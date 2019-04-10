@@ -1,0 +1,65 @@
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+# Deploying your first Quarkus application on OpenShift
+
+## Develop your application:
+
+Follow the instructions available on this guide: https://quarkus.io/guides/rest-json-guide
+
+## Add the healthcheck to your application:
+
+[source,bash]
+----
+./mvnw quarkus:add-extension -Dextensions=io.quarkus:quarkus-smallrye-health
+----
+
+## Build your application as a native image:
+
+[source,bash]
+----
+./mvnw package -Pnative -Dnative-image.docker-build=true
+----
+
+## Deploy your application to OpenShift:
+
+[source,bash]
+----
+oc new-build --binary --name=rest-json
+oc patch bc/rest-json -p '{"spec":{"strategy":{"dockerStrategy":{"dockerfilePath":"src/main/docker/Dockerfile.native"}}}}'
+oc start-build rest-json --from-dir=. --follow
+oc new-app rest-json
+oc expose service rest-json
+----
+
+WARNING: You only need to run the above steps once. Then your pipeline and application will already be setup.
+
+## Redeploying your application to OpenShift:
+
+TIP: You only need to start a new build to update your application.
+
+Since your pipeline and application is already setup, you only need to start a new build: your application will be updated automatically.
+
+Start a new build by running:
+
+[source,bash]
+----
+oc start-build rest-json --from-dir=. --follow
+----
+
+
+## Access your application running on OpenShift:
+
+Get your application URL:
+
+[source,bash]
+----
+oc get route rest-json | awk '{print $2}'
+----
+
+TIP: Check your application on your OpenShift console.

@@ -1,0 +1,93 @@
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+# Deploying your first Quarkus Kafka application on OpenShift
+
+## Develop your application:
+
+Follow the instructions available on this guide: https://quarkus.io/guides/kafka-guide
+
+[NOTE]
+====
+Your Kafka properties should look like these:
+
+CAUTION: Remeber to change your `topic` from `userXX` to your current `WORKSHOP_USER`!
+
+[source,properties]
+----
+# Configure the Kafka sink (we write to it)
+smallrye.messaging.sink.generated-price.type=io.smallrye.reactive.messaging.kafka.Kafka
+smallrye.messaging.sink.generated-price.topic=prices-userXX
+smallrye.messaging.sink.generated-price.bootstrap.servers=my-cluster-kafka-bootstrap.strimzi-infra.svc:9092
+smallrye.messaging.sink.generated-price.key.serializer=org.apache.kafka.common.serialization.StringSerializer
+smallrye.messaging.sink.generated-price.value.serializer=org.apache.kafka.common.serialization.IntegerSerializer
+smallrye.messaging.sink.generated-price.acks=1
+
+# Configure the Kafka source (we read from it)
+smallrye.messaging.source.prices.type=io.smallrye.reactive.messaging.kafka.Kafka
+smallrye.messaging.source.prices.topic=prices-userXX
+smallrye.messaging.source.prices.bootstrap.servers=my-cluster-kafka-bootstrap.strimzi-infra.svc:9092
+smallrye.messaging.source.prices.key.deserializer=org.apache.kafka.common.serialization.StringDeserializer
+smallrye.messaging.source.prices.value.deserializer=org.apache.kafka.common.serialization.IntegerDeserializer
+smallrye.messaging.source.prices.group.id=my-group-id
+----
+
+TIP: We only changed the `boostrap.servers` and `topic` properties.
+
+====
+
+## Add the healthcheck to your application:
+
+[source,bash]
+----
+./mvnw quarkus:add-extension -Dextensions=io.quarkus:quarkus-smallrye-health
+----
+
+## Build your application as a native image:
+
+[source,bash]
+----
+./mvnw package -Pnative -Dnative-image.docker-build=true
+----
+
+## Deploy your application to OpenShift:
+
+[source,bash]
+----
+oc new-build --binary --name=kafka-quickstart
+oc patch bc/kafka-quickstart -p '{"spec":{"strategy":{"dockerStrategy":{"dockerfilePath":"src/main/docker/Dockerfile.native"}}}}'
+oc start-build kafka-quickstart --from-dir=. --follow
+oc new-app kafka-quickstart
+oc expose service kafka-quickstart
+----
+
+WARNING: You only need to run the above steps once. Then your pipeline and application will already be setup.
+
+## Redeploying your application to OpenShift:
+
+TIP: You only need to start a new build to update your application.
+
+Since your pipeline and application is already setup, you only need to start a new build: your application will be updated automatically.
+
+Start a new build by running:
+
+[source,bash]
+----
+oc start-build kafka-quickstart --from-dir=. --follow
+----
+
+## Access your application running on OpenShift:
+
+Get your application URL:
+
+[source,bash]
+----
+oc get route kafka-quickstart | awk '{print $2}'
+----
+
+TIP: Check your application on your OpenShift console.

@@ -1,0 +1,62 @@
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+# Creating your MariaDB Database Service 
+
+## Process the OpenShift template:
+
+[source,bash]
+----
+oc process openshift//mariadb-persistent \
+-p MYSQL_USER=sparksjoy \
+-p MYSQL_PASSWORD=sparksjoy \
+-p MYSQL_ROOT_PASSWORD=redhat \
+| oc create -f -
+----
+
+## Running MariaDB Commands with the CLI
+
+Print the list of pods and check the mariadb pod that is running:
+
+[source,bash]
+----
+oc get pods
+----
+
+Open a Remote Shell session to the pod:
+
+[source,bash]
+----
+oc rsh <pod>
+----
+
+Run the CLI as root:
+
+[source,bash]
+----
+mysql -u root
+----
+
+[NOTE]
+====
+If you wish to run as the default user:
+[source,bash]
+----
+mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -h $HOSTNAME $MYSQL_DATABASE
+----
+====
+
+## Create the application database and grant the privileges:
+
+Running the CLI as the `root` user, execute:
+
+[source,sql]
+----
+CREATE DATABASE sparksjoy;
+GRANT ALL PRIVILEGES ON sparksjoy.* to sparksjoy@'%';
+----

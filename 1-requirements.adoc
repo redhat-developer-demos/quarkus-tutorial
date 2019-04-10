@@ -1,0 +1,49 @@
+= Requirements for the Workshop
+
+== IDE
+
+You can use any Java IDE for this workshop, but if you didn't try it before, we recommend https://code.visualstudio.com/download[VS Code] with the https://code.visualstudio.com/docs/languages/java[Java Extension Pack].
+
+== CLI tools
+
+You will be extensively using the Terminal on this workshop, so the following CLI tools are required:
+
+* docker
+** https://www.docker.com/products/docker-desktop[Mac OS & Windows]
+** Fedora: `dnf install docker`
+
+* oc (Openshift client)
+** MacOS: `brew install openshift-cli`
+** Other: https://github.com/openshift/origin/releases[Openshift Releases]
+
+* Java 8
+** MacOS: 
+`brew tap AdoptOpenJDK/openjdk && brew cask install adoptopenjdk8`
+** Fedora: `dnf install java-1.8.0-openjdk.x86_64`
+** https://adoptopenjdk.net[Windows] (Make sure you set the `JAVA_HOME` environment variable and add `%JAVA_HOME%\bin` to your `PATH`)
+
+* Apache Maven 3.6.0+
+** MacOS: `brew install maven`
+** Fedora: `dnf install maven`
+** https://maven.apache.org/download.cgi[Windows] (Make sure you set the `MAVEN_HOME` environment variable and add `%MAVEN_HOME%\bin` to your `PATH`)
+
+* link:https://github.com/wercker/stern[Stern] - A multi pod and container log tailing for Kubernetes
+** Mac OS: `brew install stern`
+** Fedora: `sudo curl --output /usr/local/bin/stern -L https://github.com/wercker/stern/releases/download/1.6.0/stern_linux_amd64 && sudo chmod +x /usr/local/bin/stern`
+** https://github.com/wercker/stern/releases/download/1.10.0/stern_windows_amd64.exe[Windows]
+
+* `curl`, `gunzip`, `tar`
+** Mac OS: built-in or part of your bash shell
+** Fedora: should also be installed already, but just in case... `dnf install curl gzip tar`
+** Windows: Make sure you have the https://docs.microsoft.com/en-us/windows/wsl/install-win10[Windows Subsystem for Linux] installed.
+
+* git
+** MacOS: `brew install git`
+** Fedora: `dnf install git`
+** Windows: Make sure you have the https://docs.microsoft.com/en-us/windows/wsl/install-win10[Windows Subsystem for Linux] installed.
+
+== Optional
+
+* If you want to run it on your own machine, you can use https://github.com/MiniShift/minishift[Minishift] v1.31.0+
+** MacOS: `brew cask install minishift`
+** Other: https://github.com/minishift/minishift/releases[Minishift Releases]

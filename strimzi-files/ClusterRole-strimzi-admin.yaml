@@ -1,0 +1,19 @@
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: strimzi-topic-admin
+rules:
+- apiGroups:
+  - "kafka.strimzi.io"
+  - "kafkas.kafka.strimzi.io"
+  resources:
+  - kafka
+  - kafkatopics
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - delete
+  - patch
+  - update
