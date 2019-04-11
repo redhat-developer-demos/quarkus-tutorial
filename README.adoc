@@ -8,9 +8,9 @@ endif::[]
 
 # Quarkus Tutorial for OpenShift
 
-Workshop URL: https://master.phoenix-9a86.openshiftworkshop.com/
+Workshop Console URL: https://master.dallas-6de2.openshiftworkshop.com/console
 
-Etherpad URL: https://etherpad.wikimedia.org/p/AA_PHX_Quarkus_Tutorial_2019_04_10
+Etherpad URL: https://etherpad.wikimedia.org/p/AA_DFW_Quarkus_Tutorial_2019_04_11
 
 ## Requirements
 
@@ -46,14 +46,14 @@ On Mac/Linux:
 
 [source,bash]
 ---- 
-oc login https://master.phoenix-9a86.openshiftworkshop.com/ -u $WORKSHOP_USER -p openshift
+oc login https://master.dallas-6de2.openshiftworkshop.com -u $WORKSHOP_USER -p openshift
 ----
 
 On Windows:
 
 [source,shell]
 ----
-oc login https://master.phoenix-9a86.openshiftworkshop.com/ -u %WORKSHOP_USER% -p openshift
+oc login https://master.dallas-6de2.openshiftworkshop.com -u %WORKSHOP_USER% -p openshift
 ----
 
 ### Create the project where you will deploy your applications:
