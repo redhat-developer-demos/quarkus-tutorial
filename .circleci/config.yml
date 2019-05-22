@@ -35,7 +35,7 @@ jobs:
             git config user.name "Kamesh Sampath"
       - add_ssh_keys:
           fingerprints:
-            - "c4:6e:01:ce:c9:32:73:e6:9f:ab:47:dc:21:08:98:d9"
+            - "d5:6a:de:6c:f9:08:e7:a9:ed:fb:4d:48:8c:5a:68:84"
       - run:
           name: Deploy docs to gh-pages branch
           command: gh-pages --dotfiles --message "[skip ci] Publishing new documentation" --dist gh-pages
