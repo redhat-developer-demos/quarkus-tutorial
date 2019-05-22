@@ -5,6 +5,13 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+- task: InstallSSHKey@0
+  inputs:
+    knownHostsEntry: $(githubHostEntry)
+    sshKeySecureFile: $(githubDeployKey)
+    sshPublicKey: $(githubPublicKey)
+  displayName: 'Setup Github Environment'
+
 - task: NodeTool@0
   inputs:
     versionSpec: '10.x'
