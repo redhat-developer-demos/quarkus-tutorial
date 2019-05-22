@@ -1,9 +1,0 @@
-= Quarkus Tutorial 
-
-Supersonic Subatomic Java
-
-A Kubernetes Native Java stack tailored for GraalVM & OpenJDK HotSpot, crafted from the best of breed Java libraries and standards.
-
-**...TODO...**
-
-This content is brought to you by http://developers.redhat.com[Red Hat Developer Program] - Register today!
