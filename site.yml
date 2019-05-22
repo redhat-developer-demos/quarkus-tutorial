@@ -10,11 +10,11 @@ content:
   sources:
     - url: git@github.com:redhat-developer-demos/quarkus-tutorial.git
       tags: []
-      branches: release/*
+      branches: master
       start_path: documentation
 asciidoc:
   attributes:
-    tutorial-namespace: tutorial
+    tutorial-namespace: quarkustutorial
   extensions:
     - ./lib/copy-to-clipboard.js
     - ./lib/tab-block.js
