@@ -19,7 +19,7 @@
 ** xref:03-containers-kubernetes.adoc#conk8s-call-svc[Invoke Service]
 ** xref:03-containers-kubernetes.adoc#conk8s-call-svc[Deploy on Kubernetes]
 
-// * xref:04-scaling.adoc[4. Scaling]
+* xref:04-quarkus-extensions.adoc[4. Quarkus Extensions]
 
 // * xref:05-eventing/eventing.adoc[5. Eventing]
 

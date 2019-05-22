@@ -86,7 +86,7 @@ ifndef::workshop[]
 Minikube::
 +
 --
-[source,bash,subs="+macros,+linenums,+attributes"]
+[source,bash,subs="+macros,+attributes"]
 ----
 minikube profile quarkus-tutorial
 minikube -p quarkus-tutorial start --memory=8192 --cpus=4 --disk-size=50g
@@ -95,7 +95,7 @@ minikube -p quarkus-tutorial start --memory=8192 --cpus=4 --disk-size=50g
 Minishift::
 +
 --
-[source,bash,subs="+macros,+linenums,+attributes"]
+[source,bash,subs="+macros,+attributes"]
 ----
 minishift profile set quarkus-tutorial
 minishift start --memory=8192 --cpus=4 --disk-size=50g
@@ -109,20 +109,20 @@ ifdef::workshop[]
 Prepare your shell environment
 
 [#quarkus-tutorial-shell-env]
-[source,bash,subs="+macros,+linenums,+attributes"]
+[source,bash,subs="+macros,+attributes"]
 ----
 cd quarkus-tutorial
 export TUTORIAL_HOME=pass:[`pwd`]
-export $WORKSHOP_USER='PUT YOUR USERNAME HERE'
-export $WORKSHOP_OPENSHIFT_SERVER='PUT THE OPENSHIFT SEVER URL HERE'
+export WORKSHOP_USER='PUT YOUR USERNAME HERE'
+export WORKSHOP_OPENSHIFT_SERVER='PUT THE OPENSHIFT SEVER URL HERE'
 ----
 copyToClipboard::quarkus-tutorial-shell-env[]
 
 Login into OpenShift 
 [#quarkus-tutorial-oc-login]
-[source,bash,subs="+macros,+linenums,+attributes"]
+[source,bash,subs="+macros,+attributes"]
 ----
-oc login --username pass:[$WORKSHOP_USER] --server pass:[$WORKSHOP_OPENSHIFT_SERVER]
+oc login --username pass:[$WORKSHOP_USER] --server pass:[$WORKSHOP_OPENSHIFT_SERVER] --insecure-skip-tls-verify=false
 ----
 copyToClipboard::quarkus-tutorial-oc-login[]
 

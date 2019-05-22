@@ -53,8 +53,8 @@ JVM mode::
 [#basics-build-quarkus-jvm-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-cd pass:[$TUTORIAL_HOME]/work/my-quarkus-project &\
-./mvnw clean package
+cd pass:[$TUTORIAL_HOME]/work/my-quarkus-project && \
+./mvnw -DskipTests clean package
 ----
 copyToClipboard::basics-build-quarkus-jvm-app[]
 
@@ -63,7 +63,7 @@ To run the application in jvm mode
 [#basics-build-run-jvm-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-java -jar target/my-quarkus-project-1.0.0-SNAPSHOT-runner.jar
+java -jar target/my-quarkus-project-1.0-SNAPSHOT-runner.jar
 ----
 copyToClipboard::basics-build-run-jvm-app[]
 
@@ -74,8 +74,8 @@ Native mode::
 [#basics-build-quarkus-native-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-cd pass:[$TUTORIAL_HOME]/work/my-quarkus-project &\
-./mvnw clean package -Pnative
+cd pass:[$TUTORIAL_HOME]/work/my-quarkus-project && \
+./mvnw -DskipTests clean package -Pnative
 ----
 copyToClipboard::basics-build-quarkus-native-app[]
 
@@ -86,7 +86,7 @@ To run the application in native mode
 [#basics-build-run-native-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-target/my-quarkus-project-1.0.0-SNAPSHOT-runner
+./target/my-quarkus-project-1.0-SNAPSHOT-runner
 ----
 copyToClipboard::basics-build-run-native-app[]
 

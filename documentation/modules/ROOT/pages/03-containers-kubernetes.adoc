@@ -35,7 +35,7 @@ JVM mode::
 [source,bash,subs="+macros,+attributes"]
 ----
 cd my-quarkus-project && \
-./mvnw clean package
+./mvnw -DskipTests clean package
 ----
 copyToClipboard::conk8s-build-quarkus-jvm-app[]
 
@@ -53,7 +53,7 @@ Run the container to start the application in jvm mode
 [#conk8s-build-run-jvm-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-docker run -it --rm -p 8080:8008 docker run example/my-quarkus-project-jvm
+docker run -it --rm -p 8080:8080 example/my-quarkus-project-jvm
 ----
 copyToClipboard::conk8s-build-run-jvm-app[]
 
@@ -64,8 +64,8 @@ Native mode::
 [#conk8s-build-quarkus-native-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-cd my-quarkus-project &&\
-./mvnw clean package -Pnative -Dnative-image.docker-build=true <1>
+cd my-quarkus-project && \
+./mvnw -DskipTests clean package -Pnative -Dnative-image.docker-build=true <1>
 ----
 copyToClipboard::conk8s-build-quarkus-native-app[]
 <1> Using the `-Dnative-image.docker-build=true` is very important as need a linux native binary what will be containerized. 
@@ -86,7 +86,7 @@ Run the container to start the application in native mode
 [#conk8s-build-run-native-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-docker run -it --rm -p 8080:8008 docker run example/my-quarkus-project-native
+docker run -it --rm -p 8080:8080  example/my-quarkus-project-native
 ----
 copyToClipboard::conk8s-build-run-native-app[]
 
@@ -144,7 +144,42 @@ Edit the app.yaml and replace the following variables:
 
 |===
 
-==== Deploy to Kubernetes
+Set the variables in shell for further use in commands:
+
+[#conk8s-set-env]
+[source,bash,subs="+macros,+attributes"]
+----
+export APP_NAME='my-quarkus-app' && \
+export REGISTRY_USER_NAME='demo' && \
+export APP_IMAGE="docker.io/$REGISTRY_USER_NAME/my-quarkus-project-native"
+----
+copyToClipboard::conk8s-set-env[]
+
+=== Tag and push the container images
+
+As we have already built the container images, we might need to build and push it to remote container registry. The remote images from the container registry will be used in kubernetes deployments:
+
+With example variable settings as above, run the following commands to tag the images:
+
+[#conk8s-tag-images]
+[source,bash,subs="+macros,+attributes"]
+----
+docker tag example/my-quarkus-project-native pass:[$APP_IMAGE]
+----
+copyToClipboard::conk8s-tag-images[]
+
+Once the container images have been tagged they can be pushed to remote container registry using the commands:
+
+[#conk8s-push-images]
+[source,bash,subs="+macros,+attributes"]
+----
+docker push pass:[$APP_IMAGE]
+----
+copyToClipboard::conk8s-push-images[]
+
+IMPORTANT: Please update the `demo` registry user to match you container registry username
+
+=== Deploy to Kubernetes
 
 ifndef::workshop[]
 [tabs]
@@ -175,7 +210,7 @@ ifndef::workshop[]
 ====
 endif::[]
 
-==== Invoke Kubernetes Service
+=== Invoke Kubernetes Service
 ifndef::workshop[]
 [tabs]
 ====
@@ -185,9 +220,10 @@ kubectl::
 [#conk8s-run-deploy-oc-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-kubectl get svc pass:[$APP_NAME]
+SVC_URL=$(minikube ip):$(kubectl get svc pass:[$APP_NAME] -o jsonpath='{.spec.ports[0].nodePort}')
 ----
 copyToClipboard::conk8s-run-deploy-oc-app[]
+
 --
 oc::
 +
@@ -207,13 +243,19 @@ Once the service is exposed we can use the following command to get the public u
 [#conk8s-oc-run-get-route]
 [source,bash,subs="+macros,+attributes"]
 ----
-oc get routes pass:[$APP_NAME]
+SVC_URL=$(oc get routes pass:[$APP_NAME] -o jsonpath='{.spec.host}')
 ----
 copyToClipboard::conk8s-oc-run-get-route[]
-
-Now you can use the URL to call the service from the browser or via cli.
-
 ifndef::workshop[]
 --
 ====
 endif::[]
+
+Now you can use the `SVC_URL` to call the service from the browser or via cli like:
+
+[#conk8s-call-k8s-svc]
+[source,bash,subs="+macros,+attributes"]
+----
+curl $SVC_URL/hello
+----
+copyToClipboard::conk8s-call-k8s-svc[]

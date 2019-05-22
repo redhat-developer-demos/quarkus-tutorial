@@ -14,7 +14,7 @@ content:
 asciidoc:
   attributes:
     tutorial-namespace: quarkustutorial
-    workshop: Yes
+    # workshop: Yes
   extensions:
     - ./lib/copy-to-clipboard.js
     - ./lib/tab-block.js
