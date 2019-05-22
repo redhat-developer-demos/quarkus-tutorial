@@ -22,8 +22,8 @@ steps:
 
 - script: |
     npm install -g @antora/cli@2.0 -g @antora/site-generator-default@2.0 gh-pages@2.0.1
-    git config --global user.email "kamesh.sampath@hotmail.com"
-    git config --global user.name "Kamesh Sampath"
+    git config --local user.email "kamesh.sampath@hotmail.com"
+    git config --local user.name "Kamesh Sampath"
   displayName: 'Install Tools and Packages'
 
 - script: |
