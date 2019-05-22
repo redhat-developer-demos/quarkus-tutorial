@@ -1,0 +1,17 @@
+{
+  "name": "quarkus-tutorial-site",
+  "description": "Quarkus Tutorial Documentation",
+  "homepage": "https://redhat-developer-demos.github.io/quarkus-tutorial",
+  "dependencies": {
+    "@antora/cli": "2.0.0",
+    "@antora/site-generator-default": "2.0.0",
+    "gulp": "3.9.1",
+    "gulp-connect": "5.6.1",
+    "yaml-js": "^0.2.3"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redhat-developer-demos/quarkus-tutorial.git"
+  }
+}
