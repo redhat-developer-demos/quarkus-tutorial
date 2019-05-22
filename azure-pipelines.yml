@@ -23,11 +23,11 @@ steps:
 
 - script: |
     antora --pull --stacktrace site.yml
+    git config --local user.email "kamesh.sampath@hotmail.com"
+    git config --local user.name "kameshsampath"
   displayName: 'Generate Site'
 
 - script: |
-    git config user.email "kamesh.sampath@hotmail.com"
-    git config user.name "kameshsampath"
     touch gh-pages/.nojekyll
     gh-pages --dotfiles --message "Publishing new documentation **NO_CI**" --dist gh-pages
   displayName: 'Deploy Site'
