@@ -21,7 +21,9 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    npm install -g @antora/cli@2.0 -g @antora/site-generator-default@2.0 gh-pages@2.0.1   
+    npm install -g @antora/cli@2.0 -g @antora/site-generator-default@2.0 gh-pages@2.0.1
+    git config --global user.email "kamesh.sampath@hotmail.com"
+    git config --global user.name "Kamesh Sampath"
   displayName: 'Install Tools and Packages'
 
 - script: |
