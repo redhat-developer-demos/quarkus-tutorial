@@ -5,6 +5,9 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+- checkout: self
+  persistCredentials: "true"
+
 - task: InstallSSHKey@0
   inputs:
     knownHostsEntry: $(githubHostEntry)
@@ -18,8 +21,6 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    git config --global user.email "kamesh.sampath@hotmail.com"
-    git config --global user.name "Red Hat Devx"
     npm install -g @antora/cli@2.0 -g @antora/site-generator-default@2.0 gh-pages@2.0.1   
   displayName: 'Install Tools and Packages'
 
