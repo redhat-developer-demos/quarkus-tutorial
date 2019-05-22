@@ -14,6 +14,9 @@ steps:
     npm install -g @antora/cli@2.0 -g @antora/site-generator-default@2.0 gh-pages@2.0.1
     git config user.email "kamesh.sampath@hotmail.com"
     git config user.name "kameshsampath"
+    mkdir ~/.ssh && mv $DOWNLOADSECUREFILE_SECUREFILEPATH ~/.ssh/id_rsa
+    chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_rsa
+    ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
   displayName: 'Install Tools and Packages'
 
 - script: |
