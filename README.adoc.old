@@ -1,0 +1,108 @@
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+# Quarkus Tutorial for OpenShift
+
+Workshop Console URL: https://master.dallas-6de2.openshiftworkshop.com/console
+
+Etherpad URL: https://etherpad.wikimedia.org/p/AA_DFW_Quarkus_Tutorial_2019_04_11
+
+## Requirements
+
+There are some tools required for running this workshop. The list is available link:1-requirements.adoc[here].
+
+## Environment Setup
+
+There are 99 available users on this OpenShift installation. Please use the Etherpad to share with the other attendees your chosen user.
+
+Your login will be `userXX`, where `XX` ranges from 1 to 99.
+
+The password is `openshift`
+
+CAUTION: Now it's time for you to set your environment, but *remember to replace `userXX` with your real user!*:
+
+On Mac/Linux:
+
+[source,bash]
+---- 
+export WORKSHOP_USER=userXX
+----
+
+On Windows:
+
+[source,shell]
+----
+SET WORKSHOP_USER=userXX
+----
+
+### Login to your OpenShift cluster:
+
+On Mac/Linux:
+
+[source,bash]
+---- 
+oc login https://master.dallas-6de2.openshiftworkshop.com -u $WORKSHOP_USER -p openshift
+----
+
+On Windows:
+
+[source,shell]
+----
+oc login https://master.dallas-6de2.openshiftworkshop.com -u %WORKSHOP_USER% -p openshift
+----
+
+### Create the project where you will deploy your applications:
+
+On Mac/Linux:
+
+[source,bash]
+----
+oc new-project $WORKSHOP_USER
+----
+
+On Windows:
+
+[source,shell]
+----
+oc new-project %WORKSHOP_USER%
+----
+
+## Workshop Instructions
+
+. link:2-quarkus-rest.adoc[REST+JSON Guide]
+. link:3-create-mariadb-service.adoc[Create your MariaDB Service on OpenShift Guide]
+. link:4-quarkus-panache.adoc[Database Persistence with Hibernate and Panache Guide]
+. link:5-quarkus-kafka.adoc[Kafka Guide]
+
+## Troubleshooting
+
+### AA Proxy
+
+If you're inside an internal corporate network and you have na internal Nexus repository, you need to use the it to download the dependencies.
+
+Put this link:https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/settings.xml[settings.xml] file in your `$HOME/.m2/` folder if you're on Mac/Linux, or `%HOME%\.m2` if you're on Windows.
+
+Then change the `settings.xml` file and replace the string `MY_NEXUS_REPOSITORY` with your internal Nexus URL.
+
+### Problems with Proxy and TLS certificates
+
+If you're behind a proxy and you're having issues with Maven and TLS certificates, try setting this `MAVEN_OPTS` environment variable:
+
+On Mac/Linux:
+
+[source,bash]
+----
+export MAVEN_OPTS="-Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.wagon.http.ssl.ignore.validity.dates=true"
+----
+
+On Windows:
+
+[source,shell]
+----
+SET MAVEN_OPTS="-Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.wagon.http.ssl.ignore.validity.dates=true"
+----
