@@ -27,7 +27,6 @@ spec:
       containers:
         - name: quarkus
           image: docker.io/$REGISTRY_USER_NAME/$APP_IMAGE
-          imagePullPolicy: IfNotPresent
           ports:
             - name: http-web
               containerPort: 8080

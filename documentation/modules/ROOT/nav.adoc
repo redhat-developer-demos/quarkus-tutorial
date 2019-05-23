@@ -20,9 +20,17 @@
 ** xref:03-containers-kubernetes.adoc#conk8s-call-svc[Deploy on Kubernetes]
 
 * xref:04-quarkus-extensions.adoc[4. Quarkus Extensions]
-
+** xref:04-quarkus-extensions.adoc#qext-intro[What are Extensions ?]
+** xref:04-quarkus-extensions.adoc#qext-list-extensions[List Extensions]
+** xref:04-quarkus-extensions.adoc#qext-health-checks[Health Checks]
+** xref:04-quarkus-extensions.adoc#qext-add-extensions[Add Extensions]
+** xref:04-quarkus-extensions.adoc#qext-rebuild-container-images[Rebuild Container Images]
+** xref:04-quarkus-extensions.adoc#qext-check-health-endpoint[Check Health Endpoint]
+** xref:04-quarkus-extensions.adoc#qext-call-health-ep[Invoke Health Endpoint]
+** xref:04-quarkus-extensions.adoc#qext-add-probes-to-k8s[Add Health Probes to Kubernetes Application]
+** xref:04-quarkus-extensions.adoc#qext-invoke-k8s-svc[Invoke Service]
 // * xref:05-eventing/eventing.adoc[5. Eventing]
 
 // ** xref:05-eventing/eventing.adoc#eventing-watch-logs[Watching Logs]
 
-* xref:faq.adoc[x. Frequently Asked Questions]
+// * xref:faq.adoc[Frequently Asked Questions]

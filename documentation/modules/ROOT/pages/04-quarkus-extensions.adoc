@@ -1,1 +1,193 @@
 = Quarkus Extensions
+
+include::_attributes.adoc[]
+:quarkus-project-name: my-quarkus-project
+
+At the end of this chapter you will be able to :
+
+* What is Quarkus Extensions ?
+* How to add them to your Quarkus project?
+
+[#qext-intro]
+== What are extensions ?
+Extensions are set of dependencies that can added to the Quarkus project in need of a specific features e.g. health checks.  Extensions configure, boot and integrate a framework or technology into your Quarkus application. They also do all of the heavy lifting of providing the right information to GraalVM for your application to compile natively.
+
+[#qext-list-extensions]
+== Listing Extensions
+
+The Quarkus maven plugin can list all available supported extensions. 
+
+Navigate to the tutorial's `work` folder:
+
+[#qext-nav-to-work-folder]
+[source,bash,subs="+macros,+attributes"]
+----
+cd pass:[$TUTORIAL_HOME]/work
+----
+copyToClipboard::qext-nav-to-work-folder[]
+
+NOTE: The instructions of this section assumes your project name to be `{quarkus-project-name}`
+
+To list the available extensions, run the following command from your project directory.
+
+[#qext-mvn-list-extensions]
+[source,bash,subs="+macros,+attributes"]
+----
+cd my-quarkus-project && \
+./mvnw quarkus:list-extensions
+----
+copyToClipboard::qext-mvn-list-extensions[]
+
+[#qext-health-checks]
+== Health checks
+
+If you had observed, the quarkus application deployed on Kubernetes does not have any health checks on it. As Kubernetes best practice its highly recommended that health checks be added to the all the deployments.
+
+Health checks in Kubernetes can be added using https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/[Liveliness and Readiness] probes.
+
+:quarkus-health-ext-name: quarkus-smallrye-health
+
+[#qext-add-extensions]
+=== Adding new extensions
+
+We can add `{quarkus-health-ext-name}` extension to allow Quarkus application to be probed on the REST endpoint called `health` to know about its current health.
+
+To add `{quarkus-health-ext-name}` to the Quarkus application, run the following command from `{quarkus-project-name}` project directory:
+
+[#qext-mvn-add-extension]
+[source,bash,subs="+macros,+attributes"]
+----
+./mvnw quarkus:add-extension -Dextension="{quarkus-health-ext-name}"
+----
+copyToClipboard::qext-mvn-add-extension[]
+
+After successful execution of the above command, you will have the following dependency added to the `{quarkus-project-name}` project's pom.xml:
+
+.pom.xml 
+[source,xml]
+----
+...
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-health</artifactId>
+    </dependency>
+...
+----
+
+[#qext-rebuild-container-images]
+=== Rebuild container images
+
+Let us rebuild the application after adding the health check extensions
+
+include::ROOT:partial$build-containers.adoc[tag=build]
+
+[#qext-check-health-endpoint]
+=== Checking health check endpoint
+
+Lets start the newly built container:
+
+include::ROOT:partial$build-containers.adoc[tag=run]
+
+After adding `smallrye-health` extension we should have REST endpoint called `/health` available. Lets invoke the `/health` endpoint to check the health of the Quarkus application.
+
+[#qext-call-health-ep]
+=== Invoke Service
+:doc-sec: basics
+:k8s-cli: k8s
+:path: health
+:k8s-env: minikube
+:cli-tool: curl
+:address: localhost
+
+The simple `{path}` REST URI can be called via browser using http://localhost:8080/{path} or using CLI like: 
+
+include::ROOT:partial$invoke-service.adoc[tag=call]
+
+The REST call about should return an response like:
+
+[source,json]
+----
+{
+    "checks": [],
+    "outcome": "UP"
+}
+----
+
+[#qext-add-probes-to-k8s]
+== Add probes to Kubernetes Quarkus Application
+
+Before we add the probes to the Kubernetes application, we need to push the rebuilt containers to the container registry.
+
+include::ROOT:partial$build-containers.adoc[tag=tag-push]
+
+Once the rebuilt containers has been successfully pushed to the container registry run the following command to add the probes to the kubernetes deployment.
+
+
+ifndef::workshop[]
+[tabs]
+====
+kubectl::
++
+--
+[#qext-copy-k8s-probes-file]
+[source,bash,subs="+macros,+attributes"]
+----
+cp pass:[$TUTORIAL_HOME]/templates/probes.yaml pass:[$TUTORIAL_HOME]/work/{quarkus-project-name}/probes.yaml
+----
+copyToClipboard::qext-copy-k8s-probes-file[]
+
+Apply the probes to the existing `pass:[$APP_NAME]` Kubernetes deployment:
+
+[#qext-k8s-set-probes]
+[source,bash,subs="+macros,+attributes"]
+----
+kubectl patch deployment pass:[$APP_NAME] -p "$(cat pass:[$TUTORIAL_HOME]/work/{quarkus-project-name}/probes.yaml)"
+----
+copyToClipboard::qext-k8s-set-probes[]
+--
+oc::
++
+--
+endif::[]
+[#qext-oc-set-probes]
+[source,bash,subs="+macros,+attributes"]
+----
+oc set probe deployment pass:[$APP_NAME] --readiness=true --liveness=true --get-url=http://:8080/health
+----
+copyToClipboard::qext-oc-set-probes[]
+ifndef::workshop[]
+--
+====
+endif::[]
+
+[#qext-invoke-k8s-svc]
+== Invoke the Kubernetes Service
+
+Adding probes will cause the redeployment of the Kubernetes application. Wait for the application to be in `Running` state before you can xref:03-containers-kubernetes.adoc##conk8s-invoke-k8s-svc[Invoke the Service].  The status of the application can be checked with the command:
+ifndef::workshop[]
+[tabs]
+====
+kubectl::
++
+--
+[#qext-k8s-pod-status]
+[source,bash,subs="+macros,+attributes"]
+----
+kubectl get pods -w 
+----
+copyToClipboard::qext-k8s-pod-status[]
+--
+oc::
++
+--
+endif::[]
+[#qext-oc-pod-status]
+[source,bash,subs="+macros,+attributes"]
+----
+oc get pods -w 
+----
+copyToClipboard::qext-oc-pod-status[]
+ifndef::workshop[]
+--
+====
+endif::[]

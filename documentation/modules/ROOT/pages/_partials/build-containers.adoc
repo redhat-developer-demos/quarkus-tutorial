@@ -1,56 +1,110 @@
-# tag::greeter[]
+NOTE: The instructions of this section assumes your project name to be `{quarkus-project-name}`
 
-[NOTE]
+#tag::build[]
+
+[tabs]
 ====
-If you have already cloned the repo and built the `greeter` service you can skip this step.
+JVM mode::
++
+--
+[#conk8s-build-quarkus-jvm-app]
+[source,bash,subs="+macros,+attributes"]
+----
+./mvnw -DskipTests clean package
+----
+copyToClipboard::conk8s-build-quarkus-jvm-app[]
+
+After successful maven build, run the following command to build te container:
+
+[#conk8s-build-quarkus-jvm-app-container]
+[source,bash,subs="+macros,+attributes"]
+----
+docker build -f src/main/docker/Dockerfile.jvm -t example/{quarkus-project-name}-jvm .
+----
+copyToClipboard::conk8s-build-quarkus-jvm-app-container[]
+
+--
+Native mode::
++
+--
+[#conk8s-build-quarkus-native-app]
+[source,bash,subs="+macros,+attributes"]
+----
+./mvnw -DskipTests clean package -Pnative -Dnative-image.docker-build=true <1>
+----
+copyToClipboard::conk8s-build-quarkus-native-app[]
+<1> Using the `-Dnative-image.docker-build=true` is very important as need a linux native binary what will be containerized. 
+
+NOTE: Native compilation will take few minutes to complete.
+
+After successful maven build, run the following command to build te container:
+
+[#conk8s-build-quarkus-native-app-container]
+[source,bash,subs="+macros,+attributes"]
+----
+docker build -f src/main/docker/Dockerfile.native -t example/{quarkus-project-name}-native .
+----
+copyToClipboard::conk8s-build-quarkus-native-app-container[]
+
+--
 ====
 
-* Navigate to work folder
+#end::build[]
 
-[#navigate-to-work-folder]
+
+#tag::run[]
+[tabs]
+====
+JVM mode::
++
+--
+[#build-run-jvm-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-cd $TUTORIAL_HOME/work
+docker run -it --rm -p 8080:8080 example/{quarkus-project-name}-jvm
 ----
-copyToClipboard::navigate-to-work-folder[]
-
-* Clone the application source code 
-
-[#clone-greeter-sources]
+copyToClipboard::build-run-jvm-app[]
+--
+Native mode::
++
+--
+[#build-run-native-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-git clone https://github.com/redhat-developer-demos/knative-tutorial-greeter.git
+docker run -it --rm -p 8080:8080 example/{quarkus-project-name}-native
 ----
-copyToClipboard::clone-greeter-sources[]
+copyToClipboard::build-run-native-app[]
+--
+====
 
-* Build the application and container image 
+#end::run[]
 
-[#build-greeter]
+#tag::tag-push[]
+
+[tabs]
+====
+JVM mode::
++
+--
+[#build-tag-jvm-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-cd knative-tutorial-greeter/java/quarkus
-./mvnw clean package
-docker build -t dev.local/rhdevelopers/greeter:0.0.1  -f Dockerfile.all .
+docker tag example/{quarkus-project-name}-jvm pass:[$APP_IMAGE] && \
+docker push pass:[$APP_IMAGE]
 ----
-copyToClipboard::build-greeter[]
-
-* Check if images are built and available:
-
-[#check-greeter-images]
+copyToClipboard::build-tag-jvm-app[]
+--
+Native mode::
++
+--
+[#build-tag-native-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-docker images | grep dev.local
+docker tag example/{quarkus-project-name}-native pass:[$APP_IMAGE] && \
+docker push pass:[$APP_IMAGE]
 ----
-copyToClipboard::check-greeter-images[]
+copyToClipboard::build-tag-native-app[]
+--
+====
 
-The above command should return something like as shown below:
-[source,bash]
-----
-dev.local/rhdevelopers/greeter   0.0.1               6aa8771da8dd        2 hours ago         456MB
-----
-
-# end::greeter[]
-
-# tag::event-greeter[]
-
-# end::event-greeter[]
+#end::tag-push[]
