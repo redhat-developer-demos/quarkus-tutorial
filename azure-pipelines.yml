@@ -30,5 +30,5 @@ steps:
 
 - script: |
     touch gh-pages/.nojekyll
-    gh-pages --user "Kamesh Sampath" --email "kamesh.sampath@hotmail.com" --dotfiles --message "Publishing new documentation **NO_CI**" --dist gh-pages
+    gh-pages --user "Kamesh Sampath <kamesh.sampath@hotmail.com>" --dotfiles --message "Publishing new documentation **NO_CI**" --dist gh-pages
   displayName: 'Deploy Site'
