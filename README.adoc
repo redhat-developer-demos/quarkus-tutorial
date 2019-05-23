@@ -1,5 +1,5 @@
 = Quarkus Tutorial
 
-image:https://dev.azure.com/kameshsampath/quarkus-tutorial/_apis/build/status/redhat-developer-demos.quarkus-tutorial?branchName=master[link=https://dev.azure.com/kameshsampath/quarkus-tutorial/_build/latest?definitionId=7&branchName=master]
+image:https://circleci.com/gh/redhat-developer-demos/quarkus-tutorial.svg?style=svg["CircleCI", link="https://circleci.com/gh/redhat-developer-demos/quarkus-tutorial"]
 
 * HTML version of Tutorial: https://redhat-developer-demos.github.io/quarkus-tutorial/
