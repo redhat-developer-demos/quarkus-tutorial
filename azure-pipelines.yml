@@ -21,7 +21,7 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    npm install -g @antora/cli@2.0 -g @antora/site-generator-default@2.0 gh-pages@2.0.1
+    npm install -g @antora/cli@2.0 -g @antora/site-generator-default@2.0
   displayName: 'Install Tools and Packages'
 
 - script: |
@@ -29,6 +29,13 @@ steps:
   displayName: 'Generate Site'
 
 - script: |
-    touch gh-pages/.nojekyll
-    gh-pages --user "Kamesh Sampath <kamesh.sampath@hotmail.com>" --dotfiles --message "Publishing new documentation **NO_CI**" --dist gh-pages
+    shopt -s dotglob
+    git config --local user.email "kamesh.sampath@hotmail.com"
+    git config --local user.name "Kamesh Sampath"
+    git checkout gh-pages --
+    mv gh-pages/* .
+    touch .nojekyll
+    git add .
+    git commit --message "Publishing new documentation **NO_CI**"
+    git push origin gh-pages
   displayName: 'Deploy Site'
