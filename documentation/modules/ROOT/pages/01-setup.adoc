@@ -17,9 +17,9 @@ The following CLI tools are required for running the exercises in this tutorial.
 |**Tool**|**macOS**|**Fedora**|**Windows**
 
 | `oc`
-| https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-mac.zip
-| https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit.tar.gz
-| https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-windows.zip
+| https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-mac.zip[openshift-origin-client-tools-v3.11.0]
+| https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit.tar.gz[openshift-origin-client-tools-v3.11.0]
+| https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-windows.zip[openshift-origin-client-tools-v3.11.0]
 
 | `git`
 | https://git-scm.com/download/mac
