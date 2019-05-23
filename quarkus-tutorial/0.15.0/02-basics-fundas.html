@@ -119,6 +119,9 @@
   </li>
 </ul>
   </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="04-quarkus-extensions.html">4. Quarkus Extensions</a>
+  </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="0">
@@ -349,8 +352,8 @@ All further sections of this chapter assumes the application name to be <code>my
 <div class="tab-pane" aria-labelledby="tabset2_jvm-mode">
 <div id="basics-build-quarkus-jvm-app" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work/my-quarkus-project &amp;\
-./mvnw clean package</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work/my-quarkus-project &amp;&amp; \
+./mvnw -DskipTests clean package</code></pre>
 </div>
 </div>
 <button class="copybtn" title="Copy to clipboard" data-clipboard-target="#basics-build-quarkus-jvm-app"><i class="fa fa-copy"></i></button><br/>
@@ -359,7 +362,7 @@ All further sections of this chapter assumes the application name to be <code>my
 </div>
 <div id="basics-build-run-jvm-app" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">java -jar target/my-quarkus-project-1.0.0-SNAPSHOT-runner.jar</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">java -jar target/my-quarkus-project-1.0-SNAPSHOT-runner.jar</code></pre>
 </div>
 </div>
 <button class="copybtn" title="Copy to clipboard" data-clipboard-target="#basics-build-run-jvm-app"><i class="fa fa-copy"></i></button><br/>
@@ -367,8 +370,8 @@ All further sections of this chapter assumes the application name to be <code>my
 <div class="tab-pane" aria-labelledby="tabset2_native-mode">
 <div id="basics-build-quarkus-native-app" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work/my-quarkus-project &amp;\
-./mvnw clean package -Pnative</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work/my-quarkus-project &amp;&amp; \
+./mvnw -DskipTests clean package -Pnative</code></pre>
 </div>
 </div>
 <button class="copybtn" title="Copy to clipboard" data-clipboard-target="#basics-build-quarkus-native-app"><i class="fa fa-copy"></i></button><br/>
@@ -389,7 +392,7 @@ Native compilation will take few minutes to complete.
 </div>
 <div id="basics-build-run-native-app" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">target/my-quarkus-project-1.0.0-SNAPSHOT-runner</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./target/my-quarkus-project-1.0-SNAPSHOT-runner</code></pre>
 </div>
 </div>
 <button class="copybtn" title="Copy to clipboard" data-clipboard-target="#basics-build-run-native-app"><i class="fa fa-copy"></i></button><br/>
