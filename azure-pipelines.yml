@@ -22,8 +22,6 @@ steps:
 
 - script: |
     npm install -g @antora/cli@2.0 -g @antora/site-generator-default@2.0 gh-pages@2.0.1
-    git config --local user.email "kamesh.sampath@hotmail.com"
-    git config --local user.name "Kamesh Sampath"
   displayName: 'Install Tools and Packages'
 
 - script: |
@@ -32,5 +30,5 @@ steps:
 
 - script: |
     touch gh-pages/.nojekyll
-    gh-pages --dotfiles --message "Publishing new documentation **NO_CI**" --dist gh-pages
+    gh-pages --user "Kamesh Sampath" --email "kamesh.sampath@hotmail.com" --dotfiles --message "Publishing new documentation **NO_CI**" --dist gh-pages
   displayName: 'Deploy Site'
