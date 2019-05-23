@@ -6,6 +6,7 @@ pool:
 
 steps:
 - checkout: self
+  clean: "all"
   persistCredentials: "true"
 
 - task: InstallSSHKey@0
@@ -25,6 +26,7 @@ steps:
   displayName: 'Install Tools and Packages'
 
 - script: |
+    rm -rf gh-pages
     git config --local user.email "kamesh.sampath@hotmail.com"
     git config --local user.name "Kamesh Sampath"
     git worktree add gh-pages gh-pages 
