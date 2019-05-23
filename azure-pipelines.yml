@@ -25,17 +25,16 @@ steps:
   displayName: 'Install Tools and Packages'
 
 - script: |
+    git config --local user.email "kamesh.sampath@hotmail.com"
+    git config --local user.name "Kamesh Sampath"
+    git worktree add gh-pages gh-pages 
     antora --pull --stacktrace site.yml
   displayName: 'Generate Site'
 
 - script: |
-    shopt -s dotglob
-    git config --local user.email "kamesh.sampath@hotmail.com"
-    git config --local user.name "Kamesh Sampath"
-    git checkout gh-pages --
-    mv gh-pages/* .
+    cd gh-pages
     touch .nojekyll
-    git add .
+    git add --all
     git commit --message "Publishing new documentation **NO_CI**"
     git push origin gh-pages
   displayName: 'Deploy Site'
