@@ -29,5 +29,3 @@
 ** xref:04-quarkus-extensions.adoc#qext-call-health-ep[Invoke Health Endpoint]
 ** xref:04-quarkus-extensions.adoc#qext-add-probes-to-k8s[Add Health Probes to Kubernetes Application]
 ** xref:04-quarkus-extensions.adoc#qext-invoke-k8s-svc[Invoke Service]
-
-* xref:faq.adoc[Frequently Asked Questions]
