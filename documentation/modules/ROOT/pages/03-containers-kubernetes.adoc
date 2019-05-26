@@ -1,6 +1,8 @@
 =  Cloud Native Deployment
 
 include::_attributes.adoc[]
+:quarkus-project-name: my-quarkus-project
+:svc-path: hello
 
 At the end of this chapter you will be able to :
 
@@ -15,88 +17,11 @@ include::partial$prereq-cli.adoc[]
 [#conk8s-build-container-app]
 == Containerize Quarkus Application
 
-Navigate to the tutorial's `work` folder:
+include::ROOT:partial$build-containers.adoc[tag=build]
 
-[#conk8s-nav-to-work-folder]
-[source,bash,subs="+macros,+attributes"]
-----
-cd pass:[$TUTORIAL_HOME]/work
-----
-copyToClipboard::conk8s-nav-to-work-folder[]
+After containerizing the application, we can verify the container by running the following commands: 
 
-NOTE: The instructions of this section assumes your project name to be `my-quarkus-project`
-
-[tabs]
-====
-JVM mode::
-+
---
-[#conk8s-build-quarkus-jvm-app]
-[source,bash,subs="+macros,+attributes"]
-----
-cd my-quarkus-project && \
-./mvnw -DskipTests clean package
-----
-copyToClipboard::conk8s-build-quarkus-jvm-app[]
-
-After successful maven build, run the following command to build te container:
-
-[#conk8s-build-quarkus-jvm-app-container]
-[source,bash,subs="+macros,+attributes"]
-----
-docker build -f src/main/docker/Dockerfile.jvm -t example/my-quarkus-project-jvm .
-----
-copyToClipboard::conk8s-build-quarkus-jvm-app-container[]
-
-Run the container to start the application in jvm mode
-
-[#conk8s-build-run-jvm-app]
-[source,bash,subs="+macros,+attributes"]
-----
-docker run -it --rm -p 8080:8080 example/my-quarkus-project-jvm
-----
-copyToClipboard::conk8s-build-run-jvm-app[]
-
---
-Native mode::
-+
---
-[#conk8s-build-quarkus-native-app]
-[source,bash,subs="+macros,+attributes"]
-----
-cd my-quarkus-project && \
-./mvnw -DskipTests clean package -Pnative -Dnative-image.docker-build=true <1>
-----
-copyToClipboard::conk8s-build-quarkus-native-app[]
-<1> Using the `-Dnative-image.docker-build=true` is very important as need a linux native binary what will be containerized. 
-
-NOTE: Native compilation will take few minutes to complete.
-
-After successful maven build, run the following command to build te container:
-
-[#conk8s-build-quarkus-native-app-container]
-[source,bash,subs="+macros,+attributes"]
-----
-docker build -f src/main/docker/Dockerfile.native -t example/my-quarkus-project-native .
-----
-copyToClipboard::conk8s-build-quarkus-native-app-container[]
-
-Run the container to start the application in native mode
-
-[#conk8s-build-run-native-app]
-[source,bash,subs="+macros,+attributes"]
-----
-docker run -it --rm -p 8080:8080  example/my-quarkus-project-native
-----
-copyToClipboard::conk8s-build-run-native-app[]
-
-
-[WARNING]
-=====
-Tests will fail on Windows as there is no graalvm support for windows, you can workaround it using `-DskipTests` option.
-=====
---
-====
+include::ROOT:partial$build-containers.adoc[tag=run]
 
 You can <<conk8s-call-svc>> to see a response like `hello`.
  
@@ -115,148 +40,24 @@ include::ROOT:partial$invoke-service.adoc[tag=call]
 [#conk8s-deploy-k8s-app]
 == Deploy Quarkus Application in Kubernetes
 
-Copy the pass:[$TUTORIAL_HOME]/templates/app.yaml to current Quarkus Application directory:
+include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-prep]
 
-[#conk8s-copy-k8s-app-template]
-[source,bash,subs="+macros,+attributes"]
-----
-cp pass:[$TUTORIAL_HOME]/templates/app.yaml .
-----
-copyToClipboard::conk8s-copy-k8s-app-template[]
-
-Edit the app.yaml and replace the following variables:
-
-[cols="3*^,3*.",options="header"]
-|===
-|**Variable**|**Description**|**Example**
-
-| pass:[$APP_NAME]
-| The Kubernetes application name
-| my-quarkus-app
-
-| pass:[$REGISTRY_USER_NAME]
-| The container registry user name
-| demo
-
-| pass:[$APP_IMAGE]
-| The Quarkus container image name 
-| docker.io/demo/my-quarkus-project-native
-
-|===
-
-Set the variables in shell for further use in commands:
-
-[#conk8s-set-env]
-[source,bash,subs="+macros,+attributes"]
-----
-export APP_NAME='my-quarkus-app' && \
-export REGISTRY_USER_NAME='demo' && \
-export APP_IMAGE="docker.io/$REGISTRY_USER_NAME/my-quarkus-project-native"
-----
-copyToClipboard::conk8s-set-env[]
-
+ifdef::workshop[]
+[#conk8s-k8s-tag-containers]
 === Tag and push the container images
 
 As we have already built the container images, we might need to build and push it to remote container registry. The remote images from the container registry will be used in kubernetes deployments:
 
 With example variable settings as above, run the following commands to tag the images:
 
-[#conk8s-tag-images]
-[source,bash,subs="+macros,+attributes"]
-----
-docker tag example/my-quarkus-project-native pass:[$APP_IMAGE]
-----
-copyToClipboard::conk8s-tag-images[]
-
-Once the container images have been tagged they can be pushed to remote container registry using the commands:
-
-[#conk8s-push-images]
-[source,bash,subs="+macros,+attributes"]
-----
-docker push pass:[$APP_IMAGE]
-----
-copyToClipboard::conk8s-push-images[]
-
-IMPORTANT: Please update the `demo` registry user to match you container registry username
-
-=== Deploy to Kubernetes
-
-ifndef::workshop[]
-[tabs]
-====
-kubectl::
-+
---
-[#conk8s-run-deploy-k8s-app]
-[source,bash,subs="+macros,+attributes"]
-----
-kubectl apply -f pass:[$TUTORIAL_HOME]/work/my-quarkus-project/app.yaml
-----
-copyToClipboard::conk8s-run-deploy-k8s-app[]
---
-oc::
-+
---
+include::ROOT:partial$build-containers.adoc[tag=tag-push]
 endif::[]
 
-[#conk8s-oc-run-deploy-k8s-app]
-[source,bash,subs="+macros,+attributes"]
-----
-oc apply -f pass:[$TUTORIAL_HOME]/work/my-quarkus-project/app.yaml
-----
-copyToClipboard::conk8s-oc-run-deploy-k8s-app[]
-ifndef::workshop[]
---
-====
-endif::[]
+[#conk8s-k8s-apply-resources]
+=== Apply Kubernetes Resources
+
+include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-deploy]
 
 [#conk8s-invoke-k8s-svc]
 === Invoke Kubernetes Service
-ifndef::workshop[]
-[tabs]
-====
-kubectl::
-+
---
-[#conk8s-run-deploy-oc-app]
-[source,bash,subs="+macros,+attributes"]
-----
-SVC_URL=$(minikube ip):$(kubectl get svc pass:[$APP_NAME] -o jsonpath='{.spec.ports[0].nodePort}')
-----
-copyToClipboard::conk8s-run-deploy-oc-app[]
-
---
-oc::
-+
---
-endif::[]
-With OpenShift we can create a route to make Quarkus application publicly accessible:
-
-[#conk8s-oc-run-expose-svc]
-[source,bash,subs="+macros,+attributes"]
-----
-oc expose service pass:[$APP_NAME]
-----
-copyToClipboard::conk8s-oc-run-expose-svc[]
-
-Once the service is exposed we can use the following command to get the public url:
-
-[#conk8s-oc-run-get-route]
-[source,bash,subs="+macros,+attributes"]
-----
-SVC_URL=$(oc get routes pass:[$APP_NAME] -o jsonpath='{.spec.host}')
-----
-copyToClipboard::conk8s-oc-run-get-route[]
-ifndef::workshop[]
---
-====
-endif::[]
-
-Now you can use the `SVC_URL` to call the service from the browser or via cli like:
-
-[#conk8s-call-k8s-svc]
-[source,bash,subs="+macros,+attributes"]
-----
-curl $SVC_URL/hello
-----
-copyToClipboard::conk8s-call-k8s-svc[]
+include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-invoke-svc]

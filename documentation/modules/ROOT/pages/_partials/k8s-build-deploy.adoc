@@ -1,0 +1,134 @@
+[:quarkus-project-name='']
+
+#tag::k8s-prep[]
+
+Copy the pass:[$TUTORIAL_HOME]/templates/app.yaml to `{quarkus-project-name}` Quarkus Application directory:
+
+[#conk8s-copy-k8s-app-template]
+[source,bash,subs="+macros,+attributes"]
+----
+cp pass:[$TUTORIAL_HOME]/templates/app.yaml .
+----
+copyToClipboard::conk8s-copy-k8s-app-template[]
+
+Edit the app.yaml and replace the following variables:
+
+[cols="3*^,3*.",options="header"]
+|===
+|**Variable**|**Description**|**Example**
+
+| pass:[$APP_NAME]
+| The Kubernetes application name
+| my-quarkus-app
+
+| pass:[$REGISTRY_USER_NAME]
+| The container registry user name
+| demo
+
+| pass:[$APP_IMAGE]
+| The Quarkus container image name 
+| docker.io/demo/{quarkus-project-name}-native
+
+|===
+
+Set the variables in shell for further use in commands:
+
+[#conk8s-set-env]
+[source,bash,subs="+macros,+attributes"]
+----
+export APP_NAME='my-quarkus-app' && \
+export REGISTRY_USER_NAME='demo' && \
+export APP_IMAGE="docker.io/$REGISTRY_USER_NAME/{quarkus-project-name}-native"
+----
+copyToClipboard::conk8s-set-env[]
+
+IMPORTANT: Please update the `demo` registry user to match you container registry username
+
+#end::k8s-prep[]
+
+#tag::k8s-deploy[]
+
+ifndef::workshop[]
+[tabs]
+====
+kubectl::
++
+--
+[#conk8s-run-deploy-k8s-app]
+[source,bash,subs="+macros,+attributes"]
+----
+kubectl apply -f pass:[$TUTORIAL_HOME]/work/{quarkus-project-name}/app.yaml
+----
+copyToClipboard::conk8s-run-deploy-k8s-app[]
+--
+oc::
++
+--
+endif::[]
+
+[#conk8s-oc-run-deploy-k8s-app]
+[source,bash,subs="+macros,+attributes"]
+----
+oc apply -f pass:[$TUTORIAL_HOME]/work/{quarkus-project-name}/app.yaml
+----
+copyToClipboard::conk8s-oc-run-deploy-k8s-app[]
+ifndef::workshop[]
+--
+====
+endif::[]
+
+#end::k8s-deploy[]
+
+
+#tag::k8s-invoke-svc[]
+
+ifndef::workshop[]
+[tabs]
+====
+kubectl::
++
+--
+[#conk8s-run-deploy-oc-app]
+[source,bash,subs="+macros,+attributes"]
+----
+SVC_URL=$(minikube ip):$(kubectl get svc pass:[$APP_NAME] -o jsonpath='{.spec.ports[0].nodePort}')
+----
+copyToClipboard::conk8s-run-deploy-oc-app[]
+
+--
+oc::
++
+--
+endif::[]
+With OpenShift we can create a route to make Quarkus application publicly accessible:
+
+[#conk8s-oc-run-expose-svc]
+[source,bash,subs="+macros,+attributes"]
+----
+oc expose service pass:[$APP_NAME]
+----
+copyToClipboard::conk8s-oc-run-expose-svc[]
+
+Once the service is exposed we can use the following command to get the public url:
+
+[#conk8s-oc-run-get-route]
+[source,bash,subs="+macros,+attributes"]
+----
+SVC_URL=$(oc get routes pass:[$APP_NAME] -o jsonpath='{.spec.host}')
+----
+copyToClipboard::conk8s-oc-run-get-route[]
+ifndef::workshop[]
+--
+====
+endif::[]
+
+Now you can use the `SVC_URL` to call the service from the browser or via cli like:
+
+[#conk8s-call-k8s-svc]
+[source,bash,subs="+macros,+attributes"]
+----
+curl $SVC_URL/{svc-path}
+----
+copyToClipboard::conk8s-call-k8s-svc[]
+
+#end::k8s-invoke-svc[]

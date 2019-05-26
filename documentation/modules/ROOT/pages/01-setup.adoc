@@ -27,9 +27,9 @@ The following CLI tools are required for running the exercises in this tutorial.
 | Make sure you have the https://docs.microsoft.com/en-us/windows/wsl/install-win10[Windows Subsystem for Linux] installed
 
 | `Docker`
-| https://www.docker.com/products/docker-desktop
+| https://www.docker.com/products/docker-desktop[Docker Desktop for Mac]
 | `dnf install docker`
-| https://www.docker.com/products/docker-desktop
+| https://www.docker.com/products/docker-desktop[Docker Desktop for Windows]
 
 | Java 8
 | `brew tap AdoptOpenJDK/openjdk && brew cask install adoptopenjdk8`
@@ -86,20 +86,28 @@ ifndef::workshop[]
 Minikube::
 +
 --
+[#quarkus-start-minikube]
 [source,bash,subs="+macros,+attributes"]
 ----
-minikube profile quarkus-tutorial
-minikube -p quarkus-tutorial start --memory=8192 --cpus=4 --disk-size=50g
+minikube profile quarkus-tutorial && \
+minikube -p quarkus-tutorial start --memory=8192 --cpus=4 --disk-size=50g && \
+kubectl create namespace {tutorial-namespace}
 ----
+copyToClipboard::quarkus-start-minikube[]
 --
 Minishift::
 +
 --
+[#quarkus-start-minishift]
 [source,bash,subs="+macros,+attributes"]
 ----
-minishift profile set quarkus-tutorial
-minishift start --memory=8192 --cpus=4 --disk-size=50g
+minishift profile set quarkus-tutorial && \
+minishift start --memory=8192 --cpus=4 --disk-size=50g && \
+minishift addon enable admin-user && \
+minishift addon enable anyuid && \
+oc new-project {tutorial-namespace}
 ----
+copyToClipboard::quarkus-start-minishift[]
 --
 ====
 endif::[]

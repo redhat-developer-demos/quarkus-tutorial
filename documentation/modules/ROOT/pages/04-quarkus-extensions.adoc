@@ -163,7 +163,7 @@ endif::[]
 [#qext-invoke-k8s-svc]
 == Invoke the Kubernetes Service
 
-Adding probes will cause the redeployment of the Kubernetes application. Wait for the application to be in `Running` state before you can xref:03-containers-kubernetes.adoc##conk8s-invoke-k8s-svc[Invoke the Service].  The status of the application can be checked with the command:
+Adding probes will cause the redeployment of the Kubernetes application. Wait for the application to be in `Running` state before you can xref:03-containers-kubernetes.adoc#conk8s-invoke-k8s-svc[Invoke the Service].  The status of the application can be checked with the command:
 ifndef::workshop[]
 [tabs]
 ====

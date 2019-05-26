@@ -8,20 +8,20 @@ site:
 
 content:
   sources:
-    - url: .
-      branches: HEAD
+    - url: git@github.com:redhat-developer-demos/quarkus-tutorial.git
+      tags: []
+      branches: master
       start_path: documentation
 asciidoc:
   attributes:
     tutorial-namespace: quarkustutorial
-    workshop: Yes
+    workshop: yes
   extensions:
     - ./lib/copy-to-clipboard.js
     - ./lib/tab-block.js
 ui:
   bundle:
-    url: ../rhd-tutorial-ui/build/ui-bundle.zip
-    snapshot: true
+    url: https://github.com/redhat-developer-demos/rhd-tutorial-ui/releases/download/v0.0.2/ui-bundle.zip
   supplemental_files: ./supplemental-ui
 output:
   dir: ./gh-pages
