@@ -304,6 +304,7 @@ copyToClipboard::quarkusp-fruit-entity1[]
 
 Do I need to add it ? The simple answer is **NO**.
 
+[#quarkusp-what-is-panache]
 ===== Make Fruit Entity a Panache Entity 
 
 ****

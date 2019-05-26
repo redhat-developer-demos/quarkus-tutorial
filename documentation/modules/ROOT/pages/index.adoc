@@ -32,5 +32,6 @@ image::Developer_Joy.png[Developer Joy,400,400,align="center"]
 
 [.tile]
 .xref:05-quarkus-panache.adoc[Database Interactive Applications]
-* xref:04-quarkus-extensions.adoc#qext-list-extensions[List Extensions]
-* xref:04-quarkus-extensions.adoc#qext-health-checks[Health Checks]
+* xref:05-quarkus-panache.adoc#quarkusp-fruitapp-dev[Build a Quarkus Hibernate Application]
+* xref:05-quarkus-panache.adoc#quarkusp-what-is-panache[Enhance Hibernate ORM with Panache]
+* xref:05-quarkus-panache.adoc#quarkusp-cloud-dev[Deploy on Kubernetes]
