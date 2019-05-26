@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build Database Interactive Applications :: Quarkus Tutorial</title>
+    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/0.15.0/05-quarkus-panache.html">
+    <meta name="generator" content="Antora 2.0.0">
+    <link rel="stylesheet" href="../../_/css/site.css">
+<link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://unpkg.com/clipboard@2/dist/clipboard.min.js"></script>
+  </head>
+  <body class="article">
+<header class="header" role="banner">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="navbar-item">
+        <a href="https://redhat-developer-demos.github.io/quarkus-tutorial">Quarkus Tutorial</a>
+      </div>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+<div class="main-wrapper">
+<div class="navigation-container"  data-component="quarkus-tutorial"
+  data-version="0.15.0" >
+  <aside class="navigation">
+    <div class="panels">
+      <div class="navigation-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">Quarkus Tutorial</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="01-setup.html">1. Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#prerequisite">Prerequisites</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#download-tutorial-sources">Download Tutorial Sources</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#kubernetes-cluster">Kubernetes Cluster</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#setup-work-folder">Work Folder</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="02-basics-fundas.html">2.Basics and Fundamentals</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-basics-fundas.html#basics-prerequisite">Prerequisites</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-basics-fundas.html#basics-create-quarkus-app">Create Quarkus Application</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-basics-fundas.html#basics-ide-quarkus-project">Open Application in IDE</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-basics-fundas.html#basics-build-run-quarkus-app">Build and Run Application</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-basics-fundas.html#basics-update-code">Update Code</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-basics-fundas.html#basics-call-svc">Invoke Service</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="03-containers-kubernetes.html">3. Cloud Native Deployment</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-containers-kubernetes.html#conk8s-prerequisite">Prerequisites</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-containers-kubernetes.html#conk8s-build-container-app">Containerize Quarkus Application</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-containers-kubernetes.html#conk8s-call-svc">Invoke Service</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="03-containers-kubernetes.html#conk8s-deploy-k8s-app">Deploy on Kubernetes</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-containers-kubernetes.html#conk8s-k8s-tag-containers">Tag Container Images</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-containers-kubernetes.html#conk8s-k8s-apply-resources">Apply Kubernetes Resources</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-containers-kubernetes.html#conk8s-invoke-k8s-svc">Invoke Kubernetes Service</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="04-quarkus-extensions.html">4. Quarkus Extensions</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-intro">What are Extensions ?</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-list-extensions">List Extensions</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-health-checks">Health Checks</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-add-extensions">Add Extensions</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-rebuild-container-images">Rebuild Container Images</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-check-health-endpoint">Check Health Endpoint</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-call-health-ep">Invoke Health Endpoint</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-add-probes-to-k8s">Add Health Probes to Kubernetes Application</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-invoke-k8s-svc">Invoke Service</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="05-quarkus-panache.html">5. Hibernate with Quarkus</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#quarkusp-demo-overview">Demo Overview</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="#quarkusp-fruitapp-dev">Build and Deploy</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#quarkus-fruit-app-db">Deploy Mariadb</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#quarkusp-access-db">Access Database </a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#quarkuspdb-update-props">Configure Application properties</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#quarkusp-create-fruit-entity">Create Fruit Entity</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#quarkusp-edit-fruit-resource">Update Fruit Resource</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#quarkusp-fruits-finder">Finders</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="#quarkusp-cloud-dev">Deploy on Kubernetes</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#quarkusp-cloud-dev-build-container">Build Containers</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#quarkusp-cloud-dev-prepare-app">Prepare Kubernetes Application</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#quarkusp-cloud-dev-apply-resources">Apply Resources</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#quarkusp-invoke-k8s-svc">Invoke Service</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+  <div class="navigation-explore" data-panel="explore">
+  <div class="context">
+    <!-- Just a place holder to fill in  explorer for each context -->
+  </div>
+</div>
+</div>
+  <main class="main">
+<div class="toolbar" role="navigation">
+  <button class="navigation-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+  <nav class="crumbs" aria-label="breadcrumbs">
+  <ul>
+    <li class="crumb"><a href="index.html">Quarkus Tutorial</a></li>
+    <li class="crumb"><a href="05-quarkus-panache.html">5. Hibernate with Quarkus</a></li>
+  </ul>
+</nav>
+</div>
+<article class="doc">
+<h1>Build Database Interactive Applications</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>At the end of this chapter you will be able to :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>What is Panache ?</p>
+</li>
+<li>
+<p>How to build a Hibernate application using Panache?</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="quarkusp-demo-overview"><a class="anchor" href="#quarkusp-demo-overview"></a>Demo Overview</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To demonstrate using Hibernate with Panache, you will be developing an application called "Fruits". Its a simple CRUD REST API that handles information about Fruits.</p>
+</div>
+<div class="paragraph">
+<p>For the demonstration we will use <a href="https://mariadb.org/">MaridDB</a> as a backing database.</p>
+</div>
+<div class="paragraph">
+<p>Create the <code>fruits-app</code> folder and navigate to the folder:</p>
+</div>
+<div id="quarkusp-nav-to-work-folder" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir -p $TUTORIAL_HOME/work/fruits-app &amp;&amp; cd `basename $_` &amp;&amp; \
+touch .keep <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-nav-to-work-folder"><i class="fa fa-copy"></i></button><br/>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>just to make sure our maven project create later will not create the top level <code>fruits-app</code> directory.</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="quarkusp-fruitapp-dev"><a class="anchor" href="#quarkusp-fruitapp-dev"></a>Build and Deploy</h3>
+<div class="paragraph">
+<p>To get started with we will first have the database deployed:</p>
+</div>
+<div class="sect3">
+<h4 id="quarkus-fruit-app-db"><a class="anchor" href="#quarkus-fruit-app-db"></a>Deploy Mariadb Stack</h4>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset1_kubectl"></a>kubectl</p>
+</li>
+<li>
+<p><a id="tabset1_oc"></a>oc</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset1_kubectl">
+<div id="quarkusp-deploy-db" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -n quarkustutorial -f $TUTORIAL_HOME/kubernetes-apps/mariadb.yaml</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-deploy-db"><i class="fa fa-copy"></i></button><br/>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_oc">
+<div id="quarkusp-oc-deploy-db" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -n quarkustutorial -f $TUTORIAL_HOME/kubernetes-apps/mariadb.yaml</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-oc-deploy-db"><i class="fa fa-copy"></i></button><br/>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>A successful mariab deployment will have the following pods and services int he <code>quarkustutorial</code></p>
+</div>
+<div class="listingblock">
+<div class="title">pods</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">NAME                          READY   STATUS    RESTARTS   AGE
+db-adminer-678857cdb9-hw2km   1/1     Running   0          2m3s
+mariadb-58fb5df86c-wfbsj      1/1     Running   0          2m3s</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">services</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">NAME         TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+db-adminer   NodePort   10.101.171.237   &lt;none&gt;        8080:30397/TCP   2m21s
+mariadb      NodePort   10.105.40.135    &lt;none&gt;        3306:30125/TCP   2m21s</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The actual pod name and NodePort will be different on your environment
+</td>
+</tr>
+</table>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset2_minikube"></a>minikube</p>
+</li>
+<li>
+<p><a id="tabset2_minishift"></a>minishift</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset2_minikube">
+<div id="quarkusp-open-db-adminer" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube service db-adminer -n quarkustutorial</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-open-db-adminer"><i class="fa fa-copy"></i></button><br/>
+</div>
+<div class="tab-pane" aria-labelledby="tabset2_minishift">
+<div id="quarkusp-minishift-open-db-adminer" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minishift openshift service db-adminer -n quarkustutorial</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-minishift-open-db-adminer"><i class="fa fa-copy"></i></button><br/>
+</div>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. DB access details</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">user</th>
+<th class="tableblock halign-center valign-top">password</th>
+<th class="tableblock halign-right valign-top">databases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">root</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">superS3cret!</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">*</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">demo</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">password</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">demodb</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="quarkusp-access-db"><a class="anchor" href="#quarkusp-access-db"></a>Accessing Database</h5>
+<div class="paragraph">
+<p>To be able to access maridb database locally, you need to <code>port-forward</code> the remote port to local port.</p>
+</div>
+<div class="paragraph">
+<p>Open a new terminal window and run the following command:</p>
+</div>
+<div class="paragraph">
+<p>You can now use <code>adminer</code> or any other SQL tool to access the mariadb using the <code>&lt;your ip address&gt;:3306</code></p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_build_fruit_resource"><a class="anchor" href="#_build_fruit_resource"></a>Build Fruit Resource</h4>
+<div class="paragraph">
+<p>The skeleton project to get started is available in $TUTORIAL_HOME/apps/fruits-app. Edit the project in the IDE e.g. <code>code [$TUTORIAL_HOME]/apps/fruits-app</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+For the easier reference, we shall call the <code>fruits-app</code> project folder as $PROJECT_HOME
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="quarkusp-configure-props"><a class="anchor" href="#quarkusp-configure-props"></a>Edit the application.properties</h5>
+<div class="paragraph">
+<p>Add the following proeprties to $PROJECT_HOME/src/main/properties/application.properties:</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you wish to create the project afresh, then here is the complete maven command for your reference:</p>
+</div>
+<div id="quarkusp-mv-create-fruits-app" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn io.quarkus:quarkus-maven-plugin:0.15.0:create \
+  -DprojectGroupId="com.example" \
+  -DprojectArtifactId="fruits-app" \
+  -DprojectVersion="1.0-SNAPSHOT" \
+  -DclassName="FruitResource" \
+  -Dextensions="mariadb,resteasy-jsonb,panache,swagger-ui,openapi,quarkus-smallrye-health"</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-mv-create-fruits-app"><i class="fa fa-copy"></i></button><br/>
+</td>
+</tr>
+</table>
+</div>
+<div id="quarkuspdb-update-props" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config"># configure your datasource
+quarkus.datasource.url = jdbc:mariadb://&lt;your-ip-address&gt;:3306/demodb <i class="conum" data-value="1"></i><b>(1)</b>
+quarkus.datasource.driver = org.mariadb.jdbc.MariaDbDataSource
+quarkus.hibernate-orm.dialect = org.hibernate.dialect.MariaDB103Dialect
+quarkus.datasource.username = demo
+quarkus.datasource.password = password
+
+# drop and create the database at startup (use `update` to only update the schema)
+quarkus.hibernate-orm.database.generation = drop-and-create
+# show sql statements in log
+quarkus.hibernate-orm.log.sql = true</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkuspdb-update-props"><i class="fa fa-copy"></i></button><br/>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Important to update to the ip used in port-forward earlier.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_test_database_connection"><a class="anchor" href="#_test_database_connection"></a>Test Database connection</h5>
+<div class="paragraph">
+<p>Lets start Quarkus in <code>development</code> mode to verify the database connection works:</p>
+</div>
+<div id="quarkuspdb-test-dbconn" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">./mvnw compile quarkus:dev</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkuspdb-test-dbconn"><i class="fa fa-copy"></i></button><br/>
+<div class="paragraph">
+<p>If all went well then you should be seeing something like the following in the log:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Listening for transport dt_socket at address: 5005
+2019-05-26 12:27:56,510 INFO  [io.qua.dep.QuarkusAugmentor] (main) Beginning quarkus augmentation
+2019-05-26 12:27:58,821 INFO  [io.qua.dep.QuarkusAugmentor] (main) Quarkus augmentation completed in 2311ms
+2019-05-26 12:27:58,935 INFO  [io.qua.swa.run.SwaggerUiServletExtension] (main) Swagger UI available at /swagger-ui
+2019-05-26 12:27:59,391 INFO  [io.quarkus] (main) Quarkus 0.15.0 started in 3.166s. Listening on: http://[::]:8080
+2019-05-26 12:27:59,392 INFO  [io.quarkus] (main) Installed features: [agroal, cdi, hibernate-orm, jdbc-mariadb, narayana-jta, resteasy, resteasy-jsonb, smallrye-health, smallrye-openapi, swagger-ui]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you would have noticed there is no database logs thats because we dont have any database related code yet:</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="quarkusp-create-fruit-entity"><a class="anchor" href="#quarkusp-create-fruit-entity"></a>Create Fruit Entity</h5>
+<div class="paragraph">
+<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>Fruit</code> with the following contents:</p>
+</div>
+<div id="quarkusp-fruit-entity" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+
+import javax.persistence.Entity;
+
+/**
+ * Fruit
+ */
+@Entity
+public class Fruit {
+
+    public String name;
+    public String season;
+
+}</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-fruit-entity"><i class="fa fa-copy"></i></button><br/>
+</div>
+<div class="sect4">
+<h5 id="quarkusp-edit-fruit-resource"><a class="anchor" href="#quarkusp-edit-fruit-resource"></a>Update Fruit Resource</h5>
+<div class="paragraph">
+<p>Edit the Java file <code>$PROJECT_HOME/src/main/java/com/example/FruitResource.java</code> to add a REST  method to get all the available fruits:</p>
+</div>
+<div id="quarkusp-fruit-entity1" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+
+import java.util.List;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+@Path("/fruits")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+public class FruitResource {
+
+    @GET
+    public List&lt;Fruit&gt; allFruits() {
+        return Fruit.listAll(); <i class="conum" data-value="1"></i><b>(1)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-fruit-entity1"><i class="fa fa-copy"></i></button><br/>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Your IDE will show an errors in <code>FruitResource.java</code> as it does not have a method <code>listAll()</code> in <code>Fruit</code> entity class.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Do I need to add it ? The simple answer is <strong>NO</strong>.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_make_fruit_entity_a_panache_entity"><a class="anchor" href="#_make_fruit_entity_a_panache_entity"></a>Make Fruit Entity a Panache Entity</h5>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>What is Panache ?</strong></p>
+</div>
+<div class="paragraph">
+<p>Hibernate ORM is the de facto JPA implementation and offers you the full breadth of an Object Relational Mapper. It makes complex mappings possible, but it does not make simple and common mappings trivial. Hibernate ORM with Panache focuses on making your entities trivial and fun to write in Quarkus.</p>
+</div>
+<div class="paragraph">
+<p>More info <a href="https://quarkus.io/guides/hibernate-orm-panache-guide">Panache Guide</a></p>
+</div>
+</div>
+</div>
+<div id="quarkusp-fruit-entity2" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+
+import javax.persistence.Entity;
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+
+/**
+ * Fruit
+ */
+@Entity
+public class Fruit extends PanacheEntity {
+
+    public String name;
+    public String season;
+
+}</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-fruit-entity2"><i class="fa fa-copy"></i></button><br/>
+<div class="paragraph">
+<p>Making the <code>Fruit</code> entity as a <code>Panache Entity</code> will make it both Entity and DAO and ofcourse the error in the <code>FruitResource.java</code> disappears.</p>
+</div>
+<div class="paragraph">
+<p>Lets now access the Fruits API <a href="http://localhost:8080/fruits" class="bare">http://localhost:8080/fruits</a>. If all goes well you will see some Hibernate SQL statements in the log that will create the new table <code>Fruit</code> with columns from <code>Fruit.java</code> entity class.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You have accessed the application using <a href="http://localhost:8080/fruits" class="bare">http://localhost:8080/fruits</a>, but we have enabled <code>Swagger</code> extension to the application. To acess the swagger UI use the url <a href="http://localhost:8080/swagger-ui" class="bare">http://localhost:8080/swagger-ui</a></p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Since we don&#8217;t have any fruits in the DB you would have got an empty response back.</p>
+</div>
+<div class="paragraph">
+<p>Lets add a REST method to the <code>FruitResource.java</code> to save a 'Fruit':</p>
+</div>
+<div id="quarkusp-fruit-add-persist" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+
+import java.util.List;
+import javax.transaction.Transactional;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+@Path("/fruits")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+public class FruitResource {
+
+    @GET
+    public List&lt;Fruit&gt; allFruits() {
+        return Fruit.listAll();
+    }
+
+    @POST
+    @Transactional
+    public Response saveFruit(Fruit fruit) {
+        // just allow it to be generated
+        fruit.id = null;
+        // since the FruitEntity is a panache entity persist is available by default
+        fruit.persist();
+        return Response.ok(201).entity(fruit).build();
+    }
+}</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-fruit-add-persist"><i class="fa fa-copy"></i></button><br/>
+<div class="paragraph">
+<p>Since we are in development accessing the Swagger UI <a href="http://localhost:8080/swagger-ui" class="bare">http://localhost:8080/swagger-ui</a> will reload the application.</p>
+</div>
+<div class="paragraph">
+<p>Try adding a fruit via the Swagger UI Post and try listing the available fruits. A good day scenario will return a JSON like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">[
+  {
+    "id": 1,
+    "name": "mango",
+    "season": "summer"
+  }
+]</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The response may vary based on what fruit you added.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="quarkusp-fruits-finder"><a class="anchor" href="#quarkusp-fruits-finder"></a>Finders</h5>
+<div class="paragraph">
+<p>Cool! So far we did with some primitive methods lets explore some cool things that Panache offers.</p>
+</div>
+<div class="paragraph">
+<p>Lets try to find all fruits by a season. To make the query return some data let us add some fruits to the DB.</p>
+</div>
+<div class="paragraph">
+<p>Create the following <code>import.sql</code> file in <code>$PROJECT_HOME/src/main/resources</code>:</p>
+</div>
+<div id="quarkusp-add-fruits" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Mango","Spring")
+INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Strawberry","Spring")
+INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Orange","Winter")
+INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"GrapeFruit","Winter")
+INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Blueberry","Summer")
+INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Plum","Summer")
+INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Apple","Fall")
+INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Grapes","Fall")</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-add-fruits"><i class="fa fa-copy"></i></button><br/>
+<div class="paragraph">
+<p>Update the <code>Fruit</code> entity with a finder method like</p>
+</div>
+<div id="quarkusp-find-fruits" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+
+import java.util.List;
+import javax.persistence.Entity;
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+
+/**
+ * Fruit
+ */
+@Entity
+public class Fruit extends PanacheEntity {
+
+    public String name;
+    public String season;
+
+    public static List&lt;Fruit&gt; getAllFruitsForSeason(String season) {
+        return find("season", season).list();
+    }
+
+}</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-find-fruits"><i class="fa fa-copy"></i></button><br/>
+<div class="paragraph">
+<p>Update the <code>Fruit</code> resource with a REST method to get fruits by season:</p>
+</div>
+<div id="quarkusp-get-find-fruits" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+
+import java.util.List;
+import javax.transaction.Transactional;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+@Path("/fruits")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+public class FruitResource {
+
+    @GET
+    public List&lt;Fruit&gt; allFruits() {
+        return Fruit.listAll();
+    }
+
+    @GET
+    @Path("{season}")
+    public List&lt;Fruit&gt; fruitsBySeason(@PathParam("season") String season) {
+        return Fruit.getAllFruitsForSeason(season);
+    }
+
+    @POST
+    @Transactional
+    public Response saveFruit(Fruit fruit) {
+        // just allow it to be generated
+        fruit.id = null;
+        // since the FruitEntity is a panache entity persist is available by default
+        fruit.persist();
+        return Response.ok(201).entity(fruit).build();
+    }
+}</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-get-find-fruits"><i class="fa fa-copy"></i></button><br/>
+<div class="paragraph">
+<p>To test finder use the Swagger UI <a href="http://localhost:8080/swagger-ui" class="bare">http://localhost:8080/swagger-ui</a>.</p>
+</div>
+<div class="paragraph">
+<p>A finder for fruits for <em>summer</em> season should return a response like :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">[
+  {
+    "id": 5,
+    "name": "Blueberry",
+    "season": "Summer"
+  },
+  {
+    "id": 6,
+    "name": "Plum",
+    "season": "Summer"
+  }
+]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="quarkusp-cloud-dev"><a class="anchor" href="#quarkusp-cloud-dev"></a>Deploy on Kubernetes</h3>
+<div class="paragraph">
+<p>We need to build the <code>fruit-app</code> application and container before deploying them on on kubernetes.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You can stop the <code>port-forward</code> and Quarkus application running in development mode
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="quarkusp-cloud-dev-build-container"><a class="anchor" href="#quarkusp-cloud-dev-build-container"></a>Build the application container</h4>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset4_jvm-mode"></a>JVM mode</p>
+</li>
+<li>
+<p><a id="tabset4_native-mode"></a>Native mode</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset4_jvm-mode">
+<div id="conk8s-build-quarkus-jvm-app" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-jvm-app"><i class="fa fa-copy"></i></button><br/>
+<div class="paragraph">
+<p>After successful maven build, run the following command to build te container:</p>
+</div>
+<div id="conk8s-build-quarkus-jvm-app-container" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.jvm -t example/fruits-app-jvm .</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-jvm-app-container"><i class="fa fa-copy"></i></button><br/>
+</div>
+<div class="tab-pane" aria-labelledby="tabset4_native-mode">
+<div id="conk8s-build-quarkus-native-app" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package -Pnative -Dnative-image.docker-build=true <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-native-app"><i class="fa fa-copy"></i></button><br/>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Using the <code>-Dnative-image.docker-build=true</code> is very important as need a linux native binary what will be containerized.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Native compilation will take few minutes to complete.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>After successful maven build, run the following command to build te container:</p>
+</div>
+<div id="conk8s-build-quarkus-native-app-container" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/fruits-app-native .</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-native-app-container"><i class="fa fa-copy"></i></button><br/>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="quarkusp-cloud-dev-prepare-app"><a class="anchor" href="#quarkusp-cloud-dev-prepare-app"></a>Prepare the Kubernetes Deployment</h4>
+<div class="paragraph">
+<p>Copy the $TUTORIAL_HOME/templates/app.yaml to <code>fruits-app</code> Quarkus Application directory:</p>
+</div>
+<div id="conk8s-copy-k8s-app-template" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cp $TUTORIAL_HOME/templates/app.yaml .</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-copy-k8s-app-template"><i class="fa fa-copy"></i></button><br/>
+<div class="paragraph">
+<p>Edit the app.yaml and replace the following variables:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-center valign-top"><strong>Variable</strong></th>
+<th class="tableblock halign-center valign-top"><strong>Description</strong></th>
+<th class="tableblock halign-center valign-top"><strong>Example</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">$APP_NAME</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">The Kubernetes application name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">my-quarkus-app</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">$REGISTRY_USER_NAME</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">The container registry user name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">demo</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">$APP_IMAGE</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">The Quarkus container image name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">docker.io/demo/fruits-app-native</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Set the variables in shell for further use in commands:</p>
+</div>
+<div id="conk8s-set-env" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">export APP_NAME='my-quarkus-app' &amp;&amp; \
+export REGISTRY_USER_NAME='demo' &amp;&amp; \
+export APP_IMAGE="docker.io/$REGISTRY_USER_NAME/fruits-app-native"</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-set-env"><i class="fa fa-copy"></i></button><br/>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Please update the <code>demo</code> registry user to match you container registry username
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Edit the app.yaml and add the following property override to the quarkus container after the <code>image</code> attribute:</p>
+</div>
+<div id="quarkusp-update-db-url" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">    env:
+    - name: QUARKUS_DATASOURCE_URL
+      value: "jdbc:mariadb://mariadb/demodb"</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-update-db-url"><i class="fa fa-copy"></i></button><br/>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Please ensure the indentation of app.yaml is right after this update.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="quarkusp-cloud-dev-apply-resources"><a class="anchor" href="#quarkusp-cloud-dev-apply-resources"></a>Apply Resources</h4>
+<div class="paragraph">
+<p>Once the images has been pushed to container registry, run the following command to deploy the application to kubernetes:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset5_kubectl"></a>kubectl</p>
+</li>
+<li>
+<p><a id="tabset5_oc"></a>oc</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset5_kubectl">
+<div id="conk8s-run-deploy-k8s-app" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f $TUTORIAL_HOME/work/fruits-app/app.yaml</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-k8s-app"><i class="fa fa-copy"></i></button><br/>
+</div>
+<div class="tab-pane" aria-labelledby="tabset5_oc">
+<div id="conk8s-oc-run-deploy-k8s-app" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f $TUTORIAL_HOME/work/fruits-app/app.yaml</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-deploy-k8s-app"><i class="fa fa-copy"></i></button><br/>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="quarkusp-invoke-k8s-svc"><a class="anchor" href="#quarkusp-invoke-k8s-svc"></a>Invoke Kubernetes Service</h4>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset6_kubectl"></a>kubectl</p>
+</li>
+<li>
+<p><a id="tabset6_oc"></a>oc</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset6_kubectl">
+<div id="conk8s-run-deploy-oc-app" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(minikube ip):$(kubectl get svc $APP_NAME -o jsonpath='{.spec.ports[0].nodePort}')</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-oc-app"><i class="fa fa-copy"></i></button><br/>
+</div>
+<div class="tab-pane" aria-labelledby="tabset6_oc">
+<div class="paragraph">
+<p>With OpenShift we can create a route to make Quarkus application publicly accessible:</p>
+</div>
+<div id="conk8s-oc-run-expose-svc" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc expose service $APP_NAME</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-expose-svc"><i class="fa fa-copy"></i></button><br/>
+<div class="paragraph">
+<p>Once the service is exposed we can use the following command to get the public url:</p>
+</div>
+<div id="conk8s-oc-run-get-route" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(oc get routes $APP_NAME -o jsonpath='{.spec.host}')</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-get-route"><i class="fa fa-copy"></i></button><br/>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Now you can use the <code>SVC_URL</code> to call the service from the browser or via cli like:</p>
+</div>
+<div id="conk8s-call-k8s-svc" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl $SVC_URL/fruits</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-call-k8s-svc"><i class="fa fa-copy"></i></button><br/>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>swagger-ui</code> is available only for <code>dev</code> and <code>test</code>, you can use REST API tools to access API.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </main>
+</div>
+<footer role="contentinfo">
+  <div class="region region-rhd-footer">
+    <div id="block-rhdfooter" class="rhd-footer">
+      <nav class="rhd-footer-nav" aria-label="Secondary Navigation" role="navigation">
+        <ul class="rhd-menu">
+          <li class="menu-item menu-item--expanded">
+            <h3 class="section-toggle">GitHub</h3>
+            <ul class="rhd-menu">
+              <li class="menu-item">
+                <a href="https://github.com/redhat-developer-demos/quarkus-tutorial" title="Quarkus Tutorial">Quarkus
+                  Tutorial</a>
+              </li>
+              <li class="menu-item">
+                <a href="https://github.com/redhat-developer-demos/quarkus-tutorial/issues" title="Issue Tracker">Issue
+                  Tracker</a>
+              </li>
+              <li class="menu-item">
+                <a href="https://quarkus.io" title="Quarkus">Quarkus</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <div class="rhd-footer-sidebar">
+        <p class="rhd-footer-sidebar-title">Red Hat Developer</p>
+        <p class="rhd-footer-sidebar-subtitle">Build here. Go anywhere.</p>
+        <p class="rhd-footer-sidebar-content">
+          We serve the builders. The problem solvers who create careers with
+          code.<br /><br /><a href="https://developer.redhat.com/register">Join us</a>
+          if you’re a developer, software engineer, web designer, front-end
+          designer, UX designer, computer scientist, architect, tester,
+          product manager, project manager or team lead.
+        </p>
+        <ul class="rhd-footer-sidebar-social">
+          <li>
+            <a href="https://www.youtube.com/channel/UC7noUdfWp-ukXUlAsJnSm-Q" target="_blank"
+              rel="noopener noreferrer"><svg class="svg-inline--fa fa-youtube fa-w-18" aria-hidden="true"
+                data-prefix="fab" data-icon="youtube" role="img" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 576 512" data-fa-i2svg="">
+                <path fill="currentColor"
+                  d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z">
+                </path>
+              </svg><!-- <i class="fab fa-youtube"></i> --></a>
+          </li>
+          <li>
+            <a href="https://www.facebook.com/RedHatDeveloperProgram" target="_blank" rel="noopener noreferrer"><svg
+                class="svg-inline--fa fa-facebook fa-w-14" aria-hidden="true" data-prefix="fab" data-icon="facebook"
+                role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">
+                <path fill="currentColor"
+                  d="M448 56.7v398.5c0 13.7-11.1 24.7-24.7 24.7H309.1V306.5h58.2l8.7-67.6h-67v-43.2c0-19.6 5.4-32.9 33.5-32.9h35.8v-60.5c-6.2-.8-27.4-2.7-52.2-2.7-51.6 0-87 31.5-87 89.4v49.9h-58.4v67.6h58.4V480H24.7C11.1 480 0 468.9 0 455.3V56.7C0 43.1 11.1 32 24.7 32h398.5c13.7 0 24.8 11.1 24.8 24.7z">
+                </path>
+              </svg><!-- <i class="fab fa-facebook"> </i> --></a>
+          </li>
+          <li>
+            <a href="https://twitter.com/rhdevelopers" target="_blank" rel="noopener noreferrer"><svg
+                class="svg-inline--fa fa-twitter fa-w-16" aria-hidden="true" data-prefix="fab" data-icon="twitter"
+                role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+                <path fill="currentColor"
+                  d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z">
+                </path>
+              </svg><!-- <i class="fab fa-twitter"> </i> --></a>
+          </li>
+          <li>
+            <a href="https://github.com/redhat-developer" target="_blank" rel="noopener noreferrer"><svg
+                class="svg-inline--fa fa-github fa-w-16" aria-hidden="true" data-prefix="fab" data-icon="github"
+                role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" data-fa-i2svg="">
+                <path fill="currentColor"
+                  d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z">
+                </path>
+              </svg><!-- <i class="fab fa-github"> </i> --></a>
+          </li>
+        </ul>
+        <a class="rhd-footer-sidebar-signup" href="https://developers.redhat.com/register">Sign me up ▸</a>
+      </div>
+    </div>
+  </div>
+</footer><script src="../../_/js/site.js"></script>
+<script src="../../_/js/vendor/highlight.js"></script>
+<script>hljs.initHighlighting()</script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+  integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+  integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+  integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>
