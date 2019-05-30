@@ -41,6 +41,11 @@ The following CLI tools are required for running the exercises in this tutorial.
 | Fedora: `dnf install maven`
 | https://maven.apache.org/download.cgi[Windows] (Make sure you set the `MAVEN_HOME` environment variable and add `%MAVEN_HOME%\bin` to your `PATH`)
 
+| Graal VM
+| https://github.com/oracle/graal/releases/download/vm-1.0.0-rc16/graalvm-ce-1.0.0-rc16-macos-amd64.tar.gz[graalvm-ce-1.0.0-rc16]
+| https://github.com/oracle/graal/releases/download/vm-1.0.0-rc16/graalvm-ce-1.0.0-rc16-linux-amd64.tar.gz[graalvm-ce-1.0.0-rc16]
+| N.A
+
 | https://github.com/wercker/stern[stern]
 | `brew install stern`
 | `sudo curl --output /usr/local/bin/stern -L https://github.com/wercker/stern/releases/download/1.6.0/stern_linux_amd64 && sudo chmod +x /usr/local/bin/stern`
@@ -74,6 +79,7 @@ This tutorial was developed and tested with:
 - Minikube `{minikube-version}`
 - OpenShift `{openshift-version}`
 - Minishift `{minishift-version}`
+- Graal VM `{graalvm-version}`
 ====
 
 [#kubernetes-cluster]
@@ -110,6 +116,19 @@ oc new-project {tutorial-namespace}
 copyToClipboard::quarkus-start-minishift[]
 --
 ====
+endif::[]
+
+ifndef::workshop[]
+
+Prepare your shell environment
+
+[#quarkus-tutorial-shell-env]
+[source,bash,subs="+macros,+attributes"]
+----
+cd quarkus-tutorial
+export TUTORIAL_HOME=pass:[`pwd`]
+----
+copyToClipboard::quarkus-tutorial-shell-env[]
 endif::[]
 
 ifdef::workshop[]

@@ -5,3 +5,4 @@
 :minikube-version: 1.0.1+
 :openshift-version: 3.11+
 :minishift-version: 1.31+
+:graalvm-version: graalvm-ce-1.0.0-rc16

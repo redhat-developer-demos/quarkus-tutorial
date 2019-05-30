@@ -21,7 +21,7 @@ Create the `fruits-app` folder and navigate to the folder:
 [#quarkusp-nav-to-work-folder]
 [source,bash,subs="+macros,+attributes"]
 ----
-mkdir -p pass:[$TUTORIAL_HOME]/work/fruits-app && cd `basename $_` && \
+mkdir -p $TUTORIAL_HOME/work/fruits-app && cd $TUTORIAL_HOME/work/`basename $_` && \
 touch .keep #<1>
 ----
 copyToClipboard::quarkusp-nav-to-work-folder[]
@@ -64,7 +64,7 @@ ifndef::workshop[]
 ====
 endif::[]
 
-A successful mariab deployment will have the following pods and services int he `{tutorial-namespace}`
+A successful mariadb deployment will have the following pods and services int he `{tutorial-namespace}`
 
 .pods
 [source,bash]
@@ -143,37 +143,39 @@ endif::[]
 
 [#quarkusp-access-db]
 ===== Accessing Database 
-To be able to access maridb database locally, you need to `port-forward` the remote port to local port.
+To be able to access mariadb database locally, you need to `port-forward` the remote port to local port.
 
 Open a new terminal window and run the following command:
 
 [tabs]
 ====
-kubectl
-++
---
+kubectl::
++
 [#quarkuspdb-port-forward]
 [source,bash,subs="+macros,+attributes"]
 ----
-# e.g. kubectl port-forward -n quarkustutorial svc/mariadb --address 192.168.64.1 3306:3306
+# e.g. kubectl port-forward -n {tutorial-namespace} svc/mariadb --address 192.168.64.1 3306:3306
 kubectl -n {tutorial-namespace} port-forward svc/mariadb 3306:3306 --address <your local ip address>
 ----
 copyToClipboard::quarkuspdb-port-forward[]
---
 oc::
 +
---
 [#quarkuspdb-oc-port-forward]
 [source,bash,subs="+macros,+attributes"]
 ----
-# e.g. oc port-forward -n quarkustutorial svc/mariadb --address 192.168.64.1 3306:3306
+# e.g. oc port-forward -n {tutorial-namespace} svc/mariadb --address 192.168.64.1 3306:3306
 oc -n {tutorial-namespace} port-forward svc/mariadb 3306:3306 --address <your local ip address>
 ----
 copyToClipboard::quarkuspdb-oc-port-forward[]
---
 ====
 
 You can now use `adminer` or any other SQL tool to access the mariadb using the `<your ip address>:3306`
+
+[NOTE]
+====
+The server address in the adminer can be either `mariadb` the kubernetes service name of the mariadb database or 
+the `<your ip address>:3306`
+====
 
 ==== Build Fruit Resource
 
@@ -184,7 +186,7 @@ NOTE: For the easier reference, we shall call the `fruits-app` project folder as
 [#quarkusp-configure-props]
 ===== Edit the application.properties
 
-Add the following proeprties to pass:[$PROJECT_HOME]/src/main/properties/application.properties:
+Add the following properties to pass:[$PROJECT_HOME]/src/main/properties/application.properties:
 
 [TIP]
 ====
