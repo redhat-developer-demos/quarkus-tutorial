@@ -250,7 +250,7 @@
 </div>
 <div id="quarkusp-nav-to-work-folder" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir -p $TUTORIAL_HOME/work/fruits-app &amp;&amp; cd `basename $_` &amp;&amp; \
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir -p $TUTORIAL_HOME/work/fruits-app &amp;&amp; cd $TUTORIAL_HOME/work/`basename $_` &amp;&amp; \
 touch .keep <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
@@ -301,7 +301,7 @@ touch .keep <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>A successful mariab deployment will have the following pods and services int he <code>quarkustutorial</code></p>
+<p>A successful mariadb deployment will have the following pods and services int he <code>quarkustutorial</code></p>
 </div>
 <div class="listingblock">
 <div class="title">pods</div>
@@ -391,13 +391,60 @@ The actual pod name and NodePort will be different on your environment
 <div class="sect4">
 <h5 id="quarkusp-access-db"><a class="anchor" href="#quarkusp-access-db"></a>Accessing Database</h5>
 <div class="paragraph">
-<p>To be able to access maridb database locally, you need to <code>port-forward</code> the remote port to local port.</p>
+<p>To be able to access mariadb database locally, you need to <code>port-forward</code> the remote port to local port.</p>
 </div>
 <div class="paragraph">
 <p>Open a new terminal window and run the following command:</p>
 </div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset3_kubectl"></a>kubectl</p>
+</li>
+<li>
+<p><a id="tabset3_oc"></a>oc</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset3_kubectl">
+<div id="quarkuspdb-port-forward" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># e.g. kubectl port-forward -n quarkustutorial svc/mariadb --address 192.168.64.1 3306:3306
+kubectl -n quarkustutorial port-forward svc/mariadb 3306:3306 --address &lt;your local ip address&gt;</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkuspdb-port-forward"><i class="fa fa-copy"></i></button><br/>
+</div>
+<div class="tab-pane" aria-labelledby="tabset3_oc">
+<div id="quarkuspdb-oc-port-forward" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># e.g. oc port-forward -n quarkustutorial svc/mariadb --address 192.168.64.1 3306:3306
+oc -n quarkustutorial port-forward svc/mariadb 3306:3306 --address &lt;your local ip address&gt;</code></pre>
+</div>
+</div>
+<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkuspdb-oc-port-forward"><i class="fa fa-copy"></i></button><br/>
+</div>
+</div>
+</div>
 <div class="paragraph">
 <p>You can now use <code>adminer</code> or any other SQL tool to access the mariadb using the <code>&lt;your ip address&gt;:3306</code></p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The server address in the adminer can be either <code>mariadb</code> the kubernetes service name of the mariadb database or
+the <code>&lt;your ip address&gt;:3306</code></p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -421,7 +468,7 @@ For the easier reference, we shall call the <code>fruits-app</code> project fold
 <div class="sect4">
 <h5 id="quarkusp-configure-props"><a class="anchor" href="#quarkusp-configure-props"></a>Edit the application.properties</h5>
 <div class="paragraph">
-<p>Add the following proeprties to $PROJECT_HOME/src/main/properties/application.properties:</p>
+<p>Add the following properties to $PROJECT_HOME/src/main/properties/application.properties:</p>
 </div>
 <div class="admonitionblock tip">
 <table>
