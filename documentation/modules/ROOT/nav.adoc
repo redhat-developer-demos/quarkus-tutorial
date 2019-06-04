@@ -18,7 +18,7 @@
 ** xref:03-containers-kubernetes.adoc#conk8s-build-container-app[Containerize Quarkus Application]
 ** xref:03-containers-kubernetes.adoc#conk8s-call-svc[Invoke Service]
 ** xref:03-containers-kubernetes.adoc#conk8s-deploy-k8s-app[Deploy on Kubernetes]
-*** xref:03-containers-kubernetes.adoc#conk8s-k8s-tag-containers[Tag Container Images]
+*** xref:03-containers-kubernetes.adoc#conk8s-deploy-k8s-app[Tag Container Images]
 *** xref:03-containers-kubernetes.adoc#conk8s-k8s-apply-resources[Apply Kubernetes Resources]
 *** xref:03-containers-kubernetes.adoc#conk8s-invoke-k8s-svc[Invoke Kubernetes Service]
 
