@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Setup :: Quarkus Tutorial</title>
-    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/0.15.0/01-setup.html">
+    <title>Basics and Fundamentals :: Quarkus Tutorial</title>
+    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/0.16.0/02-basics-fundas.html">
     <meta name="generator" content="Antora 2.0.0">
     <link rel="stylesheet" href="../../_/css/site.css">
 <link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
@@ -28,7 +28,7 @@
 </header>
 <div class="main-wrapper">
 <div class="navigation-container"  data-component="quarkus-tutorial"
-  data-version="0.15.0" >
+  data-version="0.16.0" >
   <aside class="navigation">
     <div class="panels">
       <div class="navigation-menu is-active" data-panel="menu">
@@ -37,45 +37,45 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <button class="nav-toggle"></button>
     <a class="nav-link" href="01-setup.html">1. Setup</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#prerequisite">Prerequisites</a>
+    <a class="nav-link" href="01-setup.html#prerequisite">Prerequisites</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#download-tutorial-sources">Download Tutorial Sources</a>
+    <a class="nav-link" href="01-setup.html#download-tutorial-sources">Download Tutorial Sources</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#kubernetes-cluster">Kubernetes Cluster</a>
+    <a class="nav-link" href="01-setup.html#kubernetes-cluster">Kubernetes Cluster</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#setup-work-folder">Work Folder</a>
+    <a class="nav-link" href="01-setup.html#setup-work-folder">Work Folder</a>
   </li>
 </ul>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <button class="nav-toggle"></button>
     <a class="nav-link" href="02-basics-fundas.html">2.Basics and Fundamentals</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="02-basics-fundas.html#basics-prerequisite">Prerequisites</a>
+    <a class="nav-link" href="#basics-prerequisite">Prerequisites</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="02-basics-fundas.html#basics-create-quarkus-app">Create Quarkus Application</a>
+    <a class="nav-link" href="#basics-create-quarkus-app">Create Quarkus Application</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="02-basics-fundas.html#basics-ide-quarkus-project">Open Application in IDE</a>
+    <a class="nav-link" href="#basics-ide-quarkus-project">Open Application in IDE</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="02-basics-fundas.html#basics-build-run-quarkus-app">Build and Run Application</a>
+    <a class="nav-link" href="#basics-build-run-quarkus-app">Build and Run Application</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="02-basics-fundas.html#basics-update-code">Update Code</a>
+    <a class="nav-link" href="#basics-update-code">Update Code</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="02-basics-fundas.html#basics-call-svc">Invoke Service</a>
+    <a class="nav-link" href="#basics-call-svc">Invoke Service</a>
   </li>
 </ul>
   </li>
@@ -97,7 +97,7 @@
     <a class="nav-link" href="03-containers-kubernetes.html#conk8s-deploy-k8s-app">Deploy on Kubernetes</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="03-containers-kubernetes.html#conk8s-k8s-tag-containers">Tag Container Images</a>
+    <a class="nav-link" href="03-containers-kubernetes.html#conk8s-deploy-k8s-app">Tag Container Images</a>
   </li>
   <li class="nav-item" data-depth="3">
     <a class="nav-link" href="03-containers-kubernetes.html#conk8s-k8s-apply-resources">Apply Kubernetes Resources</a>
@@ -213,162 +213,41 @@
   <nav class="crumbs" aria-label="breadcrumbs">
   <ul>
     <li class="crumb"><a href="index.html">Quarkus Tutorial</a></li>
-    <li class="crumb"><a href="01-setup.html">1. Setup</a></li>
+    <li class="crumb"><a href="02-basics-fundas.html">2.Basics and Fundamentals</a></li>
   </ul>
 </nav>
 </div>
 <article class="doc">
-<h1>Setup</h1>
-<div class="sect1">
-<h2 id="prerequisite"><a class="anchor" href="#prerequisite"></a>Prerequisite Tools</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_ide"><a class="anchor" href="#_ide"></a>IDE</h3>
-<div class="paragraph">
-<p>You can use any Java IDE for this tutorial but if you didn&#8217;t try it before, we recommend <a href="https://code.visualstudio.com/download">VS Code</a> with the <a href="https://code.visualstudio.com/docs/languages/java">Java Extension Pack</a>.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_cli_tools"><a class="anchor" href="#_cli_tools"></a>CLI Tools</h3>
-<div class="paragraph">
-<p>The following CLI tools are required for running the exercises in this tutorial. Please have them installed and configured before you get started with any of the tutorial chapters.</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-center valign-top"><strong>Tool</strong></th>
-<th class="tableblock halign-center valign-top"><strong>macOS</strong></th>
-<th class="tableblock halign-center valign-top"><strong>Fedora</strong></th>
-<th class="tableblock halign-center valign-top"><strong>Windows</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Kubernetes</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>brew install kubernetes-cli</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/kubernetes/kubernetes/releases">Kubernetes Releases</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/kubernetes/kubernetes/releases">Kubernetes Releases</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><strong>(OR)</strong></p></td>
-<td class="tableblock halign-center valign-top"></td>
-<td class="tableblock halign-center valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>oc</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-mac.zip">openshift-origin-client-tools-v3.11.0</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit.tar.gz">openshift-origin-client-tools-v3.11.0</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-windows.zip">openshift-origin-client-tools-v3.11.0</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>git</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://git-scm.com/download/mac" class="bare">https://git-scm.com/download/mac</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>dnf install git</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">Make sure you have the <a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10">Windows Subsystem for Linux</a> installed</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Docker</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://www.docker.com/products/docker-desktop">Docker Desktop for Mac</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>dnf install docker</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://www.docker.com/products/docker-desktop">Docker Desktop for Windows</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock">Java 8</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>brew tap AdoptOpenJDK/openjdk &amp;&amp; brew cask install adoptopenjdk8</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>dnf install java-1.8.0-openjdk.x86_64</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://adoptopenjdk.net">Windows</a> (Make sure you set the <code>JAVA_HOME</code> environment variable and add <code>%JAVA_HOME%\bin</code> to your <code>PATH</code>)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock">Apache Maven 3.6.0+</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">brew install maven</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">dnf install maven</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://maven.apache.org/download.cgi">Windows</a> (Make sure you set the <code>MAVEN_HOME</code> environment variable and add <code>%MAVEN_HOME%\bin</code> to your <code>PATH</code>)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock">Graal VM</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/oracle/graal/releases/download/vm-1.0.0-rc16/graalvm-ce-1.0.0-rc16-macos-amd64.tar.gz">graalvm-ce-1.0.0-rc16</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/oracle/graal/releases/download/vm-1.0.0-rc16/graalvm-ce-1.0.0-rc16-linux-amd64.tar.gz">graalvm-ce-1.0.0-rc16</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">N.A</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/wercker/stern">stern</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>brew install stern</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>sudo curl --output /usr/local/bin/stern -L <a href="https://github.com/wercker/stern/releases/download/1.6.0/stern_linux_amd64" class="bare">https://github.com/wercker/stern/releases/download/1.6.0/stern_linux_amd64</a> &amp;&amp; sudo chmod +x /usr/local/bin/stern</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/wercker/stern/releases" class="bare">https://github.com/wercker/stern/releases</a></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="remote-docker-repository"><a class="anchor" href="#remote-docker-repository"></a>Remote Repository</h2>
+<h1>Basics and Fundamentals</h1>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>For some parts of the tutorial, you will be pushing and pulling container images to and from a remote image repository. You will need an account with publish rights. As of this writing, knative works best with <a href="https://docker.io">Docker Hub</a>.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="download-tutorial-sources"><a class="anchor" href="#download-tutorial-sources"></a>Download Tutorial Sources</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Before we start setting up the environment, let&#8217;s clone the tutorial sources and set the <code>TUTORIAL_HOME</code> environment variable to point to the root directory of the tutorial:</p>
-</div>
-<div id="cloneRepo" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone <a href="https://github.com/redhat-developer-demos/quarkus-tutorial" class="bare">https://github.com/redhat-developer-demos/quarkus-tutorial</a></code></pre>
-</div>
-</div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#cloneRepo"><i class="fa fa-copy"></i></button><br/>
-<div class="paragraph">
-<p>The <code>work</code> folder in <code>$TUTORIAL_HOME</code> can be used to download the demo application resources and refer to them during the exercises. The <code>work</code> folder has a README with instructions on the source code repo and git commands to clone the sources.</p>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>This tutorial was developed and tested with:</p>
+<p>At the end of this chapter you will be able to :</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Quarkus <code>0.15.0</code></p>
+<p>Create a Quarkus Java Application</p>
 </li>
 <li>
-<p>Minikube <code>1.0.1+</code></p>
+<p>Build and run the Java application in JVM mode.</p>
 </li>
 <li>
-<p>OpenShift <code>3.11+</code></p>
+<p>Build and run the Java application in Native mode.</p>
 </li>
 <li>
-<p>Minishift <code>1.31+</code></p>
-</li>
-<li>
-<p>Graal VM <code>graalvm-ce-1.0.0-rc16</code></p>
+<p>Build and run the Java Application in Developer mode</p>
 </li>
 </ul>
-</div>
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="kubernetes-cluster"><a class="anchor" href="#kubernetes-cluster"></a>Kubernetes Cluster</h2>
+<h2 id="basics-prerequisite"><a class="anchor" href="#basics-prerequisite"></a>Prerequisite</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>The following checks ensure that each chapter exercises are done with the right environment settings.</p>
+</div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
 <ul>
@@ -382,48 +261,264 @@
 </div>
 <div class="content">
 <div class="tab-pane" aria-labelledby="tabset1_minikube">
-<div id="quarkus-start-minikube" class="listingblock">
+<div class="ulist">
+<ul>
+<li>
+<p>Set your local docker to use minikube docker daemon</p>
+</li>
+</ul>
+</div>
+<div id="minikube-set-env" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube profile quarkus-tutorial &amp;&amp; \
-minikube -p quarkus-tutorial start --memory=8192 --cpus=4 --disk-size=50g &amp;&amp; \
-kubectl create namespace quarkustutorial</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">eval $(minikube docker-env)</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkus-start-minikube"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#minikube-set-env"><i class="fa fa-clipboard"></i></button><br/>
+<div class="ulist">
+<ul>
+<li>
+<p>Kubernetes should be v1.12+</p>
+</li>
+</ul>
+</div>
+<div id="kubectl-version" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl version</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#kubectl-version"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_minishift">
-<div id="quarkus-start-minishift" class="listingblock">
+<div class="ulist">
+<ul>
+<li>
+<p>Set your local docker to use minishift docker daemon</p>
+</li>
+</ul>
+</div>
+<div id="minishift-set-env" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minishift profile set quarkus-tutorial &amp;&amp; \
-minishift start --memory=8192 --cpus=4 --disk-size=50g &amp;&amp; \
-minishift addon enable admin-user &amp;&amp; \
-minishift addon enable anyuid &amp;&amp; \
-oc new-project quarkustutorial</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">eval $(minishift docker-env)</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkus-start-minishift"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#minishift-set-env"><i class="fa fa-clipboard"></i></button><br/>
+<div class="ulist">
+<ul>
+<li>
+<p>OpenShift CLI should be 3.11+</p>
+</li>
+</ul>
+</div>
+<div id="oc-version" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc version</code></pre>
 </div>
 </div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#oc-version"><i class="fa fa-clipboard"></i></button><br/>
+<div class="ulist">
+<ul>
+<li>
+<p>Make sure to be on <code>quarkustutorial</code> OpenShift project</p>
+</li>
+</ul>
 </div>
+<div id="right-openshift-project" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc project -q</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#right-openshift-project"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
-<p>Prepare your shell environment</p>
+<p>If you are not on <code>quarkustutorial</code> project, then run following command to change to <code>quarkustutorial</code> project:</p>
 </div>
-<div id="quarkus-tutorial-shell-env" class="listingblock">
+<div id="change-to-openshift-project" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd quarkus-tutorial
-export TUTORIAL_HOME=`pwd`
-export GRAALVM_HOME='PUT THE LOCATION  WHERE YOU HAVE EXTRACTED GRAAL VM'</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc project quarkustutorial</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkus-tutorial-shell-env"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#change-to-openshift-project"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="setup-work-folder"><a class="anchor" href="#setup-work-folder"></a>Work folder (Optional)</h2>
+<h2 id="basics-create-quarkus-app"><a class="anchor" href="#basics-create-quarkus-app"></a>Create Quarkus Application</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The work folder i.e <code>$TUTORIAL_HOME/work</code> can be used as a work directory during the build.</p>
+<p>Navigate to the tutorial&#8217;s <code>work</code> folder:</p>
 </div>
+<div id="basics-create-quarkus-project" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work
+mvn io.quarkus:quarkus-maven-plugin:0.16.0:create</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-create-quarkus-project"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+</div>
+<div class="sect1">
+<h2 id="basics-ide-quarkus-app"><a class="anchor" href="#basics-ide-quarkus-app"></a>Open the Project in IDE</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Open or import the generated project into your IDE.</p>
+</div>
+<div class="paragraph">
+<p>If you are using <strong>vscode</strong>, assuming your project name is <code>my-quarkus-project</code> then you can do like,</p>
+</div>
+<div id="basics-ide-quarkus-project" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">code my-quarkus-project</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-ide-quarkus-project"><i class="fa fa-clipboard"></i></button><br/>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+All further sections of this chapter assumes the application name to be <code>my-quarkus-project</code>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="basics-build-run-quarkus-app"><a class="anchor" href="#basics-build-run-quarkus-app"></a>Build and Run the Quarkus Application</h2>
+<div class="sectionbody">
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset2_jvm-mode"></a>JVM mode</p>
+</li>
+<li>
+<p><a id="tabset2_native-mode"></a>Native mode</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset2_jvm-mode">
+<div id="basics-build-quarkus-jvm-app" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work/my-quarkus-project &amp;&amp; \
+./mvnw -DskipTests clean package</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-quarkus-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>To run the application in jvm mode</p>
+</div>
+<div id="basics-build-run-jvm-app" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">java -jar target/my-quarkus-project-1.0-SNAPSHOT-runner.jar</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-run-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+<div class="tab-pane" aria-labelledby="tabset2_native-mode">
+<div id="basics-build-quarkus-native-app" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work/my-quarkus-project &amp;&amp; \
+./mvnw -DskipTests clean package -Pnative</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-quarkus-native-app"><i class="fa fa-clipboard"></i></button><br/>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Native compilation will take few minutes to complete.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To run the application in native mode</p>
+</div>
+<div id="basics-build-run-native-app" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./target/my-quarkus-project-1.0-SNAPSHOT-runner</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-run-native-app"><i class="fa fa-clipboard"></i></button><br/>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Tests will fail on Windows as there is no graalvm support for windows, you can workaround it using <code>-DskipTests</code> option.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>You can <a href="#basics-call-svc">Invoke Service</a> to see a response like <code>hello</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="basics-run-quarkus-app-dev-mode"><a class="anchor" href="#basics-run-quarkus-app-dev-mode"></a>Run Quarkus Application in Development mode</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Stop the Quarkus applicaiton that might be running in <code>jvm</code> or <code>native</code> mode.</p>
+</div>
+<div class="paragraph">
+<p>Run the following command to start Quarkus application in development mode:</p>
+</div>
+<div id="basics-build-run-dev-mode" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+</div>
+<div class="sect1">
+<h2 id="basics-update"><a class="anchor" href="#basics-update"></a>Updating of code</h2>
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Only if running in Development mode
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You can edit the Java source(s) in your IDE. When you save and hit refresh in your browser, you will notice browser showing the new changes.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="basics-call-svc"><a class="anchor" href="#basics-call-svc"></a>Invoke Service</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The simple <code>hello</code> REST URI can be called from the browser using <a href="http://localhost:8080" class="bare">http://localhost:8080</a> or using cli like:</p>
+</div>
+<div id="basics-k8s-svc-call" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/hello</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </article>

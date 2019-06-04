@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Build Database Interactive Applications :: Quarkus Tutorial</title>
-    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/0.15.0/05-quarkus-panache.html">
+    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/0.16.0/05-quarkus-panache.html">
     <meta name="generator" content="Antora 2.0.0">
     <link rel="stylesheet" href="../../_/css/site.css">
 <link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
@@ -28,7 +28,7 @@
 </header>
 <div class="main-wrapper">
 <div class="navigation-container"  data-component="quarkus-tutorial"
-  data-version="0.15.0" >
+  data-version="0.16.0" >
   <aside class="navigation">
     <div class="panels">
       <div class="navigation-menu is-active" data-panel="menu">
@@ -97,7 +97,7 @@
     <a class="nav-link" href="03-containers-kubernetes.html#conk8s-deploy-k8s-app">Deploy on Kubernetes</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="03-containers-kubernetes.html#conk8s-k8s-tag-containers">Tag Container Images</a>
+    <a class="nav-link" href="03-containers-kubernetes.html#conk8s-deploy-k8s-app">Tag Container Images</a>
   </li>
   <li class="nav-item" data-depth="3">
     <a class="nav-link" href="03-containers-kubernetes.html#conk8s-k8s-apply-resources">Apply Kubernetes Resources</a>
@@ -254,7 +254,7 @@
 touch .keep <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-nav-to-work-folder"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-nav-to-work-folder"><i class="fa fa-clipboard"></i></button><br/>
 <div class="colist arabic">
 <table>
 <tr>
@@ -288,7 +288,7 @@ touch .keep <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -n quarkustutorial -f $TUTORIAL_HOME/kubernetes-apps/mariadb.yaml</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-deploy-db"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-deploy-db"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_oc">
 <div id="quarkusp-oc-deploy-db" class="listingblock">
@@ -296,7 +296,7 @@ touch .keep <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -n quarkustutorial -f $TUTORIAL_HOME/kubernetes-apps/mariadb.yaml</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-oc-deploy-db"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-oc-deploy-db"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
@@ -349,7 +349,7 @@ The actual pod name and NodePort will be different on your environment
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube service db-adminer -n quarkustutorial</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-open-db-adminer"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-open-db-adminer"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="tab-pane" aria-labelledby="tabset2_minishift">
 <div id="quarkusp-minishift-open-db-adminer" class="listingblock">
@@ -357,7 +357,7 @@ The actual pod name and NodePort will be different on your environment
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minishift openshift service db-adminer -n quarkustutorial</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-minishift-open-db-adminer"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-minishift-open-db-adminer"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
@@ -415,7 +415,7 @@ The actual pod name and NodePort will be different on your environment
 kubectl -n quarkustutorial port-forward svc/mariadb 3306:3306 --address &lt;your local ip address&gt;</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkuspdb-port-forward"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkuspdb-port-forward"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="tab-pane" aria-labelledby="tabset3_oc">
 <div id="quarkuspdb-oc-port-forward" class="listingblock">
@@ -424,7 +424,7 @@ kubectl -n quarkustutorial port-forward svc/mariadb 3306:3306 --address &lt;your
 oc -n quarkustutorial port-forward svc/mariadb 3306:3306 --address &lt;your local ip address&gt;</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkuspdb-oc-port-forward"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkuspdb-oc-port-forward"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
@@ -490,7 +490,7 @@ For the easier reference, we shall call the <code>fruits-app</code> project fold
   -Dextensions="mariadb,resteasy-jsonb,panache,swagger-ui,openapi,quarkus-smallrye-health"</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-mv-create-fruits-app"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-mv-create-fruits-app"><i class="fa fa-clipboard"></i></button><br/>
 </td>
 </tr>
 </table>
@@ -510,7 +510,7 @@ quarkus.hibernate-orm.database.generation = drop-and-create
 quarkus.hibernate-orm.log.sql = true</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkuspdb-update-props"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkuspdb-update-props"><i class="fa fa-clipboard"></i></button><br/>
 <div class="colist arabic">
 <table>
 <tr>
@@ -530,7 +530,7 @@ quarkus.hibernate-orm.log.sql = true</code></pre>
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkuspdb-test-dbconn"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkuspdb-test-dbconn"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>If all went well then you should be seeing something like the following in the log:</p>
 </div>
@@ -571,7 +571,7 @@ public class Fruit {
 }</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-fruit-entity"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-fruit-entity"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="sect4">
 <h5 id="quarkusp-edit-fruit-resource"><a class="anchor" href="#quarkusp-edit-fruit-resource"></a>Update Fruit Resource</h5>
@@ -601,7 +601,7 @@ public class FruitResource {
 }</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-fruit-entity1"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-fruit-entity1"><i class="fa fa-clipboard"></i></button><br/>
 <div class="colist arabic">
 <table>
 <tr>
@@ -648,7 +648,7 @@ public class Fruit extends PanacheEntity {
 }</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-fruit-entity2"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-fruit-entity2"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>Making the <code>Fruit</code> entity as a <code>Panache Entity</code> will make it both Entity and DAO and ofcourse the error in the <code>FruitResource.java</code> disappears.</p>
 </div>
@@ -711,7 +711,7 @@ public class FruitResource {
 }</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-fruit-add-persist"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-fruit-add-persist"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>Since we are in development accessing the Swagger UI <a href="http://localhost:8080/swagger-ui" class="bare">http://localhost:8080/swagger-ui</a> will reload the application.</p>
 </div>
@@ -765,7 +765,7 @@ INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Apple","F
 INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Grapes","Fall")</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-add-fruits"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-add-fruits"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>Update the <code>Fruit</code> entity with a finder method like</p>
 </div>
@@ -793,7 +793,7 @@ public class Fruit extends PanacheEntity {
 }</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-find-fruits"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-find-fruits"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>Update the <code>Fruit</code> resource with a REST method to get fruits by season:</p>
 </div>
@@ -840,7 +840,7 @@ public class FruitResource {
 }</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-get-find-fruits"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-get-find-fruits"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>To test finder use the Swagger UI <a href="http://localhost:8080/swagger-ui" class="bare">http://localhost:8080/swagger-ui</a>.</p>
 </div>
@@ -903,7 +903,7 @@ You can stop the <code>port-forward</code> and Quarkus application running in de
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-jvm-app"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>After successful maven build, run the following command to build te container:</p>
 </div>
@@ -912,7 +912,7 @@ You can stop the <code>port-forward</code> and Quarkus application running in de
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.jvm -t example/fruits-app-jvm .</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-jvm-app-container"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-jvm-app-container"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="tab-pane" aria-labelledby="tabset4_native-mode">
 <div id="conk8s-build-quarkus-native-app" class="listingblock">
@@ -920,7 +920,7 @@ You can stop the <code>port-forward</code> and Quarkus application running in de
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package -Pnative -Dnative-image.docker-build=true <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-native-app"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-native-app"><i class="fa fa-clipboard"></i></button><br/>
 <div class="colist arabic">
 <table>
 <tr>
@@ -949,7 +949,7 @@ Native compilation will take few minutes to complete.
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/fruits-app-native .</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-native-app-container"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-native-app-container"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
@@ -964,7 +964,7 @@ Native compilation will take few minutes to complete.
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cp $TUTORIAL_HOME/templates/app.yaml .</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-copy-k8s-app-template"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-copy-k8s-app-template"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>Edit the app.yaml and replace the following variables:</p>
 </div>
@@ -1009,7 +1009,7 @@ export REGISTRY_USER_NAME='demo' &amp;&amp; \
 export APP_IMAGE="docker.io/$REGISTRY_USER_NAME/fruits-app-native"</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-set-env"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-set-env"><i class="fa fa-clipboard"></i></button><br/>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -1032,7 +1032,7 @@ Please update the <code>demo</code> registry user to match you container registr
       value: "jdbc:mariadb://mariadb/demodb"</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#quarkusp-update-db-url"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-update-db-url"><i class="fa fa-clipboard"></i></button><br/>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -1069,7 +1069,7 @@ Please ensure the indentation of app.yaml is right after this update.
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f $TUTORIAL_HOME/work/fruits-app/app.yaml</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-k8s-app"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="tab-pane" aria-labelledby="tabset5_oc">
 <div id="conk8s-oc-run-deploy-k8s-app" class="listingblock">
@@ -1077,7 +1077,7 @@ Please ensure the indentation of app.yaml is right after this update.
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f $TUTORIAL_HOME/work/fruits-app/app.yaml</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-deploy-k8s-app"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-deploy-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
@@ -1102,7 +1102,7 @@ Please ensure the indentation of app.yaml is right after this update.
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(minikube ip):$(kubectl get svc $APP_NAME -o jsonpath='{.spec.ports[0].nodePort}')</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-oc-app"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-oc-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="tab-pane" aria-labelledby="tabset6_oc">
 <div class="paragraph">
@@ -1113,7 +1113,7 @@ Please ensure the indentation of app.yaml is right after this update.
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc expose service $APP_NAME</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-expose-svc"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-expose-svc"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>Once the service is exposed we can use the following command to get the public url:</p>
 </div>
@@ -1122,7 +1122,7 @@ Please ensure the indentation of app.yaml is right after this update.
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(oc get routes $APP_NAME -o jsonpath='{.spec.host}')</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-get-route"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-get-route"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
@@ -1134,7 +1134,7 @@ Please ensure the indentation of app.yaml is right after this update.
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl $SVC_URL/fruits</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-call-k8s-svc"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-call-k8s-svc"><i class="fa fa-clipboard"></i></button><br/>
 <div class="admonitionblock note">
 <table>
 <tr>

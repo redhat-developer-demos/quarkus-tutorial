@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cloud Native Deployment :: Quarkus Tutorial</title>
-    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/0.15.0/03-containers-kubernetes.html">
+    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/0.16.0/03-containers-kubernetes.html">
     <meta name="generator" content="Antora 2.0.0">
     <link rel="stylesheet" href="../../_/css/site.css">
 <link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
@@ -28,7 +28,7 @@
 </header>
 <div class="main-wrapper">
 <div class="navigation-container"  data-component="quarkus-tutorial"
-  data-version="0.15.0" >
+  data-version="0.16.0" >
   <aside class="navigation">
     <div class="panels">
       <div class="navigation-menu is-active" data-panel="menu">
@@ -97,7 +97,7 @@
     <a class="nav-link" href="#conk8s-deploy-k8s-app">Deploy on Kubernetes</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="#conk8s-k8s-tag-containers">Tag Container Images</a>
+    <a class="nav-link" href="#conk8s-deploy-k8s-app">Tag Container Images</a>
   </li>
   <li class="nav-item" data-depth="3">
     <a class="nav-link" href="#conk8s-k8s-apply-resources">Apply Kubernetes Resources</a>
@@ -267,7 +267,7 @@
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">eval $(minikube docker-env)</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#minikube-set-env"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#minikube-set-env"><i class="fa fa-clipboard"></i></button><br/>
 <div class="ulist">
 <ul>
 <li>
@@ -280,7 +280,7 @@
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl version</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#kubectl-version"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#kubectl-version"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_minishift">
 <div class="ulist">
@@ -295,7 +295,7 @@
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">eval $(minishift docker-env)</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#minishift-set-env"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#minishift-set-env"><i class="fa fa-clipboard"></i></button><br/>
 <div class="ulist">
 <ul>
 <li>
@@ -308,7 +308,7 @@
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc version</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#oc-version"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#oc-version"><i class="fa fa-clipboard"></i></button><br/>
 <div class="ulist">
 <ul>
 <li>
@@ -321,7 +321,7 @@
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc project -q</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#right-openshift-project"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#right-openshift-project"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>If you are not on <code>quarkustutorial</code> project, then run following command to change to <code>quarkustutorial</code> project:</p>
 </div>
@@ -330,7 +330,7 @@
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc project quarkustutorial</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#change-to-openshift-project"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#change-to-openshift-project"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
@@ -357,7 +357,7 @@
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-jvm-app"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>After successful maven build, run the following command to build te container:</p>
 </div>
@@ -366,7 +366,7 @@
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.jvm -t example/my-quarkus-project-jvm .</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-jvm-app-container"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-jvm-app-container"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="tab-pane" aria-labelledby="tabset2_native-mode">
 <div id="conk8s-build-quarkus-native-app" class="listingblock">
@@ -374,7 +374,7 @@
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package -Pnative -Dnative-image.docker-build=true <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-native-app"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-native-app"><i class="fa fa-clipboard"></i></button><br/>
 <div class="colist arabic">
 <table>
 <tr>
@@ -403,7 +403,7 @@ Native compilation will take few minutes to complete.
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/my-quarkus-project-native .</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-native-app-container"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-native-app-container"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
@@ -428,7 +428,7 @@ Native compilation will take few minutes to complete.
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -it --rm -p 8080:8080 example/my-quarkus-project-jvm</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#build-run-jvm-app"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#build-run-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="tab-pane" aria-labelledby="tabset3_native-mode">
 <div id="build-run-native-app" class="listingblock">
@@ -436,7 +436,7 @@ Native compilation will take few minutes to complete.
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -it --rm -p 8080:8080 example/my-quarkus-project-native</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#build-run-native-app"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#build-run-native-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
@@ -456,7 +456,7 @@ Native compilation will take few minutes to complete.
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/hello</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#basics-k8s-svc-call"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 <div class="sect1">
@@ -470,7 +470,7 @@ Native compilation will take few minutes to complete.
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cp $TUTORIAL_HOME/templates/app.yaml .</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-copy-k8s-app-template"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-copy-k8s-app-template"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>Edit the app.yaml and replace the following variables:</p>
 </div>
@@ -515,7 +515,7 @@ export REGISTRY_USER_NAME='demo' &amp;&amp; \
 export APP_IMAGE="docker.io/$REGISTRY_USER_NAME/my-quarkus-project-native"</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-set-env"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-set-env"><i class="fa fa-clipboard"></i></button><br/>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -548,7 +548,7 @@ Please update the <code>demo</code> registry user to match you container registr
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f $TUTORIAL_HOME/work/my-quarkus-project/app.yaml</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-k8s-app"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="tab-pane" aria-labelledby="tabset4_oc">
 <div id="conk8s-oc-run-deploy-k8s-app" class="listingblock">
@@ -556,7 +556,7 @@ Please update the <code>demo</code> registry user to match you container registr
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f $TUTORIAL_HOME/work/my-quarkus-project/app.yaml</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-deploy-k8s-app"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-deploy-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
@@ -581,7 +581,7 @@ Please update the <code>demo</code> registry user to match you container registr
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(minikube ip):$(kubectl get svc $APP_NAME -o jsonpath='{.spec.ports[0].nodePort}')</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-oc-app"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-oc-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="tab-pane" aria-labelledby="tabset5_oc">
 <div class="paragraph">
@@ -592,7 +592,7 @@ Please update the <code>demo</code> registry user to match you container registr
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc expose service $APP_NAME</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-expose-svc"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-expose-svc"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>Once the service is exposed we can use the following command to get the public url:</p>
 </div>
@@ -601,7 +601,7 @@ Please update the <code>demo</code> registry user to match you container registr
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(oc get routes $APP_NAME -o jsonpath='{.spec.host}')</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-get-route"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-get-route"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
@@ -613,7 +613,7 @@ Please update the <code>demo</code> registry user to match you container registr
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl $SVC_URL/hello</code></pre>
 </div>
 </div>
-<button class="copybtn" title="Copy to clipboard" data-clipboard-target="#conk8s-call-k8s-svc"><i class="fa fa-copy"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-call-k8s-svc"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
