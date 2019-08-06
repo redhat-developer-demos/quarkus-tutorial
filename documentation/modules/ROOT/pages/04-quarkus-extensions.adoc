@@ -38,6 +38,232 @@ cd my-quarkus-project && \
 ----
 copyToClipboard::qext-mvn-list-extensions[]
 
+[#qext-rest-client]
+== Rest Client
+
+In a microservices architecture, and generally speaking, any kind of application, might need to access other RESTful Web Services.
+Quarkus provides a Rest client following the https://github.com/eclipse/microprofile-rest-client[MicroProfile Rest Client] spec.
+
+Let's create a Rest client that access to http://www.fruityvice.com to get nutrition facts about fruits.
+Two endpoints are the important ones for this workshop:
+
+* `api/fruit/all` that returns all fruits.
+
+[source, json]
+----
+[{
+    "genus": "Malus",
+    "name": "Apple",
+    "id": 6,
+    "family": "Rosaceae",
+    "order": "Rosales",
+    "nutritions": {
+        "carbohydrates": 11.4,
+        "protein": 0.3,
+        "fat": 0.4,
+        "calories": 52,
+        "sugar": 10.3
+    }
+}, {...}
+]
+----
+
+* `api/fruit/\{name\}` that returns specific info from given fruit name.
+
+[source, json]
+----
+{
+    "genus": "Musa",
+    "name": "Banana",
+    "id": 1,
+    "family": "Musaceae",
+    "order": "Zingiberales",
+    "nutritions": {
+        "carbohydrates": 22,
+        "protein": 1,
+        "fat": 0.2,
+        "calories": 96,
+        "sugar": 17.2
+    }
+}
+----
+
+[#qext-add-rest-client-extensions]
+=== Adding Rest Client extension
+
+:quarkus-rest-client-ext-name: quarkus-rest-client, quarkus-resteasy-jsonb
+
+To add Rest Client and JSON-B extensions (`{quarkus-rest-client-ext-name}`) to the Quarkus application, run the following command from `{quarkus-project-name}` project directory:
+
+[#qext-mvn-add-rest-client-extension]
+[source,bash,subs="+macros,+attributes"]
+----
+./mvnw quarkus:add-extension -Dextension="{quarkus-rest-client-ext-name}"
+----
+copyToClipboard::qext-mvn-add-rest-client-extension[]
+
+[#qext-create-fruity-vice-pojo]
+=== Creating FruityVice POJO
+
+We need to create a POJO object that is used to unmarshal JSON message from http://www.fruityvice.com to Java object.
+
+Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `FruityVice` with the following contents:
+
+[#quarkusrc-fruity-vice-pojo]
+[source,java,subs="+macros,+attributes"]
+----
+package com.example;
+
+public class FruityVice {
+
+    private String name;
+    private Nutritions nutritions;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Nutritions getNutritions() {
+        return nutritions;
+    }
+
+    public void setNutritions(Nutritions nutritions) {
+        this.nutritions = nutritions;
+    }
+
+    public static class Nutritions {
+        private double fat;
+        private int calories;
+
+        public double getFat() {
+            return fat;
+        }
+
+        public void setFat(double fat) {
+            this.fat = fat;
+        }
+
+        public int getCalories() {
+            return calories;
+        }
+
+        public void setCalories(int calories) {
+            this.calories = calories;
+        }
+
+    }
+}
+----
+copyToClipboard::quarkusrc-fruity-vice-pojo[]
+
+[#qext-create-fruity-vice-service]
+=== Creating FruityVice Service
+
+The next thing is to create a Java interface that acts as a client between code and external service.
+
+Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `FruityViceService` with the following contents:
+
+[#quarkusrc-fruity-vice-service]
+[source,java,subs="+macros"]
+----
+package com.example;
+
+import java.util.List;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
+@Path("/api")
+@RegisterRestClient
+public interface FruityViceService {
+
+    @GET
+    @Path("/fruit/all")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<FruityVice> getAllFruits();
+    
+    @GET
+    @Path("/fruit/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public FruityVice getFruitByName(@PathParam("name") String name);
+
+}
+----
+copyToClipboard::quarkusrc-fruity-vice-service[]
+
+[#qext-create-fruity-vice-service-config]
+=== Configuring FruityVice Service
+
+Add the following properties to pass:[$PROJECT_HOME]/src/main/resources/application.properties:
+
+[#quarkusrc-config-fruity-update-props]
+[source,config,subs="+macros,+attributes"]
+----
+org.alexsotob.quickstart.FruityViceService/mp-rest/url=http://www.fruityvice.com
+----
+copyToClipboard::quarkusrc-config-fruity-update-props[]
+
+[#qext-create-fruity-vice-service-resclient]
+=== Using the RestClient
+
+Open the following Java class pass:[$PROJECT_HOME]/src/main/java/com/example/FruitResource.java and copy the next content in its body:
+
+[#quarkusrc-fruity-vice-service]
+[source,java,subs="+macros"]
+----
+@Inject
+@RestClient
+FruityViceService fruityViceService;
+
+@GET
+@Path("{name}")
+@Produces(MediaType.APPLICATION_JSON)
+public FruityVice getFruitInfoByName(@PathParam("name") String name) {
+    return fruityViceService.getFruitByName(name);
+}
+----
+copyToClipboard::quarkusrc-fruity-vice-service[]
+
+[#qext-build-run-quarkus-rest-client]
+=== Build and Run the Quarkus Application
+
+include::ROOT:partial$compile-and-run.adoc[]
+
+[#qext-call-fruity-rest-client]
+=== Invoke Service
+:doc-sec: rest-client
+:k8s-cli: k8s
+:path: fruit/banana
+:k8s-env: minikube
+:cli-tool: curl
+:address: localhost
+
+The simple `{path}` REST URI can be called via browser using http://localhost:8080/{path} or using CLI like: 
+
+include::ROOT:partial$invoke-service.adoc[tag=call]
+
+The REST call about should return an response like:
+
+[source,json]
+----
+{
+    "name":"Banana",
+    "nutritions":{
+        "calories":96,
+        "fat":0.2
+    }
+}
+----
+
 [#qext-health-checks]
 == Health checks
 

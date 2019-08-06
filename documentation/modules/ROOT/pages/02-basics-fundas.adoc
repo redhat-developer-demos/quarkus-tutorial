@@ -45,57 +45,8 @@ NOTE: All further sections of this chapter assumes the application name to be `m
 
 [#basics-build-run-quarkus-app]
 == Build and Run the Quarkus Application
-[tabs]
-====
-JVM mode::
-+
---
-[#basics-build-quarkus-jvm-app]
-[source,bash,subs="+macros,+attributes"]
-----
-cd pass:[$TUTORIAL_HOME]/work/my-quarkus-project && \
-./mvnw -DskipTests clean package
-----
-copyToClipboard::basics-build-quarkus-jvm-app[]
 
-To run the application in jvm mode
-
-[#basics-build-run-jvm-app]
-[source,bash,subs="+macros,+attributes"]
-----
-java -jar target/my-quarkus-project-1.0-SNAPSHOT-runner.jar
-----
-copyToClipboard::basics-build-run-jvm-app[]
-
---
-Native mode::
-+
---
-[#basics-build-quarkus-native-app]
-[source,bash,subs="+macros,+attributes"]
-----
-cd pass:[$TUTORIAL_HOME]/work/my-quarkus-project && \
-./mvnw -DskipTests clean package -Pnative
-----
-copyToClipboard::basics-build-quarkus-native-app[]
-
-NOTE: Native compilation will take few minutes to complete.
-
-To run the application in native mode
-
-[#basics-build-run-native-app]
-[source,bash,subs="+macros,+attributes"]
-----
-./target/my-quarkus-project-1.0-SNAPSHOT-runner
-----
-copyToClipboard::basics-build-run-native-app[]
-
-[IMPORTANT]
-=====
-Tests will fail on Windows as there is no graalvm support for windows, you can workaround it using `-DskipTests` option.
-=====
---
-====
+include::ROOT:partial$compile-and-run.adoc[]
 
 You can <<basics-call-svc>> to see a response like `hello`.
 
