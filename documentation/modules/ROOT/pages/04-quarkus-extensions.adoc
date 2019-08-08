@@ -116,6 +116,8 @@ package com.example;
 
 public class FruityVice {
 
+    public static FruityVice EMPTY_FRUIT = new FruityVice();
+
     private String name;
     private Nutritions nutritions;
 
@@ -233,10 +235,12 @@ public FruityVice getFruitInfoByName(@PathParam("name") String name) {
 ----
 copyToClipboard::quarkusrc-fruity-vice-service[]
 
-[#qext-build-run-quarkus-rest-client]
-=== Build and Run the Quarkus Application
+[#qext-rest-client-run-quarkus-app-dev-mode]
+== Run Quarkus Application in Development mode
 
-include::ROOT:partial$compile-and-run.adoc[]
+:section-build-run: rest-client
+
+include::ROOT:partial$run-dev-mode.adoc[]
 
 [#qext-call-fruity-rest-client]
 === Invoke Service
@@ -263,6 +267,205 @@ The REST call about should return an response like:
     }
 }
 ----
+
+[#qext-fault-tolerance]
+== Fault Tolerance
+
+It is increasingly important to build fault tolerant micro services. Fault tolerance is about leveraging different strategies to guide the execution and result of some logic. Retry policies, bulkheads, and circuit breakers are popular concepts in this area. 
+Quarkus integrates with https://github.com/eclipse/microprofile-fault-tolerance[MicroProfile Fault Tolerance] spec to provide resiliency capabilities.
+
+[#qext-add-fault-tolerance-extensions]
+=== Adding Fault Tolerance extension
+
+:quarkus-fault-tolerance-ext-name: quarkus-smallrye-fault-tolerance
+
+To add Fault Tolernace extension (`{quarkus-fault-tolerance-ext-name}`) to the Quarkus application, run the following command from `{quarkus-project-name}` project directory:
+
+[#qext-mvn-add-fault-tolernace-extension]
+[source,bash,subs="+macros,+attributes"]
+----
+./mvnw quarkus:add-extension -Dextension="{quarkus-fault-tolerance-ext-name}"
+----
+copyToClipboard::qext-mvn-add-fault-tolernace-extension[]
+
+[#qext-retry-fruity-vice-service]
+=== Add Retry to Fruity Vice Service
+
+Let's add the retry policy in `FruityViceService`.
+
+Add the following annotation to pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruityViceService.java:
+
+[#quarkusft-retry-fruit-vice-service]
+[source,config,subs="+macros"]
+----
+@GET
+@Path("/fruit/{name}")
+@Produces(MediaType.APPLICATION_JSON)
+@Retry(maxRetries = 3, delay = 2000)
+public FruityVice getFruitByName(@PathParam("name") String name);
+----
+copyToClipboard::quarkusft-retry-fruit-vice-service[]
+
+Now in case of any error, 3 retries are done automatically, waiting for 2 seconds between retries.
+
+[#qext-fault-tolerance-run-quarkus-app-dev-mode]
+=== Run Quarkus Application in Development mode
+
+:section-build-run: fault-tolerance
+
+include::ROOT:partial$run-dev-mode.adoc[]
+
+[#qext-call-fruity-fault-tolerance-retry]
+=== Invoke Service
+:doc-sec: fault-tolerance
+:k8s-cli: k8s
+:path: fruit/banana
+:k8s-env: minikube
+:cli-tool: curl
+:address: localhost
+
+The simple `{path}` REST URI can be called via browser using http://localhost:8080/{path} or using CLI like: 
+
+include::ROOT:partial$invoke-service.adoc[tag=call]
+
+The REST call about should return an response like:
+
+[source,json]
+----
+{
+    "name":"Banana",
+    "nutritions":{
+        "calories":96,
+        "fat":0.2
+    }
+}
+----
+
+No change of previous calls done in <<Adding Rest Client extension>> section, but now switch off your network so you do not have access to http://www.fruityvice.com.
+And make again a request to http://localhost:8080/{path}.
+
+include::ROOT:partial$invoke-service.adoc[tag=call]
+
+Now after waiting 6 seconds (3 retries x 2 seconds), the next exception is thrown `java.net.UnknownHostException: www.fruityvice.com`.
+
+[#qext-fallback-fruity-vice-service]
+=== Add Fallback to Fruity Vice Service
+
+Let's add a fallback policy in case of an error in `FruityViceService`.
+
+Add the following annotation to pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruityViceService.java:
+
+[#quarkusft-fallback-fruit-vice-service]
+[source,config,subs="+macros"]
+----
+@GET
+@Path("/fruit/{name}")
+@Produces(MediaType.APPLICATION_JSON)
+@Retry(maxRetries = 3, delay = 2000)
+@Fallback(value = FruityViceRecovery.class)
+public FruityVice getFruitByName(@PathParam("name") String name);
+
+public static class FruityViceRecovery implements FallbackHandler<FruityVice> {
+
+    @Override
+    public FruityVice handle(ExecutionContext context) {
+        return FruityVice.EMPTY_FRUIT;
+	}
+
+}
+----
+copyToClipboard::quarkusft-fallback-fruit-vice-service[]
+
+Now in case of any error, 3 retries are done automatically, waiting for 2 seconds between retries. 
+If the error persits, then the fallback method is executed.
+
+[#qext-fault-tolerance-fallback-run-quarkus-app-dev-mode]
+=== Run Quarkus Application in Development mode
+
+:section-build-run: fault-tolerance-fallback
+
+include::ROOT:partial$run-dev-mode.adoc[]
+
+[#qext-call-fruity-fault-tolerance-fallback]
+=== Invoke Service
+:doc-sec: fault-tolerance-tolerance
+:k8s-cli: k8s
+:path: fruit/banana
+:k8s-env: minikube
+:cli-tool: curl
+:address: localhost
+
+The simple `{path}` REST URI can be called via browser using http://localhost:8080/{path} or using CLI like: 
+
+include::ROOT:partial$invoke-service.adoc[tag=call]
+
+Now after waiting for 6 seconds (3 retries x 2 seconds), an empty object is sent instead of an exception.
+
+[source,json]
+----
+{}
+----
+
+[#qext-circuit-breaker-fruity-vice-service]
+=== Add Circuit Breaker to Fruity Vice Service
+
+Let's add the circuit breaker policy in `FruityViceService`.
+
+Remove previous annotations of fallback and retry policies and add the following annotation to pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruityViceService.java:
+
+[#quarkusft-circuit-breaker-fruit-vice-service]
+[source,config,subs="+macros"]
+----
+@GET
+@Path("/fruit/{name}")
+@Produces(MediaType.APPLICATION_JSON)
+@CircuitBreaker(requestVolumeThreshold = 4, failureRatio=0.75, delay = 5000)
+public FruityVice getFruitByName(@PathParam("name") String name);
+
+public static class FruityViceRecovery implements FallbackHandler<FruityVice> {
+
+    @Override
+    public FruityVice handle(ExecutionContext context) {
+        return FruityVice.EMPTY_FRUIT;
+	}
+
+}
+----
+copyToClipboard::quarkusft-circuit-breaker-fruit-vice-service[]
+
+Now, if 3 (4 x 0.75) failures occur among the rolling window of 4 consecutive invocations then the circuit is opened for 5000 ms and then be back to half open. 
+If the invocation succeeds then the circuit is back to closed again.
+
+[#qext-circuit-breaker-run-quarkus-app-dev-mode]
+=== Run Quarkus Application in Development mode
+
+:section-build-run: fault-tolerance-circuit-breaker
+
+include::ROOT:partial$run-dev-mode.adoc[]
+
+[#qext-call-fruity-fault-tolerance-circuit-breaker]
+=== Invoke Service
+:doc-sec: fault-tolerance-tolerance
+:k8s-cli: k8s
+:path: fruit/banana
+:k8s-env: minikube
+:cli-tool: curl
+:address: localhost
+
+Do 5 consecutive calls to the service, `{path}` REST URI can be called via browser using http://localhost:8080/{path} or using CLI like: 
+
+include::ROOT:partial$invoke-service.adoc[tag=call]
+
+The output changes form `java.net.UnknownHostException: www.fruityvice.com` in the first calls to `org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getFruitByName` when circuit is opened.
+
+The big difference between first exception and second one is that in first one, occurs because the circuit is closed and means that the system is trying to reach the host, in the second one, the circuit is closed and the exception is thrown automatically instead of trying to reach the host.
+
+TIP: You can use `@Retry` and `@Fallback` annotations together with `@CircuitBreaker` annotation.
+
+[#qext-turn-on-network]
+=== Turn Network on
+
+Turn network on again to continue with the workshop.
 
 [#qext-health-checks]
 == Health checks

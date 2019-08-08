@@ -1,0 +1,12 @@
+:experimental:
+
+If you are not in dev mode, run the following command to start Quarkus application in development mode:
+
+[#{section-build-run}-build-run-dev]
+[source,bash,subs="+macros,+attributes"]
+----
+./mvnw compile quarkus:dev 
+----
+copyToClipboard::{section-build-run}-build-run-dev-mode[]
+
+IMPORTANT: If you are in dev mode and you added new dependencies on the project, sometimes, if they are not in the local cache, you might need to stop the dev mode (kbd:[Ctrl+C]) and start it again.
