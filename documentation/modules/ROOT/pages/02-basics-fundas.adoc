@@ -55,14 +55,9 @@ You can <<basics-call-svc>> to see a response like `hello`.
 
 Stop the Quarkus applicaiton that might be running in `jvm` or `native` mode. 
 
-Run the following command to start Quarkus application in development mode:
+:section-build-run: basics
 
-[#basics-build-run-dev-mode]
-[source,bash,subs="+macros,+attributes"]
-----
-./mvnw compile quarkus:dev 
-----
-copyToClipboard::basics-build-run-dev-mode[]
+include::ROOT:partial$run-dev-mode.adoc[]
 
 [#basics-update]
 == Updating of code
