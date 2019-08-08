@@ -120,25 +120,70 @@
     <a class="nav-link" href="04-quarkus-extensions.html#qext-list-extensions">List Extensions</a>
   </li>
   <li class="nav-item" data-depth="2">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-rest-client">Rest Client</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-add-rest-client-extensions">Adding Rest Client extension</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-create-fruity-vice-pojo">Creating FruityVice POJO</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-create-fruity-vice-service">Creating FruityVice Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-create-fruity-vice-service-config">Configuring FruityVice Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-create-fruity-vice-service-resclient">Using the RestClient</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-build-run-quarkus-rest-client">Build and Run</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-call-fruity-rest-client">Invoke Service</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-toggle"></button>
     <a class="nav-link" href="04-quarkus-extensions.html#qext-health-checks">Health Checks</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-add-extensions">Add Extension</a>
   </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-quarkus-extensions.html#qext-add-extensions">Add Extensions</a>
-  </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item" data-depth="3">
     <a class="nav-link" href="04-quarkus-extensions.html#qext-rebuild-container-images">Rebuild Container Images</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item" data-depth="3">
     <a class="nav-link" href="04-quarkus-extensions.html#qext-check-health-endpoint">Check Health Endpoint</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item" data-depth="3">
     <a class="nav-link" href="04-quarkus-extensions.html#qext-call-health-ep">Invoke Health Endpoint</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item" data-depth="3">
     <a class="nav-link" href="04-quarkus-extensions.html#qext-add-probes-to-k8s">Add Health Probes to Kubernetes Application</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item" data-depth="3">
     <a class="nav-link" href="04-quarkus-extensions.html#qext-invoke-k8s-svc">Invoke Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-custom-health-check">Customizing Health Checks</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-rebuild-container-images-custom-check">Rebuild Container Images</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-check-custom-health-endpoint">Check Health Endpoint</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-call-health-custom">Invoke Health Endpoint</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-add-custom-probes-to-k8s">Add Health Probes to Kubernetes Application</a>
+  </li>
+</ul>
   </li>
 </ul>
   </li>
@@ -468,7 +513,7 @@ For the easier reference, we shall call the <code>fruits-app</code> project fold
 <div class="sect4">
 <h5 id="quarkusp-configure-props"><a class="anchor" href="#quarkusp-configure-props"></a>Edit the application.properties</h5>
 <div class="paragraph">
-<p>Add the following properties to $PROJECT_HOME/src/main/properties/application.properties:</p>
+<p>Add the following properties to $PROJECT_HOME/src/main/resources/application.properties:</p>
 </div>
 <div class="admonitionblock tip">
 <table>
