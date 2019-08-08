@@ -139,10 +139,49 @@
     <a class="nav-link" href="#qext-create-fruity-vice-service-resclient">Using the RestClient</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="#qext-build-run-quarkus-rest-client">Build and Run</a>
+    <a class="nav-link" href="#qext-rest-client-run-quarkus-app-dev-mode">Run Quarkus Application in Development mode</a>
   </li>
   <li class="nav-item" data-depth="3">
     <a class="nav-link" href="#qext-call-fruity-rest-client">Invoke Service</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="#qext-fault-tolerance">Fault Tolerance</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#qext-add-fault-tolerance-extensions">Adding Fault Tolerance extension</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#qext-retry-fruity-vice-service">Add Retry to Fruity Vice Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#qext-fault-tolerance-run-quarkus-app-dev-mode">Run Quarkus Application in Development mode</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#qext-call-fruity-fault-tolerance-retry">Invoke Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#qext-fallback-fruity-vice-service">Add Fallback to Fruity Vice Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#qext-fault-tolerance-fallback-run-quarkus-app-dev-mode">Run Quarkus Application in Development mode</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#qext-call-fruity-fault-tolerance-fallback">Invoke Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#qext-circuit-breaker-fruity-vice-service">Add Ciruict Breaker to Fruity Vice Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#qext-circuit-breaker-run-quarkus-app-dev-mode">Run Quarkus Application in Development mode</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#qext-call-fruity-fault-tolerance-circuit-breaker">Invoke Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#qext-turn-on-network">Turn Network On</a>
   </li>
 </ul>
   </li>
@@ -416,6 +455,8 @@ Two endpoints are the important ones for this workshop:</p>
 
 public class FruityVice {
 
+    public static FruityVice EMPTY_FRUIT = new FruityVice();
+
     private String name;
     private Nutritions nutritions;
 
@@ -535,67 +576,20 @@ public FruityVice getFruitInfoByName(@PathParam("name") String name) {
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusrc-fruity-vice-service"><i class="fa fa-clipboard"></i></button><br/>
 </div>
-<div class="sect2">
-<h3 id="qext-build-run-quarkus-rest-client"><a class="anchor" href="#qext-build-run-quarkus-rest-client"></a>Build and Run the Quarkus Application</h3>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset1_jvm-mode"></a>JVM mode</p>
-</li>
-<li>
-<p><a id="tabset1_native-mode"></a>Native mode</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset1_jvm-mode">
-<div id="basics-build-quarkus-jvm-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work/my-quarkus-project &amp;&amp; \
-./mvnw -DskipTests clean package</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-quarkus-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
+<div class="sect1">
+<h2 id="qext-rest-client-run-quarkus-app-dev-mode"><a class="anchor" href="#qext-rest-client-run-quarkus-app-dev-mode"></a>Run Quarkus Application in Development mode</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>To run the application in jvm mode</p>
+<p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
 </div>
-<div id="basics-build-run-jvm-app" class="listingblock">
+<div id="rest-client-build-run-dev" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">java -jar target/my-quarkus-project-1.0-SNAPSHOT-runner.jar</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-run-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="tab-pane" aria-labelledby="tabset1_native-mode">
-<div id="basics-build-quarkus-native-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work/my-quarkus-project &amp;&amp; \
-./mvnw -DskipTests clean package -Pnative</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-quarkus-native-app"><i class="fa fa-clipboard"></i></button><br/>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Native compilation will take few minutes to complete.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>To run the application in native mode</p>
-</div>
-<div id="basics-build-run-native-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./target/my-quarkus-project-1.0-SNAPSHOT-runner</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-run-native-app"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#rest-client-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -603,16 +597,10 @@ Native compilation will take few minutes to complete.
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-<div class="paragraph">
-<p>Tests will fail on Windows as there is no graalvm support for windows, you can workaround it using <code>-DskipTests</code> option.</p>
-</div>
+If you are in dev mode and you added new dependencies on the project, sometimes, if they are not in the local cache, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
 </td>
 </tr>
 </table>
-</div>
-</div>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="qext-call-fruity-rest-client"><a class="anchor" href="#qext-call-fruity-rest-client"></a>Invoke Service</h3>
@@ -638,6 +626,281 @@ Native compilation will take few minutes to complete.
     }
 }</code></pre>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="qext-fault-tolerance"><a class="anchor" href="#qext-fault-tolerance"></a>Fault Tolerance</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>It is increasingly important to build fault tolerant micro services. Fault tolerance is about leveraging different strategies to guide the execution and result of some logic. Retry policies, bulkheads, and circuit breakers are popular concepts in this area.
+Quarkus integrates with <a href="https://github.com/eclipse/microprofile-fault-tolerance">MicroProfile Fault Tolerance</a> spec to provide resiliency capabilities.</p>
+</div>
+<div class="sect2">
+<h3 id="qext-add-fault-tolerance-extensions"><a class="anchor" href="#qext-add-fault-tolerance-extensions"></a>Adding Fault Tolerance extension</h3>
+<div class="paragraph">
+<p>To add Fault Tolernace extension (<code>quarkus-smallrye-fault-tolerance</code>) to the Quarkus application, run the following command from <code>my-quarkus-project</code> project directory:</p>
+</div>
+<div id="qext-mvn-add-fault-tolernace-extension" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-smallrye-fault-tolerance"</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-mvn-add-fault-tolernace-extension"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+<div class="sect2">
+<h3 id="qext-retry-fruity-vice-service"><a class="anchor" href="#qext-retry-fruity-vice-service"></a>Add Retry to Fruity Vice Service</h3>
+<div class="paragraph">
+<p>Let&#8217;s add the retry policy in <code>FruityViceService</code>.</p>
+</div>
+<div class="paragraph">
+<p>Add the following annotation to $PROJECT_HOME/src/main/java/java/com/example/FruityViceService.java:</p>
+</div>
+<div id="quarkusft-retry-fruit-vice-service" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">@GET
+@Path("/fruit/{name}")
+@Produces(MediaType.APPLICATION_JSON)
+@Retry(maxRetries = 3, delay = 2000)
+public FruityVice getFruitByName(@PathParam("name") String name);</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusft-retry-fruit-vice-service"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>Now in case of any error, 3 retries are done automatically, waiting for 2 seconds between retries.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="qext-fault-tolerance-run-quarkus-app-dev-mode"><a class="anchor" href="#qext-fault-tolerance-run-quarkus-app-dev-mode"></a>Run Quarkus Application in Development mode</h3>
+<div class="paragraph">
+<p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
+</div>
+<div id="fault-tolerance-build-run-dev" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+If you are in dev mode and you added new dependencies on the project, sometimes, if they are not in the local cache, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="qext-call-fruity-fault-tolerance-retry"><a class="anchor" href="#qext-call-fruity-fault-tolerance-retry"></a>Invoke Service</h3>
+<div class="paragraph">
+<p>The simple <code>fruit/banana</code> REST URI can be called via browser using <a href="http://localhost:8080/fruit/banana" class="bare">http://localhost:8080/fruit/banana</a> or using CLI like:</p>
+</div>
+<div id="fault-tolerance-k8s-svc-call" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>The REST call about should return an response like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+    "name":"Banana",
+    "nutritions":{
+        "calories":96,
+        "fat":0.2
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>No change of previous calls done in <a href="#">qext-add-rest-client-extensions.adoc</a> section, but now switch off your network so you do not have access to <a href="http://www.fruityvice.com" class="bare">http://www.fruityvice.com</a>.
+And make again a request to <a href="http://localhost:8080/fruit/banana" class="bare">http://localhost:8080/fruit/banana</a>.</p>
+</div>
+<div id="fault-tolerance-k8s-svc-call" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>Now after waiting 6 seconds (3 retries x 2 seconds), the next exception is thrown <code>java.net.UnknownHostException: www.fruityvice.com</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="qext-fallback-fruity-vice-service"><a class="anchor" href="#qext-fallback-fruity-vice-service"></a>Add Fallback to Fruity Vice Service</h3>
+<div class="paragraph">
+<p>Let&#8217;s add a fallback policy in case of an error in <code>FruityViceService</code>.</p>
+</div>
+<div class="paragraph">
+<p>Add the following annotation to $PROJECT_HOME/src/main/java/java/com/example/FruityViceService.java:</p>
+</div>
+<div id="quarkusft-fallback-fruit-vice-service" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">@GET
+@Path("/fruit/{name}")
+@Produces(MediaType.APPLICATION_JSON)
+@Retry(maxRetries = 3, delay = 2000)
+@Fallback(value = FruityViceRecovery.class)
+public FruityVice getFruitByName(@PathParam("name") String name);
+
+public static class FruityViceRecovery implements FallbackHandler&lt;FruityVice&gt; {
+
+    @Override
+    public FruityVice handle(ExecutionContext context) {
+        return FruityVice.EMPTY_FRUIT;
+	}
+
+}</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusft-fallback-fruit-vice-service"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>Now in case of any error, 3 retries are done automatically, waiting for 2 seconds between retries.
+If the error persits, then the fallback method is executed.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="qext-fault-tolerance-fallback-run-quarkus-app-dev-mode"><a class="anchor" href="#qext-fault-tolerance-fallback-run-quarkus-app-dev-mode"></a>Run Quarkus Application in Development mode</h3>
+<div class="paragraph">
+<p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
+</div>
+<div id="fault-tolerance-fallback-build-run-dev" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-fallback-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+If you are in dev mode and you added new dependencies on the project, sometimes, if they are not in the local cache, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="qext-call-fruity-fault-tolerance-fallback"><a class="anchor" href="#qext-call-fruity-fault-tolerance-fallback"></a>Invoke Service</h3>
+<div class="paragraph">
+<p>The simple <code>fruit/banana</code> REST URI can be called via browser using <a href="http://localhost:8080/fruit/banana" class="bare">http://localhost:8080/fruit/banana</a> or using CLI like:</p>
+</div>
+<div id="fault-tolerance-tolerance-k8s-svc-call" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-tolerance-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>Now after waiting for 6 seconds (3 retries x 2 seconds), an empty object is sent instead of an exception.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="qext-circuit-breaker-fruity-vice-service"><a class="anchor" href="#qext-circuit-breaker-fruity-vice-service"></a>Add Circuit Breaker to Fruity Vice Service</h3>
+<div class="paragraph">
+<p>Let&#8217;s add the circuit breaker policy in <code>FruityViceService</code>.</p>
+</div>
+<div class="paragraph">
+<p>Remove previous annotations of fallback and retry policies and add the following annotation to $PROJECT_HOME/src/main/java/java/com/example/FruityViceService.java:</p>
+</div>
+<div id="quarkusft-circuit-breaker-fruit-vice-service" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">@GET
+@Path("/fruit/{name}")
+@Produces(MediaType.APPLICATION_JSON)
+@CircuitBreaker(requestVolumeThreshold = 4, failureRatio=0.75, delay = 5000)
+public FruityVice getFruitByName(@PathParam("name") String name);
+
+public static class FruityViceRecovery implements FallbackHandler&lt;FruityVice&gt; {
+
+    @Override
+    public FruityVice handle(ExecutionContext context) {
+        return FruityVice.EMPTY_FRUIT;
+	}
+
+}</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusft-circuit-breaker-fruit-vice-service"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>Now, if 3 (4 x 0.75) failures occur among the rolling window of 4 consecutive invocations then the circuit is opened for 5000 ms and then be back to half open.
+If the invocation succeeds then the circuit is back to closed again.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="qext-circuit-breaker-run-quarkus-app-dev-mode"><a class="anchor" href="#qext-circuit-breaker-run-quarkus-app-dev-mode"></a>Run Quarkus Application in Development mode</h3>
+<div class="paragraph">
+<p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
+</div>
+<div id="fault-tolerance-circuit-breaker-build-run-dev" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-circuit-breaker-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+If you are in dev mode and you added new dependencies on the project, sometimes, if they are not in the local cache, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="qext-call-fruity-fault-tolerance-circuit-breaker"><a class="anchor" href="#qext-call-fruity-fault-tolerance-circuit-breaker"></a>Invoke Service</h3>
+<div class="paragraph">
+<p>Do 5 consecutive calls to the service, <code>fruit/banana</code> REST URI can be called via browser using <a href="http://localhost:8080/fruit/banana" class="bare">http://localhost:8080/fruit/banana</a> or using CLI like:</p>
+</div>
+<div id="fault-tolerance-tolerance-k8s-svc-call" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-tolerance-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>The output changes form <code>java.net.UnknownHostException: www.fruityvice.com</code> in the first calls to <code>org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getFruitByName</code> when circuit is opened.</p>
+</div>
+<div class="paragraph">
+<p>The big difference between first exception and second one is that in first one, occurs because the circuit is closed and means that the system is trying to reach the host, in the second one, the circuit is closed and the exception is thrown automatically instead of trying to reach the host.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+You can use <code>@Retry</code> and <code>@Fallback</code> annotations together with <code>@CircuitBreaker</code> annotation.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="qext-turn-on-network"><a class="anchor" href="#qext-turn-on-network"></a>Turn Network on</h3>
+<div class="paragraph">
+<p>Turn network on again to continue with the workshop.</p>
 </div>
 </div>
 </div>
@@ -689,15 +952,15 @@ Native compilation will take few minutes to complete.
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset2_jvm-mode"></a>JVM mode</p>
+<p><a id="tabset1_jvm-mode"></a>JVM mode</p>
 </li>
 <li>
-<p><a id="tabset2_native-mode"></a>Native mode</p>
+<p><a id="tabset1_native-mode"></a>Native mode</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset2_jvm-mode">
+<div class="tab-pane" aria-labelledby="tabset1_jvm-mode">
 <div id="conk8s-build-quarkus-jvm-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package</code></pre>
@@ -714,7 +977,7 @@ Native compilation will take few minutes to complete.
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-jvm-app-container"><i class="fa fa-clipboard"></i></button><br/>
 </div>
-<div class="tab-pane" aria-labelledby="tabset2_native-mode">
+<div class="tab-pane" aria-labelledby="tabset1_native-mode">
 <div id="conk8s-build-quarkus-native-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package -Pnative -Dnative-image.docker-build=true <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
@@ -763,15 +1026,15 @@ Native compilation will take few minutes to complete.
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset3_jvm-mode"></a>JVM mode</p>
+<p><a id="tabset2_jvm-mode"></a>JVM mode</p>
 </li>
 <li>
-<p><a id="tabset3_native-mode"></a>Native mode</p>
+<p><a id="tabset2_native-mode"></a>Native mode</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset3_jvm-mode">
+<div class="tab-pane" aria-labelledby="tabset2_jvm-mode">
 <div id="build-run-jvm-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -it --rm -p 8080:8080 example/my-quarkus-project-jvm</code></pre>
@@ -779,7 +1042,7 @@ Native compilation will take few minutes to complete.
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#build-run-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
-<div class="tab-pane" aria-labelledby="tabset3_native-mode">
+<div class="tab-pane" aria-labelledby="tabset2_native-mode">
 <div id="build-run-native-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -it --rm -p 8080:8080 example/my-quarkus-project-native</code></pre>
@@ -825,15 +1088,15 @@ Native compilation will take few minutes to complete.
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset4_jvm-mode"></a>JVM mode</p>
+<p><a id="tabset3_jvm-mode"></a>JVM mode</p>
 </li>
 <li>
-<p><a id="tabset4_native-mode"></a>Native mode</p>
+<p><a id="tabset3_native-mode"></a>Native mode</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset4_jvm-mode">
+<div class="tab-pane" aria-labelledby="tabset3_jvm-mode">
 <div id="build-tag-jvm-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker tag example/my-quarkus-project-jvm $APP_IMAGE &amp;&amp; \
@@ -842,7 +1105,7 @@ docker push $APP_IMAGE</code></pre>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#build-tag-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
-<div class="tab-pane" aria-labelledby="tabset4_native-mode">
+<div class="tab-pane" aria-labelledby="tabset3_native-mode">
 <div id="build-tag-native-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker tag example/my-quarkus-project-native $APP_IMAGE &amp;&amp; \
@@ -860,15 +1123,15 @@ docker push $APP_IMAGE</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset5_kubectl"></a>kubectl</p>
+<p><a id="tabset4_kubectl"></a>kubectl</p>
 </li>
 <li>
-<p><a id="tabset5_oc"></a>oc</p>
+<p><a id="tabset4_oc"></a>oc</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset5_kubectl">
+<div class="tab-pane" aria-labelledby="tabset4_kubectl">
 <div id="qext-copy-k8s-probes-file" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cp $TUTORIAL_HOME/templates/probes.yaml $TUTORIAL_HOME/work/my-quarkus-project/probes.yaml</code></pre>
@@ -885,7 +1148,7 @@ docker push $APP_IMAGE</code></pre>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-k8s-set-probes"><i class="fa fa-clipboard"></i></button><br/>
 </div>
-<div class="tab-pane" aria-labelledby="tabset5_oc">
+<div class="tab-pane" aria-labelledby="tabset4_oc">
 <div id="qext-oc-set-probes" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc set probe deployment $APP_NAME --readiness=true --liveness=true --get-url=http://:8080/health</code></pre>
@@ -905,15 +1168,15 @@ docker push $APP_IMAGE</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset6_kubectl"></a>kubectl</p>
+<p><a id="tabset5_kubectl"></a>kubectl</p>
 </li>
 <li>
-<p><a id="tabset6_oc"></a>oc</p>
+<p><a id="tabset5_oc"></a>oc</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset6_kubectl">
+<div class="tab-pane" aria-labelledby="tabset5_kubectl">
 <div id="qext-k8s-pod-status" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl get pods -w</code></pre>
@@ -921,7 +1184,7 @@ docker push $APP_IMAGE</code></pre>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-k8s-pod-status"><i class="fa fa-clipboard"></i></button><br/>
 </div>
-<div class="tab-pane" aria-labelledby="tabset6_oc">
+<div class="tab-pane" aria-labelledby="tabset5_oc">
 <div id="qext-oc-pod-status" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get pods -w</code></pre>
@@ -1001,15 +1264,15 @@ public class FruitHealthCheck {
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset7_jvm-mode"></a>JVM mode</p>
+<p><a id="tabset6_jvm-mode"></a>JVM mode</p>
 </li>
 <li>
-<p><a id="tabset7_native-mode"></a>Native mode</p>
+<p><a id="tabset6_native-mode"></a>Native mode</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset7_jvm-mode">
+<div class="tab-pane" aria-labelledby="tabset6_jvm-mode">
 <div id="conk8s-build-quarkus-jvm-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package</code></pre>
@@ -1026,7 +1289,7 @@ public class FruitHealthCheck {
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-jvm-app-container"><i class="fa fa-clipboard"></i></button><br/>
 </div>
-<div class="tab-pane" aria-labelledby="tabset7_native-mode">
+<div class="tab-pane" aria-labelledby="tabset6_native-mode">
 <div id="conk8s-build-quarkus-native-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package -Pnative -Dnative-image.docker-build=true <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
@@ -1075,15 +1338,15 @@ Native compilation will take few minutes to complete.
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset8_jvm-mode"></a>JVM mode</p>
+<p><a id="tabset7_jvm-mode"></a>JVM mode</p>
 </li>
 <li>
-<p><a id="tabset8_native-mode"></a>Native mode</p>
+<p><a id="tabset7_native-mode"></a>Native mode</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset8_jvm-mode">
+<div class="tab-pane" aria-labelledby="tabset7_jvm-mode">
 <div id="build-run-jvm-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -it --rm -p 8080:8080 example/my-quarkus-project-jvm</code></pre>
@@ -1091,7 +1354,7 @@ Native compilation will take few minutes to complete.
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#build-run-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
-<div class="tab-pane" aria-labelledby="tabset8_native-mode">
+<div class="tab-pane" aria-labelledby="tabset7_native-mode">
 <div id="build-run-native-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -it --rm -p 8080:8080 example/my-quarkus-project-native</code></pre>
@@ -1193,15 +1456,15 @@ Native compilation will take few minutes to complete.
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset9_jvm-mode"></a>JVM mode</p>
+<p><a id="tabset8_jvm-mode"></a>JVM mode</p>
 </li>
 <li>
-<p><a id="tabset9_native-mode"></a>Native mode</p>
+<p><a id="tabset8_native-mode"></a>Native mode</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset9_jvm-mode">
+<div class="tab-pane" aria-labelledby="tabset8_jvm-mode">
 <div id="build-tag-jvm-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker tag example/my-quarkus-project-jvm $APP_IMAGE &amp;&amp; \
@@ -1210,7 +1473,7 @@ docker push $APP_IMAGE</code></pre>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#build-tag-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
-<div class="tab-pane" aria-labelledby="tabset9_native-mode">
+<div class="tab-pane" aria-labelledby="tabset8_native-mode">
 <div id="build-tag-native-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker tag example/my-quarkus-project-native $APP_IMAGE &amp;&amp; \
@@ -1228,15 +1491,15 @@ docker push $APP_IMAGE</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset10_kubectl"></a>kubectl</p>
+<p><a id="tabset9_kubectl"></a>kubectl</p>
 </li>
 <li>
-<p><a id="tabset10_oc"></a>oc</p>
+<p><a id="tabset9_oc"></a>oc</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset10_kubectl">
+<div class="tab-pane" aria-labelledby="tabset9_kubectl">
 <div id="qext-copy-k8s-custom-probes-file" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cp $TUTORIAL_HOME/templates/custom-probes.yaml $TUTORIAL_HOME/work/my-quarkus-project/custom-probes.yaml</code></pre>
@@ -1253,7 +1516,7 @@ docker push $APP_IMAGE</code></pre>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-k8s-set-custom-probes"><i class="fa fa-clipboard"></i></button><br/>
 </div>
-<div class="tab-pane" aria-labelledby="tabset10_oc">
+<div class="tab-pane" aria-labelledby="tabset9_oc">
 <div id="qext-oc-set-custom-probes" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc set probe deployment $APP_NAME --liveness --get-url=http://:8080/health/live

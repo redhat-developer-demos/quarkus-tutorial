@@ -139,10 +139,49 @@
     <a class="nav-link" href="04-quarkus-extensions.html#qext-create-fruity-vice-service-resclient">Using the RestClient</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="04-quarkus-extensions.html#qext-build-run-quarkus-rest-client">Build and Run</a>
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-rest-client-run-quarkus-app-dev-mode">Run Quarkus Application in Development mode</a>
   </li>
   <li class="nav-item" data-depth="3">
     <a class="nav-link" href="04-quarkus-extensions.html#qext-call-fruity-rest-client">Invoke Service</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-fault-tolerance">Fault Tolerance</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-add-fault-tolerance-extensions">Adding Fault Tolerance extension</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-retry-fruity-vice-service">Add Retry to Fruity Vice Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-fault-tolerance-run-quarkus-app-dev-mode">Run Quarkus Application in Development mode</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-call-fruity-fault-tolerance-retry">Invoke Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-fallback-fruity-vice-service">Add Fallback to Fruity Vice Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-fault-tolerance-fallback-run-quarkus-app-dev-mode">Run Quarkus Application in Development mode</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-call-fruity-fault-tolerance-fallback">Invoke Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-circuit-breaker-fruity-vice-service">Add Ciruict Breaker to Fruity Vice Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-circuit-breaker-run-quarkus-app-dev-mode">Run Quarkus Application in Development mode</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-call-fruity-fault-tolerance-circuit-breaker">Invoke Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-turn-on-network">Turn Network On</a>
   </li>
 </ul>
   </li>
@@ -522,14 +561,26 @@ Native compilation will take few minutes to complete.
 <p>Stop the Quarkus applicaiton that might be running in <code>jvm</code> or <code>native</code> mode.</p>
 </div>
 <div class="paragraph">
-<p>Run the following command to start Quarkus application in development mode:</p>
+<p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
 </div>
-<div id="basics-build-run-dev-mode" class="listingblock">
+<div id="basics-build-run-dev" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+If you are in dev mode and you added new dependencies on the project, sometimes, if they are not in the local cache, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div class="sect1">
