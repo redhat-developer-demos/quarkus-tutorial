@@ -38,17 +38,243 @@ cd my-quarkus-project && \
 ----
 copyToClipboard::qext-mvn-list-extensions[]
 
+[#qext-rest-client]
+== Rest Client
+
+In a microservices architecture, and generally speaking, any kind of application, might need to access other RESTful Web Services.
+Quarkus provides a Rest client following the https://github.com/eclipse/microprofile-rest-client[MicroProfile Rest Client] spec.
+
+Let's create a Rest client that access to http://www.fruityvice.com to get nutrition facts about fruits.
+Two endpoints are the important ones for this workshop:
+
+* `api/fruit/all` that returns all fruits.
+
+[source, json]
+----
+[{
+    "genus": "Malus",
+    "name": "Apple",
+    "id": 6,
+    "family": "Rosaceae",
+    "order": "Rosales",
+    "nutritions": {
+        "carbohydrates": 11.4,
+        "protein": 0.3,
+        "fat": 0.4,
+        "calories": 52,
+        "sugar": 10.3
+    }
+}, {...}
+]
+----
+
+* `api/fruit/\{name\}` that returns specific info from given fruit name.
+
+[source, json]
+----
+{
+    "genus": "Musa",
+    "name": "Banana",
+    "id": 1,
+    "family": "Musaceae",
+    "order": "Zingiberales",
+    "nutritions": {
+        "carbohydrates": 22,
+        "protein": 1,
+        "fat": 0.2,
+        "calories": 96,
+        "sugar": 17.2
+    }
+}
+----
+
+[#qext-add-rest-client-extensions]
+=== Adding Rest Client extension
+
+:quarkus-rest-client-ext-name: quarkus-rest-client, quarkus-resteasy-jsonb
+
+To add Rest Client and JSON-B extensions (`{quarkus-rest-client-ext-name}`) to the Quarkus application, run the following command from `{quarkus-project-name}` project directory:
+
+[#qext-mvn-add-rest-client-extension]
+[source,bash,subs="+macros,+attributes"]
+----
+./mvnw quarkus:add-extension -Dextension="{quarkus-rest-client-ext-name}"
+----
+copyToClipboard::qext-mvn-add-rest-client-extension[]
+
+[#qext-create-fruity-vice-pojo]
+=== Creating FruityVice POJO
+
+We need to create a POJO object that is used to unmarshal JSON message from http://www.fruityvice.com to Java object.
+
+Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `FruityVice` with the following contents:
+
+[#quarkusrc-fruity-vice-pojo]
+[source,java,subs="+macros,+attributes"]
+----
+package com.example;
+
+public class FruityVice {
+
+    private String name;
+    private Nutritions nutritions;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Nutritions getNutritions() {
+        return nutritions;
+    }
+
+    public void setNutritions(Nutritions nutritions) {
+        this.nutritions = nutritions;
+    }
+
+    public static class Nutritions {
+        private double fat;
+        private int calories;
+
+        public double getFat() {
+            return fat;
+        }
+
+        public void setFat(double fat) {
+            this.fat = fat;
+        }
+
+        public int getCalories() {
+            return calories;
+        }
+
+        public void setCalories(int calories) {
+            this.calories = calories;
+        }
+
+    }
+}
+----
+copyToClipboard::quarkusrc-fruity-vice-pojo[]
+
+[#qext-create-fruity-vice-service]
+=== Creating FruityVice Service
+
+The next thing is to create a Java interface that acts as a client between code and external service.
+
+Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `FruityViceService` with the following contents:
+
+[#quarkusrc-fruity-vice-service]
+[source,java,subs="+macros"]
+----
+package com.example;
+
+import java.util.List;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
+@Path("/api")
+@RegisterRestClient
+public interface FruityViceService {
+
+    @GET
+    @Path("/fruit/all")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<FruityVice> getAllFruits();
+    
+    @GET
+    @Path("/fruit/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public FruityVice getFruitByName(@PathParam("name") String name);
+
+}
+----
+copyToClipboard::quarkusrc-fruity-vice-service[]
+
+[#qext-create-fruity-vice-service-config]
+=== Configuring FruityVice Service
+
+Add the following properties to pass:[$PROJECT_HOME]/src/main/resources/application.properties:
+
+[#quarkusrc-config-fruity-update-props]
+[source,config,subs="+macros,+attributes"]
+----
+org.alexsotob.quickstart.FruityViceService/mp-rest/url=http://www.fruityvice.com
+----
+copyToClipboard::quarkusrc-config-fruity-update-props[]
+
+[#qext-create-fruity-vice-service-resclient]
+=== Using the RestClient
+
+Open the following Java class pass:[$PROJECT_HOME]/src/main/java/com/example/FruitResource.java and copy the next content in its body:
+
+[#quarkusrc-fruity-vice-service]
+[source,java,subs="+macros"]
+----
+@Inject
+@RestClient
+FruityViceService fruityViceService;
+
+@GET
+@Path("{name}")
+@Produces(MediaType.APPLICATION_JSON)
+public FruityVice getFruitInfoByName(@PathParam("name") String name) {
+    return fruityViceService.getFruitByName(name);
+}
+----
+copyToClipboard::quarkusrc-fruity-vice-service[]
+
+[#qext-build-run-quarkus-rest-client]
+=== Build and Run the Quarkus Application
+
+include::ROOT:partial$compile-and-run.adoc[]
+
+[#qext-call-fruity-rest-client]
+=== Invoke Service
+:doc-sec: rest-client
+:k8s-cli: k8s
+:path: fruit/banana
+:k8s-env: minikube
+:cli-tool: curl
+:address: localhost
+
+The simple `{path}` REST URI can be called via browser using http://localhost:8080/{path} or using CLI like: 
+
+include::ROOT:partial$invoke-service.adoc[tag=call]
+
+The REST call about should return an response like:
+
+[source,json]
+----
+{
+    "name":"Banana",
+    "nutritions":{
+        "calories":96,
+        "fat":0.2
+    }
+}
+----
+
 [#qext-health-checks]
 == Health checks
 
 If you had observed, the quarkus application deployed on Kubernetes does not have any health checks on it. As Kubernetes best practice its highly recommended that health checks be added to the all the deployments.
 
-Health checks in Kubernetes can be added using https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/[Liveliness and Readiness] probes.
+Health checks in Kubernetes can be added using https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/[Liveness and Readiness] probes.
 
 :quarkus-health-ext-name: quarkus-smallrye-health
 
 [#qext-add-extensions]
-=== Adding new extensions
+=== Adding Health Check extension
 
 We can add `{quarkus-health-ext-name}` extension to allow Quarkus application to be probed on the REST endpoint called `health` to know about its current health.
 
@@ -114,7 +340,7 @@ The REST call about should return an response like:
 ----
 
 [#qext-add-probes-to-k8s]
-== Add probes to Kubernetes Quarkus Application
+=== Add probes to Kubernetes Quarkus Application
 
 Before we add the probes to the Kubernetes application, we need to push the rebuilt containers to the container registry.
 
@@ -161,7 +387,7 @@ ifndef::workshop[]
 endif::[]
 
 [#qext-invoke-k8s-svc]
-== Invoke the Kubernetes Service
+=== Invoke the Kubernetes Service
 
 Adding probes will cause the redeployment of the Kubernetes application. Wait for the application to be in `Running` state before you can xref:03-containers-kubernetes.adoc#conk8s-invoke-k8s-svc[Invoke the Service].  The status of the application can be checked with the command:
 ifndef::workshop[]
@@ -187,6 +413,190 @@ endif::[]
 oc get pods -w 
 ----
 copyToClipboard::qext-oc-pod-status[]
+ifndef::workshop[]
+--
+====
+endif::[]
+[#qext-custom-health-check]
+=== Customizing Health Checks
+
+So far, you've seen that some a default health check is provided but in most cases, you'd like to customize this logic providing custom logic.
+Moreover, Kubernetes provides the concept of liveness and readiness probe to regularly check the health of the application.
+
+liveness:: Checks if the application is up and running.
+readiness:: Checks if the application can receive public requests.
+
+Let's create a custom check for both liveness and readiness checks.
+Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `FruitHealthCheck` with the following contents:
+
+[#quarkusp-fruit-checks]
+[source,java,subs="+macros,+attributes"]
+----
+package com.example;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Produces;
+
+import org.eclipse.microprofile.health.HealthCheck;
+import org.eclipse.microprofile.health.Liveness;
+import org.eclipse.microprofile.health.Readiness;
+
+import io.smallrye.health.HealthStatus;
+
+@ApplicationScoped
+public class FruitHealthCheck {
+
+    @Produces
+    @ApplicationScoped
+    @Liveness
+    HealthCheck liveCheck() {
+      return HealthStatus.up("successful-live");
+    }
+
+    @Produces
+    @ApplicationScoped
+    @Readiness
+    HealthCheck readyCheck() {
+      return HealthStatus.state("successful-read", this::isReady)
+    }
+
+    private boolean isReady() {
+        return true;
+    }
+}
+----
+copyToClipboard::quarkusp-fruit-checks[]
+
+[#qext-rebuild-container-images-custom-check]
+=== Rebuild container images
+
+Let us rebuild the application after adding the health check extensions
+
+include::ROOT:partial$build-containers.adoc[tag=build]
+
+[#qext-check-custom-health-endpoint]
+=== Checking health check endpoint
+
+Lets start the newly built container:
+
+include::ROOT:partial$build-containers.adoc[tag=run]
+
+After adding `smallrye-health` extension we should have REST endpoint called `/health` available. Lets invoke the `/health` endpoint to check the health of the Quarkus application and you'll see both health checks.
+
+[#qext-call-health-custom]
+=== Invoke Service
+:doc-sec: custom-health
+:k8s-cli: k8s
+:path: health
+:k8s-env: minikube
+:cli-tool: curl
+:address: localhost
+
+The simple `{path}` REST URI can be called via browser using http://localhost:8080/{path} or using CLI like: 
+
+include::ROOT:partial$invoke-service.adoc[tag=call]
+
+The REST call about should return an response like:
+
+[source,json]
+----
+{
+    "status": "UP",
+    "checks": [
+        {
+            "name": "successful-live",
+            "status": "UP"
+        },
+        {
+            "name": "successful-read",
+            "status": "UP"
+        }
+    ]
+}
+----
+
+But also you can invoke them individually by calling `/health/live` and `/health/ready`.
+
+:doc-sec: custom-health-live
+:path: health/live
+include::ROOT:partial$invoke-service.adoc[tag=call]
+
+The REST call about should return an response like:
+
+[source, json]
+----
+{
+    "status": "UP",
+    "checks": [
+        {
+            "name": "successful-live",
+            "status": "UP"
+        }
+    ]
+}
+----
+
+:doc-sec: custom-health-ready
+:path: health/ready
+include::ROOT:partial$invoke-service.adoc[tag=call]
+
+The REST call about should return an response like:
+
+[source, json]
+----
+{
+    "status": "UP",
+    "checks": [
+        {
+            "name": "successful-read",
+            "status": "UP"
+        }
+    ]
+}
+----
+
+[#qext-add-custom-probes-to-k8s]
+=== Add probes to Kubernetes Quarkus Application
+
+Before we add the probes to the Kubernetes application, we need to push the rebuilt containers to the container registry.
+
+include::ROOT:partial$build-containers.adoc[tag=tag-push]
+
+Once the rebuilt containers has been successfully pushed to the container registry run the following command to add the probes to the kubernetes deployment.
+
+ifndef::workshop[]
+[tabs]
+====
+kubectl::
++
+--
+[#qext-copy-k8s-custom-probes-file]
+[source,bash,subs="+macros,+attributes"]
+----
+cp pass:[$TUTORIAL_HOME]/templates/custom-probes.yaml pass:[$TUTORIAL_HOME]/work/{quarkus-project-name}/custom-probes.yaml
+----
+copyToClipboard::qext-copy-k8s-custom-probes-file[]
+
+Apply the probes to the existing `pass:[$APP_NAME]` Kubernetes deployment:
+
+[#qext-k8s-set-cusotm-probes]
+[source,bash,subs="+macros,+attributes"]
+----
+kubectl patch deployment pass:[$APP_NAME] -p "$(cat pass:[$TUTORIAL_HOME]/work/{quarkus-project-name}/custom-probes.yaml)"
+----
+copyToClipboard::qext-k8s-set-custom-probes[]
+--
+oc::
++
+--
+endif::[]
+[#qext-oc-set-custom-probes]
+[source,bash,subs="+macros,+attributes"]
+----
+oc set probe deployment pass:[$APP_NAME] --liveness --get-url=http://:8080/health/live
+oc set probe deployment pass:[$APP_NAME] --readiness --get-url=http://:8080/health/ready
+----
+copyToClipboard::qext-oc-set-custom-probes[]
 ifndef::workshop[]
 --
 ====

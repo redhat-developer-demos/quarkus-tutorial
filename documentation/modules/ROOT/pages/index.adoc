@@ -28,6 +28,7 @@ image::Developer_Joy.png[Developer Joy,400,400,align="center"]
 [.tile]
 .xref:04-quarkus-extensions.adoc[Quarkus Extensions]
 * xref:04-quarkus-extensions.adoc#qext-list-extensions[List Extensions]
+* xref:04-quarkus-extensions.adoc#qext-rest-client[Rest Client]
 * xref:04-quarkus-extensions.adoc#qext-health-checks[Health Checks]
 
 [.tile]

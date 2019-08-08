@@ -1,0 +1,13 @@
+spec:
+ template:
+    spec:
+      containers:
+       - name: quarkus
+         livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8080
+         readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8080

@@ -186,7 +186,7 @@ NOTE: For the easier reference, we shall call the `fruits-app` project folder as
 [#quarkusp-configure-props]
 ===== Edit the application.properties
 
-Add the following properties to pass:[$PROJECT_HOME]/src/main/properties/application.properties:
+Add the following properties to pass:[$PROJECT_HOME]/src/main/resources/application.properties:
 
 [TIP]
 ====
