@@ -4,10 +4,10 @@ include::_attributes.adoc[]
 
 At the end of this chapter you will be able to :
 
-* Create a Quarkus Java Application
-* Build and run the Java application in JVM mode.
-* Build and run the Java application in Native mode.
-* Build and run the Java Application in Developer mode
+* [x] Create a Quarkus Java Application
+* [x] Build and run the Java application in JVM mode.
+* [x] Build and run the Java application in Native mode.
+* [x] Build and run the Java Application in Developer mode
 
 [#basics-prerequisite]
 == Prerequisite
@@ -17,31 +17,42 @@ include::partial$prereq-cli.adoc[]
 [#basics-create-quarkus-app]
 == Create Quarkus Application
 
-Navigate to the tutorial's `work` folder:
+Create the `fruits-app` folder and navigate to the folder:
 
-[#basics-create-quarkus-project]
+[#quarkusp-nav-to-work-folder]
 [source,bash,subs="+macros,+attributes"]
 ----
-cd $TUTORIAL_HOME/work
-mvn io.quarkus:quarkus-maven-plugin:{quarkus-version}:create
+mkdir -p $TUTORIAL_HOME/work/fruits-app && cd $TUTORIAL_HOME/work/`basename $_`
 ----
-copyToClipboard::basics-create-quarkus-project[]
+copyToClipboard::quarkusp-nav-to-work-folder[]
+
+[#quarkusp-mv-create-fruits-app]
+[source,bash,subs="+macros,+attributes"]
+----
+mvn io.quarkus:quarkus-maven-plugin:{page-component-version}:create \
+  -DprojectGroupId="com.example" \
+  -DprojectArtifactId="fruits-app" \
+  -DprojectVersion="1.0-SNAPSHOT" \
+  -DclassName="FruitResource" \
+  -Dpath="fruit"
+----
+copyToClipboard::quarkusp-mv-create-fruits-app[]
 
 [#basics-ide-quarkus-app]
 == Open the Project in IDE
 
 Open or import the generated project into your IDE.
 
-If you are using **vscode**, assuming your project name is `my-quarkus-project` then you can do like,
+If you are using **vscode** you can open the project by:
 
 [#basics-ide-quarkus-project]
 [source,bash,subs="+macros,+attributes"]
 ----
-code my-quarkus-project
+code .
 ----
 copyToClipboard::basics-ide-quarkus-project[]
 
-NOTE: All further sections of this chapter assumes the application name to be `my-quarkus-project`.
+NOTE: All further sections of this tutorial assumes the application name to be `fruit-app`.
 
 [#basics-build-run-quarkus-app]
 == Build and Run the Quarkus Application
@@ -72,7 +83,7 @@ The simple `hello` REST URI can be called from the browser using http://localhos
 
 :doc-sec: basics
 :k8s-cli: k8s
-:path: hello
+:path: fruit
 :k8s-env: minikube
 :cli-tool: curl
 :address: localhost

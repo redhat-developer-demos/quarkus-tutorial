@@ -1,13 +1,13 @@
 =  Cloud Native Deployment
 
 include::_attributes.adoc[]
-:quarkus-project-name: my-quarkus-project
-:svc-path: hello
+:quarkus-project-name: fruit-app
+:svc-path: fruit
 
 At the end of this chapter you will be able to :
 
-* Containerize the Quarkus Application
-* Build and run the Quarkus Application in Kubernetes
+* [x] Containerize the Quarkus Application
+* [x] Build and run the Quarkus Application in Kubernetes
 
 [#conk8s-prerequisite]
 == Prerequisite
@@ -31,7 +31,7 @@ The simple `hello` REST URI can be called via browser using http://localhost:808
 
 :doc-sec: basics
 :k8s-cli: k8s
-:path: hello
+:path: fruit
 :k8s-env: minikube
 :cli-tool: curl
 :address: localhost
