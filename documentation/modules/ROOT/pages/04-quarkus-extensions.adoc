@@ -1,12 +1,17 @@
 = Quarkus Extensions
 
 include::_attributes.adoc[]
-:quarkus-project-name: my-quarkus-project
+:quarkus-project-name: fruit-app
+:svc-path: fruit
+:experimental:
 
 At the end of this chapter you will be able to :
 
-* What is Quarkus Extensions ?
-* How to add them to your Quarkus project?
+* [x] What is Quarkus Extensions ?
+* [x] How to add them to your Quarkus project?
+* [x] How to make calls to other services with Rest Client
+* [x] How to add fault tolerant behaviour in your service
+* [x] How to add health checks
 
 [#qext-intro]
 == What are extensions ?
@@ -219,7 +224,7 @@ copyToClipboard::quarkusrc-config-fruity-update-props[]
 
 Open the following Java class pass:[$PROJECT_HOME]/src/main/java/com/example/FruitResource.java and copy the next content in its body:
 
-[#quarkusrc-fruity-vice-service]
+[#quarkusrc-fruity-vice-service-inject]
 [source,java,subs="+macros"]
 ----
 @Inject
@@ -233,7 +238,7 @@ public FruityVice getFruitInfoByName(@PathParam("name") String name) {
     return fruityViceService.getFruitByName(name);
 }
 ----
-copyToClipboard::quarkusrc-fruity-vice-service[]
+copyToClipboard::quarkusrc-fruity-vice-service-inject[]
 
 [#qext-rest-client-run-quarkus-app-dev-mode]
 == Run Quarkus Application in Development mode
@@ -526,9 +531,9 @@ After adding `smallrye-health` extension we should have REST endpoint called `/h
 :path: health
 :k8s-env: minikube
 :cli-tool: curl
-:address: localhost
+:address: $(minikube ip)
 
-The simple `{path}` REST URI can be called via browser using http://localhost:8080/{path} or using CLI like: 
+The simple `{path}` REST URI can be called via browser using `http://$(minikube ip):8080/{path}` or using CLI like: 
 
 include::ROOT:partial$invoke-service.adoc[tag=call]
 
@@ -542,84 +547,40 @@ The REST call about should return an response like:
 }
 ----
 
+Then you can stop the container by typing kbd:[Ctrl+C].
+
 [#qext-add-probes-to-k8s]
 === Add probes to Kubernetes Quarkus Application
 
-Before we add the probes to the Kubernetes application, we need to push the rebuilt containers to the container registry.
+We need to push the rebuilt containers to the container registry.
 
 include::ROOT:partial$build-containers.adoc[tag=tag-push]
 
-Once the rebuilt containers has been successfully pushed to the container registry run the following command to add the probes to the kubernetes deployment.
+[#qext-health-check-k8s-delete-resources]
+=== Delete Kubernetes Resources
 
+include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-delete]
 
-ifndef::workshop[]
-[tabs]
-====
-kubectl::
-+
---
-[#qext-copy-k8s-probes-file]
+[#qext-health-check-k8s-apply-resources]
+=== Apply Kubernetes Resources
+
+Since we are using Kubernetes extension, configured at xref:03-containers-kubernetes.adoc[Cloud Native Deployment] section, the kubernetes resource has been updated with both probes.
+
+[#quarkusk8s-generated-kubernetes-resource-health-check]
 [source,bash,subs="+macros,+attributes"]
 ----
-cp pass:[$TUTORIAL_HOME]/templates/probes.yaml pass:[$TUTORIAL_HOME]/work/{quarkus-project-name}/probes.yaml
+cat pass:[$TUTORIAL_HOME]/target/wiring-classes/META-INF/kubernetes/kubernetes.json
 ----
-copyToClipboard::qext-copy-k8s-probes-file[]
+copyToClipboard::quarkusk8s-generated-kubernetes-resource-health-check[]
 
-Apply the probes to the existing `pass:[$APP_NAME]` Kubernetes deployment:
+include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-deploy]
 
-[#qext-k8s-set-probes]
-[source,bash,subs="+macros,+attributes"]
-----
-kubectl patch deployment pass:[$APP_NAME] -p "$(cat pass:[$TUTORIAL_HOME]/work/{quarkus-project-name}/probes.yaml)"
-----
-copyToClipboard::qext-k8s-set-probes[]
---
-oc::
-+
---
-endif::[]
-[#qext-oc-set-probes]
-[source,bash,subs="+macros,+attributes"]
-----
-oc set probe deployment pass:[$APP_NAME] --readiness=true --liveness=true --get-url=http://:8080/health
-----
-copyToClipboard::qext-oc-set-probes[]
-ifndef::workshop[]
---
-====
-endif::[]
+[#qext-health-check-invoke-k8s-svc]
+=== Invoke Kubernetes Service
 
-[#qext-invoke-k8s-svc]
-=== Invoke the Kubernetes Service
+include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-invoke-svc]
 
-Adding probes will cause the redeployment of the Kubernetes application. Wait for the application to be in `Running` state before you can xref:03-containers-kubernetes.adoc#conk8s-invoke-k8s-svc[Invoke the Service].  The status of the application can be checked with the command:
-ifndef::workshop[]
-[tabs]
-====
-kubectl::
-+
---
-[#qext-k8s-pod-status]
-[source,bash,subs="+macros,+attributes"]
-----
-kubectl get pods -w 
-----
-copyToClipboard::qext-k8s-pod-status[]
---
-oc::
-+
---
-endif::[]
-[#qext-oc-pod-status]
-[source,bash,subs="+macros,+attributes"]
-----
-oc get pods -w 
-----
-copyToClipboard::qext-oc-pod-status[]
-ifndef::workshop[]
---
-====
-endif::[]
+
 [#qext-custom-health-check]
 === Customizing Health Checks
 
@@ -693,9 +654,9 @@ After adding `smallrye-health` extension we should have REST endpoint called `/h
 :path: health
 :k8s-env: minikube
 :cli-tool: curl
-:address: localhost
+:address: $(minikube ip)
 
-The simple `{path}` REST URI can be called via browser using http://localhost:8080/{path} or using CLI like: 
+The simple `{path}` REST URI can be called via browser using `http://$(minikube ip)/{path}` or using CLI like: 
 
 include::ROOT:partial$invoke-service.adoc[tag=call]
 
@@ -758,49 +719,40 @@ The REST call about should return an response like:
 }
 ----
 
+Then you can stop the container by typing kbd:[Ctrl+C].
+
 [#qext-add-custom-probes-to-k8s]
 === Add probes to Kubernetes Quarkus Application
 
-Before we add the probes to the Kubernetes application, we need to push the rebuilt containers to the container registry.
+We need to push the rebuilt containers to the container registry.
 
 include::ROOT:partial$build-containers.adoc[tag=tag-push]
 
-Once the rebuilt containers has been successfully pushed to the container registry run the following command to add the probes to the kubernetes deployment.
+[#qext-custom-health-check-k8s-delete-resources]
+=== Delete Kubernetes Resources
 
-ifndef::workshop[]
-[tabs]
-====
-kubectl::
-+
---
-[#qext-copy-k8s-custom-probes-file]
+include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-delete]
+
+[#qext-custom-health-check-k8s-apply-resources]
+=== Apply Kubernetes Resources
+
+Since we are using Kubernetes extension, configured at xref:03-containers-kubernetes.adoc[Cloud Native Deployment] section, the kubernetes resource has been updated with both probes.
+
+[#quarkusk8s-generated-kubernetes-resource-custom-health-check]
 [source,bash,subs="+macros,+attributes"]
 ----
-cp pass:[$TUTORIAL_HOME]/templates/custom-probes.yaml pass:[$TUTORIAL_HOME]/work/{quarkus-project-name}/custom-probes.yaml
+cat pass:[$TUTORIAL_HOME]/target/wiring-classes/META-INF/kubernetes/kubernetes.json
 ----
-copyToClipboard::qext-copy-k8s-custom-probes-file[]
+copyToClipboard::quarkusk8s-generated-kubernetes-resource-custom-health-check[]
 
-Apply the probes to the existing `pass:[$APP_NAME]` Kubernetes deployment:
+include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-deploy]
 
-[#qext-k8s-set-cusotm-probes]
-[source,bash,subs="+macros,+attributes"]
-----
-kubectl patch deployment pass:[$APP_NAME] -p "$(cat pass:[$TUTORIAL_HOME]/work/{quarkus-project-name}/custom-probes.yaml)"
-----
-copyToClipboard::qext-k8s-set-custom-probes[]
---
-oc::
-+
---
-endif::[]
-[#qext-oc-set-custom-probes]
-[source,bash,subs="+macros,+attributes"]
-----
-oc set probe deployment pass:[$APP_NAME] --liveness --get-url=http://:8080/health/live
-oc set probe deployment pass:[$APP_NAME] --readiness --get-url=http://:8080/health/ready
-----
-copyToClipboard::qext-oc-set-custom-probes[]
-ifndef::workshop[]
---
-====
-endif::[]
+[#qext-custom-health-check-invoke-k8s-svc]
+=== Invoke Kubernetes Service
+
+include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-invoke-svc]
+
+[#qext-custom-health-check-end-k8s-delete-resources]
+=== Delete Kubernetes Resources
+
+include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-delete]

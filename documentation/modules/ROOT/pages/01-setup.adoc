@@ -108,6 +108,7 @@ Minikube::
 minikube profile quarkus-tutorial && \
 minikube -p quarkus-tutorial start --memory=8192 --cpus=4 --disk-size=50g && \
 kubectl create namespace {tutorial-namespace}
+kubectl config set-context --current --namespace={tutorial-namespace}
 ----
 copyToClipboard::quarkus-start-minikube[]
 --

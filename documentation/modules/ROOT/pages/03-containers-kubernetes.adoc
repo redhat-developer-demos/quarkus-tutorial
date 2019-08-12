@@ -3,6 +3,7 @@
 include::_attributes.adoc[]
 :quarkus-project-name: fruit-app
 :svc-path: fruit
+:experimental:
 
 At the end of this chapter you will be able to :
 
@@ -26,19 +27,23 @@ include::ROOT:partial$build-containers.adoc[tag=run]
 You can <<conk8s-call-svc>> to see a response like `hello`.
  
 [#conk8s-call-svc]
-== Invoke Service
-The simple `hello` REST URI can be called via browser using http://localhost:8080 or using CLI like: 
+=== Invoke Service
+The simple `hello` REST URI can be called via browser using `http://$(minikube ip)/fruit` or using CLI like: 
 
 :doc-sec: basics
 :k8s-cli: k8s
 :path: fruit
 :k8s-env: minikube
 :cli-tool: curl
-:address: localhost
+:address: $(minikube ip)
 include::ROOT:partial$invoke-service.adoc[tag=call]
+
+Then you can stop the container by typing kbd:[Ctrl+C].
 
 [#conk8s-deploy-k8s-app]
 == Deploy Quarkus Application in Kubernetes
+
+:doc-sec: basics
 
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-prep]
 
@@ -60,4 +65,10 @@ include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-deploy]
 
 [#conk8s-invoke-k8s-svc]
 === Invoke Kubernetes Service
+
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-invoke-svc]
+
+[#conk8s-delete-k8s-app]
+=== Delete Kubernetes Resources
+
+include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-delete]
