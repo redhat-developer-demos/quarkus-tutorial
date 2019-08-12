@@ -329,24 +329,6 @@
 <div class="paragraph">
 <p>For the demonstration we will use <a href="https://mariadb.org/">MaridDB</a> as a backing database.</p>
 </div>
-<div class="paragraph">
-<p>Create the <code>fruits-app</code> folder and navigate to the folder:</p>
-</div>
-<div id="quarkusp-nav-to-work-folder" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir -p $TUTORIAL_HOME/work/fruits-app &amp;&amp; cd $TUTORIAL_HOME/work/`basename $_` &amp;&amp; \
-touch .keep <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-nav-to-work-folder"><i class="fa fa-clipboard"></i></button><br/>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>just to make sure our maven project create later will not create the top level <code>fruits-app</code> directory.</td>
-</tr>
-</table>
-</div>
 <div class="sect2">
 <h3 id="quarkusp-fruitapp-dev"><a class="anchor" href="#quarkusp-fruitapp-dev"></a>Build and Deploy</h3>
 <div class="paragraph">
@@ -535,7 +517,7 @@ the <code>&lt;your ip address&gt;:3306</code></p>
 <div class="sect3">
 <h4 id="_build_fruit_resource"><a class="anchor" href="#_build_fruit_resource"></a>Build Fruit Resource</h4>
 <div class="paragraph">
-<p>The skeleton project to get started is available in $TUTORIAL_HOME/apps/fruits-app. Edit the project in the IDE e.g. <code>code [$TUTORIAL_HOME]/apps/fruits-app</code>.</p>
+<p>The skeleton project to get started is available in $TUTORIAL_HOME/apps/fruits-app and it is the same you created at <a href="#Basics and Fundamentals">[Basics and Fundamentals]</a>.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -553,31 +535,6 @@ For the easier reference, we shall call the <code>fruits-app</code> project fold
 <h5 id="quarkusp-configure-props"><a class="anchor" href="#quarkusp-configure-props"></a>Edit the application.properties</h5>
 <div class="paragraph">
 <p>Add the following properties to $PROJECT_HOME/src/main/resources/application.properties:</p>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>If you wish to create the project afresh, then here is the complete maven command for your reference:</p>
-</div>
-<div id="quarkusp-mv-create-fruits-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn io.quarkus:quarkus-maven-plugin:0.15.0:create \
-  -DprojectGroupId="com.example" \
-  -DprojectArtifactId="fruits-app" \
-  -DprojectVersion="1.0-SNAPSHOT" \
-  -DclassName="FruitResource" \
-  -Dextensions="mariadb,resteasy-jsonb,panache,swagger-ui,openapi,quarkus-smallrye-health"</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-mv-create-fruits-app"><i class="fa fa-clipboard"></i></button><br/>
-</td>
-</tr>
-</table>
 </div>
 <div id="quarkuspdb-update-props" class="listingblock">
 <div class="content">
