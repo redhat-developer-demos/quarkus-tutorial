@@ -16,18 +16,6 @@ To demonstrate using Hibernate with Panache, you will be developing an applicati
 
 For the demonstration we will use https://mariadb.org/[MaridDB] as a backing database.
 
-Create the `fruits-app` folder and navigate to the folder:
-
-[#quarkusp-nav-to-work-folder]
-[source,bash,subs="+macros,+attributes"]
-----
-mkdir -p $TUTORIAL_HOME/work/fruits-app && cd $TUTORIAL_HOME/work/`basename $_` && \
-touch .keep #<1>
-----
-copyToClipboard::quarkusp-nav-to-work-folder[]
-
-<1> just to make sure our maven project create later will not create the top level `fruits-app` directory.
-
 [#quarkusp-fruitapp-dev]
 === Build and Deploy
 
@@ -179,7 +167,7 @@ the `<your ip address>:3306`
 
 ==== Build Fruit Resource
 
-The skeleton project to get started is available in pass:[$TUTORIAL_HOME]/apps/fruits-app. Edit the project in the IDE e.g. `code [$TUTORIAL_HOME]/apps/fruits-app`. 
+The skeleton project to get started is available in pass:[$TUTORIAL_HOME]/apps/fruits-app and it is the same you created at <<Basics and Fundamentals>>.
 
 NOTE: For the easier reference, we shall call the `fruits-app` project folder as pass:[$PROJECT_HOME]
 
@@ -187,22 +175,6 @@ NOTE: For the easier reference, we shall call the `fruits-app` project folder as
 ===== Edit the application.properties
 
 Add the following properties to pass:[$PROJECT_HOME]/src/main/resources/application.properties:
-
-[TIP]
-====
-If you wish to create the project afresh, then here is the complete maven command for your reference:
-[#quarkusp-mv-create-fruits-app]
-[source,bash,subs="+macros,+attributes"]
-----
-mvn io.quarkus:quarkus-maven-plugin:0.15.0:create \
-  -DprojectGroupId="com.example" \
-  -DprojectArtifactId="fruits-app" \
-  -DprojectVersion="1.0-SNAPSHOT" \
-  -DclassName="FruitResource" \
-  -Dextensions="mariadb,resteasy-jsonb,panache,swagger-ui,openapi,quarkus-smallrye-health"
-----
-copyToClipboard::quarkusp-mv-create-fruits-app[]
-====
 
 [#quarkuspdb-update-props]
 [source,config,subs="+macros,+attributes"]
