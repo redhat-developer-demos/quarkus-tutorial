@@ -41,7 +41,7 @@ You can inspect the generated file by accessing next file:
 [#quakrusk8s-generated-kubernetes-resource]
 [source,bash,subs="+macros,+attributes"]
 ----
-cat pass:[$TUTORIAL_HOME]/target/wiring-classes/META-INF/kubernetes/kubernetes.json
+cat pass:[$TUTORIAL_HOME]/target/wiring-classes/META-INF/kubernetes/kubernetes.yml
 ----
 copyToClipboard::quakrusk8s-generated-kubernetes-resource[]
 
@@ -58,7 +58,7 @@ kubectl::
 [#conk8s-run-deploy-k8s-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-kubectl apply -f pass:[$TUTORIAL_HOME]/target/wiring-classes/META-INF/kubernetes/kubernetes.json
+kubectl apply -f pass:[$TUTORIAL_HOME]/target/wiring-classes/META-INF/kubernetes/kubernetes.yml
 ----
 copyToClipboard::conk8s-run-deploy-k8s-app[]
 --
@@ -70,7 +70,7 @@ endif::[]
 [#conk8s-oc-run-deploy-k8s-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-oc apply -f pass:[$TUTORIAL_HOME]/target/wiring-classes/META-INF/kubernetes/kubernetes.json
+oc apply -f pass:[$TUTORIAL_HOME]/target/wiring-classes/META-INF/kubernetes/kubernetes.yml
 ----
 copyToClipboard::conk8s-oc-run-deploy-k8s-app[]
 ifndef::workshop[]
