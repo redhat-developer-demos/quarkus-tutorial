@@ -6,8 +6,8 @@ include::_attributes.adoc[]
 
 At the end of this chapter you will be able to :
 
-* What is Panache ?
-* How to build a Hibernate application using Panache?
+* [x] What is Panache ?
+* [x] How to build a Hibernate application using Panache?
 
 [#quarkusp-demo-overview]
 == Demo Overview 
