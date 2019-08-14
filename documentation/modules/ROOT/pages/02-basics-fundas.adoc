@@ -88,3 +88,73 @@ The simple `hello` REST URI can be called from the browser using http://localhos
 :cli-tool: curl
 :address: localhost
 include::ROOT:partial$invoke-service.adoc[tag=call]
+
+[#basics-logging]
+== Configuring Logging
+
+You can configure Quarkus logging by setting the following parameters to pass:[$PROJECT_HOME]/src/main/resources/application.properties: 
+
+[#basics-update-logging-props]
+[source,config,subs="+macros,+attributes"]
+----
+quarkus.log.console.enable=true
+quarkus.log.console.level=DEBUG
+----
+copyToClipboard::basics-update-logging-props[]
+
+Also you can configure your application logger level.
+Let's add a logger and configure it.
+
+Open the following Java class pass:[$PROJECT_HOME]/src/main/java/com/example/FruitResource.java and copy the next content in its body:
+
+[#basics-custom-log-manager]
+[source,java,subs="+macros"]
+----
+package com.example;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.jboss.logging.Logger;
+
+@Path("/fruit")
+public class FruitResource {
+
+    Logger logger = Logger.getLogger(FruitResource.class);
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello() {
+        logger.debug("Hello method is called.");
+        return "hello";
+    }
+}
+----
+copyToClipboard::basics-custom-log-manager[]
+
+And configure `DEBUG` mode for the service to pass:[$PROJECT_HOME]/src/main/resources/application.properties: 
+
+[#basics-update-custom-logging-props]
+[source,config,subs="+macros,+attributes"]
+----
+quarkus.log.category."com.example".level=DEBUG
+----
+copyToClipboard::basics-update-custom-logging-props[]
+
+[#basics-call-svc-logging]
+=== Invoke Service
+The simple `hello` REST URI can be called from the browser using http://localhost:8080 or using cli like: 
+
+:doc-sec: basics
+:k8s-cli: k8s
+:path: fruit
+:k8s-env: minikube
+:cli-tool: curl
+:address: localhost
+include::ROOT:partial$invoke-service.adoc[tag=call]
+
+And if you inspect the console output, you see the logging message:
+
+`2019-08-13 18:12:53,284 DEBUG [com.exa.FruitResource] (executor-thread-1) Hello method is called.`
