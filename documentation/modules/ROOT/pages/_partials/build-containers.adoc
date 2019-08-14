@@ -49,6 +49,8 @@ copyToClipboard::conk8s-build-quarkus-native-app-container[]
 --
 ====
 
+NOTE: For sake of simplicity the container name in both native and jvm mode are named identically. In real cases where you might need both containers, you'd like to name them differently to know exactly the package they are containing.
+
 #end::build[]
 
 
