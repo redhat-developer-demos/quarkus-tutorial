@@ -19,7 +19,7 @@ After successful maven build, run the following command to build te container:
 [#conk8s-build-quarkus-jvm-app-container]
 [source,bash,subs="+macros,+attributes"]
 ----
-docker build -f src/main/docker/Dockerfile.jvm -t example/{quarkus-project-name}-jvm .
+docker build -f src/main/docker/Dockerfile.jvm -t example/{quarkus-project-name}:1.0-SNAPSHOT .
 ----
 copyToClipboard::conk8s-build-quarkus-jvm-app-container[]
 
@@ -42,69 +42,36 @@ After successful maven build, run the following command to build te container:
 [#conk8s-build-quarkus-native-app-container]
 [source,bash,subs="+macros,+attributes"]
 ----
-docker build -f src/main/docker/Dockerfile.native -t example/{quarkus-project-name}-native .
+docker build -f src/main/docker/Dockerfile.native -t example/{quarkus-project-name}:1.0-SNAPSHOT .
 ----
 copyToClipboard::conk8s-build-quarkus-native-app-container[]
 
 --
 ====
 
+NOTE: For sake of simplicity the container name in both native and jvm mode are named identically. In real cases where you might need both containers, you'd like to name them differently to know exactly the package they are containing.
+
 #end::build[]
 
 
 #tag::run[]
-[tabs]
-====
-JVM mode::
-+
---
+
 [#build-run-jvm-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-docker run -it --rm -p 8080:8080 example/{quarkus-project-name}-jvm
+docker run -it --rm -p 8080:8080 example/{quarkus-project-name}:1.0-SNAPSHOT
 ----
 copyToClipboard::build-run-jvm-app[]
---
-Native mode::
-+
---
-[#build-run-native-app]
-[source,bash,subs="+macros,+attributes"]
-----
-docker run -it --rm -p 8080:8080 example/{quarkus-project-name}-native
-----
-copyToClipboard::build-run-native-app[]
---
-====
 
 #end::run[]
 
 #tag::tag-push[]
 
-[tabs]
-====
-JVM mode::
-+
---
 [#build-tag-jvm-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-docker tag example/{quarkus-project-name}-jvm pass:[$APP_IMAGE] && \
-docker push pass:[$APP_IMAGE]
+docker push example/{quarkus-project-name}:1.0-SNAPSHOT
 ----
 copyToClipboard::build-tag-jvm-app[]
---
-Native mode::
-+
---
-[#build-tag-native-app]
-[source,bash,subs="+macros,+attributes"]
-----
-docker tag example/{quarkus-project-name}-native pass:[$APP_IMAGE] && \
-docker push pass:[$APP_IMAGE]
-----
-copyToClipboard::build-tag-native-app[]
---
-====
 
 #end::tag-push[]

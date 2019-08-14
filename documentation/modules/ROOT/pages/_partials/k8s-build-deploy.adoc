@@ -2,47 +2,48 @@
 
 #tag::k8s-prep[]
 
-Copy the pass:[$TUTORIAL_HOME]/templates/app.yaml to `{quarkus-project-name}` Quarkus Application directory:
+[IMPORTANT]
+====
+If you have not deployed the application previously, you need to add Quarkus Kubernetes extension. This extension uses https://github.com/dekorateio/dekorate[Dekorate] to generate a default Kubernetes resource template.
 
-[#conk8s-copy-k8s-app-template]
+[#qext-mvn-add-kubernetes-extension]
 [source,bash,subs="+macros,+attributes"]
 ----
-cp pass:[$TUTORIAL_HOME]/templates/app.yaml .
+./mvnw quarkus:add-extension -Dextensions="quarkus-kubernetes"
 ----
-copyToClipboard::conk8s-copy-k8s-app-template[]
+copyToClipboard::qext-mvn-add-kubernetes-extension[]
 
-Edit the app.yaml and replace the following variables:
+You need to configure group and name of the Docker container used to deploy into Kubernetes.
 
-[cols="3*^,3*.",options="header"]
-|===
-|**Variable**|**Description**|**Example**
+Add the following properties (if you haven't already done it before) to pass:[$PROJECT_HOME]/src/main/resources/application.properties:
 
-| pass:[$APP_NAME]
-| The Kubernetes application name
-| my-quarkus-app
+[#quarkusk8s-update-props]
+[source,config,subs="+macros,+attributes"]
+----
+quarkus.kubernetes.group=example
+quarkus.application.name={quarkus-project-name}
+----
+copyToClipboard::quarkusk8s-update-props[]
 
-| pass:[$REGISTRY_USER_NAME]
-| The container registry user name
-| demo
+====
 
-| pass:[$APP_IMAGE]
-| The Quarkus container image name 
-| docker.io/demo/{quarkus-project-name}-native
+Now you need to run Maven goal to generate Kubernetes resource.
 
-|===
-
-Set the variables in shell for further use in commands:
-
-[#conk8s-set-env]
+[#quarkusk8s-generate-kubernetes]
 [source,bash,subs="+macros,+attributes"]
 ----
-export APP_NAME='my-quarkus-app' && \
-export REGISTRY_USER_NAME='demo' && \
-export APP_IMAGE="docker.io/$REGISTRY_USER_NAME/{quarkus-project-name}-native"
+./mvnw package -DskipTests
 ----
-copyToClipboard::conk8s-set-env[]
+copyToClipboard::quarkusk8s-generate-kubernetes[]
 
-IMPORTANT: Please update the `demo` registry user to match you container registry username
+You can inspect the generated file by accessing next file:
+
+[#quakrusk8s-generated-kubernetes-resource]
+[source,bash,subs="+macros,+attributes"]
+----
+cat pass:[$TUTORIAL_HOME]/target/wiring-classes/META-INF/kubernetes/kubernetes.yml
+----
+copyToClipboard::quakrusk8s-generated-kubernetes-resource[]
 
 #end::k8s-prep[]
 
@@ -57,7 +58,7 @@ kubectl::
 [#conk8s-run-deploy-k8s-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-kubectl apply -f pass:[$TUTORIAL_HOME]/work/{quarkus-project-name}/app.yaml
+kubectl apply -f pass:[$TUTORIAL_HOME]/target/wiring-classes/META-INF/kubernetes/kubernetes.yml
 ----
 copyToClipboard::conk8s-run-deploy-k8s-app[]
 --
@@ -69,7 +70,7 @@ endif::[]
 [#conk8s-oc-run-deploy-k8s-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-oc apply -f pass:[$TUTORIAL_HOME]/work/{quarkus-project-name}/app.yaml
+oc apply -f pass:[$TUTORIAL_HOME]/target/wiring-classes/META-INF/kubernetes/kubernetes.yml
 ----
 copyToClipboard::conk8s-oc-run-deploy-k8s-app[]
 ifndef::workshop[]
@@ -88,12 +89,23 @@ ifndef::workshop[]
 kubectl::
 +
 --
-[#conk8s-run-deploy-oc-app]
+
+You need to create a `NodePort` to expose the application if you are in minikube.
+As generated resources creates a `ClusterIP` service, you need to patch it:
+
+[#conk8s-k8s-run-expose-svc-nodeport]
 [source,bash,subs="+macros,+attributes"]
 ----
-SVC_URL=$(minikube ip):$(kubectl get svc pass:[$APP_NAME] -o jsonpath='{.spec.ports[0].nodePort}')
+kubectl patch svc {quarkus-project-name} --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"}]'
 ----
-copyToClipboard::conk8s-run-deploy-oc-app[]
+copyToClipboard::conk8s-k8s-run-expose-svc-nodeport[]
+
+[#conk8s-run-deploy-k8s-service]
+[source,bash,subs="+macros,+attributes"]
+----
+SVC_URL=$(minikube service -n quarkustutorial {quarkus-project-name} --url)
+----
+copyToClipboard::conk8s-run-deploy-k8s-service[]
 
 --
 oc::
@@ -102,19 +114,19 @@ oc::
 endif::[]
 With OpenShift we can create a route to make Quarkus application publicly accessible:
 
-[#conk8s-oc-run-expose-svc]
+[#conk8s-oc-run-expose-svc-route]
 [source,bash,subs="+macros,+attributes"]
 ----
-oc expose service pass:[$APP_NAME]
+oc expose service {quarkus-project-name}
 ----
-copyToClipboard::conk8s-oc-run-expose-svc[]
+copyToClipboard::conk8s-oc-run-expose-svc-route[]
 
 Once the service is exposed we can use the following command to get the public url:
 
 [#conk8s-oc-run-get-route]
 [source,bash,subs="+macros,+attributes"]
 ----
-SVC_URL=$(oc get routes pass:[$APP_NAME] -o jsonpath='{.spec.host}')
+SVC_URL=$(oc get routes {quarkus-project-name} -o jsonpath='{.spec.host}')
 ----
 copyToClipboard::conk8s-oc-run-get-route[]
 ifndef::workshop[]
@@ -132,3 +144,36 @@ curl $SVC_URL/{svc-path}
 copyToClipboard::conk8s-call-k8s-svc[]
 
 #end::k8s-invoke-svc[]
+
+#tag::k8s-delete[]
+
+ifndef::workshop[]
+[tabs]
+====
+kubectl::
++
+--
+[#conk8s-delete-k8s-app]
+[source,bash,subs="+macros,+attributes"]
+----
+kubectl delete all --all
+----
+copyToClipboard::conk8s-delete-k8s-app[]
+--
+oc::
++
+--
+endif::[]
+
+[#conk8s-delete-oc-app]
+[source,bash,subs="+macros,+attributes"]
+----
+oc delete all --all
+----
+copyToClipboard::conk8s-delete-oc-app[]
+ifndef::workshop[]
+--
+====
+endif::[]
+
+#end::k8s-delete[]

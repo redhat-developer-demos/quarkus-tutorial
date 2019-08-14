@@ -21,6 +21,7 @@
 *** xref:03-containers-kubernetes.adoc#conk8s-deploy-k8s-app[Tag Container Images]
 *** xref:03-containers-kubernetes.adoc#conk8s-k8s-apply-resources[Apply Kubernetes Resources]
 *** xref:03-containers-kubernetes.adoc#conk8s-invoke-k8s-svc[Invoke Kubernetes Service]
+*** xref:03-containers-kubernetes.adoc#conk8s-delete-k8s-app[Delete Kubernetes Resources]
 
 * xref:04-quarkus-extensions.adoc[4. Quarkus Extensions]
 ** xref:04-quarkus-extensions.adoc#qext-intro[What are Extensions ?]
@@ -72,3 +73,4 @@
 *** xref:05-quarkus-panache.adoc#quarkusp-cloud-dev-prepare-app[Prepare Kubernetes Application]
 *** xref:05-quarkus-panache.adoc#quarkusp-cloud-dev-apply-resources[Apply Resources]
 *** xref:05-quarkus-panache.adoc#quarkusp-invoke-k8s-svc[Invoke Service]
+*** xref:05-quarkus-panache.adoc#quarkusp-persistence-k8s-delete-resources[Delete Kubernetes Resource]
