@@ -105,6 +105,9 @@
   <li class="nav-item" data-depth="3">
     <a class="nav-link" href="03-containers-kubernetes.html#conk8s-invoke-k8s-svc">Invoke Kubernetes Service</a>
   </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-containers-kubernetes.html#conk8s-delete-k8s-app">Delete Kubernetes Resources</a>
+  </li>
 </ul>
   </li>
 </ul>
@@ -273,6 +276,9 @@
   <li class="nav-item" data-depth="3">
     <a class="nav-link" href="#quarkusp-invoke-k8s-svc">Invoke Service</a>
   </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#quarkusp-persistence-k8s-delete-resources">Delete Kubernetes Resource</a>
+  </li>
 </ul>
   </li>
 </ul>
@@ -308,13 +314,13 @@
 <div class="paragraph">
 <p>At the end of this chapter you will be able to :</p>
 </div>
-<div class="ulist">
-<ul>
+<div class="ulist checklist">
+<ul class="checklist">
 <li>
-<p>What is Panache ?</p>
+<p><i class="fa fa-check-square-o"></i> What is Panache ?</p>
 </li>
 <li>
-<p>How to build a Hibernate application using Panache?</p>
+<p><i class="fa fa-check-square-o"></i> How to build a Hibernate application using Panache?</p>
 </li>
 </ul>
 </div>
@@ -327,7 +333,7 @@
 <p>To demonstrate using Hibernate with Panache, you will be developing an application called "Fruits". Its a simple CRUD REST API that handles information about Fruits.</p>
 </div>
 <div class="paragraph">
-<p>For the demonstration we will use <a href="https://mariadb.org/">MaridDB</a> as a backing database.</p>
+<p>For the demonstration we will use <a href="https://mariadb.org/">MariaDB</a> as a backing database.</p>
 </div>
 <div class="sect2">
 <h3 id="quarkusp-fruitapp-dev"><a class="anchor" href="#quarkusp-fruitapp-dev"></a>Build and Deploy</h3>
@@ -381,7 +387,7 @@ mariadb-58fb5df86c-wfbsj      1/1     Running   0          2m3s</code></pre>
 <div class="title">services</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">NAME         TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
-db-adminer   NodePort   10.101.171.237   &lt;none&gt;        8080:30397/TCP   2m21s
+db-adminer   NodePort   10.101.171.237   &lt;none&gt;        9090:30397/TCP   2m21s
 mariadb      NodePort   10.105.40.135    &lt;none&gt;        3306:30125/TCP   2m21s</code></pre>
 </div>
 </div>
@@ -396,6 +402,9 @@ The actual pod name and NodePort will be different on your environment
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>To access to DB adminer:</p>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -427,6 +436,10 @@ The actual pod name and NodePort will be different on your environment
 </div>
 </div>
 </div>
+<div class="paragraph">
+<p>Use <code>mariadb</code> as host and <code>demodb</code> as database.
+Any of the next parameters as authentication credentials are valid.</p>
+</div>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. DB access details</caption>
 <colgroup>
@@ -457,7 +470,7 @@ The actual pod name and NodePort will be different on your environment
 <div class="sect4">
 <h5 id="quarkusp-access-db"><a class="anchor" href="#quarkusp-access-db"></a>Accessing Database</h5>
 <div class="paragraph">
-<p>To be able to access mariadb database locally, you need to <code>port-forward</code> the remote port to local port.</p>
+<p>To be able to access mariadb database locally (<code>localhost</code>), you need to <code>port-forward</code> the remote port to local port.</p>
 </div>
 <div class="paragraph">
 <p>Open a new terminal window and run the following command:</p>
@@ -477,8 +490,7 @@ The actual pod name and NodePort will be different on your environment
 <div class="tab-pane" aria-labelledby="tabset3_kubectl">
 <div id="quarkuspdb-port-forward" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># e.g. kubectl port-forward -n quarkustutorial svc/mariadb --address 192.168.64.1 3306:3306
-kubectl -n quarkustutorial port-forward svc/mariadb 3306:3306 --address &lt;your local ip address&gt;</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl -n quarkustutorial port-forward svc/mariadb 3306:3306</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkuspdb-port-forward"><i class="fa fa-clipboard"></i></button><br/>
@@ -486,38 +498,19 @@ kubectl -n quarkustutorial port-forward svc/mariadb 3306:3306 --address &lt;your
 <div class="tab-pane" aria-labelledby="tabset3_oc">
 <div id="quarkuspdb-oc-port-forward" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># e.g. oc port-forward -n quarkustutorial svc/mariadb --address 192.168.64.1 3306:3306
-oc -n quarkustutorial port-forward svc/mariadb 3306:3306 --address &lt;your local ip address&gt;</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc -n quarkustutorial port-forward svc/mariadb 3306:3306</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkuspdb-oc-port-forward"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
-<div class="paragraph">
-<p>You can now use <code>adminer</code> or any other SQL tool to access the mariadb using the <code>&lt;your ip address&gt;:3306</code></p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>The server address in the adminer can be either <code>mariadb</code> the kubernetes service name of the mariadb database or
-the <code>&lt;your ip address&gt;:3306</code></p>
-</div>
-</td>
-</tr>
-</table>
-</div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_build_fruit_resource"><a class="anchor" href="#_build_fruit_resource"></a>Build Fruit Resource</h4>
 <div class="paragraph">
-<p>The skeleton project to get started is available in $TUTORIAL_HOME/apps/fruits-app and it is the same you created at <a href="#Basics and Fundamentals">[Basics and Fundamentals]</a>.</p>
+<p>The skeleton project to get started is the same you created at <a href="02-basics-fundas.html" class="page">Basics and Fundamentals</a>.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -532,6 +525,15 @@ For the easier reference, we shall call the <code>fruits-app</code> project fold
 </table>
 </div>
 <div class="sect4">
+<h5 id="quarkusp-add-persistence-extensions"><a class="anchor" href="#quarkusp-add-persistence-extensions"></a>Add Extensions</h5>
+<div id="qext-mvn-add-persistence-extensions" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-jdbc-mariadb, quarkus-hibernate-orm-panache"</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-mvn-add-persistence-extensions"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+<div class="sect4">
 <h5 id="quarkusp-configure-props"><a class="anchor" href="#quarkusp-configure-props"></a>Edit the application.properties</h5>
 <div class="paragraph">
 <p>Add the following properties to $PROJECT_HOME/src/main/resources/application.properties:</p>
@@ -539,7 +541,10 @@ For the easier reference, we shall call the <code>fruits-app</code> project fold
 <div id="quarkuspdb-update-props" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config"># configure your datasource
-quarkus.datasource.url = jdbc:mariadb://&lt;your-ip-address&gt;:3306/demodb <i class="conum" data-value="1"></i><b>(1)</b>
+<i class="conum" data-value="1"></i><b>(1)</b>
+quarkus.datasource.url = jdbc:mariadb://mariadb:3306/demodb
+<i class="conum" data-value="2"></i><b>(2)</b>
+%dev.quarkus.datasource.url = jdbc:mariadb://127.0.0.1:3306/demodb
 quarkus.datasource.driver = org.mariadb.jdbc.MariaDbDataSource
 quarkus.hibernate-orm.dialect = org.hibernate.dialect.MariaDB103Dialect
 quarkus.datasource.username = demo
@@ -556,7 +561,11 @@ quarkus.hibernate-orm.log.sql = true</code></pre>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Important to update to the ip used in port-forward earlier.</td>
+<td>URL used when app is running in production (native or JAR)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>URL used when app is running in development mode</td>
 </tr>
 </table>
 </div>
@@ -600,9 +609,6 @@ quarkus.hibernate-orm.log.sql = true</code></pre>
 
 import javax.persistence.Entity;
 
-/**
- * Fruit
- */
 @Entity
 public class Fruit {
 
@@ -617,7 +623,7 @@ public class Fruit {
 <div class="sect4">
 <h5 id="quarkusp-edit-fruit-resource"><a class="anchor" href="#quarkusp-edit-fruit-resource"></a>Update Fruit Resource</h5>
 <div class="paragraph">
-<p>Edit the Java file <code>$PROJECT_HOME/src/main/java/com/example/FruitResource.java</code> to add a REST  method to get all the available fruits:</p>
+<p>Edit the Java file <code>$PROJECT_HOME/src/main/java/com/example/FruitResource.java</code>, remove <code>hello()</code> method and add a new REST method to get all the available fruits:</p>
 </div>
 <div id="quarkusp-fruit-entity1" class="listingblock">
 <div class="content">
@@ -630,7 +636,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-@Path("/fruits")
+@Path("/fruit")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class FruitResource {
@@ -677,9 +683,6 @@ public class FruitResource {
 import javax.persistence.Entity;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
-/**
- * Fruit
- */
 @Entity
 public class Fruit extends PanacheEntity {
 
@@ -694,7 +697,7 @@ public class Fruit extends PanacheEntity {
 <p>Making the <code>Fruit</code> entity as a <code>Panache Entity</code> will make it both Entity and DAO and ofcourse the error in the <code>FruitResource.java</code> disappears.</p>
 </div>
 <div class="paragraph">
-<p>Lets now access the Fruits API <a href="http://localhost:8080/fruits" class="bare">http://localhost:8080/fruits</a>. If all goes well you will see some Hibernate SQL statements in the log that will create the new table <code>Fruit</code> with columns from <code>Fruit.java</code> entity class.</p>
+<p>Lets now access the Fruits API <a href="http://localhost:8080/fruit" class="bare">http://localhost:8080/fruit</a>. If all goes well you will see some Hibernate SQL statements in the log that will create the new table <code>Fruit</code> with columns from <code>Fruit.java</code> entity class.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -704,7 +707,16 @@ public class Fruit extends PanacheEntity {
 </td>
 <td class="content">
 <div class="paragraph">
-<p>You have accessed the application using <a href="http://localhost:8080/fruits" class="bare">http://localhost:8080/fruits</a>, but we have enabled <code>Swagger</code> extension to the application. To acess the swagger UI use the url <a href="http://localhost:8080/swagger-ui" class="bare">http://localhost:8080/swagger-ui</a></p>
+<p>You have accessed the application using <a href="http://localhost:8080/fruit" class="bare">http://localhost:8080/fruit</a>. If you want you can enable <code>Swagger</code> by adding the extension:</p>
+</div>
+<div id="qext-mvn-add-swagger-ui-extensions" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-swagger-ui"</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-mvn-add-swagger-ui-extensions"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>And then access the swagger UI using the url <a href="http://localhost:8080/swagger-ui" class="bare">http://localhost:8080/swagger-ui</a>.</p>
 </div>
 </td>
 </tr>
@@ -720,7 +732,9 @@ public class Fruit extends PanacheEntity {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
 
+import java.net.URI;
 import java.util.List;
+
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -729,10 +743,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 
-@Path("/fruits")
-@Produces(MediaType.APPLICATION_JSON)
+@Path("/fruit")
 @Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class FruitResource {
 
     @GET
@@ -743,31 +758,33 @@ public class FruitResource {
     @POST
     @Transactional
     public Response saveFruit(Fruit fruit) {
-        // just allow it to be generated
-        fruit.id = null;
-        // since the FruitEntity is a panache entity persist is available by default
+        // since the FruitEntity is a panache entity
+        // persist is available by default
         fruit.persist();
-        return Response.ok(201).entity(fruit).build();
+        final URI createdUri = UriBuilder.fromResource(FruitResource.class)
+                        .path(Long.toString(fruit.id))
+                        .build();
+        return Response.created(createdUri).build();
     }
 }</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-fruit-add-persist"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
-<p>Since we are in development accessing the Swagger UI <a href="http://localhost:8080/swagger-ui" class="bare">http://localhost:8080/swagger-ui</a> will reload the application.</p>
+<p>You can insert a new fruit by using the next <code>curl</code> command: <code>curl -vvv -d '{"name": "banana", "season": "summer"}' -H "Content-Type: application/json" POST <a href="http://localhost:8080/fruit" class="bare">http://localhost:8080/fruit</a></code></p>
+</div>
+<div class="paragraph">
+<p>Or if you have the Swagger UI <a href="http://localhost:8080/swagger-ui" class="bare">http://localhost:8080/swagger-ui</a> enabled you can do it form there as well.</p>
 </div>
 <div class="paragraph">
 <p>Try adding a fruit via the Swagger UI Post and try listing the available fruits. A good day scenario will return a JSON like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">[
-  {
-    "id": 1,
-    "name": "mango",
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+    "name": "banana",
     "season": "summer"
-  }
-]</code></pre>
+}</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -796,14 +813,15 @@ The response may vary based on what fruit you added.
 </div>
 <div id="quarkusp-add-fruits" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Mango","Spring")
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Strawberry","Spring")
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Orange","Winter")
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"GrapeFruit","Winter")
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Blueberry","Summer")
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Plum","Summer")
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Apple","Fall")
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Grapes","Fall")</code></pre>
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Mango","Spring");
+INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Strawberry","Spring");
+INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Orange","Winter");
+INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"GrapeFruit","Winter");
+INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Blueberry","Summer");
+INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Banana","Summer");
+INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Plum","Summer");
+INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Apple","Fall");
+INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Grapes","Fall");</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-add-fruits"><i class="fa fa-clipboard"></i></button><br/>
@@ -818,9 +836,6 @@ import java.util.List;
 import javax.persistence.Entity;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
-/**
- * Fruit
- */
 @Entity
 public class Fruit extends PanacheEntity {
 
@@ -853,7 +868,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/fruits")
+@Path("/fruit")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class FruitResource {
@@ -882,6 +897,18 @@ public class FruitResource {
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-get-find-fruits"><i class="fa fa-clipboard"></i></button><br/>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Remember to remove the <code>getFruitInfoByName</code> method created in previous section.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>To test finder use the Swagger UI <a href="http://localhost:8080/swagger-ui" class="bare">http://localhost:8080/swagger-ui</a>.</p>
 </div>
@@ -898,6 +925,11 @@ public class FruitResource {
   },
   {
     "id": 6,
+    "name": "Banana",
+    "season": "Summer"
+  },
+  {
+    "id": 7,
     "name": "Plum",
     "season": "Summer"
   }
@@ -950,7 +982,7 @@ You can stop the <code>port-forward</code> and Quarkus application running in de
 </div>
 <div id="conk8s-build-quarkus-jvm-app-container" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.jvm -t example/fruits-app-jvm .</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.jvm -t example/fruits-app:1.0-SNAPSHOT .</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-jvm-app-container"><i class="fa fa-clipboard"></i></button><br/>
@@ -987,70 +1019,28 @@ Native compilation will take few minutes to complete.
 </div>
 <div id="conk8s-build-quarkus-native-app-container" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/fruits-app-native .</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/fruits-app:1.0-SNAPSHOT .</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-native-app-container"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+For sake of simplicity the container name in both native and jvm mode are named identically. In real cases where you might need both containers, you&#8217;d like to name them differently to know exactly the package they are containing.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect3">
 <h4 id="quarkusp-cloud-dev-prepare-app"><a class="anchor" href="#quarkusp-cloud-dev-prepare-app"></a>Prepare the Kubernetes Deployment</h4>
-<div class="paragraph">
-<p>Copy the $TUTORIAL_HOME/templates/app.yaml to <code>fruits-app</code> Quarkus Application directory:</p>
-</div>
-<div id="conk8s-copy-k8s-app-template" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cp $TUTORIAL_HOME/templates/app.yaml .</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-copy-k8s-app-template"><i class="fa fa-clipboard"></i></button><br/>
-<div class="paragraph">
-<p>Edit the app.yaml and replace the following variables:</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-center valign-top"><strong>Variable</strong></th>
-<th class="tableblock halign-center valign-top"><strong>Description</strong></th>
-<th class="tableblock halign-center valign-top"><strong>Example</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock">$APP_NAME</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">The Kubernetes application name</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">my-quarkus-app</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock">$REGISTRY_USER_NAME</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">The container registry user name</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">demo</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock">$APP_IMAGE</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">The Quarkus container image name</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">docker.io/demo/fruits-app-native</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>Set the variables in shell for further use in commands:</p>
-</div>
-<div id="conk8s-set-env" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">export APP_NAME='my-quarkus-app' &amp;&amp; \
-export REGISTRY_USER_NAME='demo' &amp;&amp; \
-export APP_IMAGE="docker.io/$REGISTRY_USER_NAME/fruits-app-native"</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-set-env"><i class="fa fa-clipboard"></i></button><br/>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -1058,34 +1048,50 @@ export APP_IMAGE="docker.io/$REGISTRY_USER_NAME/fruits-app-native"</code></pre>
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Please update the <code>demo</code> registry user to match you container registry username
+<div class="paragraph">
+<p>If you have not deployed the application previously, you need to add Quarkus Kubernetes extension. This extension uses <a href="https://github.com/dekorateio/dekorate">Dekorate</a> to generate a default Kubernetes resource template.</p>
+</div>
+<div id="qext-mvn-add-kubernetes-extension" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextensions="quarkus-kubernetes"</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-mvn-add-kubernetes-extension"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>You need to configure group and name of the Docker container used to deploy into Kubernetes.</p>
+</div>
+<div class="paragraph">
+<p>Add the following properties (if you haven&#8217;t already done it before) to $PROJECT_HOME/src/main/resources/application.properties:</p>
+</div>
+<div id="quarkusk8s-update-props" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.kubernetes.group=example
+quarkus.application.name=fruits-app</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusk8s-update-props"><i class="fa fa-clipboard"></i></button><br/>
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Edit the app.yaml and add the following property override to the quarkus container after the <code>image</code> attribute:</p>
+<p>Now you need to run Maven goal to generate Kubernetes resource.</p>
 </div>
-<div id="quarkusp-update-db-url" class="listingblock">
+<div id="quarkusk8s-generate-kubernetes" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">    env:
-    - name: QUARKUS_DATASOURCE_URL
-      value: "jdbc:mariadb://mariadb/demodb"</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw package -DskipTests</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-update-db-url"><i class="fa fa-clipboard"></i></button><br/>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-Please ensure the indentation of app.yaml is right after this update.
-</td>
-</tr>
-</table>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusk8s-generate-kubernetes"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>You can inspect the generated file by accessing next file:</p>
 </div>
+<div id="quakrusk8s-generated-kubernetes-resource" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat $TUTORIAL_HOME/target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quakrusk8s-generated-kubernetes-resource"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="sect3">
 <h4 id="quarkusp-cloud-dev-apply-resources"><a class="anchor" href="#quarkusp-cloud-dev-apply-resources"></a>Apply Resources</h4>
@@ -1107,7 +1113,7 @@ Please ensure the indentation of app.yaml is right after this update.
 <div class="tab-pane" aria-labelledby="tabset5_kubectl">
 <div id="conk8s-run-deploy-k8s-app" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f $TUTORIAL_HOME/work/fruits-app/app.yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f $TUTORIAL_HOME/target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
@@ -1115,7 +1121,7 @@ Please ensure the indentation of app.yaml is right after this update.
 <div class="tab-pane" aria-labelledby="tabset5_oc">
 <div id="conk8s-oc-run-deploy-k8s-app" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f $TUTORIAL_HOME/work/fruits-app/app.yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f $TUTORIAL_HOME/target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-deploy-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
@@ -1138,29 +1144,39 @@ Please ensure the indentation of app.yaml is right after this update.
 </div>
 <div class="content">
 <div class="tab-pane" aria-labelledby="tabset6_kubectl">
-<div id="conk8s-run-deploy-oc-app" class="listingblock">
+<div class="paragraph">
+<p>You need to create a <code>NodePort</code> to expose the application if you are in minikube.
+As generated resources creates a <code>ClusterIP</code> service, you need to patch it:</p>
+</div>
+<div id="conk8s-k8s-run-expose-svc-nodeport" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(minikube ip):$(kubectl get svc $APP_NAME -o jsonpath='{.spec.ports[0].nodePort}')</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl patch svc fruits-app --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"}]'</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-oc-app"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-k8s-run-expose-svc-nodeport"><i class="fa fa-clipboard"></i></button><br/>
+<div id="conk8s-run-deploy-k8s-service" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(minikube service -n quarkustutorial fruits-app --url)</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-k8s-service"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="tab-pane" aria-labelledby="tabset6_oc">
 <div class="paragraph">
 <p>With OpenShift we can create a route to make Quarkus application publicly accessible:</p>
 </div>
-<div id="conk8s-oc-run-expose-svc" class="listingblock">
+<div id="conk8s-oc-run-expose-svc-route" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc expose service $APP_NAME</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc expose service fruits-app</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-expose-svc"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-expose-svc-route"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>Once the service is exposed we can use the following command to get the public url:</p>
 </div>
 <div id="conk8s-oc-run-get-route" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(oc get routes $APP_NAME -o jsonpath='{.spec.host}')</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(oc get routes fruits-app -o jsonpath='{.spec.host}')</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-get-route"><i class="fa fa-clipboard"></i></button><br/>
@@ -1172,7 +1188,7 @@ Please ensure the indentation of app.yaml is right after this update.
 </div>
 <div id="conk8s-call-k8s-svc" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl $SVC_URL/fruits</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl $SVC_URL/fruit</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-call-k8s-svc"><i class="fa fa-clipboard"></i></button><br/>
@@ -1187,6 +1203,39 @@ Please ensure the indentation of app.yaml is right after this update.
 </td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="quarkusp-persistence-k8s-delete-resources"><a class="anchor" href="#quarkusp-persistence-k8s-delete-resources"></a>Delete Kubernetes Resources</h3>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset7_kubectl"></a>kubectl</p>
+</li>
+<li>
+<p><a id="tabset7_oc"></a>oc</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset7_kubectl">
+<div id="conk8s-delete-k8s-app" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl delete all --all</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-delete-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+<div class="tab-pane" aria-labelledby="tabset7_oc">
+<div id="conk8s-delete-oc-app" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc delete all --all</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-delete-oc-app"><i class="fa fa-clipboard"></i></button><br/>
+</div>
 </div>
 </div>
 </div>

@@ -105,6 +105,9 @@
   <li class="nav-item" data-depth="3">
     <a class="nav-link" href="03-containers-kubernetes.html#conk8s-invoke-k8s-svc">Invoke Kubernetes Service</a>
   </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-containers-kubernetes.html#conk8s-delete-k8s-app">Delete Kubernetes Resources</a>
+  </li>
 </ul>
   </li>
 </ul>
@@ -272,6 +275,9 @@
   </li>
   <li class="nav-item" data-depth="3">
     <a class="nav-link" href="05-quarkus-panache.html#quarkusp-invoke-k8s-svc">Invoke Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="05-quarkus-panache.html#quarkusp-persistence-k8s-delete-resources">Delete Kubernetes Resource</a>
   </li>
 </ul>
   </li>
@@ -470,7 +476,8 @@
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube profile quarkus-tutorial &amp;&amp; \
 minikube -p quarkus-tutorial start --memory=8192 --cpus=4 --disk-size=50g &amp;&amp; \
-kubectl create namespace quarkustutorial</code></pre>
+kubectl create namespace quarkustutorial
+kubectl config set-context --current --namespace=quarkustutorial</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkus-start-minikube"><i class="fa fa-clipboard"></i></button><br/>

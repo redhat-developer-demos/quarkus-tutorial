@@ -105,6 +105,9 @@
   <li class="nav-item" data-depth="3">
     <a class="nav-link" href="#conk8s-invoke-k8s-svc">Invoke Kubernetes Service</a>
   </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#conk8s-delete-k8s-app">Delete Kubernetes Resources</a>
+  </li>
 </ul>
   </li>
 </ul>
@@ -272,6 +275,9 @@
   </li>
   <li class="nav-item" data-depth="3">
     <a class="nav-link" href="05-quarkus-panache.html#quarkusp-invoke-k8s-svc">Invoke Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="05-quarkus-panache.html#quarkusp-persistence-k8s-delete-resources">Delete Kubernetes Resource</a>
   </li>
 </ul>
   </li>
@@ -447,7 +453,7 @@
 </div>
 <div id="conk8s-build-quarkus-jvm-app-container" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.jvm -t example/fruit-app-jvm .</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.jvm -t example/fruit-app:1.0-SNAPSHOT .</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-jvm-app-container"><i class="fa fa-clipboard"></i></button><br/>
@@ -484,122 +490,57 @@ Native compilation will take few minutes to complete.
 </div>
 <div id="conk8s-build-quarkus-native-app-container" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/fruit-app-native .</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/fruit-app:1.0-SNAPSHOT .</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-native-app-container"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+For sake of simplicity the container name in both native and jvm mode are named identically. In real cases where you might need both containers, you&#8217;d like to name them differently to know exactly the package they are containing.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>After containerizing the application, we can verify the container by running the following commands:</p>
 </div>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset3_jvm-mode"></a>JVM mode</p>
-</li>
-<li>
-<p><a id="tabset3_native-mode"></a>Native mode</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset3_jvm-mode">
 <div id="build-run-jvm-app" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -it --rm -p 8080:8080 example/fruit-app-jvm</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -it --rm -p 8080:8080 example/fruit-app:1.0-SNAPSHOT</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#build-run-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="tab-pane" aria-labelledby="tabset3_native-mode">
-<div id="build-run-native-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -it --rm -p 8080:8080 example/fruit-app-native</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#build-run-native-app"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-</div>
 <div class="paragraph">
 <p>You can <a href="#conk8s-call-svc">Invoke Service</a> to see a response like <code>hello</code>.</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="conk8s-call-svc"><a class="anchor" href="#conk8s-call-svc"></a>Invoke Service</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="conk8s-call-svc"><a class="anchor" href="#conk8s-call-svc"></a>Invoke Service</h3>
 <div class="paragraph">
-<p>The simple <code>hello</code> REST URI can be called via browser using <a href="http://localhost:8080" class="bare">http://localhost:8080</a> or using CLI like:</p>
+<p>The simple <code>hello</code> REST URI can be called via browser using <code><a href="http://$(minikube" class="bare">http://$(minikube</a> ip)/fruit</code> or using CLI like:</p>
 </div>
 <div id="basics-k8s-svc-call" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl $(minikube ip):8080/fruit</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>Then you can stop the container by typing <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>.</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="conk8s-deploy-k8s-app"><a class="anchor" href="#conk8s-deploy-k8s-app"></a>Deploy Quarkus Application in Kubernetes</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Copy the $TUTORIAL_HOME/templates/app.yaml to <code>fruit-app</code> Quarkus Application directory:</p>
-</div>
-<div id="conk8s-copy-k8s-app-template" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cp $TUTORIAL_HOME/templates/app.yaml .</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-copy-k8s-app-template"><i class="fa fa-clipboard"></i></button><br/>
-<div class="paragraph">
-<p>Edit the app.yaml and replace the following variables:</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-center valign-top"><strong>Variable</strong></th>
-<th class="tableblock halign-center valign-top"><strong>Description</strong></th>
-<th class="tableblock halign-center valign-top"><strong>Example</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock">$APP_NAME</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">The Kubernetes application name</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">my-quarkus-app</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock">$REGISTRY_USER_NAME</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">The container registry user name</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">demo</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock">$APP_IMAGE</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">The Quarkus container image name</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">docker.io/demo/fruit-app-native</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>Set the variables in shell for further use in commands:</p>
-</div>
-<div id="conk8s-set-env" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">export APP_NAME='my-quarkus-app' &amp;&amp; \
-export REGISTRY_USER_NAME='demo' &amp;&amp; \
-export APP_IMAGE="docker.io/$REGISTRY_USER_NAME/fruit-app-native"</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-set-env"><i class="fa fa-clipboard"></i></button><br/>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -607,37 +548,76 @@ export APP_IMAGE="docker.io/$REGISTRY_USER_NAME/fruit-app-native"</code></pre>
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Please update the <code>demo</code> registry user to match you container registry username
+<div class="paragraph">
+<p>If you have not deployed the application previously, you need to add Quarkus Kubernetes extension. This extension uses <a href="https://github.com/dekorateio/dekorate">Dekorate</a> to generate a default Kubernetes resource template.</p>
+</div>
+<div id="qext-mvn-add-kubernetes-extension" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextensions="quarkus-kubernetes"</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-mvn-add-kubernetes-extension"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>You need to configure group and name of the Docker container used to deploy into Kubernetes.</p>
+</div>
+<div class="paragraph">
+<p>Add the following properties (if you haven&#8217;t already done it before) to $PROJECT_HOME/src/main/resources/application.properties:</p>
+</div>
+<div id="quarkusk8s-update-props" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.kubernetes.group=example
+quarkus.application.name=fruit-app</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusk8s-update-props"><i class="fa fa-clipboard"></i></button><br/>
 </td>
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>Now you need to run Maven goal to generate Kubernetes resource.</p>
+</div>
+<div id="quarkusk8s-generate-kubernetes" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw package -DskipTests</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusk8s-generate-kubernetes"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>You can inspect the generated file by accessing next file:</p>
+</div>
+<div id="quakrusk8s-generated-kubernetes-resource" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat $TUTORIAL_HOME/target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quakrusk8s-generated-kubernetes-resource"><i class="fa fa-clipboard"></i></button><br/>
 <div class="sect2">
 <h3 id="conk8s-k8s-apply-resources"><a class="anchor" href="#conk8s-k8s-apply-resources"></a>Apply Kubernetes Resources</h3>
 <div class="tabset is-loading">
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset4_kubectl"></a>kubectl</p>
+<p><a id="tabset3_kubectl"></a>kubectl</p>
 </li>
 <li>
-<p><a id="tabset4_oc"></a>oc</p>
+<p><a id="tabset3_oc"></a>oc</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset4_kubectl">
+<div class="tab-pane" aria-labelledby="tabset3_kubectl">
 <div id="conk8s-run-deploy-k8s-app" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f $TUTORIAL_HOME/work/fruit-app/app.yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f $TUTORIAL_HOME/target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
-<div class="tab-pane" aria-labelledby="tabset4_oc">
+<div class="tab-pane" aria-labelledby="tabset3_oc">
 <div id="conk8s-oc-run-deploy-k8s-app" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f $TUTORIAL_HOME/work/fruit-app/app.yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f $TUTORIAL_HOME/target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-deploy-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
@@ -651,38 +631,48 @@ Please update the <code>demo</code> registry user to match you container registr
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset5_kubectl"></a>kubectl</p>
+<p><a id="tabset4_kubectl"></a>kubectl</p>
 </li>
 <li>
-<p><a id="tabset5_oc"></a>oc</p>
+<p><a id="tabset4_oc"></a>oc</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset5_kubectl">
-<div id="conk8s-run-deploy-oc-app" class="listingblock">
+<div class="tab-pane" aria-labelledby="tabset4_kubectl">
+<div class="paragraph">
+<p>You need to create a <code>NodePort</code> to expose the application if you are in minikube.
+As generated resources creates a <code>ClusterIP</code> service, you need to patch it:</p>
+</div>
+<div id="conk8s-k8s-run-expose-svc-nodeport" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(minikube ip):$(kubectl get svc $APP_NAME -o jsonpath='{.spec.ports[0].nodePort}')</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl patch svc fruit-app --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"}]'</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-oc-app"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-k8s-run-expose-svc-nodeport"><i class="fa fa-clipboard"></i></button><br/>
+<div id="conk8s-run-deploy-k8s-service" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(minikube service -n quarkustutorial fruit-app --url)</code></pre>
 </div>
-<div class="tab-pane" aria-labelledby="tabset5_oc">
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-k8s-service"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+<div class="tab-pane" aria-labelledby="tabset4_oc">
 <div class="paragraph">
 <p>With OpenShift we can create a route to make Quarkus application publicly accessible:</p>
 </div>
-<div id="conk8s-oc-run-expose-svc" class="listingblock">
+<div id="conk8s-oc-run-expose-svc-route" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc expose service $APP_NAME</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc expose service fruit-app</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-expose-svc"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-expose-svc-route"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>Once the service is exposed we can use the following command to get the public url:</p>
 </div>
 <div id="conk8s-oc-run-get-route" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(oc get routes $APP_NAME -o jsonpath='{.spec.host}')</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(oc get routes fruit-app -o jsonpath='{.spec.host}')</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-get-route"><i class="fa fa-clipboard"></i></button><br/>
@@ -698,6 +688,39 @@ Please update the <code>demo</code> registry user to match you container registr
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-call-k8s-svc"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+<div class="sect2">
+<h3 id="conk8s-delete-k8s-app"><a class="anchor" href="#conk8s-delete-k8s-app"></a>Delete Kubernetes Resources</h3>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset5_kubectl"></a>kubectl</p>
+</li>
+<li>
+<p><a id="tabset5_oc"></a>oc</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset5_kubectl">
+<div id="conk8s-delete-k8s-app" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl delete all --all</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-delete-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+<div class="tab-pane" aria-labelledby="tabset5_oc">
+<div id="conk8s-delete-oc-app" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc delete all --all</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-delete-oc-app"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
