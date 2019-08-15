@@ -521,6 +521,100 @@ A finder for fruits for __summer__ season should return a response like :
 ]
 ----
 
+[#quarkusp-testing]
+==== Testing Fruit Resource
+
+Let's write a test to validate that inserting and finding methods works as expected.
+
+[#quarkusp-testing-dep]
+===== Adding AssertJ Dependency
+
+To validate simple output messages RestAssured assertions mechanism is enough but in our experience, when start dealing with more complex assertions then things might become a bit more complex. 
+For this reason, we encourage you to start using https://assertj.github.io/doc/[AssertJ].
+
+Open `$PROJECT_HOME/pom.xml` and add the next dependency in `dependencies` section:
+
+[#quarkusp-register-assertj]
+[source,xml,subs="+macros,+attributes"]
+----
+<dependency>
+    <groupId>org.assertj</groupId>
+    <artifactId>assertj-core</artifactId>
+    <version>3.13.2</version>
+    <scope>test</scope>
+</dependency>
+----
+copyToClipboard::quarkusp-register-assertj[]
+
+[#quarkusp-write-persistence-test]
+===== Write Persistence Test 
+
+Open the next class `$PROJECT_HOME/src/test/java/com/example/FruitResourceTest.java` and copy the next content:
+
+[#quarkusp-test-class]
+[source,java,subs="+macros"]
+----
+package com.example;
+
+import io.quarkus.test.junit.QuarkusTest;
+
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+
+import java.util.List;
+
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
+
+@QuarkusTest
+@TestMethodOrder(OrderAnnotation.class)
+public class FruitResourceTest {
+
+    @Test
+    @Order(1)
+    public void testInsertFruit() {
+
+        Fruit fruit = new Fruit();
+        fruit.name = "Watermelon";
+        fruit.season = "summer";
+
+        given()
+          .contentType("application/json")
+          .body(fruit)
+          .when()
+          .post("/fruit")
+          .then()
+          .assertThat()
+          .statusCode(201);
+    }
+
+    @Test
+    @Order(2)
+    public void testFindFruitsBySeason() {
+        final List<Fruit> fruits = given()
+          .when()
+          .get("/fruit/{season}", "summer")
+          .then()
+          .assertThat()
+          .statusCode(200)
+          .extract()
+          .body()
+          .jsonPath()
+          .getList(".", Fruit.class);
+          
+        assertThat(fruits)
+            .extracting("name")
+            .containsExactlyInAnyOrder("Banana", "Watermelon", "Plum", "Blueberry");
+    }
+
+}
+----
+copyToClipboard::quarkusp-test-class[]
+
+include::ROOT:partial$invoke-service.adoc[tag=test]
+
 [#quarkusp-cloud-dev]
 === Deploy on Kubernetes
 

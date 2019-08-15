@@ -12,6 +12,7 @@
 ** xref:02-basics-fundas.adoc#basics-build-run-quarkus-app[Build and Run Application]
 ** xref:02-basics-fundas.adoc#basics-update-code[Update Code]
 ** xref:02-basics-fundas.adoc#basics-call-svc[Invoke Service]
+** xref:02-basics-fundas.adoc#basics-testing[Testing]
 ** xref:02-basics-fundas.adoc#basics-logging[Configuring Logging]
 *** xref:02-basics-fundas.adoc#basics-call-svc-logging[Invoke Service]
 
@@ -70,6 +71,7 @@
 *** xref:05-quarkus-panache.adoc#quarkusp-create-fruit-entity[Create Fruit Entity]
 *** xref:05-quarkus-panache.adoc#quarkusp-edit-fruit-resource[Update Fruit Resource]
 *** xref:05-quarkus-panache.adoc#quarkusp-fruits-finder[Finders]
+** xref:05-quarkus-panache.adoc#quarkusp-testing[Testing]
 ** xref:05-quarkus-panache.adoc#quarkusp-cloud-dev[Deploy on Kubernetes]
 *** xref:05-quarkus-panache.adoc#quarkusp-cloud-dev-build-container[Build Containers]
 *** xref:05-quarkus-panache.adoc#quarkusp-cloud-dev-prepare-app[Prepare Kubernetes Application]

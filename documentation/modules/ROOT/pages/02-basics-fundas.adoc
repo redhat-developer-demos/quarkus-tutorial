@@ -89,6 +89,15 @@ The simple `hello` REST URI can be called from the browser using http://localhos
 :address: localhost
 include::ROOT:partial$invoke-service.adoc[tag=call]
 
+[#basics-testing]
+== Testing Fruit Resource
+
+The scaffolding process also creates a test case for the `hello` endpoint.
+
+Open the next class `$PROJECT_HOME/src/test/java/com/example/FruitResourceTest.java` to see how a test looks like.
+
+include::ROOT:partial$invoke-service.adoc[tag=test]
+
 [#basics-logging]
 == Configuring Logging
 
