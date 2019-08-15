@@ -153,24 +153,24 @@ ifndef::workshop[]
 kubectl::
 +
 --
-[#conk8s-delete-k8s-app]
+[#{section-k8s}k8s-delete-k8s-app]
 [source,bash,subs="+macros,+attributes"]
 ----
 kubectl delete all --all
 ----
-copyToClipboard::conk8s-delete-k8s-app[]
+copyToClipboard::{section-k8s}k8s-delete-k8s-app[]
 --
 oc::
 +
 --
 endif::[]
 
-[#conk8s-delete-oc-app]
+[#{section-k8s}k8s-delete-oc-app]
 [source,bash,subs="+macros,+attributes"]
 ----
 oc delete all --all
 ----
-copyToClipboard::conk8s-delete-oc-app[]
+copyToClipboard::{section-k8s}k8s-delete-oc-app[]
 ifndef::workshop[]
 --
 ====

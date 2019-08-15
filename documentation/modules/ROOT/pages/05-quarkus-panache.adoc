@@ -532,6 +532,7 @@ NOTE: You can stop the `port-forward` and Quarkus application running in develop
 ==== Build the application container
 
 :quarkus-project-name: fruit-app
+:section-k8s: persistence
 include::ROOT:partial$build-containers.adoc[tag=build]
 
 [#quarkusp-cloud-dev-prepare-app]
@@ -565,4 +566,5 @@ NOTE: `swagger-ui` is available only for `dev` and `test`, you can use REST API 
 [#quarkusp-persistence-k8s-delete-resources]
 === Delete Kubernetes Resources
 
+:section-k8s: persistence
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-delete]

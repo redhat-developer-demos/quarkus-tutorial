@@ -322,8 +322,8 @@ include::ROOT:partial$run-dev-mode.adoc[]
 
 [#qext-call-fruity-fault-tolerance-retry]
 === Invoke Service
-:doc-sec: fault-tolerance
-:k8s-cli: k8s
+:doc-sec: fault-tolerance-retry
+:k8s-cli: cli
 :path: fruit/banana
 :k8s-env: minikube
 :cli-tool: curl
@@ -393,7 +393,7 @@ include::ROOT:partial$run-dev-mode.adoc[]
 
 [#qext-call-fruity-fault-tolerance-fallback]
 === Invoke Service
-:doc-sec: fault-tolerance-tolerance
+:doc-sec: fault-tolerance-fallback
 :k8s-cli: k8s
 :path: fruit/banana
 :k8s-env: minikube
@@ -450,7 +450,7 @@ include::ROOT:partial$run-dev-mode.adoc[]
 
 [#qext-call-fruity-fault-tolerance-circuit-breaker]
 === Invoke Service
-:doc-sec: fault-tolerance-tolerance
+:doc-sec: fault-tolerance-cb
 :k8s-cli: k8s
 :path: fruit/banana
 :k8s-env: minikube
@@ -513,6 +513,7 @@ After successful execution of the above command, you will have the following dep
 
 Let us rebuild the application after adding the health check extensions
 
+:section-k8s: health-check
 include::ROOT:partial$build-containers.adoc[tag=build]
 
 [#qext-check-health-endpoint]
@@ -526,7 +527,7 @@ After adding `smallrye-health` extension we should have REST endpoint called `/h
 
 [#qext-call-health-ep]
 === Invoke Service
-:doc-sec: basics
+:doc-sec: basics-health-check
 :k8s-cli: k8s
 :path: health
 :k8s-env: minikube
@@ -559,6 +560,7 @@ include::ROOT:partial$build-containers.adoc[tag=tag-push]
 [#qext-health-check-k8s-delete-resources]
 === Delete Kubernetes Resources
 
+:section-k8s: probes
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-delete]
 
 [#qext-health-check-k8s-apply-resources]
@@ -636,6 +638,7 @@ copyToClipboard::quarkusp-fruit-checks[]
 
 Let us rebuild the application after adding the health check extensions
 
+:section-k8s: custom-check
 include::ROOT:partial$build-containers.adoc[tag=build]
 
 [#qext-check-custom-health-endpoint]
@@ -731,6 +734,7 @@ include::ROOT:partial$build-containers.adoc[tag=tag-push]
 [#qext-custom-health-check-k8s-delete-resources]
 === Delete Kubernetes Resources
 
+:section-k8s: custom-probes
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-delete]
 
 [#qext-custom-health-check-k8s-apply-resources]
@@ -755,4 +759,5 @@ include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-invoke-svc]
 [#qext-custom-health-check-end-k8s-delete-resources]
 === Delete Kubernetes Resources
 
+:section-k8s: health-check
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-delete]

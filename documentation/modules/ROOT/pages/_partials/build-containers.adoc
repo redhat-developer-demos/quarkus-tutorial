@@ -7,44 +7,44 @@ NOTE: The instructions of this section assumes your project name to be `{quarkus
 JVM mode::
 +
 --
-[#conk8s-build-quarkus-jvm-app]
+[#{section-k8s}-build-quarkus-jvm-app]
 [source,bash,subs="+macros,+attributes"]
 ----
 ./mvnw -DskipTests clean package
 ----
-copyToClipboard::conk8s-build-quarkus-jvm-app[]
+copyToClipboard::{section-k8s}-build-quarkus-jvm-app[]
 
 After successful maven build, run the following command to build te container:
 
-[#conk8s-build-quarkus-jvm-app-container]
+[#{section-k8s}-build-quarkus-jvm-app-container]
 [source,bash,subs="+macros,+attributes"]
 ----
 docker build -f src/main/docker/Dockerfile.jvm -t example/{quarkus-project-name}:1.0-SNAPSHOT .
 ----
-copyToClipboard::conk8s-build-quarkus-jvm-app-container[]
+copyToClipboard::{section-k8s}-build-quarkus-jvm-app-container[]
 
 --
 Native mode::
 +
 --
-[#conk8s-build-quarkus-native-app]
+[#{section-k8s}-build-quarkus-native-app]
 [source,bash,subs="+macros,+attributes"]
 ----
 ./mvnw -DskipTests clean package -Pnative -Dnative-image.docker-build=true <1>
 ----
-copyToClipboard::conk8s-build-quarkus-native-app[]
+copyToClipboard::{section-k8s}-build-quarkus-native-app[]
 <1> Using the `-Dnative-image.docker-build=true` is very important as need a linux native binary what will be containerized. 
 
 NOTE: Native compilation will take few minutes to complete.
 
 After successful maven build, run the following command to build te container:
 
-[#conk8s-build-quarkus-native-app-container]
+[#{section-k8s}-build-quarkus-native-app-container]
 [source,bash,subs="+macros,+attributes"]
 ----
 docker build -f src/main/docker/Dockerfile.native -t example/{quarkus-project-name}:1.0-SNAPSHOT .
 ----
-copyToClipboard::conk8s-build-quarkus-native-app-container[]
+copyToClipboard::{section-k8s}-build-quarkus-native-app-container[]
 
 --
 ====

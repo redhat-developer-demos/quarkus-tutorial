@@ -14,6 +14,10 @@
 ** xref:02-basics-fundas.adoc#basics-call-svc[Invoke Service]
 ** xref:02-basics-fundas.adoc#basics-logging[Configuring Logging]
 *** xref:02-basics-fundas.adoc#basics-call-svc-logging[Invoke Service]
+** xref:02-basics-fundas.adoc#basics-configuration[Configuration]
+*** xref:02-basics-fundas.adoc#basics-configuration-new-property[Add New Property]
+*** xref:02-basics-fundas.adoc#basics-configuration-get-value[Get Configuration Value]
+*** xref:02-basics-fundas.adoc#basics-call-configuration[Invoke Service]
 
 * xref:03-containers-kubernetes.adoc[3. Cloud Native Deployment]
 ** xref:03-containers-kubernetes.adoc#conk8s-prerequisite[Prerequisites]
