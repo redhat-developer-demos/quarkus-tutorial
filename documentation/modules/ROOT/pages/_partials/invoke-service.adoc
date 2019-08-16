@@ -24,3 +24,17 @@ copyToClipboard::{doc-sec}-{k8s-cli}-svc-gateway-env[]
 copyToClipboard::{doc-sec}-{k8s-cli}-svc-call[]
 
 #end::call[]
+
+#tag::test[]
+When running this test, the application is started once, then all tests are executed, and finally, the application is stopped.
+Although it is not mandatory, by default http://rest-assured.io/[RestAssured] project is used to test Rest endpoints but it is up to you to change that.
+
+You can run the test either in IDE or by running Maven:
+
+[#basics-run-tests]
+[source,bash,subs="+macros,+attributes"]
+----
+./mvnw clean compile test
+----
+copyToClipboard::basics-run-tests[]
+#end::test[]
