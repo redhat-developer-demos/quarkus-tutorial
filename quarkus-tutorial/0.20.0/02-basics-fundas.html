@@ -89,6 +89,21 @@
   </li>
 </ul>
   </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="#basics-configuration">Configuration</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#basics-configuration-new-property">Add New Property</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#basics-configuration-get-value">Get Configuration Value</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#basics-call-configuration">Invoke Service</a>
+  </li>
+</ul>
+  </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
@@ -732,18 +747,81 @@ public class FruitResource {
 <div class="paragraph">
 <p>The simple <code>hello</code> REST URI can be called from the browser using <a href="http://localhost:8080" class="bare">http://localhost:8080</a> or using cli like:</p>
 </div>
-<div id="basics-k8s-svc-call" class="listingblock">
+<div id="basics-log-k8s-svc-call" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-log-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>And if you inspect the console output, you see the logging message:</p>
 </div>
 <div class="paragraph">
 <p><code>2019-08-13 18:12:53,284 DEBUG [com.exa.FruitResource] (executor-thread-1) Hello method is called.</code></p>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="basics-configuration"><a class="anchor" href="#basics-configuration"></a>Configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Hardcoded values in your code is a no go, let&#8217;s see how to add configuration to your application.
+Quarkus relies on MicroProfile Config specification and the main configuration is  <code>application.properties</code>.</p>
+</div>
+<div class="sect2">
+<h3 id="basics-configuration-new-property"><a class="anchor" href="#basics-configuration-new-property"></a>Add a new property</h3>
+<div class="paragraph">
+<p>Add the following property to <code>$PROJECT_HOME]/src/main/resources/application.properties</code>:</p>
+</div>
+<div id="basics-configuration-add-new-property" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">greetings.message = hello</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-configuration-add-new-property"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+<div class="sect2">
+<h3 id="basics-configuration-get-value"><a class="anchor" href="#basics-configuration-get-value"></a>Get Configuration Value</h3>
+<div class="paragraph">
+<p>Open the following Java class <code>$PROJECT_HOME/src/main/java/com/example/FruitResource.java</code> and copy the next content in its body:</p>
+</div>
+<div id="basics-configuration-get-value-code" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+@Path("/fruit")
+public class FruitResource {
+
+    @ConfigProperty(name = "greetings.message")
+    String message;
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello() {
+        return message;
+    }
+}</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-configuration-get-value-code"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+<div class="sect2">
+<h3 id="basics-call-configuration"><a class="anchor" href="#basics-call-configuration"></a>Invoke Service</h3>
+<div class="paragraph">
+<p>The simple <code>hello</code> REST URI can be called from the browser using <a href="http://localhost:8080" class="bare">http://localhost:8080</a> or using cli like:</p>
+</div>
+<div id="basics-conf-k8s-svc-call" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-conf-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>

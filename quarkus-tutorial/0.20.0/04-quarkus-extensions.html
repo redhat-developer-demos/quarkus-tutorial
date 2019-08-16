@@ -89,6 +89,21 @@
   </li>
 </ul>
   </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="02-basics-fundas.html#basics-configuration">Configuration</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="02-basics-fundas.html#basics-configuration-new-property">Add New Property</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="02-basics-fundas.html#basics-configuration-get-value">Get Configuration Value</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="02-basics-fundas.html#basics-call-configuration">Invoke Service</a>
+  </li>
+</ul>
+  </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
@@ -730,12 +745,12 @@ If you are in dev mode and you added new dependencies on the project, sometimes,
 <div class="paragraph">
 <p>The simple <code>fruit/banana</code> REST URI can be called via browser using <a href="http://localhost:8080/fruit/banana" class="bare">http://localhost:8080/fruit/banana</a> or using CLI like:</p>
 </div>
-<div id="fault-tolerance-k8s-svc-call" class="listingblock">
+<div id="fault-tolerance-retry-cli-svc-call" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-retry-cli-svc-call"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>The REST call about should return an response like:</p>
 </div>
@@ -754,12 +769,12 @@ If you are in dev mode and you added new dependencies on the project, sometimes,
 <p>No change of previous calls done in <a href="#">qext-add-rest-client-extensions.adoc</a> section, but now switch off your network so you do not have access to <a href="http://www.fruityvice.com" class="bare">http://www.fruityvice.com</a>.
 And make again a request to <a href="http://localhost:8080/fruit/banana" class="bare">http://localhost:8080/fruit/banana</a>.</p>
 </div>
-<div id="fault-tolerance-k8s-svc-call" class="listingblock">
+<div id="fault-tolerance-retry-cli-svc-call" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-retry-cli-svc-call"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>Now after waiting 6 seconds (3 retries x 2 seconds), the next exception is thrown <code>java.net.UnknownHostException: www.fruityvice.com</code>.</p>
 </div>
@@ -826,12 +841,12 @@ If you are in dev mode and you added new dependencies on the project, sometimes,
 <div class="paragraph">
 <p>The simple <code>fruit/banana</code> REST URI can be called via browser using <a href="http://localhost:8080/fruit/banana" class="bare">http://localhost:8080/fruit/banana</a> or using CLI like:</p>
 </div>
-<div id="fault-tolerance-tolerance-k8s-svc-call" class="listingblock">
+<div id="fault-tolerance-fallback-k8s-svc-call" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-tolerance-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-fallback-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>Now after waiting for 6 seconds (3 retries x 2 seconds), an empty object is sent instead of an exception.</p>
 </div>
@@ -902,12 +917,12 @@ If you are in dev mode and you added new dependencies on the project, sometimes,
 <div class="paragraph">
 <p>Do 5 consecutive calls to the service, <code>fruit/banana</code> REST URI can be called via browser using <a href="http://localhost:8080/fruit/banana" class="bare">http://localhost:8080/fruit/banana</a> or using CLI like:</p>
 </div>
-<div id="fault-tolerance-tolerance-k8s-svc-call" class="listingblock">
+<div id="fault-tolerance-cb-k8s-svc-call" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-tolerance-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-cb-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>The output changes form <code>java.net.UnknownHostException: www.fruityvice.com</code> in the first calls to <code>org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getFruitByName</code> when circuit is opened.</p>
 </div>
@@ -991,29 +1006,29 @@ You can use <code>@Retry</code> and <code>@Fallback</code> annotations together 
 </div>
 <div class="content">
 <div class="tab-pane" aria-labelledby="tabset1_jvm-mode">
-<div id="conk8s-build-quarkus-jvm-app" class="listingblock">
+<div id="health-check-build-quarkus-jvm-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#health-check-build-quarkus-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>After successful maven build, run the following command to build te container:</p>
 </div>
-<div id="conk8s-build-quarkus-jvm-app-container" class="listingblock">
+<div id="health-check-build-quarkus-jvm-app-container" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.jvm -t example/fruit-app:1.0-SNAPSHOT .</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-jvm-app-container"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#health-check-build-quarkus-jvm-app-container"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_native-mode">
-<div id="conk8s-build-quarkus-native-app" class="listingblock">
+<div id="health-check-build-quarkus-native-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package -Pnative -Dnative-image.docker-build=true <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-native-app"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#health-check-build-quarkus-native-app"><i class="fa fa-clipboard"></i></button><br/>
 <div class="colist arabic">
 <table>
 <tr>
@@ -1037,12 +1052,12 @@ Native compilation will take few minutes to complete.
 <div class="paragraph">
 <p>After successful maven build, run the following command to build te container:</p>
 </div>
-<div id="conk8s-build-quarkus-native-app-container" class="listingblock">
+<div id="health-check-build-quarkus-native-app-container" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/fruit-app:1.0-SNAPSHOT .</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-native-app-container"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#health-check-build-quarkus-native-app-container"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
@@ -1079,12 +1094,12 @@ For sake of simplicity the container name in both native and jvm mode are named 
 <div class="paragraph">
 <p>The simple <code>health</code> REST URI can be called via browser using <code><a href="http://$(minikube" class="bare">http://$(minikube</a> ip):8080/health</code> or using CLI like:</p>
 </div>
-<div id="basics-k8s-svc-call" class="listingblock">
+<div id="basics-health-check-k8s-svc-call" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl $(minikube ip):8080/health</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-health-check-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>The REST call about should return an response like:</p>
 </div>
@@ -1127,20 +1142,20 @@ For sake of simplicity the container name in both native and jvm mode are named 
 </div>
 <div class="content">
 <div class="tab-pane" aria-labelledby="tabset2_kubectl">
-<div id="conk8s-delete-k8s-app" class="listingblock">
+<div id="probesk8s-delete-k8s-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl delete all --all</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-delete-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#probesk8s-delete-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="tab-pane" aria-labelledby="tabset2_oc">
-<div id="conk8s-delete-oc-app" class="listingblock">
+<div id="probesk8s-delete-oc-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc delete all --all</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-delete-oc-app"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#probesk8s-delete-oc-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
@@ -1329,29 +1344,29 @@ public class FruitHealthCheck {
 </div>
 <div class="content">
 <div class="tab-pane" aria-labelledby="tabset5_jvm-mode">
-<div id="conk8s-build-quarkus-jvm-app" class="listingblock">
+<div id="custom-check-build-quarkus-jvm-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#custom-check-build-quarkus-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>After successful maven build, run the following command to build te container:</p>
 </div>
-<div id="conk8s-build-quarkus-jvm-app-container" class="listingblock">
+<div id="custom-check-build-quarkus-jvm-app-container" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.jvm -t example/fruit-app:1.0-SNAPSHOT .</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-jvm-app-container"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#custom-check-build-quarkus-jvm-app-container"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="tab-pane" aria-labelledby="tabset5_native-mode">
-<div id="conk8s-build-quarkus-native-app" class="listingblock">
+<div id="custom-check-build-quarkus-native-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package -Pnative -Dnative-image.docker-build=true <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-native-app"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#custom-check-build-quarkus-native-app"><i class="fa fa-clipboard"></i></button><br/>
 <div class="colist arabic">
 <table>
 <tr>
@@ -1375,12 +1390,12 @@ Native compilation will take few minutes to complete.
 <div class="paragraph">
 <p>After successful maven build, run the following command to build te container:</p>
 </div>
-<div id="conk8s-build-quarkus-native-app-container" class="listingblock">
+<div id="custom-check-build-quarkus-native-app-container" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/fruit-app:1.0-SNAPSHOT .</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-native-app-container"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#custom-check-build-quarkus-native-app-container"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
@@ -1521,20 +1536,20 @@ For sake of simplicity the container name in both native and jvm mode are named 
 </div>
 <div class="content">
 <div class="tab-pane" aria-labelledby="tabset6_kubectl">
-<div id="conk8s-delete-k8s-app" class="listingblock">
+<div id="custom-probesk8s-delete-k8s-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl delete all --all</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-delete-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#custom-probesk8s-delete-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="tab-pane" aria-labelledby="tabset6_oc">
-<div id="conk8s-delete-oc-app" class="listingblock">
+<div id="custom-probesk8s-delete-oc-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc delete all --all</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-delete-oc-app"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#custom-probesk8s-delete-oc-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
@@ -1660,20 +1675,20 @@ As generated resources creates a <code>ClusterIP</code> service, you need to pat
 </div>
 <div class="content">
 <div class="tab-pane" aria-labelledby="tabset9_kubectl">
-<div id="conk8s-delete-k8s-app" class="listingblock">
+<div id="health-checkk8s-delete-k8s-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl delete all --all</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-delete-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#health-checkk8s-delete-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="tab-pane" aria-labelledby="tabset9_oc">
-<div id="conk8s-delete-oc-app" class="listingblock">
+<div id="health-checkk8s-delete-oc-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc delete all --all</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-delete-oc-app"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#health-checkk8s-delete-oc-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>

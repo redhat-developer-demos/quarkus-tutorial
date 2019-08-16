@@ -89,6 +89,21 @@
   </li>
 </ul>
   </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="02-basics-fundas.html#basics-configuration">Configuration</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="02-basics-fundas.html#basics-configuration-new-property">Add New Property</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="02-basics-fundas.html#basics-configuration-get-value">Get Configuration Value</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="02-basics-fundas.html#basics-call-configuration">Invoke Service</a>
+  </li>
+</ul>
+  </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1093,29 +1108,29 @@ You can stop the <code>port-forward</code> and Quarkus application running in de
 </div>
 <div class="content">
 <div class="tab-pane" aria-labelledby="tabset4_jvm-mode">
-<div id="conk8s-build-quarkus-jvm-app" class="listingblock">
+<div id="persistence-build-quarkus-jvm-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#persistence-build-quarkus-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
 <p>After successful maven build, run the following command to build te container:</p>
 </div>
-<div id="conk8s-build-quarkus-jvm-app-container" class="listingblock">
+<div id="persistence-build-quarkus-jvm-app-container" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.jvm -t example/fruits-app:1.0-SNAPSHOT .</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-jvm-app-container"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#persistence-build-quarkus-jvm-app-container"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="tab-pane" aria-labelledby="tabset4_native-mode">
-<div id="conk8s-build-quarkus-native-app" class="listingblock">
+<div id="persistence-build-quarkus-native-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package -Pnative -Dnative-image.docker-build=true <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-native-app"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#persistence-build-quarkus-native-app"><i class="fa fa-clipboard"></i></button><br/>
 <div class="colist arabic">
 <table>
 <tr>
@@ -1139,12 +1154,12 @@ Native compilation will take few minutes to complete.
 <div class="paragraph">
 <p>After successful maven build, run the following command to build te container:</p>
 </div>
-<div id="conk8s-build-quarkus-native-app-container" class="listingblock">
+<div id="persistence-build-quarkus-native-app-container" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/fruits-app:1.0-SNAPSHOT .</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-build-quarkus-native-app-container"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#persistence-build-quarkus-native-app-container"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
@@ -1343,20 +1358,20 @@ As generated resources creates a <code>ClusterIP</code> service, you need to pat
 </div>
 <div class="content">
 <div class="tab-pane" aria-labelledby="tabset7_kubectl">
-<div id="conk8s-delete-k8s-app" class="listingblock">
+<div id="persistencek8s-delete-k8s-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl delete all --all</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-delete-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#persistencek8s-delete-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="tab-pane" aria-labelledby="tabset7_oc">
-<div id="conk8s-delete-oc-app" class="listingblock">
+<div id="persistencek8s-delete-oc-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc delete all --all</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-delete-oc-app"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#persistencek8s-delete-oc-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
