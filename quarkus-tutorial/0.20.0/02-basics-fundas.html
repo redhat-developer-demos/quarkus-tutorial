@@ -78,6 +78,9 @@
     <a class="nav-link" href="#basics-call-svc">Invoke Service</a>
   </li>
   <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#basics-testing">Testing</a>
+  </li>
+  <li class="nav-item" data-depth="2">
     <button class="nav-toggle"></button>
     <a class="nav-link" href="#basics-logging">Configuring Logging</a>
 <ul class="nav-list">
@@ -268,6 +271,9 @@
     <a class="nav-link" href="05-quarkus-panache.html#quarkusp-fruits-finder">Finders</a>
   </li>
 </ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="05-quarkus-panache.html#quarkusp-testing">Testing</a>
   </li>
   <li class="nav-item" data-depth="2">
     <button class="nav-toggle"></button>
@@ -640,6 +646,30 @@ Only if running in Development mode
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+</div>
+<div class="sect1">
+<h2 id="basics-testing"><a class="anchor" href="#basics-testing"></a>Testing Fruit Resource</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The scaffolding process also creates a test case for the <code>hello</code> endpoint.</p>
+</div>
+<div class="paragraph">
+<p>Open the next class <code>$PROJECT_HOME/src/test/java/com/example/FruitResourceTest.java</code> to see how a test looks like.</p>
+</div>
+<div class="paragraph">
+<p>When running this test, the application is started once, then all tests are executed, and finally, the application is stopped.
+Although it is not mandatory, by default <a href="http://rest-assured.io/">RestAssured</a> project is used to test Rest endpoints but it is up to you to change that.</p>
+</div>
+<div class="paragraph">
+<p>You can run the test either in IDE or by running Maven:</p>
+</div>
+<div id="basics-run-tests" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw clean compile test</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-run-tests"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 <div class="sect1">

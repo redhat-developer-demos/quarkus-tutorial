@@ -78,6 +78,9 @@
     <a class="nav-link" href="02-basics-fundas.html#basics-call-svc">Invoke Service</a>
   </li>
   <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-basics-fundas.html#basics-testing">Testing</a>
+  </li>
+  <li class="nav-item" data-depth="2">
     <button class="nav-toggle"></button>
     <a class="nav-link" href="02-basics-fundas.html#basics-logging">Configuring Logging</a>
 <ul class="nav-list">
@@ -268,6 +271,9 @@
     <a class="nav-link" href="#quarkusp-fruits-finder">Finders</a>
   </li>
 </ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#quarkusp-testing">Testing</a>
   </li>
   <li class="nav-item" data-depth="2">
     <button class="nav-toggle"></button>
@@ -945,6 +951,113 @@ Remember to remove the <code>getFruitInfoByName</code> method created in previou
 ]</code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="quarkusp-testing"><a class="anchor" href="#quarkusp-testing"></a>Testing Fruit Resource</h4>
+<div class="paragraph">
+<p>Let&#8217;s write a test to validate that inserting and finding methods works as expected.</p>
+</div>
+<div class="sect4">
+<h5 id="quarkusp-testing-dep"><a class="anchor" href="#quarkusp-testing-dep"></a>Adding AssertJ Dependency</h5>
+<div class="paragraph">
+<p>To validate simple output messages RestAssured assertions mechanism is enough but in our experience, when start dealing with more complex assertions then things might become a bit more complex.
+For this reason, we encourage you to start using <a href="https://assertj.github.io/doc/">AssertJ</a>.</p>
+</div>
+<div class="paragraph">
+<p>Open <code>$PROJECT_HOME/pom.xml</code> and add the next dependency in <code>dependencies</code> section:</p>
+</div>
+<div id="quarkusp-register-assertj" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.assertj&lt;/groupId&gt;
+    &lt;artifactId&gt;assertj-core&lt;/artifactId&gt;
+    &lt;version&gt;3.13.2&lt;/version&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-register-assertj"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+<div class="sect4">
+<h5 id="quarkusp-write-persistence-test"><a class="anchor" href="#quarkusp-write-persistence-test"></a>Write Persistence Test</h5>
+<div class="paragraph">
+<p>Open the next class <code>$PROJECT_HOME/src/test/java/com/example/FruitResourceTest.java</code> and copy the next content:</p>
+</div>
+<div id="quarkusp-test-class" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+
+import io.quarkus.test.junit.QuarkusTest;
+
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+
+import java.util.List;
+
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
+
+@QuarkusTest
+@TestMethodOrder(OrderAnnotation.class)
+public class FruitResourceTest {
+
+    @Test
+    @Order(1)
+    public void testInsertFruit() {
+
+        Fruit fruit = new Fruit();
+        fruit.name = "Watermelon";
+        fruit.season = "summer";
+
+        given()
+          .contentType("application/json")
+          .body(fruit)
+          .when()
+          .post("/fruit")
+          .then()
+          .assertThat()
+          .statusCode(201);
+    }
+
+    @Test
+    @Order(2)
+    public void testFindFruitsBySeason() {
+        final List&lt;Fruit&gt; fruits = given()
+          .when()
+          .get("/fruit/{season}", "summer")
+          .then()
+          .assertThat()
+          .statusCode(200)
+          .extract()
+          .body()
+          .jsonPath()
+          .getList(".", Fruit.class);
+
+        assertThat(fruits)
+            .extracting("name")
+            .containsExactlyInAnyOrder("Banana", "Watermelon", "Plum", "Blueberry");
+    }
+
+}</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-test-class"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>When running this test, the application is started once, then all tests are executed, and finally, the application is stopped.
+Although it is not mandatory, by default <a href="http://rest-assured.io/">RestAssured</a> project is used to test Rest endpoints but it is up to you to change that.</p>
+</div>
+<div class="paragraph">
+<p>You can run the test either in IDE or by running Maven:</p>
+</div>
+<div id="basics-run-tests" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw clean compile test</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-run-tests"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
