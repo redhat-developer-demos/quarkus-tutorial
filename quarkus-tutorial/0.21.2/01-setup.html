@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frequently Asked Questions :: Quarkus Tutorial</title>
-    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/0.20.0/faq.html">
-    <meta name="generator" content="Antora 2.0.0">
+    <title>Setup :: Quarkus Tutorial</title>
+    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/0.21.2/01-setup.html">
+    <meta name="generator" content="Antora 2.0.1">
     <link rel="stylesheet" href="../../_/css/site.css">
 <link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -28,7 +28,7 @@
 </header>
 <div class="main-wrapper">
 <div class="navigation-container"  data-component="quarkus-tutorial"
-  data-version="0.20.0" >
+  data-version="0.21.2" >
   <aside class="navigation">
     <div class="panels">
       <div class="navigation-menu is-active" data-panel="menu">
@@ -37,21 +37,21 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <button class="nav-toggle"></button>
     <a class="nav-link" href="01-setup.html">1. Setup</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="01-setup.html#prerequisite">Prerequisites</a>
+    <a class="nav-link" href="#prerequisite">Prerequisites</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="01-setup.html#download-tutorial-sources">Download Tutorial Sources</a>
+    <a class="nav-link" href="#download-tutorial-sources">Download Tutorial Sources</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="01-setup.html#kubernetes-cluster">Kubernetes Cluster</a>
+    <a class="nav-link" href="#kubernetes-cluster">Kubernetes Cluster</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="01-setup.html#setup-work-folder">Work Folder</a>
+    <a class="nav-link" href="#setup-work-folder">Work Folder</a>
   </li>
 </ul>
   </li>
@@ -333,13 +333,266 @@
   <nav class="crumbs" aria-label="breadcrumbs">
   <ul>
     <li class="crumb"><a href="index.html">Quarkus Tutorial</a></li>
-    <li class="crumb"><a href="faq.html">Frequently Asked Questions</a></li>
+    <li class="crumb"><a href="01-setup.html">1. Setup</a></li>
   </ul>
 </nav>
 </div>
 <article class="doc">
-<h1>Frequently Asked Questions</h1>
-
+<h1>Setup</h1>
+<div class="sect1">
+<h2 id="prerequisite"><a class="anchor" href="#prerequisite"></a>Prerequisite Tools</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_ide"><a class="anchor" href="#_ide"></a>IDE</h3>
+<div class="paragraph">
+<p>You can use any Java IDE for this tutorial but if you didn&#8217;t try it before, we recommend <a href="https://code.visualstudio.com/download">VS Code</a> with the <a href="https://code.visualstudio.com/docs/languages/java">Java Extension Pack</a>.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you are using vscode then install vscode <a href="https://aka.ms/vscode-remote/download/extension">Remote Development Extension pack</a>,
+which allows you to run this entire tutorial within contianer that will have all tools configured.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_cli_tools"><a class="anchor" href="#_cli_tools"></a>CLI Tools</h3>
+<div class="paragraph">
+<p>The following CLI tools are required for running the exercises in this tutorial.</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset1_container-image"></a>Container Image</p>
+</li>
+<li>
+<p><a id="tabset1_locally"></a>Locally</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset1_container-image">
+<div class="paragraph">
+<p>If you have <a href="https://www.docker.com/products/docker-desktop">Docker for Mac or Windows or Linux</a>  then you can pull the linux container image
+<a href="https://quay.io/repository/rhdevelopers/tutorial-tools?tab=tags">tutorial tools</a> which has all the tools listed below installed and pre-configured.</p>
+</div>
+<div id="docker-pull-tutorials-cli" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker pull quay.io/rhdevelopers/tutorial-tools:0.0.1</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#docker-pull-tutorials-cli"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_locally">
+<div class="paragraph">
+<p>Please have them installed and configured before you get started with any of the tutorial chapters.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>Tool</strong></th>
+<th class="tableblock halign-left valign-top"><strong>macOS</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Fedora</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Windows</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Kubernetes</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>brew install kubernetes-cli</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/kubernetes/kubernetes/releases">Kubernetes Releases</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/kubernetes/kubernetes/releases">Kubernetes Releases</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>(OR)</strong></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>OpenShift client(oc)</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-mac-4.1.8.tar.gz">openshift-client-linux-4.x</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux-4.1.8.tar.gz">openshift-client-linux-4.x</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-windows-4.1.8.zip">openshift-client-linux-4.x</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>git</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://git-scm.com/download/mac" class="bare">https://git-scm.com/download/mac</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dnf install git</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Make sure you have the <a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10">Windows Subsystem for Linux</a> installed</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Docker</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.docker.com/products/docker-desktop">Docker Desktop for Mac</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dnf install docker</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.docker.com/products/docker-desktop">Docker Desktop for Windows</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Java 8</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>brew tap AdoptOpenJDK/openjdk &amp;&amp; brew cask install adoptopenjdk8</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dnf install java-1.8.0-openjdk.x86_64</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://adoptopenjdk.net">Windows</a> (Make sure you set the <code>JAVA_HOME</code> environment variable and add <code>%JAVA_HOME%\bin</code> to your <code>PATH</code>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Apache Maven 3.6.0+</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">brew install maven</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dnf install maven</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://maven.apache.org/download.cgi">Windows</a> (Make sure you set the <code>MAVEN_HOME</code> environment variable and add <code>%MAVEN_HOME%\bin</code> to your <code>PATH</code>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Graal VM</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/graal/releases/download/vm-19.1.1/graalvm-ce-darwin-amd64-19.1.1.tar.gz">GraalVM Community Edition 19.1.1</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/graal/releases/download/vm-19.1.1/graalvm-ce-linux-amd64-19.1.1.tar.gz">GraalVM Community Edition 19.1.1</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not Supported</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>stern</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>brew install stern</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/wercker/stern/releases" class="bare">https://github.com/wercker/stern/releases</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/wercker/stern/releases" class="bare">https://github.com/wercker/stern/releases</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="remote-docker-repository"><a class="anchor" href="#remote-docker-repository"></a>Remote Repository</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For some parts of the tutorial, you will be pushing and pulling container images to and from a remote image repository. You will need an account with push rights. You can create a free account on <a href="https://quay.io">Red Hat Quay.io</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="download-tutorial-sources"><a class="anchor" href="#download-tutorial-sources"></a>Download Tutorial Sources</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Before we start setting up the environment, let&#8217;s clone the tutorial sources and set the <code>TUTORIAL_HOME</code> environment variable to point to the root directory of the tutorial:</p>
+</div>
+<div id="cloneRepo" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone <a href="https://github.com/redhat-developer-demos/quarkus-tutorial" class="bare">https://github.com/redhat-developer-demos/quarkus-tutorial</a></code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#cloneRepo"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>The <code>work</code> folder in <code>$TUTORIAL_HOME</code> can be used to download the demo application resources and refer to them during the exercises. The <code>work</code> folder has a README with instructions on the source code repo and git commands to clone the sources.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This tutorial was developed and tested with:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Quarkus <code>0.21.2</code></p>
+</li>
+<li>
+<p>Minikube <code>1.0.1+</code></p>
+</li>
+<li>
+<p>OpenShift <code>3.11+</code></p>
+</li>
+<li>
+<p>Minishift <code>1.31+</code></p>
+</li>
+<li>
+<p>Graal VM <code>19.1.1</code></p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="kubernetes-cluster"><a class="anchor" href="#kubernetes-cluster"></a>Kubernetes Cluster</h2>
+<div class="sectionbody">
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset2_minikube"></a>Minikube</p>
+</li>
+<li>
+<p><a id="tabset2_minishift"></a>Minishift</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset2_minikube">
+<div id="quarkus-start-minikube" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube profile quarkus-tutorial &amp;&amp; \
+minikube -p quarkus-tutorial start --memory=8192 --cpus=4 --disk-size=50g &amp;&amp; \
+kubectl create namespace quarkustutorial
+kubectl config set-context --current --namespace=quarkustutorial</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkus-start-minikube"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+<div class="tab-pane" aria-labelledby="tabset2_minishift">
+<div id="quarkus-start-minishift" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minishift profile set quarkus-tutorial &amp;&amp; \
+minishift start --memory=8192 --cpus=4 --disk-size=50g &amp;&amp; \
+minishift addon enable admin-user &amp;&amp; \
+minishift addon enable anyuid &amp;&amp; \
+oc new-project quarkustutorial</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkus-start-minishift"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Prepare your shell environment</p>
+</div>
+<div id="quarkus-tutorial-shell-env" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd quarkus-tutorial
+export TUTORIAL_HOME=`pwd`
+export GRAALVM_HOME='PUT THE LOCATION  WHERE YOU HAVE EXTRACTED GRAAL VM'</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkus-tutorial-shell-env"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+</div>
+<div class="sect1">
+<h2 id="setup-work-folder"><a class="anchor" href="#setup-work-folder"></a>Work folder (Optional)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The work folder i.e <code>$TUTORIAL_HOME/work</code> can be used as a work directory during the build.</p>
+</div>
+</div>
+</div>
 </article>
   </main>
 </div>
