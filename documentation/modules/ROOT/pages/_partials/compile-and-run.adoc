@@ -6,7 +6,7 @@ JVM mode::
 [#basics-build-quarkus-jvm-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-cd pass:[$TUTORIAL_HOME]/work/my-quarkus-project && \
+cd pass:[$TUTORIAL_HOME]/work/{project-dir} && \
 ./mvnw -DskipTests clean package
 ----
 copyToClipboard::basics-build-quarkus-jvm-app[]
@@ -16,7 +16,7 @@ To run the application in jvm mode
 [#basics-build-run-jvm-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-java -jar target/my-quarkus-project-1.0-SNAPSHOT-runner.jar
+java -jar target/{project-dir}-1.0-SNAPSHOT-runner.jar
 ----
 copyToClipboard::basics-build-run-jvm-app[]
 
