@@ -1,6 +1,8 @@
 = Basics and Fundamentals
+:linkattrs:
 
 include::_attributes.adoc[]
+:project-dir: fruits-app
 
 At the end of this chapter you will be able to :
 
@@ -23,13 +25,15 @@ Create the `fruits-app` folder and navigate to the folder:
 [source,bash,subs="+macros,+attributes"]
 ----
 mkdir -p $TUTORIAL_HOME/work/fruits-app && cd $TUTORIAL_HOME/work/`basename $_`
+# set the Quarkus release environment variable 
+export QUARKUS_VERSION={page-component-version}
 ----
 copyToClipboard::quarkusp-nav-to-work-folder[]
 
 [#quarkusp-mv-create-fruits-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn io.quarkus:quarkus-maven-plugin:{page-component-version}:create \
+mvn io.quarkus:quarkus-maven-plugin:pass:[$QUARKUS_VERSION]:create \
   -DprojectGroupId="com.example" \
   -DprojectArtifactId="fruits-app" \
   -DprojectVersion="1.0-SNAPSHOT" \
@@ -57,6 +61,7 @@ NOTE: All further sections of this tutorial assumes the application name to be `
 [#basics-build-run-quarkus-app]
 == Build and Run the Quarkus Application
 
+
 include::ROOT:partial$compile-and-run.adoc[]
 
 You can <<basics-call-svc>> to see a response like `hello`.
@@ -79,7 +84,7 @@ You can edit the Java source(s) in your IDE. When you save and hit refresh in yo
 
 [#basics-call-svc]
 == Invoke Service
-The simple `hello` REST URI can be called from the browser using http://localhost:8080 or using cli like: 
+The simple `hello` REST URI can be called from the browser using http://localhost:8080[http://localhost:8080,window=_blank] or using cli like: 
 
 :doc-sec: basics
 :k8s-cli: k8s
@@ -154,7 +159,7 @@ copyToClipboard::basics-update-custom-logging-props[]
 
 [#basics-call-svc-logging]
 === Invoke Service
-The simple `hello` REST URI can be called from the browser using http://localhost:8080 or using cli like: 
+The simple `hello` REST URI can be called from the browser using http://localhost:8080[http://localhost:8080[http://localhost:8080,window=_blank],window=_blank] or using cli like: 
 
 :doc-sec: basics-log
 :k8s-cli: k8s
@@ -200,6 +205,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @Path("/fruit")
 public class FruitResource {
@@ -218,7 +224,7 @@ copyToClipboard::basics-configuration-get-value-code[]
 
 [#basics-call-configuration]
 === Invoke Service
-The simple `hello` REST URI can be called from the browser using http://localhost:8080 or using cli like: 
+The simple `hello` REST URI can be called from the browser using http://localhost:8080[http://localhost:8080[http://localhost:8080,window=_blank],window=_blank] or using cli like: 
 
 :doc-sec: basics-conf
 :k8s-cli: k8s

@@ -1,0 +1,28 @@
+{
+	"name": "Red Hat Developers:: Quarkus Tutorial",
+	"dockerFile": "Dockerfile",
+	"runArgs": [
+		"-e","TUTORIAL_HOME=/workspaces/quarkus-tutorial",
+		"-e","QUARKUS_VERSION=0.21.2"
+	],
+
+	// Use 'settings' to set *default* container specific settings.json values on container create. 
+	// You can edit these settings after create using File > Preferences > Settings > Remote.
+	"settings": { 
+		"terminal.integrated.shell.linux": "/bin/bash",
+		"java.home": "/opt/graalvm"
+	},
+
+	// Uncomment the next line if you want to publish any ports.
+	"appPort": ["8080:8080"],
+
+	// Uncomment the next line to run commands after the container is created.
+	// "postCreateCommand": "/usr/local/bin/run.sh",
+
+	// Add the IDs of extensions you want installed when the container is created in the array below.
+	"extensions": [
+		"vscjava.vscode-java-pack",
+		"redhat.vscode-xml",
+		"redhat.vscode-yaml"
+	]
+}
