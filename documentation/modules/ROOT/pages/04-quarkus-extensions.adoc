@@ -349,6 +349,7 @@ The REST call about should return an response like:
 No change of previous calls done in <<Adding Rest Client extension>> section, but now switch off your network so you do not have access to http://www.fruityvice.com.
 And make again a request to http://localhost:8080/{path}.
 
+:doc-sec: fault-tolerance-retry-no-network
 include::ROOT:partial$invoke-service.adoc[tag=call]
 
 Now after waiting 6 seconds (3 retries x 2 seconds), the next exception is thrown `java.net.UnknownHostException: www.fruityvice.com`.
@@ -521,6 +522,7 @@ include::ROOT:partial$build-containers.adoc[tag=build]
 
 Lets start the newly built container:
 
+:doc-sec: k8s-run-health-check
 include::ROOT:partial$build-containers.adoc[tag=run]
 
 After adding `smallrye-health` extension we should have REST endpoint called `/health` available. Lets invoke the `/health` endpoint to check the health of the Quarkus application.
@@ -575,11 +577,13 @@ cat pass:[$TUTORIAL_HOME]/target/wiring-classes/META-INF/kubernetes/kubernetes.j
 ----
 copyToClipboard::quarkusk8s-generated-kubernetes-resource-health-check[]
 
+:doc-sec: k8s-delpoy-health-check
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-deploy]
 
 [#qext-health-check-invoke-k8s-svc]
 === Invoke Kubernetes Service
 
+:doc-sec: k8s-invoke-health-check
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-invoke-svc]
 
 
@@ -646,6 +650,7 @@ include::ROOT:partial$build-containers.adoc[tag=build]
 
 Lets start the newly built container:
 
+:doc-sec: k8s-run-custom-health-check
 include::ROOT:partial$build-containers.adoc[tag=run]
 
 After adding `smallrye-health` extension we should have REST endpoint called `/health` available. Lets invoke the `/health` endpoint to check the health of the Quarkus application and you'll see both health checks.
@@ -749,11 +754,13 @@ cat pass:[$TUTORIAL_HOME]/target/wiring-classes/META-INF/kubernetes/kubernetes.j
 ----
 copyToClipboard::quarkusk8s-generated-kubernetes-resource-custom-health-check[]
 
+:doc-sec: k8s-deploy-custom-health-check
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-deploy]
 
 [#qext-custom-health-check-invoke-k8s-svc]
 === Invoke Kubernetes Service
 
+:doc-sec: k8s-invoke-custom-health-check
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-invoke-svc]
 
 [#qext-custom-health-check-end-k8s-delete-resources]

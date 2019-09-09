@@ -23,6 +23,7 @@ include::ROOT:partial$build-containers.adoc[tag=build]
 
 After containerizing the application, we can verify the container by running the following commands: 
 
+:doc-sec: container
 include::ROOT:partial$build-containers.adoc[tag=run]
 
 You can <<conk8s-call-svc>> to see a response like `hello`.
@@ -62,11 +63,13 @@ endif::[]
 [#conk8s-k8s-apply-resources]
 === Apply Kubernetes Resources
 
+:container:
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-deploy]
 
 [#conk8s-invoke-k8s-svc]
 === Invoke Kubernetes Service
 
+:doc-sec: container
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-invoke-svc]
 
 [#conk8s-delete-k8s-app]
