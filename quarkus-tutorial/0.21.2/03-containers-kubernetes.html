@@ -542,7 +542,7 @@ For sake of simplicity the container name in both native and jvm mode are named 
 <div class="paragraph">
 <p>After containerizing the application, we can verify the container by running the following commands:</p>
 </div>
-<div id="build-run-jvm-app" class="listingblock">
+<div id="container-run-jvm-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -it --rm -p 8080:8080 example/fruit-app:1.0-SNAPSHOT</code></pre>
 </div>
@@ -637,7 +637,7 @@ quarkus.application.name=fruit-app</code></pre>
 </div>
 <div class="content">
 <div class="tab-pane" aria-labelledby="tabset3_kubectl">
-<div id="conk8s-run-deploy-k8s-app" class="listingblock">
+<div id="basics-run-deploy-k8s-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f $TUTORIAL_HOME/target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
 </div>
@@ -645,7 +645,7 @@ quarkus.application.name=fruit-app</code></pre>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="tab-pane" aria-labelledby="tabset3_oc">
-<div id="conk8s-oc-run-deploy-k8s-app" class="listingblock">
+<div id="basics-oc-run-deploy-k8s-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f $TUTORIAL_HOME/target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
 </div>
@@ -674,13 +674,13 @@ quarkus.application.name=fruit-app</code></pre>
 <p>You need to create a <code>NodePort</code> to expose the application if you are in minikube.
 As generated resources creates a <code>ClusterIP</code> service, you need to patch it:</p>
 </div>
-<div id="conk8s-k8s-run-expose-svc-nodeport" class="listingblock">
+<div id="container-k8s-run-expose-svc-nodeport" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl patch svc fruit-app --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"}]'</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-k8s-run-expose-svc-nodeport"><i class="fa fa-clipboard"></i></button><br/>
-<div id="conk8s-run-deploy-k8s-service" class="listingblock">
+<div id="container-run-deploy-k8s-service" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(minikube service -n quarkustutorial fruit-app --url)</code></pre>
 </div>
@@ -691,7 +691,7 @@ As generated resources creates a <code>ClusterIP</code> service, you need to pat
 <div class="paragraph">
 <p>With OpenShift we can create a route to make Quarkus application publicly accessible:</p>
 </div>
-<div id="conk8s-oc-run-expose-svc-route" class="listingblock">
+<div id="container-oc-run-expose-svc-route" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc expose service fruit-app</code></pre>
 </div>
@@ -700,7 +700,7 @@ As generated resources creates a <code>ClusterIP</code> service, you need to pat
 <div class="paragraph">
 <p>Once the service is exposed we can use the following command to get the public url:</p>
 </div>
-<div id="conk8s-oc-run-get-route" class="listingblock">
+<div id="container-oc-run-get-route" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(oc get routes fruit-app -o jsonpath='{.spec.host}')</code></pre>
 </div>
@@ -712,7 +712,7 @@ As generated resources creates a <code>ClusterIP</code> service, you need to pat
 <div class="paragraph">
 <p>Now you can use the <code>SVC_URL</code> to call the service from the browser or via cli like:</p>
 </div>
-<div id="conk8s-call-k8s-svc" class="listingblock">
+<div id="container-call-k8s-svc" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl $SVC_URL/fruit</code></pre>
 </div>
