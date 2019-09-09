@@ -532,6 +532,7 @@ NOTE: You can stop the `port-forward` and Quarkus application running in develop
 ==== Build the application container
 
 :quarkus-project-name: fruit-app
+:doc-sec: panache-containers
 include::ROOT:partial$build-containers.adoc[tag=build]
 
 [#quarkusp-cloud-dev-prepare-app]
@@ -554,6 +555,7 @@ endif::[]
 
 Once the images has been pushed to container registry, run the following command to deploy the application to kubernetes:
 
+:doc-sec: deploy-panache
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-deploy]
 
 [#quarkusp-invoke-k8s-svc]
@@ -564,5 +566,5 @@ NOTE: `swagger-ui` is available only for `dev` and `test`, you can use REST API 
 
 [#quarkusp-persistence-k8s-delete-resources]
 === Delete Kubernetes Resources
-
+:doc-sec: panache-delete
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-delete]

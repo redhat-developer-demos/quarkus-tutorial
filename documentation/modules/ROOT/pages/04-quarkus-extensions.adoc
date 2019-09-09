@@ -349,6 +349,7 @@ The REST call about should return an response like:
 No change of previous calls done in <<Adding Rest Client extension>> section, but now switch off your network so you do not have access to http://www.fruityvice.com.
 And make again a request to http://localhost:8080/{path}.
 
+:doc-sec: fault-tolerance-no-network
 include::ROOT:partial$invoke-service.adoc[tag=call]
 
 Now after waiting 6 seconds (3 retries x 2 seconds), the next exception is thrown `java.net.UnknownHostException: www.fruityvice.com`.
@@ -393,7 +394,7 @@ include::ROOT:partial$run-dev-mode.adoc[]
 
 [#qext-call-fruity-fault-tolerance-fallback]
 === Invoke Service
-:doc-sec: fault-tolerance-tolerance
+:doc-sec: fault-tolerance-fallback
 :k8s-cli: k8s
 :path: fruit/banana
 :k8s-env: minikube
@@ -450,7 +451,7 @@ include::ROOT:partial$run-dev-mode.adoc[]
 
 [#qext-call-fruity-fault-tolerance-circuit-breaker]
 === Invoke Service
-:doc-sec: fault-tolerance-tolerance
+:doc-sec: fault-tolerance-circuit-breaker
 :k8s-cli: k8s
 :path: fruit/banana
 :k8s-env: minikube
@@ -513,6 +514,7 @@ After successful execution of the above command, you will have the following dep
 
 Let us rebuild the application after adding the health check extensions
 
+:doc-sec: rebuild-health-check
 include::ROOT:partial$build-containers.adoc[tag=build]
 
 [#qext-check-health-endpoint]
@@ -520,6 +522,7 @@ include::ROOT:partial$build-containers.adoc[tag=build]
 
 Lets start the newly built container:
 
+:doc-sec: container-run-health-check
 include::ROOT:partial$build-containers.adoc[tag=run]
 
 After adding `smallrye-health` extension we should have REST endpoint called `/health` available. Lets invoke the `/health` endpoint to check the health of the Quarkus application.
@@ -554,11 +557,12 @@ Then you can stop the container by typing kbd:[Ctrl+C].
 
 We need to push the rebuilt containers to the container registry.
 
+:doc-sec: container-push-health-check
 include::ROOT:partial$build-containers.adoc[tag=tag-push]
 
 [#qext-health-check-k8s-delete-resources]
 === Delete Kubernetes Resources
-
+:doc-sec: health-check-delete
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-delete]
 
 [#qext-health-check-k8s-apply-resources]
@@ -573,11 +577,13 @@ cat pass:[$TUTORIAL_HOME]/target/wiring-classes/META-INF/kubernetes/kubernetes.j
 ----
 copyToClipboard::quarkusk8s-generated-kubernetes-resource-health-check[]
 
+:doc-sec: deploy-health-check
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-deploy]
 
 [#qext-health-check-invoke-k8s-svc]
 === Invoke Kubernetes Service
 
+:doc-sec: k8s-invoke-health-check
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-invoke-svc]
 
 
@@ -636,6 +642,7 @@ copyToClipboard::quarkusp-fruit-checks[]
 
 Let us rebuild the application after adding the health check extensions
 
+:doc-sec: rebuild-custom-health-check
 include::ROOT:partial$build-containers.adoc[tag=build]
 
 [#qext-check-custom-health-endpoint]
@@ -643,6 +650,7 @@ include::ROOT:partial$build-containers.adoc[tag=build]
 
 Lets start the newly built container:
 
+:doc-sec: container-run-custom-health-check
 include::ROOT:partial$build-containers.adoc[tag=run]
 
 After adding `smallrye-health` extension we should have REST endpoint called `/health` available. Lets invoke the `/health` endpoint to check the health of the Quarkus application and you'll see both health checks.
@@ -726,11 +734,12 @@ Then you can stop the container by typing kbd:[Ctrl+C].
 
 We need to push the rebuilt containers to the container registry.
 
+:doc-sec: container-push-custom-health-check
 include::ROOT:partial$build-containers.adoc[tag=tag-push]
 
 [#qext-custom-health-check-k8s-delete-resources]
 === Delete Kubernetes Resources
-
+:doc-sec: custom-probes-delete
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-delete]
 
 [#qext-custom-health-check-k8s-apply-resources]
@@ -745,14 +754,17 @@ cat pass:[$TUTORIAL_HOME]/target/wiring-classes/META-INF/kubernetes/kubernetes.j
 ----
 copyToClipboard::quarkusk8s-generated-kubernetes-resource-custom-health-check[]
 
+:doc-sec: deploy-custom-health-check
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-deploy]
 
 [#qext-custom-health-check-invoke-k8s-svc]
 === Invoke Kubernetes Service
 
+:doc-sec: k8s-invoke-custom-health-check
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-invoke-svc]
 
 [#qext-custom-health-check-end-k8s-delete-resources]
 === Delete Kubernetes Resources
 
+:doc-sec: health-check-resources-extension
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-delete]

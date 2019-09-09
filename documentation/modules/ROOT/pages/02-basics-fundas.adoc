@@ -147,7 +147,7 @@ copyToClipboard::basics-update-custom-logging-props[]
 === Invoke Service
 The simple `hello` REST URI can be called from the browser using http://localhost:8080 or using cli like: 
 
-:doc-sec: basics
+:doc-sec: basics-logging
 :k8s-cli: k8s
 :path: fruit
 :k8s-env: minikube

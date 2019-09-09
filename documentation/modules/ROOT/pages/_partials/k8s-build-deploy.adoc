@@ -55,7 +55,7 @@ ifndef::workshop[]
 kubectl::
 +
 --
-[#conk8s-run-deploy-k8s-app]
+[#{doc-sec}-run-deploy-k8s-app]
 [source,bash,subs="+macros,+attributes"]
 ----
 kubectl apply -f pass:[$TUTORIAL_HOME]/target/wiring-classes/META-INF/kubernetes/kubernetes.yml
@@ -67,7 +67,7 @@ oc::
 --
 endif::[]
 
-[#conk8s-oc-run-deploy-k8s-app]
+[#{doc-sec}-oc-run-deploy-k8s-app]
 [source,bash,subs="+macros,+attributes"]
 ----
 oc apply -f pass:[$TUTORIAL_HOME]/target/wiring-classes/META-INF/kubernetes/kubernetes.yml
@@ -93,14 +93,14 @@ kubectl::
 You need to create a `NodePort` to expose the application if you are in minikube.
 As generated resources creates a `ClusterIP` service, you need to patch it:
 
-[#conk8s-k8s-run-expose-svc-nodeport]
+[#{doc-sec}-k8s-run-expose-svc-nodeport]
 [source,bash,subs="+macros,+attributes"]
 ----
 kubectl patch svc {quarkus-project-name} --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"}]'
 ----
 copyToClipboard::conk8s-k8s-run-expose-svc-nodeport[]
 
-[#conk8s-run-deploy-k8s-service]
+[#{doc-sec}-run-deploy-k8s-service]
 [source,bash,subs="+macros,+attributes"]
 ----
 SVC_URL=$(minikube service -n quarkustutorial {quarkus-project-name} --url)
@@ -114,7 +114,7 @@ oc::
 endif::[]
 With OpenShift we can create a route to make Quarkus application publicly accessible:
 
-[#conk8s-oc-run-expose-svc-route]
+[#{doc-sec}-oc-run-expose-svc-route]
 [source,bash,subs="+macros,+attributes"]
 ----
 oc expose service {quarkus-project-name}
@@ -123,7 +123,7 @@ copyToClipboard::conk8s-oc-run-expose-svc-route[]
 
 Once the service is exposed we can use the following command to get the public url:
 
-[#conk8s-oc-run-get-route]
+[#{doc-sec}-oc-run-get-route]
 [source,bash,subs="+macros,+attributes"]
 ----
 SVC_URL=$(oc get routes {quarkus-project-name} -o jsonpath='{.spec.host}')
@@ -136,7 +136,7 @@ endif::[]
 
 Now you can use the `SVC_URL` to call the service from the browser or via cli like:
 
-[#conk8s-call-k8s-svc]
+[#{doc-sec}-call-k8s-svc]
 [source,bash,subs="+macros,+attributes"]
 ----
 curl $SVC_URL/{svc-path}
@@ -153,7 +153,7 @@ ifndef::workshop[]
 kubectl::
 +
 --
-[#conk8s-delete-k8s-app]
+[#{doc-sec}-delete-k8s-app]
 [source,bash,subs="+macros,+attributes"]
 ----
 kubectl delete all --all
@@ -165,7 +165,7 @@ oc::
 --
 endif::[]
 
-[#conk8s-delete-oc-app]
+[#{doc-sec}-delete-oc-app]
 [source,bash,subs="+macros,+attributes"]
 ----
 oc delete all --all
