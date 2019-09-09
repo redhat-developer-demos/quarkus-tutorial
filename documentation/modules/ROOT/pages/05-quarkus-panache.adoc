@@ -649,10 +649,13 @@ endif::[]
 
 Once the images has been pushed to container registry, run the following command to deploy the application to kubernetes:
 
+:doc-sec: k8s-deploy-panache
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-deploy]
 
 [#quarkusp-invoke-k8s-svc]
 ==== Invoke Kubernetes Service
+
+:doc-sec: k8s-invoke-panache
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-invoke-svc]
 
 NOTE: `swagger-ui` is available only for `dev` and `test`, you can use REST API tools to access API.

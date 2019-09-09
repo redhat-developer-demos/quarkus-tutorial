@@ -56,7 +56,7 @@ NOTE: For sake of simplicity the container name in both native and jvm mode are 
 
 #tag::run[]
 
-[#build-run-jvm-app]
+[#{doc-sec}-run-jvm-app]
 [source,bash,subs="+macros,+attributes"]
 ----
 docker run -it --rm -p 8080:8080 example/{quarkus-project-name}:1.0-SNAPSHOT
@@ -67,7 +67,7 @@ copyToClipboard::build-run-jvm-app[]
 
 #tag::tag-push[]
 
-[#build-tag-jvm-app]
+[#{doc-sec}-tag-jvm-app]
 [source,bash,subs="+macros,+attributes"]
 ----
 docker push example/{quarkus-project-name}:1.0-SNAPSHOT
