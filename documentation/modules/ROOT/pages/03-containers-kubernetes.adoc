@@ -17,10 +17,12 @@ include::partial$prereq-cli.adoc[]
 [#conk8s-build-container-app]
 == Containerize Quarkus Application
 
+:doc-sec: container
 include::ROOT:partial$build-containers.adoc[tag=build]
 
 After containerizing the application, we can verify the container by running the following commands: 
 
+:doc-sec: container
 include::ROOT:partial$build-containers.adoc[tag=run]
 
 You can <<conk8s-call-svc>> to see a response like `hello`.
@@ -50,6 +52,7 @@ As we have already built the container images, we might need to build and push i
 
 With example variable settings as above, run the following commands to tag the images:
 
+:doc-sec: container
 include::ROOT:partial$build-containers.adoc[tag=tag-push]
 endif::[]
 

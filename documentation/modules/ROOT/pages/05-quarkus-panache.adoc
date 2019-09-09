@@ -539,6 +539,7 @@ NOTE: You can stop the `port-forward` and Quarkus application running in develop
 ==== Build the application container
 
 :quarkus-project-name: fruit-app
+:doc-sec: build-panache
 include::ROOT:partial$build-containers.adoc[tag=build]
 
 [#quarkusp-cloud-dev-prepare-app]
@@ -566,6 +567,7 @@ As we have already built the container images, we might need to build and push i
 
 With example variable settings as above, run the following commands to tag the images:
 
+:doc-sec: k8s-panache-push
 include::ROOT:partial$build-containers.adoc[tag=tag-push]
 endif::[]
 

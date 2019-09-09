@@ -79,6 +79,7 @@ After successful execution of the above command, you will have the following dep
 
 Let us rebuild the application after adding the health check extensions
 
+:doc-sec: build-health-check
 include::ROOT:partial$build-containers.adoc[tag=build]
 
 [#qext-check-health-endpoint]
@@ -86,6 +87,7 @@ include::ROOT:partial$build-containers.adoc[tag=build]
 
 Lets start the newly built container:
 
+:doc-sec: run-health-check
 include::ROOT:partial$build-containers.adoc[tag=run]
 
 After adding `smallrye-health` extension we should have REST endpoint called `/health` available. Lets invoke the `/health` endpoint to check the health of the Quarkus application.
@@ -118,6 +120,7 @@ The REST call about should return an response like:
 
 Before we add the probes to the Kubernetes application, we need to push the rebuilt containers to the container registry.
 
+:doc-sec: k8s-push-health-check
 include::ROOT:partial$build-containers.adoc[tag=tag-push]
 
 Once the rebuilt containers has been successfully pushed to the container registry run the following command to add the probes to the kubernetes deployment.
@@ -246,6 +249,7 @@ copyToClipboard::quarkusp-fruit-checks[]
 
 Let us rebuild the application after adding the health check extensions
 
+:doc-sec: build-custom-health-check
 include::ROOT:partial$build-containers.adoc[tag=build]
 
 [#qext-check-custom-health-endpoint]
@@ -253,6 +257,7 @@ include::ROOT:partial$build-containers.adoc[tag=build]
 
 Lets start the newly built container:
 
+:doc-sec: run-custom-health-check
 include::ROOT:partial$build-containers.adoc[tag=run]
 
 After adding `smallrye-health` extension we should have REST endpoint called `/health` available. Lets invoke the `/health` endpoint to check the health of the Quarkus application and you'll see both health checks.
@@ -334,6 +339,7 @@ The REST call about should return an response like:
 
 Before we add the probes to the Kubernetes application, we need to push the rebuilt containers to the container registry.
 
+:doc-sec: k8s-custom-health-check
 include::ROOT:partial$build-containers.adoc[tag=tag-push]
 
 Once the rebuilt containers has been successfully pushed to the container registry run the following command to add the probes to the kubernetes deployment.
