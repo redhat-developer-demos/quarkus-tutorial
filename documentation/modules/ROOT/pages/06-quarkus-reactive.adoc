@@ -68,6 +68,7 @@ Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `BeerGatew
 package com.example;
 
 import java.util.List;
+import java.util.concurrent.CompletionStage;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -84,7 +85,7 @@ public interface BeerGateway {
     @GET
     @Path("/beers")
     @Produces(MediaType.APPLICATION_JSON)
-    List<Beer> getBeers(@QueryParam("page") int page);
+    CompletionStage<List<Beer>> getBeers(@QueryParam("page") int page);
     
 }
 ----
@@ -115,52 +116,53 @@ Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `BeerServi
 package com.example;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.enterprise.context.ApplicationScoped;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
-import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
+
 
 @ApplicationScoped
 public class BeerService {
-    
+
+    ExecutorService executor = Executors.newSingleThreadExecutor(); // <1>
+
     @RestClient
     BeerGateway beerGateway;
-    
+
     public Flowable<Beer> beers() {
-         return Flowable.<Beer>create(emitter -> {
-            try { 
-            int page = 1;
-             List<Beer> beers = beerGateway.getBeers(page); // <1>
-             for (Beer beer : beers) {
-                 emitter.onNext(beer); // <2>
-             }
+        Flowable<List<Beer>> beerStream = Flowable.generate(() -> 1, (page, emitter) -> { // <2>
 
-             page++;
-             while(!((beers = beerGateway.getBeers(page)).isEmpty()) && !emitter.isCancelled()) { // <3>
-                for (Beer beer : beers) {
-                    emitter.onNext(beer);
-                }
-                page++;
-             }
+            beerGateway.getBeers(page).thenAcceptAsync(beers -> {
+                
+                    if (beers.isEmpty()) {
+                        emitter.onComplete(); // <3>
+                    } else {
+                        emitter.onNext(beers); // <4>
+                    }
+                
+                }, executor);
 
-             emitter.onComplete(); // <4>
-            } catch (Throwable t) {
-                emitter.onError(t);
-            }
-         }, BackpressureStrategy.BUFFER);
+                return page + 1; // <5>
+            });
+
+            return beerStream.flatMap(Flowable::fromIterable); // <6>
     }
 
 }
 ----
 copyToClipboard::qext-quarkusrpb-beer-service[]
 
-<1> Gets first batch of beers
-<2> Emits each beer
-<3> Gets beers from all pages
-<4> Sends an event that the process is completed
+<1> Creates a single thread executor for getting beers by page
+<2> Gets first batch of beers
+<3> Sends an event that the process is completed
+<4> Emits each beer
+<5> Gets beers from next page
+<6> Transforms the list of beers event into event of beers
 
 So far nothing really new, but notice that now instead of reading all the beers, put them in memory and then filter out by any parameter, you are just emitting them individually per page.
 The caller is responsible to manipulate this information as it starts receiving the information and it is not necessary to store all beers in memory but just the ones that matches any condition.
