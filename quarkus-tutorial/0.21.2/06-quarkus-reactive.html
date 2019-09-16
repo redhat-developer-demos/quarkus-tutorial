@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Basics and Fundamentals :: Quarkus Tutorial</title>
-    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/0.21.2/02-basics-fundas.html">
+    <title>Reactive Programming :: Quarkus Tutorial</title>
+    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/0.21.2/06-quarkus-reactive.html">
     <meta name="generator" content="Antora 2.0.1">
     <link rel="stylesheet" href="../../_/css/site.css">
 <link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
@@ -55,52 +55,52 @@
   </li>
 </ul>
   </li>
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <button class="nav-toggle"></button>
     <a class="nav-link" href="02-basics-fundas.html">2.Basics and Fundamentals</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#basics-prerequisite">Prerequisites</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-prerequisite">Prerequisites</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#basics-create-quarkus-app">Create Quarkus Application</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-create-quarkus-app">Create Quarkus Application</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#basics-ide-quarkus-project">Open Application in IDE</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-ide-quarkus-project">Open Application in IDE</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#basics-build-run-quarkus-app">Build and Run Application</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-build-run-quarkus-app">Build and Run Application</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#basics-update-code">Update Code</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-update-code">Update Code</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#basics-call-svc">Invoke Service</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-call-svc">Invoke Service</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#basics-testing">Testing</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-testing">Testing</a>
   </li>
   <li class="nav-item" data-depth="2">
     <button class="nav-toggle"></button>
-    <a class="nav-link" href="#basics-logging">Configuring Logging</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-logging">Configuring Logging</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="#basics-call-svc-logging">Invoke Service</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-call-svc-logging">Invoke Service</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="2">
     <button class="nav-toggle"></button>
-    <a class="nav-link" href="#basics-configuration">Configuration</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-configuration">Configuration</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="#basics-configuration-new-property">Add New Property</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-configuration-new-property">Add New Property</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="#basics-configuration-get-value">Get Configuration Value</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-configuration-get-value">Get Configuration Value</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="#basics-call-configuration">Invoke Service</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-call-configuration">Invoke Service</a>
   </li>
 </ul>
   </li>
@@ -313,19 +313,19 @@
   </li>
 </ul>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <button class="nav-toggle"></button>
     <a class="nav-link" href="06-quarkus-reactive.html">6. Reactive Programming with Quarkus</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <button class="nav-toggle"></button>
-    <a class="nav-link" href="06-quarkus-reactive.html#quarkusrpb-demo-overview">Beer Demo Overview</a>
+    <a class="nav-link" href="#quarkusrpb-demo-overview">Beer Demo Overview</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="06-quarkus-reactive.html#quarkusrpb-buld-beer-reactive">Build Beer Service</a>
+    <a class="nav-link" href="#quarkusrpb-buld-beer-reactive">Build Beer Service</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="06-quarkus-reactive.html#qext-reactive-beer-run-quarkus-app-dev-mode">Run Quarkus Application with Beer Service</a>
+    <a class="nav-link" href="#qext-reactive-beer-run-quarkus-app-dev-mode">Run Quarkus Application with Beer Service</a>
   </li>
 </ul>
   </li>
@@ -351,12 +351,12 @@
   <nav class="crumbs" aria-label="breadcrumbs">
   <ul>
     <li class="crumb"><a href="index.html">Quarkus Tutorial</a></li>
-    <li class="crumb"><a href="02-basics-fundas.html">2.Basics and Fundamentals</a></li>
+    <li class="crumb"><a href="06-quarkus-reactive.html">6. Reactive Programming with Quarkus</a></li>
   </ul>
 </nav>
 </div>
 <article class="doc">
-<h1>Basics and Fundamentals</h1>
+<h1>Reactive Programming</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -365,163 +365,30 @@
 <div class="ulist checklist">
 <ul class="checklist">
 <li>
-<p><i class="fa fa-check-square-o"></i> Create a Quarkus Java Application</p>
+<p><i class="fa fa-check-square-o"></i> Use reactive programming in Quarkus.</p>
 </li>
 <li>
-<p><i class="fa fa-check-square-o"></i> Build and run the Java application in JVM mode.</p>
-</li>
-<li>
-<p><i class="fa fa-check-square-o"></i> Build and run the Java application in Native mode.</p>
-</li>
-<li>
-<p><i class="fa fa-check-square-o"></i> Build and run the Java Application in Developer mode</p>
+<p><i class="fa fa-check-square-o"></i> How to use Reactive programming for accessing Rest API services with pagination and back pressure.</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="basics-prerequisite"><a class="anchor" href="#basics-prerequisite"></a>Prerequisite</h2>
+<h2 id="quarkusrpb-demo-overview"><a class="anchor" href="#quarkusrpb-demo-overview"></a>Beer Demo Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The following checks ensure that each chapter exercises are done with the right environment settings.</p>
-</div>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset1_minikube"></a>Minikube</p>
-</li>
-<li>
-<p><a id="tabset1_minishift"></a>Minishift</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset1_minikube">
-<div class="ulist">
-<ul>
-<li>
-<p>Set your local docker to use minikube docker daemon</p>
-</li>
-</ul>
-</div>
-<div id="minikube-set-env" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">eval $(minikube docker-env)</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#minikube-set-env"><i class="fa fa-clipboard"></i></button><br/>
-<div class="ulist">
-<ul>
-<li>
-<p>Kubernetes should be v1.12+</p>
-</li>
-</ul>
-</div>
-<div id="kubectl-version" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl version</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#kubectl-version"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="tab-pane" aria-labelledby="tabset1_minishift">
-<div class="ulist">
-<ul>
-<li>
-<p>Set your local docker to use minishift docker daemon</p>
-</li>
-</ul>
-</div>
-<div id="minishift-set-env" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">eval $(minishift docker-env)</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#minishift-set-env"><i class="fa fa-clipboard"></i></button><br/>
-<div class="ulist">
-<ul>
-<li>
-<p>OpenShift CLI should be 3.11+</p>
-</li>
-</ul>
-</div>
-<div id="oc-version" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc version</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#oc-version"><i class="fa fa-clipboard"></i></button><br/>
-<div class="ulist">
-<ul>
-<li>
-<p>Make sure to be on <code>quarkustutorial</code> OpenShift project</p>
-</li>
-</ul>
-</div>
-<div id="right-openshift-project" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc project -q</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#right-openshift-project"><i class="fa fa-clipboard"></i></button><br/>
-<div class="paragraph">
-<p>If you are not on <code>quarkustutorial</code> project, then run following command to change to <code>quarkustutorial</code> project:</p>
-</div>
-<div id="change-to-openshift-project" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc project quarkustutorial</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#change-to-openshift-project"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="basics-create-quarkus-app"><a class="anchor" href="#basics-create-quarkus-app"></a>Create Quarkus Application</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Create the <code>fruits-app</code> folder and navigate to the folder:</p>
-</div>
-<div id="quarkusp-nav-to-work-folder" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir -p $TUTORIAL_HOME/work/fruits-app &amp;&amp; cd $TUTORIAL_HOME/work/`basename $_`
-# set the Quarkus release environment variable
-export QUARKUS_VERSION=0.21.2</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-nav-to-work-folder"><i class="fa fa-clipboard"></i></button><br/>
-<div id="quarkusp-mv-create-fruits-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn io.quarkus:quarkus-maven-plugin:$QUARKUS_VERSION:create \
-  -DprojectGroupId="com.example" \
-  -DprojectArtifactId="fruits-app" \
-  -DprojectVersion="1.0-SNAPSHOT" \
-  -DclassName="FruitResource" \
-  -Dpath="fruit"</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-mv-create-fruits-app"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-<div class="sect1">
-<h2 id="basics-ide-quarkus-app"><a class="anchor" href="#basics-ide-quarkus-app"></a>Open the Project in IDE</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Open or import the generated project into your IDE.</p>
+<p>To demonstrate how to use reactive programming in Quarkus, you will be developing a REST client that connects to a beer database (<a href="https://punkapi.com/documentation/v2" class="bare">https://punkapi.com/documentation/v2</a>) to retrieve beer information.
+This API does not return all beers at once, but you need to use pagination to navigate through all beer database.</p>
 </div>
 <div class="paragraph">
-<p>If you are using <strong>vscode</strong> you can open the project by:</p>
+<p>In this section, you are going to develop a service that returns all beers with an <em>abv</em> value greater than <em>7.0</em> and using a reactive approach as a solution.</p>
 </div>
-<div id="basics-ide-quarkus-project" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">code .</code></pre>
+<div class="sect2">
+<h3 id="quarkusrpb-buld-beer-reactive"><a class="anchor" href="#quarkusrpb-buld-beer-reactive"></a>Build Beer Service</h3>
+<div class="paragraph">
+<p>The skeleton project to get started is the same you created at <a href="02-basics-fundas.html" class="page">Basics and Fundamentals</a>.</p>
 </div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-ide-quarkus-project"><i class="fa fa-clipboard"></i></button><br/>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -529,112 +396,266 @@ export QUARKUS_VERSION=0.21.2</code></pre>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-All further sections of this tutorial assumes the application name to be <code>fruit-app</code>.
+For the easier reference, we shall call the <code>fruits-app</code> project folder as $PROJECT_HOME
 </td>
 </tr>
 </table>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="basics-build-run-quarkus-app"><a class="anchor" href="#basics-build-run-quarkus-app"></a>Build and Run the Quarkus Application</h2>
-<div class="sectionbody">
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset2_jvm-mode"></a>JVM mode</p>
-</li>
-<li>
-<p><a id="tabset2_native-mode"></a>Native mode</p>
-</li>
-</ul>
-</div>
+<div class="sect3">
+<h4 id="quarkusrpb-add-reactive"><a class="anchor" href="#quarkusrpb-add-reactive"></a>Add Extensions</h4>
+<div id="qext-mvn-add-reactive-extensions" class="listingblock">
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset2_jvm-mode">
-<div id="basics-build-quarkus-jvm-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work/fruits-app &amp;&amp; \
-./mvnw -DskipTests clean package</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-rest-client, quarkus-smallrye-reactive-streams-operators"</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-quarkus-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-mvn-add-reactive-extensions"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+<div class="sect3">
+<h4 id="quarkusrpb-create-pojo"><a class="anchor" href="#quarkusrpb-create-pojo"></a>Create Beer POJO</h4>
 <div class="paragraph">
-<p>To run the application in jvm mode</p>
+<p>Let&#8217;s create the <code>Beer</code> pojo.</p>
 </div>
-<div id="basics-build-run-jvm-app" class="listingblock">
+<div class="paragraph">
+<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>Beer</code> with the following contents:</p>
+</div>
+<div id="qext-quarkusrpb-beer-pojo" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">java -jar target/fruits-app-1.0-SNAPSHOT-runner.jar</code></pre>
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+
+public class Beer {
+
+    private String name;
+    private String tagline;
+    private double abv;
+    private String description;
+
+    // generate getters/setters</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-run-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-quarkusrpb-beer-pojo"><i class="fa fa-clipboard"></i></button><br/>
 </div>
-<div class="tab-pane" aria-labelledby="tabset2_native-mode">
-<div id="basics-build-quarkus-native-app" class="listingblock">
+<div class="sect3">
+<h4 id="quarkusrpb-create-beer-client"><a class="anchor" href="#quarkusrpb-create-beer-client"></a>Create Rest Client to Punk Beer API</h4>
+<div class="paragraph">
+<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>BeerGateway</code> with the following contents:</p>
+</div>
+<div id="qext-quarkusrpb-beer-client" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work/my-quarkus-project &amp;&amp; \
-./mvnw -DskipTests clean package -Pnative</code></pre>
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+
+import java.util.List;
+import java.util.concurrent.CompletionStage;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
+@Path("/v2")
+@RegisterRestClient
+public interface BeerGateway {
+
+    @GET
+    @Path("/beers")
+    @Produces(MediaType.APPLICATION_JSON)
+    CompletionStage&lt;List&lt;Beer&gt;&gt; getBeers(@QueryParam("page") int page); <i class="conum" data-value="1"></i><b>(1)</b>
+
+}</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-quarkus-native-app"><i class="fa fa-clipboard"></i></button><br/>
-<div class="admonitionblock note">
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-quarkusrpb-beer-client"><i class="fa fa-clipboard"></i></button><br/>
+<div class="colist arabic">
 <table>
 <tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Native compilation will take few minutes to complete.
-</td>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Retrieves all beers from a specific page.</td>
 </tr>
 </table>
 </div>
+<div class="sect4">
+<h5 id="quarkusrpb-configure-props"><a class="anchor" href="#quarkusrpb-configure-props"></a>Edit the application.properties</h5>
 <div class="paragraph">
-<p>To run the application in native mode</p>
+<p>Add the following properties to $PROJECT_HOME/src/main/resources/application.properties:</p>
 </div>
-<div id="basics-build-run-native-app" class="listingblock">
+<div id="qext-quarkusrpb-update-props" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./target/my-quarkus-project-1.0-SNAPSHOT-runner</code></pre>
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">com.example.BeerGateway/mp-rest/url=https://api.punkapi.com</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-run-native-app"><i class="fa fa-clipboard"></i></button><br/>
-<div class="admonitionblock important">
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-quarkusrpb-update-props"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+</div>
+<div class="sect3">
+<h4 id="quarkusrpb-beer-reactive-service"><a class="anchor" href="#quarkusrpb-beer-reactive-service"></a>Create Beer Punk API Reactive Service</h4>
+<div class="paragraph">
+<p>Let&#8217;s create the service that uses <code>BeerGateway</code> to retrieve beer information by page and reactively emits each of the beer information.</p>
+</div>
+<div class="paragraph">
+<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>BeerService</code> with the following contents:</p>
+</div>
+<div id="qext-quarkusrpb-beer-service" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.enterprise.context.ApplicationScoped;
+
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+
+import io.reactivex.Flowable;
+
+
+@ApplicationScoped
+public class BeerService {
+
+    ExecutorService executor = Executors.newSingleThreadExecutor(); <i class="conum" data-value="1"></i><b>(1)</b>
+
+    @RestClient
+    BeerGateway beerGateway;
+
+    public Flowable&lt;Beer&gt; beers() {
+        Flowable&lt;List&lt;Beer&gt;&gt; beerStream = Flowable.generate) -&gt; 1, (page, emitter) -&gt; { <i class="conum" data-value="2"></i><b>(2)</b>              beerGateway.getBeers(page).thenAcceptAsync(beers -&gt; {                      if (beers.isEmpty( {
+                        emitter.onComplete(); <i class="conum" data-value="3"></i><b>(3)</b>
+                    } else {
+                        emitter.onNext(beers); <i class="conum" data-value="4"></i><b>(4)</b>
+                    }
+
+                }, executor);
+
+                return page + 1; <i class="conum" data-value="5"></i><b>(5)</b>
+            });
+
+            return beerStream.flatMap(Flowable::fromIterable); <i class="conum" data-value="6"></i><b>(6)</b>
+    }
+
+}</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-quarkusrpb-beer-service"><i class="fa fa-clipboard"></i></button><br/>
+<div class="colist arabic">
 <table>
 <tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Tests will fail on Windows as there is no graalvm support for windows, you can workaround it using <code>-DskipTests</code> option.</p>
-</div>
-</td>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This executor is used to serialize calls and not using multi-threading.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Gets first batch of beers</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Sends an event that the process is completed</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Emits each beer</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Gets beers from next page</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Flatten the list of beers event into event of beers</td>
 </tr>
 </table>
 </div>
-</div>
-</div>
+<div class="paragraph">
+<p>So far nothing really new, but notice that now instead of reading all the beers, put them in memory and then filter out by any parameter, you are just emitting them individually per page.
+The caller is responsible to manipulate this information as it starts receiving the information and it is not necessary to store all beers in memory but just the ones that matches any condition.</p>
 </div>
 <div class="paragraph">
-<p>You can <a href="#basics-call-svc">Invoke Service</a> to see a response like <code>hello</code>.</p>
+<p>Notice that until a caller subscribes to a stream (<code>Flowable</code> in this case), the logic is not executed.</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="basics-run-quarkus-app-dev-mode"><a class="anchor" href="#basics-run-quarkus-app-dev-mode"></a>Run Quarkus Application in Development mode</h2>
-<div class="sectionbody">
+<div class="sect3">
+<h4 id="quarkusrpb-beer-resource"><a class="anchor" href="#quarkusrpb-beer-resource"></a>Create Beer Resource</h4>
 <div class="paragraph">
-<p>Stop the Quarkus applicaiton that might be running in <code>jvm</code> or <code>native</code> mode.</p>
+<p>The last step is to manipulate the beer <em>stream</em> created in the previous section to filter out by <em>abv</em> and return the result to the caller.</p>
 </div>
+<div class="paragraph">
+<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>BeerResource</code> with the following contents:</p>
+</div>
+<div id="qext-quarkusrpb-beer-resource" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+
+import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.reactivestreams.Publisher;
+
+@Path("/beer")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public class BeerResource {
+
+    @Inject
+    BeerService beerService; <i class="conum" data-value="1"></i><b>(1)</b>
+
+    @GET
+    public Publisher&lt;Beer&gt; hello() {
+        return beerService.beers() <i class="conum" data-value="2"></i><b>(2)</b>
+                .filter(b -&gt; b.getAbv() &gt; 7.0); <i class="conum" data-value="3"></i><b>(3)</b>
+                <i class="conum" data-value="4"></i><b>(4)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-quarkusrpb-beer-resource"><i class="fa fa-clipboard"></i></button><br/>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Injects <code>BeerService</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Gets the beer stream</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>For each beer emitted checks that <em>abv</em> is greater than 7</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Automatically subscribes to the stream and get back the result as <code>List&lt;Beer&gt;</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The big change here is that now instead of having to deal with all beers in memory and then apply some operations, you are just loading into memory a <em>page</em> of beers, then filter them and finally return them to the caller.</p>
+</div>
+<div class="paragraph">
+<p>Another big advantage is that now the <em>beer servcie</em> is just called if the consumer requests it.
+If the operation is canceled/aborted before completion, then you also save IO by not executing the operations.</p>
+</div>
+<div class="paragraph">
+<p>Notice that one of the big advantages of this approach (apart from the memory usage) is that you can apply any reactive operator without modifying the creation of the stream.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="qext-reactive-beer-run-quarkus-app-dev-mode"><a class="anchor" href="#qext-reactive-beer-run-quarkus-app-dev-mode"></a>Run Quarkus Application in Development mode</h3>
 <div class="paragraph">
 <p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
 </div>
-<div id="basics-build-run-dev" class="listingblock">
+<div id="beer-reactive-build-run-dev" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#beer-reactive-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -647,202 +668,34 @@ If you are in dev mode and you added new dependencies on the project, sometimes,
 </tr>
 </table>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="basics-update"><a class="anchor" href="#basics-update"></a>Updating of code</h2>
-<div class="sectionbody">
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Only if running in Development mode
-</td>
-</tr>
-</table>
-</div>
+<div class="sect3">
+<h4 id="qext-call-beer-reactive-service"><a class="anchor" href="#qext-call-beer-reactive-service"></a>Invoke Service</h4>
 <div class="paragraph">
-<p>You can edit the Java source(s) in your IDE. When you save and hit refresh in your browser, you will notice browser showing the new changes.</p>
+<p>The simple <code>beer</code> REST URI can be called via browser using <a href="http://localhost:8080/beer" class="bare">http://localhost:8080/beer</a> or using CLI like:</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="basics-call-svc"><a class="anchor" href="#basics-call-svc"></a>Invoke Service</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The simple <code>hello</code> REST URI can be called from the browser using <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a> or using cli like:</p>
-</div>
-<div id="basics-k8s-svc-call" class="listingblock">
+<div id="beer-reactive-k8s-svc-call" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/beer</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-<div class="sect1">
-<h2 id="basics-testing"><a class="anchor" href="#basics-testing"></a>Testing Fruit Resource</h2>
-<div class="sectionbody">
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#beer-reactive-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
-<p>The scaffolding process also creates a test case for the <code>hello</code> endpoint.</p>
+<p>The REST call about should return an response like:</p>
 </div>
-<div class="paragraph">
-<p>Open the next class <code>$PROJECT_HOME/src/test/java/com/example/FruitResourceTest.java</code> to see how a test looks like.</p>
-</div>
-<div class="paragraph">
-<p>When running this test, the application is started once, then all tests are executed, and finally, the application is stopped.
-Although it is not mandatory, by default <a href="http://rest-assured.io/">RestAssured</a> project is used to test Rest endpoints but it is up to you to change that.</p>
-</div>
-<div class="paragraph">
-<p>You can run the test either in IDE or by running Maven:</p>
-</div>
-<div id="basics-run-tests" class="listingblock">
+<div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw clean compile test</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-run-tests"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-<div class="sect1">
-<h2 id="basics-logging"><a class="anchor" href="#basics-logging"></a>Configuring Logging</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>You can configure Quarkus logging by setting the following parameters to $PROJECT_HOME/src/main/resources/application.properties:</p>
-</div>
-<div id="basics-update-logging-props" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.log.console.enable=true
-quarkus.log.console.level=DEBUG</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-update-logging-props"><i class="fa fa-clipboard"></i></button><br/>
-<div class="paragraph">
-<p>Also you can configure your application logger level.
-Let&#8217;s add a logger and configure it.</p>
-</div>
-<div class="paragraph">
-<p>Open the following Java class $PROJECT_HOME/src/main/java/com/example/FruitResource.java and copy the next content in its body:</p>
-</div>
-<div id="basics-custom-log-manager" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import org.jboss.logging.Logger;
-
-@Path("/fruit")
-public class FruitResource {
-
-    Logger logger = Logger.getLogger(FruitResource.class);
-
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
-        logger.debug("Hello method is called.");
-        return "hello";
-    }
-}</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-custom-log-manager"><i class="fa fa-clipboard"></i></button><br/>
-<div class="paragraph">
-<p>And configure <code>DEBUG</code> mode for the service to $PROJECT_HOME/src/main/resources/application.properties:</p>
-</div>
-<div id="basics-update-custom-logging-props" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.log.category."com.example".level=DEBUG</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-update-custom-logging-props"><i class="fa fa-clipboard"></i></button><br/>
-<div class="sect2">
-<h3 id="basics-call-svc-logging"><a class="anchor" href="#basics-call-svc-logging"></a>Invoke Service</h3>
-<div class="paragraph">
-<p>The simple <code>hello</code> REST URI can be called from the browser using <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080[http://localhost:8080</a>,window=_blank] or using cli like:</p>
-</div>
-<div id="basics-log-k8s-svc-call" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-log-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
-<div class="paragraph">
-<p>And if you inspect the console output, you see the logging message:</p>
-</div>
-<div class="paragraph">
-<p><code>2019-08-13 18:12:53,284 DEBUG [com.exa.FruitResource] (executor-thread-1) Hello method is called.</code></p>
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">[
+   {
+      "abv":7.2,
+      "description":"An Imperial Pilsner in collaboration with beer writers...." ,
+      "name":"Avery Brown Dredge",
+      "tagline":"Bloggers' Imperial Pilsner."
+   },
+   ...
+]</code></pre>
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="basics-configuration"><a class="anchor" href="#basics-configuration"></a>Configuration</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Hardcoded values in your code is a no go, let&#8217;s see how to add configuration to your application.
-Quarkus relies on MicroProfile Config specification and the main configuration is  <code>application.properties</code>.</p>
-</div>
-<div class="sect2">
-<h3 id="basics-configuration-new-property"><a class="anchor" href="#basics-configuration-new-property"></a>Add a new property</h3>
-<div class="paragraph">
-<p>Add the following property to <code>$PROJECT_HOME]/src/main/resources/application.properties</code>:</p>
-</div>
-<div id="basics-configuration-add-new-property" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">greetings.message = hello</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-configuration-add-new-property"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="sect2">
-<h3 id="basics-configuration-get-value"><a class="anchor" href="#basics-configuration-get-value"></a>Get Configuration Value</h3>
-<div class="paragraph">
-<p>Open the following Java class <code>$PROJECT_HOME/src/main/java/com/example/FruitResource.java</code> and copy the next content in its body:</p>
-</div>
-<div id="basics-configuration-get-value-code" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-
-@Path("/fruit")
-public class FruitResource {
-
-    @ConfigProperty(name = "greetings.message")
-    String message;
-
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
-        return message;
-    }
-}</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-configuration-get-value-code"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="sect2">
-<h3 id="basics-call-configuration"><a class="anchor" href="#basics-call-configuration"></a>Invoke Service</h3>
-<div class="paragraph">
-<p>The simple <code>hello</code> REST URI can be called from the browser using <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080[http://localhost:8080</a>,window=_blank] or using cli like:</p>
-</div>
-<div id="basics-conf-k8s-svc-call" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-conf-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
