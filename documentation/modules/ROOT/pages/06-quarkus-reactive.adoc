@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 At the end of this chapter you will be able to :
 
 * [x] Use reactive programming in Quarkus.
-* [x] How to use Reactive programming for accessing Rest API services with pagination with back pressure.
+* [x] How to use Reactive programming for accessing Rest API services with pagination and back pressure.
 
 [#quarkusrpb-demo-overview]
 == Beer Demo Overview 
