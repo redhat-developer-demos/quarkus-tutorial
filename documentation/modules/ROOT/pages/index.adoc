@@ -40,3 +40,7 @@ image::Developer_Joy.png[Developer Joy,400,400,align="center"]
 * xref:05-quarkus-panache.adoc#quarkusp-fruitapp-dev[Build a Quarkus Hibernate Application]
 * xref:05-quarkus-panache.adoc#quarkusp-what-is-panache[Enhance Hibernate ORM with Panache]
 * xref:05-quarkus-panache.adoc#quarkusp-cloud-dev[Deploy on Kubernetes]
+
+[.tile]
+.xref:06-quarkus-reactive.adoc[Reactive Programming in Quarkus]
+* xref:06-quarkus-reactive.adoc#quarkusrpb-demo-overview[Reactive Programming Rest API calls]

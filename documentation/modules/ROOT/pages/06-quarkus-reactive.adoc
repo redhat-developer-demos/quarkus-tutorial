@@ -1,0 +1,258 @@
+= Reactive Programming
+
+include::_attributes.adoc[]
+:quarkus-project-name: fruits-app
+:svc-path: beer
+
+At the end of this chapter you will be able to :
+
+* [x] Use reactive programming in Quarkus.
+* [x] How to use Reactive programming for accessing Rest API services with pagination and back pressure.
+
+[#quarkusrpb-demo-overview]
+== Beer Demo Overview 
+
+To demonstrate how to use reactive programming in Quarkus, you will be developing a REST client that connects to a beer database (https://punkapi.com/documentation/v2) to retrieve beer information.
+This API does not return all beers at once, but you need to use pagination to navigate through all beer database.
+
+In this section, you are going to develop a service that returns all beers with an _abv_ value greater than _7.0_ and using a reactive approach as a solution.
+
+[#quarkusrpb-buld-beer-reactive]
+=== Build Beer Service
+
+The skeleton project to get started is the same you created at xref:02-basics-fundas.adoc[Basics and Fundamentals].
+
+NOTE: For the easier reference, we shall call the `fruits-app` project folder as pass:[$PROJECT_HOME]
+
+[#quarkusrpb-add-reactive]
+==== Add Extensions
+
+[#qext-mvn-add-reactive-extensions]
+[source,bash,subs="+macros,+attributes"]
+----
+./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-rest-client, quarkus-smallrye-reactive-streams-operators"
+----
+copyToClipboard::qext-mvn-add-reactive-extensions[]
+
+[#quarkusrpb-create-pojo]
+==== Create Beer POJO
+
+Let's create the `Beer` pojo.
+
+Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `Beer` with the following contents:
+
+[#qext-quarkusrpb-beer-pojo]
+[source,java,subs="+macros,+attributes"]
+----
+package com.example;
+
+public class Beer {
+
+    private String name;
+    private String tagline;
+    private double abv;
+    private String description;
+
+    // generate getters/setters
+----
+copyToClipboard::qext-quarkusrpb-beer-pojo[]
+
+[#quarkusrpb-create-beer-client]
+==== Create Rest Client to Punk Beer API
+
+Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `BeerGateway` with the following contents:
+
+[#qext-quarkusrpb-beer-client]
+[source,java,subs="+macros,+attributes"]
+----
+package com.example;
+
+import java.util.List;
+import java.util.concurrent.CompletionStage;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
+@Path("/v2")
+@RegisterRestClient
+public interface BeerGateway {
+
+    @GET
+    @Path("/beers")
+    @Produces(MediaType.APPLICATION_JSON)
+    CompletionStage<List<Beer>> getBeers(@QueryParam("page") int page); //<1>
+    
+}
+----
+copyToClipboard::qext-quarkusrpb-beer-client[]
+
+<1> Retrieves all beers from a specific page.
+
+[#quarkusrpb-configure-props]
+===== Edit the application.properties
+
+Add the following properties to pass:[$PROJECT_HOME]/src/main/resources/application.properties:
+
+[#qext-quarkusrpb-update-props]
+[source,config,subs="+macros,+attributes"]
+----
+com.example.BeerGateway/mp-rest/url=https://api.punkapi.com
+----
+copyToClipboard::qext-quarkusrpb-update-props[]
+
+[#quarkusrpb-beer-reactive-service]
+==== Create Beer Punk API Reactive Service
+
+Let's create the service that uses `BeerGateway` to retrieve beer information by page and reactively emits each of the beer information.
+
+Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `BeerService` with the following contents:
+
+[#qext-quarkusrpb-beer-service]
+[source,java,subs="+macros,+attributes"]
+----
+package com.example;
+
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.enterprise.context.ApplicationScoped;
+
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+
+import io.reactivex.Flowable;
+
+
+@ApplicationScoped
+public class BeerService {
+
+    ExecutorService executor = Executors.newSingleThreadExecutor(); // <1>
+
+    @RestClient
+    BeerGateway beerGateway;
+
+    public Flowable<Beer> beers() {
+        Flowable<List<Beer>> beerStream = Flowable.generate(() -> 1, (page, emitter) -> { // <2>
+
+            beerGateway.getBeers(page).thenAcceptAsync(beers -> {
+                
+                    if (beers.isEmpty()) {
+                        emitter.onComplete(); // <3>
+                    } else {
+                        emitter.onNext(beers); // <4>
+                    }
+                
+                }, executor);
+
+                return page + 1; // <5>
+            });
+
+            return beerStream.flatMap(Flowable::fromIterable); // <6>
+    }
+
+}
+----
+copyToClipboard::qext-quarkusrpb-beer-service[]
+
+<1> This executor is used to serialize calls and not using multi-threading.
+<2> Gets first batch of beers
+<3> Sends an event that the process is completed
+<4> Emits each beer
+<5> Gets beers from next page
+<6> Flatten the list of beers event into event of beers
+
+So far nothing really new, but notice that now instead of reading all the beers, put them in memory and then filter out by any parameter, you are just emitting them individually per page.
+The caller is responsible to manipulate this information as it starts receiving the information and it is not necessary to store all beers in memory but just the ones that matches any condition.
+
+Notice that until a caller subscribes to a stream (`Flowable` in this case), the logic is not executed.
+
+[#quarkusrpb-beer-resource]
+==== Create Beer Resource
+
+The last step is to manipulate the beer _stream_ created in the previous section to filter out by _abv_ and return the result to the caller.
+
+Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `BeerResource` with the following contents:
+
+[#qext-quarkusrpb-beer-resource]
+[source,java,subs="+macros,+attributes"]
+----
+package com.example;
+
+import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.reactivestreams.Publisher;
+
+@Path("/beer")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public class BeerResource {
+
+    @Inject
+    BeerService beerService; // <1>
+
+    @GET
+    public Publisher<Beer> hello() {
+        return beerService.beers() // <2>
+                .filter(b -> b.getAbv() > 7.0); // <3>
+                // <4>
+    }
+}
+----
+copyToClipboard::qext-quarkusrpb-beer-resource[]
+
+<1> Injects `BeerService`
+<2> Gets the beer stream
+<3> For each beer emitted checks that _abv_ is greater than 7
+<4> Automatically subscribes to the stream and get back the result as `List<Beer>`
+
+The big change here is that now instead of having to deal with all beers in memory and then apply some operations, you are just loading into memory a _page_ of beers, then filter them and finally return them to the caller.
+
+Another big advantage is that now the _beer servcie_ is just called if the consumer requests it. 
+If the operation is canceled/aborted before completion, then you also save IO by not executing the operations.
+
+Notice that one of the big advantages of this approach (apart from the memory usage) is that you can apply any reactive operator without modifying the creation of the stream.
+
+[#qext-reactive-beer-run-quarkus-app-dev-mode]
+=== Run Quarkus Application in Development mode
+
+:section-build-run: beer-reactive
+
+include::ROOT:partial$run-dev-mode.adoc[]
+
+[#qext-call-beer-reactive-service]
+==== Invoke Service
+:doc-sec: beer-reactive
+:k8s-cli: k8s
+:path: beer
+:k8s-env: minikube
+:cli-tool: curl
+:address: localhost
+
+The simple `{path}` REST URI can be called via browser using http://localhost:8080/{path} or using CLI like: 
+
+include::ROOT:partial$invoke-service.adoc[tag=call]
+
+The REST call about should return an response like:
+
+[source,json]
+----
+[ 
+   { 
+      "abv":7.2,
+      "description":"An Imperial Pilsner in collaboration with beer writers...." ,
+      "name":"Avery Brown Dredge",
+      "tagline":"Bloggers' Imperial Pilsner."
+   },
+   ...
+]
+----
