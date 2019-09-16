@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 At the end of this chapter you will be able to :
 
 * [x] Use reactive programming in Quarkus.
-* [x] How to use Reactive programming for accessing Rest API services with pagination.
+* [x] How to use Reactive programming for accessing Rest API services with pagination with back pressure.
 
 [#quarkusrpb-demo-overview]
 == Beer Demo Overview 
@@ -85,11 +85,13 @@ public interface BeerGateway {
     @GET
     @Path("/beers")
     @Produces(MediaType.APPLICATION_JSON)
-    CompletionStage<List<Beer>> getBeers(@QueryParam("page") int page);
+    CompletionStage<List<Beer>> getBeers(@QueryParam("page") int page); //<1>
     
 }
 ----
 copyToClipboard::qext-quarkusrpb-beer-client[]
+
+<1> Retrieves all beers from a specific page.
 
 [#quarkusrpb-configure-props]
 ===== Edit the application.properties
@@ -157,12 +159,12 @@ public class BeerService {
 ----
 copyToClipboard::qext-quarkusrpb-beer-service[]
 
-<1> Creates a single thread executor for getting beers by page
+<1> This executor is used to serialize calls and not using multi-threading.
 <2> Gets first batch of beers
 <3> Sends an event that the process is completed
 <4> Emits each beer
 <5> Gets beers from next page
-<6> Transforms the list of beers event into event of beers
+<6> Flatten the list of beers event into event of beers
 
 So far nothing really new, but notice that now instead of reading all the beers, put them in memory and then filter out by any parameter, you are just emitting them individually per page.
 The caller is responsible to manipulate this information as it starts receiving the information and it is not necessary to store all beers in memory but just the ones that matches any condition.
@@ -214,6 +216,9 @@ copyToClipboard::qext-quarkusrpb-beer-resource[]
 <4> Automatically subscribes to the stream and get back the result as `List<Beer>`
 
 The big change here is that now instead of having to deal with all beers in memory and then apply some operations, you are just loading into memory a _page_ of beers, then filter them and finally return them to the caller.
+
+Another big advantage is that now the _beer servcie_ is just called if the consumer requests it. 
+If the operation is canceled/aborted before completion, then you also save IO by not executing the operations.
 
 Notice that one of the big advantages of this approach (apart from the memory usage) is that you can apply any reactive operator without modifying the creation of the stream.
 
