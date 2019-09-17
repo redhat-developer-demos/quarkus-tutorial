@@ -38,7 +38,7 @@ To list the available extensions, run the following command from your project di
 [#qext-mvn-list-extensions]
 [source,bash,subs="+macros,+attributes"]
 ----
-cd my-quarkus-project && \
+cd {quarkus-project-name} && \
 ./mvnw quarkus:list-extensions
 ----
 copyToClipboard::qext-mvn-list-extensions[]
@@ -215,7 +215,7 @@ Add the following properties to pass:[$PROJECT_HOME]/src/main/resources/applicat
 [#quarkusrc-config-fruity-update-props]
 [source,config,subs="+macros,+attributes"]
 ----
-org.alexsotob.quickstart.FruityViceService/mp-rest/url=http://www.fruityvice.com
+com.example.FruityViceService/mp-rest/url=http://www.fruityvice.com
 ----
 copyToClipboard::quarkusrc-config-fruity-update-props[]
 

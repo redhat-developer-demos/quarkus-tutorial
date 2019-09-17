@@ -27,7 +27,7 @@ Native mode::
 [#basics-build-quarkus-native-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-cd pass:[$TUTORIAL_HOME]/work/my-quarkus-project && \
+cd pass:[$TUTORIAL_HOME]/work/{project-dir} && \
 ./mvnw -DskipTests clean package -Pnative
 ----
 copyToClipboard::basics-build-quarkus-native-app[]
@@ -39,7 +39,7 @@ To run the application in native mode
 [#basics-build-run-native-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-./target/my-quarkus-project-1.0-SNAPSHOT-runner
+./target/{project-dir}-1.0-SNAPSHOT-runner
 ----
 copyToClipboard::basics-build-run-native-app[]
 
