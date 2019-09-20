@@ -461,7 +461,7 @@ Do 5 consecutive calls to the service, `{path}` REST URI can be called via brows
 
 include::ROOT:partial$invoke-service.adoc[tag=call]
 
-The output changes form `java.net.UnknownHostException: www.fruityvice.com` (or any other network related exception) in the first calls to `org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getFruitByName` when circuit is opened.
+The output changes form `java.net.UnknownHostException: www.fruityvice.com` (or any other network exception) in the first calls to `org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getFruitByName` when circuit is opened.
 
 The big difference between first exception and second one is that in first one, occurs because the circuit is closed and means that the system is trying to reach the host, in the second one, the circuit is closed and the exception is thrown automatically instead of trying to reach the host.
 

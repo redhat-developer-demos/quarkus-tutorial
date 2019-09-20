@@ -139,7 +139,7 @@ copyToClipboard::quarkusp-minishift-open-db-adminer[]
 docker::
 +
 --
-Open in a browser the next page: http://localhost:8081
+Open in a browser the next page: http://localhost:8081[http://localhost:8081,window=_blank]
 --
 ====
 endif::[]
@@ -180,7 +180,7 @@ Any of the next parameters as authentication credentials are valid.
 
 [#quarkusp-access-db]
 ===== Accessing Database 
-To be able to access MariaDB database locally (`localhost` if you are not using Docker approach), you need to `port-forward` the remote port to local port.
+To be able to access MariaDB database locally (`localhost` if you are not using the Docker approach), you need to `port-forward` the remote port to local port.
 
 Open a new terminal window and run the following command:
 

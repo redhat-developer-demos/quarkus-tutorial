@@ -177,7 +177,7 @@ ifdef::workshop[]
 Prepare your shell environment:
 
 It is not necessary to install GraalVM as the native compilation can be done within a Docker container.
-The only limitation in this case is to have Docker installed and the produced native executable will only be runnable inside a container.
+The only limitation, in this case, is to have Docker installed and the produced native executable will only be runnable inside a container.
 
 [#quarkus-tutorial-shell-env]
 [source,bash,subs="+macros,+attributes"]

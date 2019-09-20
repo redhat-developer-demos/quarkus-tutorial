@@ -62,7 +62,7 @@ copyToClipboard::basics-build-quarkus-native-docker-app[]
 
 NOTE: Native compilation will take few minutes to complete.
 
-To run the application in native mode you need to build a Docker image with native file generated in previous step:
+To run the application in native mode you need to build a Docker image using the native file generated in previous step:
 
 [#basics-build-run-native-docker-app]
 [source,bash,subs="+macros,+attributes"]
