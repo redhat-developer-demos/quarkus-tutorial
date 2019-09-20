@@ -22,7 +22,7 @@ Extensions are set of dependencies that can added to the Quarkus project in need
 
 The Quarkus maven plugin can list all available supported extensions. 
 
-Navigate to the tutorial's `work` folder:
+Navigate to the tutorial's `work` folder or the root folder where you created the project:
 
 [#qext-nav-to-work-folder]
 [source,bash,subs="+macros,+attributes"]
@@ -210,7 +210,7 @@ copyToClipboard::quarkusrc-fruity-vice-service[]
 [#qext-create-fruity-vice-service-config]
 === Configuring FruityVice Service
 
-Add the following properties to pass:[$PROJECT_HOME]/src/main/resources/application.properties:
+Add the following properties to `pass:[$PROJECT_HOME]/src/main/resources/application.properties`:
 
 [#quarkusrc-config-fruity-update-props]
 [source,config,subs="+macros,+attributes"]
@@ -222,12 +222,11 @@ copyToClipboard::quarkusrc-config-fruity-update-props[]
 [#qext-create-fruity-vice-service-resclient]
 === Using the RestClient
 
-Open the following Java class pass:[$PROJECT_HOME]/src/main/java/com/example/FruitResource.java and copy the next content in its body:
+Open the following Java class `pass:[$PROJECT_HOME]/src/main/java/com/example/FruitResource.java` and copy the next content in its body:
 
 [#quarkusrc-fruity-vice-service-inject]
 [source,java,subs="+macros"]
 ----
-@Inject
 @RestClient
 FruityViceService fruityViceService;
 
@@ -298,7 +297,7 @@ copyToClipboard::qext-mvn-add-fault-tolernace-extension[]
 
 Let's add the retry policy in `FruityViceService`.
 
-Add the following annotation to pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruityViceService.java:
+Add the `org.eclipse.microprofile.faulttolerance.Retry;` annotation to `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruityViceService.java`:
 
 [#quarkusft-retry-fruit-vice-service]
 [source,config,subs="+macros"]
@@ -359,7 +358,7 @@ Now after waiting 6 seconds (3 retries x 2 seconds), the next exception is throw
 
 Let's add a fallback policy in case of an error in `FruityViceService`.
 
-Add the following annotation to pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruityViceService.java:
+Add the `org.eclipse.microprofile.faulttolerance.Fallback` annotation to `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruityViceService.java`:
 
 [#quarkusft-fallback-fruit-vice-service]
 [source,config,subs="+macros"]
@@ -417,7 +416,7 @@ Now after waiting for 6 seconds (3 retries x 2 seconds), an empty object is sent
 
 Let's add the circuit breaker policy in `FruityViceService`.
 
-Remove previous annotations of fallback and retry policies and add the following annotation to pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruityViceService.java:
+Remove previous annotations of fallback and retry policies and add the following annotation to `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruityViceService.java`:
 
 [#quarkusft-circuit-breaker-fruit-vice-service]
 [source,config,subs="+macros"]
@@ -462,7 +461,7 @@ Do 5 consecutive calls to the service, `{path}` REST URI can be called via brows
 
 include::ROOT:partial$invoke-service.adoc[tag=call]
 
-The output changes form `java.net.UnknownHostException: www.fruityvice.com` in the first calls to `org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getFruitByName` when circuit is opened.
+The output changes form `java.net.UnknownHostException: www.fruityvice.com` (or any other network related exception) in the first calls to `org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getFruitByName` when circuit is opened.
 
 The big difference between first exception and second one is that in first one, occurs because the circuit is closed and means that the system is trying to reach the host, in the second one, the circuit is closed and the exception is thrown automatically instead of trying to reach the host.
 
@@ -573,7 +572,7 @@ Since we are using Kubernetes extension, configured at xref:03-containers-kubern
 [#quarkusk8s-generated-kubernetes-resource-health-check]
 [source,bash,subs="+macros,+attributes"]
 ----
-cat pass:[$TUTORIAL_HOME]/target/wiring-classes/META-INF/kubernetes/kubernetes.json
+cat target/wiring-classes/META-INF/kubernetes/kubernetes.yml
 ----
 copyToClipboard::quarkusk8s-generated-kubernetes-resource-health-check[]
 
