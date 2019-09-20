@@ -389,7 +389,7 @@
 <p>To get started with we will first have the database deployed:</p>
 </div>
 <div class="sect3">
-<h4 id="quarkus-fruit-app-db"><a class="anchor" href="#quarkus-fruit-app-db"></a>Deploy Mariadb Stack</h4>
+<h4 id="quarkus-fruit-app-db"><a class="anchor" href="#quarkus-fruit-app-db"></a>Deploy MariaDB Stack</h4>
 <div class="tabset is-loading">
 <div class="ulist tabs">
 <ul>
@@ -398,6 +398,9 @@
 </li>
 <li>
 <p><a id="tabset1_oc"></a>oc</p>
+</li>
+<li>
+<p><a id="tabset1_docker"></a>docker</p>
 </li>
 </ul>
 </div>
@@ -409,19 +412,8 @@
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-deploy-db"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="tab-pane" aria-labelledby="tabset1_oc">
-<div id="quarkusp-oc-deploy-db" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -n quarkustutorial -f $TUTORIAL_HOME/kubernetes-apps/mariadb.yaml</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-oc-deploy-db"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-</div>
 <div class="paragraph">
-<p>A successful mariadb deployment will have the following pods and services int he <code>quarkustutorial</code></p>
+<p>A successful MariaDB deployment will have the following pods and services in the <code>quarkustutorial</code> if it is running in a Kubernetes/OpenShift cluster.</p>
 </div>
 <div class="listingblock">
 <div class="title">pods</div>
@@ -451,6 +443,65 @@ The actual pod name and NodePort will be different on your environment
 </tr>
 </table>
 </div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_oc">
+<div id="quarkusp-oc-deploy-db" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -n quarkustutorial -f $TUTORIAL_HOME/kubernetes-apps/mariadb.yaml</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-oc-deploy-db"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>A successful MariaDB deployment will have the following pods and services in the <code>quarkustutorial</code> if it is running in a Kubernetes/OpenShift cluster.</p>
+</div>
+<div class="listingblock">
+<div class="title">pods</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">NAME                          READY   STATUS    RESTARTS   AGE
+db-adminer-678857cdb9-hw2km   1/1     Running   0          2m3s
+mariadb-58fb5df86c-wfbsj      1/1     Running   0          2m3s</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">services</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">NAME         TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+db-adminer   NodePort   10.101.171.237   &lt;none&gt;        9090:30397/TCP   2m21s
+mariadb      NodePort   10.105.40.135    &lt;none&gt;        3306:30125/TCP   2m21s</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The actual pod name and NodePort will be different on your environment
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_docker">
+<div id="quarkusp-docker-deploy-db" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -ti --rm --name mariadb -e MYSQL_ROOT_PASSWORD=superS3cret! -e MYSQL_USER=demo -e MYSQL_DATABASE=demodb -e MYSQL_PASSWORD=password -p 3306:3306  mariadb:10.4.4</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-docker-deploy-db"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>Open a new terminal window:</p>
+</div>
+<div id="quarkusp-docker-deploy-adminer" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run  --link mariadb -p 8081:8080 adminer:4.7.3-standalone</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-docker-deploy-adminer"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+</div>
+</div>
 <div class="paragraph">
 <p>To access to DB adminer:</p>
 </div>
@@ -462,6 +513,9 @@ The actual pod name and NodePort will be different on your environment
 </li>
 <li>
 <p><a id="tabset2_minishift"></a>minishift</p>
+</li>
+<li>
+<p><a id="tabset2_docker"></a>docker</p>
 </li>
 </ul>
 </div>
@@ -481,6 +535,11 @@ The actual pod name and NodePort will be different on your environment
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-minishift-open-db-adminer"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+<div class="tab-pane" aria-labelledby="tabset2_docker">
+<div class="paragraph">
+<p>Open in a browser the next page: <a href="http://localhost:8081" target="_blank" rel="noopener">http://localhost:8081</a></p>
+</div>
 </div>
 </div>
 </div>
@@ -518,7 +577,7 @@ Any of the next parameters as authentication credentials are valid.</p>
 <div class="sect4">
 <h5 id="quarkusp-access-db"><a class="anchor" href="#quarkusp-access-db"></a>Accessing Database</h5>
 <div class="paragraph">
-<p>To be able to access mariadb database locally (<code>localhost</code>), you need to <code>port-forward</code> the remote port to local port.</p>
+<p>To be able to access MariaDB database locally (<code>localhost</code> if you are not using the Docker approach), you need to <code>port-forward</code> the remote port to local port.</p>
 </div>
 <div class="paragraph">
 <p>Open a new terminal window and run the following command:</p>
@@ -584,7 +643,7 @@ For the easier reference, we shall call the <code>fruits-app</code> project fold
 <div class="sect4">
 <h5 id="quarkusp-configure-props"><a class="anchor" href="#quarkusp-configure-props"></a>Edit the application.properties</h5>
 <div class="paragraph">
-<p>Add the following properties to $PROJECT_HOME/src/main/resources/application.properties:</p>
+<p>Add the following properties to <code>$PROJECT_HOME/src/main/resources/application.properties</code>:</p>
 </div>
 <div id="quarkuspdb-update-props" class="listingblock">
 <div class="content">
@@ -1133,7 +1192,7 @@ You can stop the <code>port-forward</code> and Quarkus application running in de
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#persistence-build-quarkus-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
-<p>After successful maven build, run the following command to build te container:</p>
+<p>After successful maven build, run the following command to build the container:</p>
 </div>
 <div id="persistence-build-quarkus-jvm-app-container" class="listingblock">
 <div class="content">
@@ -1170,7 +1229,7 @@ Native compilation will take few minutes to complete.
 </table>
 </div>
 <div class="paragraph">
-<p>After successful maven build, run the following command to build te container:</p>
+<p>After successful maven build, run the following command to build the container:</p>
 </div>
 <div id="persistence-build-quarkus-native-app-container" class="listingblock">
 <div class="content">
@@ -1243,7 +1302,7 @@ quarkus.application.name=fruits-app</code></pre>
 </div>
 <div id="quakrusk8s-generated-kubernetes-resource" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat $TUTORIAL_HOME/target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quakrusk8s-generated-kubernetes-resource"><i class="fa fa-clipboard"></i></button><br/>

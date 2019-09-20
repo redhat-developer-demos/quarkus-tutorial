@@ -529,7 +529,7 @@ export QUARKUS_VERSION=0.21.2</code></pre>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-All further sections of this tutorial assumes the application name to be <code>fruit-app</code>.
+All further sections of this tutorial assumes the application name to be <code>fruits-app</code>.
 </td>
 </tr>
 </table>
@@ -547,6 +547,9 @@ All further sections of this tutorial assumes the application name to be <code>f
 </li>
 <li>
 <p><a id="tabset2_native-mode"></a>Native mode</p>
+</li>
+<li>
+<p><a id="tabset2_docker-native-mode"></a>Docker-Native mode</p>
 </li>
 </ul>
 </div>
@@ -613,6 +616,37 @@ Native compilation will take few minutes to complete.
 </table>
 </div>
 </div>
+<div class="tab-pane" aria-labelledby="tabset2_docker-native-mode">
+<div id="basics-build-quarkus-native-docker-app" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work/fruits-app &amp;&amp; \
+./mvnw package -DskipTests -Pnative -Dnative-image.docker-build=true</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-quarkus-native-docker-app"><i class="fa fa-clipboard"></i></button><br/>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Native compilation will take few minutes to complete.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To run the application in native mode you need to build a Docker image using the native file generated in previous step:</p>
+</div>
+<div id="basics-build-run-native-docker-app" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.jvm -t example/fruits-app:1.0-SNAPSHOT . &amp;&amp; \
+docker run -it --rm -p 8080:8080 example/fruit-app:1.0-SNAPSHOT</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-run-native-docker-app"><i class="fa fa-clipboard"></i></button><br/>
+</div>
 </div>
 </div>
 <div class="paragraph">
@@ -624,7 +658,10 @@ Native compilation will take few minutes to complete.
 <h2 id="basics-run-quarkus-app-dev-mode"><a class="anchor" href="#basics-run-quarkus-app-dev-mode"></a>Run Quarkus Application in Development mode</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Stop the Quarkus applicaiton that might be running in <code>jvm</code> or <code>native</code> mode.</p>
+<p>Stop the Quarkus application that might be running in <code>jvm</code> or <code>native</code> mode.</p>
+</div>
+<div class="paragraph">
+<p><em>Development</em> mode enables hot deployment with background compilation, which means that when you modify your Java files and/or your resource files and refresh your browser, these changes will automatically take effect.</p>
 </div>
 <div class="paragraph">
 <p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
@@ -673,7 +710,7 @@ Only if running in Development mode
 <h2 id="basics-call-svc"><a class="anchor" href="#basics-call-svc"></a>Invoke Service</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The simple <code>hello</code> REST URI can be called from the browser using <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a> or using cli like:</p>
+<p>The simple <code>hello</code> REST URI can be called from the browser using <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a> or using cli in a new terminal window like:</p>
 </div>
 <div id="basics-k8s-svc-call" class="listingblock">
 <div class="content">
@@ -687,7 +724,7 @@ Only if running in Development mode
 <h2 id="basics-testing"><a class="anchor" href="#basics-testing"></a>Testing Fruit Resource</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The scaffolding process also creates a test case for the <code>hello</code> endpoint.</p>
+<p>The scaffolding process also creates a test case for the <code>fruit</code> endpoint.</p>
 </div>
 <div class="paragraph">
 <p>Open the next class <code>$PROJECT_HOME/src/test/java/com/example/FruitResourceTest.java</code> to see how a test looks like.</p>
