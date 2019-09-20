@@ -11,7 +11,7 @@ You can use any Java IDE for this tutorial but if you didn't try it before, we r
 [TIP]
 ====
 If you are using vscode then install vscode https://aka.ms/vscode-remote/download/extension[Remote Development Extension pack],
-which allows you to run this entire tutorial within contianer that will have all tools configured.
+which allows you to run this entire tutorial within a contianer that will have all tools configured.
 ====
 
 === CLI Tools
@@ -174,7 +174,10 @@ endif::[]
 
 ifdef::workshop[]
 
-Prepare your shell environment
+Prepare your shell environment:
+
+It is not necessary to install GraalVM as the native compilation can be done within a Docker container.
+The only limitation, in this case, is to have Docker installed and the produced native executable will only be runnable inside a container.
 
 [#quarkus-tutorial-shell-env]
 [source,bash,subs="+macros,+attributes"]
@@ -200,6 +203,8 @@ You can also access the Openshift Console via url {openshift-console-url}
 endif::[]
 
 endif::[]
+
+IMPORTANT: If you are in `MAC OSX`, the variable should point to `Home` sub-directory: `export GRAALVM_HOME=$HOME/Development/graalvm/Contents/Home/`
 
 [#setup-work-folder]
 == Work folder (Optional)

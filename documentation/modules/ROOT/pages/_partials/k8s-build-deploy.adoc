@@ -41,7 +41,7 @@ You can inspect the generated file by accessing next file:
 [#quakrusk8s-generated-kubernetes-resource]
 [source,bash,subs="+macros,+attributes"]
 ----
-cat pass:[$TUTORIAL_HOME]/target/wiring-classes/META-INF/kubernetes/kubernetes.yml
+cat target/wiring-classes/META-INF/kubernetes/kubernetes.yml
 ----
 copyToClipboard::quakrusk8s-generated-kubernetes-resource[]
 

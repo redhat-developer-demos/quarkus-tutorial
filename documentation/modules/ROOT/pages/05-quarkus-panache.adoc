@@ -22,7 +22,7 @@ For the demonstration we will use https://mariadb.org/[MariaDB] as a backing dat
 To get started with we will first have the database deployed:
 
 [#quarkus-fruit-app-db]
-==== Deploy Mariadb Stack
+==== Deploy MariaDB Stack
 
 ifndef::workshop[]
 [tabs]
@@ -36,23 +36,8 @@ kubectl::
 kubectl apply -n {tutorial-namespace} -f pass:[$TUTORIAL_HOME]/kubernetes-apps/mariadb.yaml
 ----
 copyToClipboard::quarkusp-deploy-db[]
---
-oc::
-+
---
-endif::[]
-[#quarkusp-oc-deploy-db]
-[source,bash,subs="+macros,+attributes"]
-----
-oc apply -n {tutorial-namespace} -f pass:[$TUTORIAL_HOME]/kubernetes-apps/mariadb.yaml
-----
-copyToClipboard::quarkusp-oc-deploy-db[]
-ifndef::workshop[]
---
-====
-endif::[]
 
-A successful mariadb deployment will have the following pods and services int he `{tutorial-namespace}`
+A successful MariaDB deployment will have the following pods and services in the `{tutorial-namespace}` if it is running in a Kubernetes/OpenShift cluster.
 
 .pods
 [source,bash]
@@ -71,6 +56,59 @@ mariadb      NodePort   10.105.40.135    <none>        3306:30125/TCP   2m21s
 ----
 
 NOTE: The actual pod name and NodePort will be different on your environment
+--
+oc::
++
+--
+endif::[]
+[#quarkusp-oc-deploy-db]
+[source,bash,subs="+macros,+attributes"]
+----
+oc apply -n {tutorial-namespace} -f pass:[$TUTORIAL_HOME]/kubernetes-apps/mariadb.yaml
+----
+copyToClipboard::quarkusp-oc-deploy-db[]
+ifndef::workshop[]
+
+A successful MariaDB deployment will have the following pods and services in the `{tutorial-namespace}` if it is running in a Kubernetes/OpenShift cluster.
+
+.pods
+[source,bash]
+----
+NAME                          READY   STATUS    RESTARTS   AGE
+db-adminer-678857cdb9-hw2km   1/1     Running   0          2m3s
+mariadb-58fb5df86c-wfbsj      1/1     Running   0          2m3s
+----
+
+.services
+[source,bash]
+----
+NAME         TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+db-adminer   NodePort   10.101.171.237   <none>        9090:30397/TCP   2m21s
+mariadb      NodePort   10.105.40.135    <none>        3306:30125/TCP   2m21s
+----
+
+NOTE: The actual pod name and NodePort will be different on your environment
+--
+docker::
++
+--
+[#quarkusp-docker-deploy-db]
+[source,bash,subs="+macros,+attributes"]
+----
+docker run -ti --rm --name mariadb -e MYSQL_ROOT_PASSWORD=superS3cret! -e MYSQL_USER=demo -e MYSQL_DATABASE=demodb -e MYSQL_PASSWORD=password -p 3306:3306  mariadb:10.4.4
+----
+copyToClipboard::quarkusp-docker-deploy-db[]
+Open a new terminal window:
+
+[#quarkusp-docker-deploy-adminer]
+[source,bash,subs="+macros,+attributes"]
+----
+docker run  --link mariadb -p 8081:8080 adminer:4.7.3-standalone
+----
+copyToClipboard::quarkusp-docker-deploy-adminer[]
+--
+====
+endif::[]
 
 ifndef::workshop[]
 
@@ -97,6 +135,11 @@ minishift::
 minishift openshift service db-adminer -n {tutorial-namespace}
 ----
 copyToClipboard::quarkusp-minishift-open-db-adminer[]
+--
+docker::
++
+--
+Open in a browser the next page: http://localhost:8081[http://localhost:8081,window=_blank]
 --
 ====
 endif::[]
@@ -137,7 +180,7 @@ Any of the next parameters as authentication credentials are valid.
 
 [#quarkusp-access-db]
 ===== Accessing Database 
-To be able to access mariadb database locally (`localhost`), you need to `port-forward` the remote port to local port.
+To be able to access MariaDB database locally (`localhost` if you are not using the Docker approach), you need to `port-forward` the remote port to local port.
 
 Open a new terminal window and run the following command:
 
@@ -180,7 +223,7 @@ copyToClipboard::qext-mvn-add-persistence-extensions[]
 [#quarkusp-configure-props]
 ===== Edit the application.properties
 
-Add the following properties to pass:[$PROJECT_HOME]/src/main/resources/application.properties:
+Add the following properties to `pass:[$PROJECT_HOME]/src/main/resources/application.properties`:
 
 [#quarkuspdb-update-props]
 [source,config,subs="+macros,+attributes"]
