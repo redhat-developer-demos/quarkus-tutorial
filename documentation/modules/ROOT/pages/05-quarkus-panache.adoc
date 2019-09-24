@@ -661,7 +661,7 @@ include::ROOT:partial$invoke-service.adoc[tag=test]
 [#quarkusp-cloud-dev]
 === Deploy on Kubernetes
 
-We need to build the `fruit-app` application and container before deploying them on on kubernetes.
+We need to build the `{quarkus-project-name}` application and container before deploying them on kubernetes.
 
 NOTE: You can stop the `port-forward` and Quarkus application running in development mode 
 
