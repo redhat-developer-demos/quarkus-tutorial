@@ -501,7 +501,7 @@
 </div>
 <div id="basics-build-quarkus-jvm-app-container" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.jvm -t example/fruit-app:1.0-SNAPSHOT .</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.jvm -t example/fruits-app:1.0-SNAPSHOT .</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-quarkus-jvm-app-container"><i class="fa fa-clipboard"></i></button><br/>
@@ -538,7 +538,7 @@ Native compilation will take few minutes to complete.
 </div>
 <div id="basics-build-quarkus-native-app-container" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/fruit-app:1.0-SNAPSHOT .</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/fruits-app:1.0-SNAPSHOT .</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-quarkus-native-app-container"><i class="fa fa-clipboard"></i></button><br/>
@@ -562,7 +562,7 @@ For sake of simplicity the container name in both native and jvm mode are named 
 </div>
 <div id="container-run-jvm-app" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -it --rm -p 8080:8080 example/fruit-app:1.0-SNAPSHOT</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -it --rm -p 8080:8080 example/fruits-app:1.0-SNAPSHOT</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#build-run-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
@@ -614,7 +614,7 @@ For sake of simplicity the container name in both native and jvm mode are named 
 <div id="quarkusk8s-update-props" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.kubernetes.group=example
-quarkus.application.name=fruit-app</code></pre>
+quarkus.application.name=fruits-app</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusk8s-update-props"><i class="fa fa-clipboard"></i></button><br/>
@@ -694,13 +694,13 @@ As generated resources creates a <code>ClusterIP</code> service, you need to pat
 </div>
 <div id="container-k8s-run-expose-svc-nodeport" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl patch svc fruit-app --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"}]'</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl patch svc fruits-app --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"}]'</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-k8s-run-expose-svc-nodeport"><i class="fa fa-clipboard"></i></button><br/>
 <div id="container-run-deploy-k8s-service" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(minikube service -n quarkustutorial fruit-app --url)</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(minikube service -n quarkustutorial fruits-app --url)</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-k8s-service"><i class="fa fa-clipboard"></i></button><br/>
@@ -711,7 +711,7 @@ As generated resources creates a <code>ClusterIP</code> service, you need to pat
 </div>
 <div id="container-oc-run-expose-svc-route" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc expose service fruit-app</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc expose service fruits-app</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-expose-svc-route"><i class="fa fa-clipboard"></i></button><br/>
@@ -720,7 +720,7 @@ As generated resources creates a <code>ClusterIP</code> service, you need to pat
 </div>
 <div id="container-oc-run-get-route" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(oc get routes fruit-app -o jsonpath='{.spec.host}')</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(oc get routes fruits-app -o jsonpath='{.spec.host}')</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-get-route"><i class="fa fa-clipboard"></i></button><br/>
