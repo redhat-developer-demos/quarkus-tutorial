@@ -103,7 +103,7 @@ Open a new terminal window:
 [#quarkusp-docker-deploy-adminer]
 [source,bash,subs="+macros,+attributes"]
 ----
-docker run  --link mariadb -p 8081:8080 adminer:4.7.3-standalone
+docker run  --link mariadb -p 8082:8080 adminer:4.7.3-standalone
 ----
 copyToClipboard::quarkusp-docker-deploy-adminer[]
 --
@@ -139,7 +139,7 @@ copyToClipboard::quarkusp-minishift-open-db-adminer[]
 docker::
 +
 --
-Open in a browser the next page: http://localhost:8081[http://localhost:8081,window=_blank]
+Open in a browser the next page: http://localhost:8081[http://localhost:8082,window=_blank]
 --
 ====
 endif::[]

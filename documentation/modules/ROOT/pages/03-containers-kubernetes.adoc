@@ -1,7 +1,7 @@
 =  Cloud Native Deployment
 
 include::_attributes.adoc[]
-:quarkus-project-name: fruit-app
+:quarkus-project-name: fruits-app
 :svc-path: fruit
 :experimental:
 
