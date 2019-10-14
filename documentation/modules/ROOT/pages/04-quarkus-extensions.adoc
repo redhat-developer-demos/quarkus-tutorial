@@ -672,7 +672,6 @@ The REST call about should return an response like:
 
 Then you can stop the container by typing kbd:[Ctrl+C].
 
-
 ifndef::workshop[]
 
 [#qext-health-checks-kubernetes]
@@ -681,10 +680,8 @@ ifndef::workshop[]
 Kubernetes extension detects that Health Check extension is registered and registers them in generated Kubernetes resource.
 
 :doc-sec: k8s-health-check
-
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-prep]
 
-<<<<<<< HEAD
 :section-k8s: health-check
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-delete]
 endif::workshop[]
@@ -880,8 +877,12 @@ include::ROOT:partial$invoke-service.adoc[tag=callToken]
 
 And the output now is different: `Access forbidden: role not allowed`.
 
+<<<<<<< HEAD
 This is the result because the provided token does not contain `Subscriber2` in the `groups` claim.
 =======
 =======
 endif::workshop[]
 >>>>>>> Fix compile problem (#47)
+=======
+This is the result because the provided token does not contain `Subscriber2` in the `groups` claim.
+>>>>>>> Adds JWT section
