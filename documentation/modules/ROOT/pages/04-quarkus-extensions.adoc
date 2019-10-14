@@ -12,6 +12,7 @@ At the end of this chapter you will be able to :
 * [x] How to make calls to other services with Rest Client
 * [x] How to add fault tolerant behaviour in your service
 * [x] How to add health checks
+* [x] How to secure your endpoints with JWT
 
 [#qext-intro]
 == What are extensions ?
@@ -767,3 +768,196 @@ include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-invoke-svc]
 
 :section-k8s: health-check
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-delete]
+
+[#qext-jwt]
+== Securing endpoints with JWT
+
+In a microservices architecture, and generally speaking, any kind of application, might need to be protected so only certain users can access to the defined endpoint.
+Quarkus provides an integration to the https://github.com/eclipse/microprofile-jwt-auth[MicroProfile JWT RBAC] spec.
+
+So let's see how you can start using JWT for role based access control (RBAC) of endpoints.
+
+[#qext-add-jwt-extensions]
+=== Adding JWT RBAC extension
+
+:quarkus-jwt-ext-name: quarkus-smallrye-jwt
+
+To add JWT RBAC extension (`{quarkus-jwt-ext-name}`) to the Quarkus application, run the following command from `{quarkus-project-name}` project directory:
+
+[#qext-mvn-add-jwt-extension]
+[source,bash,subs="+macros,+attributes"]
+----
+./mvnw quarkus:add-extension -Dextension="{quarkus-jwt-ext-name}"
+----
+copyToClipboard::qext-mvn-add-jwt-extension[]
+
+[#qext-configure-jwt-parameters]
+=== Configuring JWT parameters
+
+Add the following properties to `pass:[$PROJECT_HOME]/src/main/resources/application.properties`:
+
+[#quarkussec-config-jwt]
+[source,config,subs="+macros,+attributes"]
+----
+mp.jwt.verify.publickey.location=https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/0c6d1ed65d38e4dd48992f7410a29aa4e5a35131/quarkus.jwt.pub.jwk.json
+# 1
+mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac
+# 2
+----
+copyToClipboard::quarkussec-config-jwt[]
+<1> Sets the location of publick key to verify the token
+<2> Issuer of the token
+
+We are also providing a valid token that can be verified by the configured public key:
+
+[source, javascript]
+----
+{
+  "kid": "/privateKey.pem",
+  "typ": "JWT",
+  "alg": "RS256"
+},
+{
+  "sub": "jdoe-using-jwt-rbac",
+  "aud": "using-jwt-rbac",
+  "upn": "jdoe@quarkus.io",
+  "birthdate": "2001-07-13",
+  "auth_time": 1570094171,
+  "iss": "https://quarkus.io/using-jwt-rbac", // <1>
+  "roleMappings": {
+    "group2": "Group2MappedRole",
+    "group1": "Group1MappedRole"
+  },
+  "groups": [ // <2>
+    "Echoer",
+    "Tester",
+    "Subscriber",
+    "group2"
+  ],
+  "preferred_username": "jdoe",
+  "exp": 2200814171,
+  "iat": 1570094171,
+  "jti": "a-123"
+}
+----
+<1> The issuer you set in `application.properties`
+<2> `groups` field is used by `MicroProfile JWT RBAC` to get the access groups (or roles) that the owner of the token has
+
+[#qext-jwt-inject-claim]
+=== Inject claims into an Object
+
+You can inject any defined claim into an object by using `@Claim` annotation:
+
+Open `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruitResource.java` and inject username claim:
+
+[#quarkussec-jwt-claim-username]
+[source,config,subs="+macros"]
+----
+@Claim(standard = Claims.preferred_username)
+String username;
+
+@GET
+@Path("/claim")
+public String getClaim() {
+    return username;
+}
+----
+copyToClipboard::quarkussec-jwt-claim-username[]
+
+[#qext-jwt-claim-quarkus-app-dev-mode]
+== Run Quarkus Application in Development mode
+
+:section-build-run: jwt-claim
+
+include::ROOT:partial$run-dev-mode.adoc[]
+
+[#qext-call-jwt-claim]
+=== Invoke Service
+:doc-sec: jwt-claim
+:k8s-cli: k8s
+:path: fruit/claim
+:k8s-env: minikube
+:cli-tool: curl
+:address: localhost
+:token-url: https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/5f8c5b7a9c11ed455f4910ed2032d79612b5e6f6/quarkus.jwt.token
+:token-value: $(curl {token-url} -s)
+
+The simple `{path}` REST URI can be called via browser using http://localhost:8080/{path} or using CLI like: 
+
+include::ROOT:partial$invoke-service.adoc[tag=callToken]
+
+And you'll see the `preferred_username` field for the given token (`jdoe`).
+
+MircoProfile JWT RBAC spec is providing out-of-the-box the validation of the given token. 
+These validations include for example that the token has not been modified, has not expired or the issuer is the expected one.
+
+To validate this just invoke again the service but changing the token:
+
+:token-value: XXXX
+
+include::ROOT:partial$invoke-service.adoc[tag=callToken]
+
+And now the invocation returns and HTTP code `401 Unauthorized` because the token is invalid.
+
+[#qext-jwt-inject-rbac]
+=== Adds RBAC to the endpoint
+
+So far, you've seen how to get claims from the provided JWT token, but anyone could access that endpoint, let's protected it with a role.
+For this case you need to use a role that is defined in JWT token into `groups` claim (ie `Subscriber`).
+
+Open `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruitResource.java` and annotate the method with `javax.annotation.security.RolesAllowed`:
+
+[#quarkussec-jwt-rbac]
+[source,config,subs="+macros"]
+----
+@GET
+@Path("/claim")
+@RolesAllowed("Subscriber")
+public String getClaim() {
+    return username;
+}
+----
+copyToClipboard::quarkussec-jwt-rbac[]
+
+[#qext-call-jwt-rbac]
+=== Invoke Service
+:doc-sec: rjwt-rbac
+:k8s-cli: k8s
+:path: fruit/claim
+:k8s-env: minikube
+:cli-tool: curl
+:address: localhost
+:token-url: https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/5f8c5b7a9c11ed455f4910ed2032d79612b5e6f6/quarkus.jwt.token
+:token-value: $(curl {token-url} -s)
+
+The simple `{path}` REST URI can be called via browser using http://localhost:8080/{path} or using CLI like: 
+
+include::ROOT:partial$invoke-service.adoc[tag=callToken]
+
+And you'll see the `preferred_username` field for given token (`jdoe`).
+
+But the big difference now, and it is that you see the result only because the token contains in `groups` claim the `Subscriber` role.
+
+Open `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruitResource.java` and change the  `RolesAllowed` value to `Subscriber2`:
+
+[#quarkussec-jwt-rbac-invalid]
+[source,config,subs="+macros"]
+----
+@GET
+@Path("/claim")
+@RolesAllowed("Subscriber2")
+public String getClaim() {
+    return username;
+}
+----
+copyToClipboard::quarkussec-jwt-rbac-invalid[]
+
+And then do the request again:
+
+The simple `{path}` REST URI can be called via browser using http://localhost:8080/{path} or using CLI like: 
+
+include::ROOT:partial$invoke-service.adoc[tag=callToken]
+
+And the output now is different: `Access forbidden: role not allowed`.
+
+This is the result because the provided token does not contain `Subscriber2` in the `groups` claim.
