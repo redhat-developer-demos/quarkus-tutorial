@@ -508,23 +508,12 @@ After successful execution of the above command, you will have the following dep
 ...
 ----
 
-[#qext-rebuild-container-images]
-=== Rebuild container images
+[#qext-health-check-default-run-quarkus-app-dev-mode]
+=== Run Quarkus Application in Development mode
 
-Let us rebuild the application after adding the health check extensions
+:section-build-run: health-check-default
 
-:section-k8s: health-check
-include::ROOT:partial$build-containers.adoc[tag=build]
-
-[#qext-check-health-endpoint]
-=== Checking health check endpoint
-
-Lets start the newly built container:
-
-:doc-sec: k8s-run-health-check
-include::ROOT:partial$build-containers.adoc[tag=run]
-
-After adding `smallrye-health` extension we should have REST endpoint called `/health` available. Lets invoke the `/health` endpoint to check the health of the Quarkus application.
+include::ROOT:partial$run-dev-mode.adoc[]
 
 [#qext-call-health-ep]
 === Invoke Service
@@ -533,9 +522,9 @@ After adding `smallrye-health` extension we should have REST endpoint called `/h
 :path: health
 :k8s-env: minikube
 :cli-tool: curl
-:address: $(minikube ip)
+:address: localhost
 
-The simple `{path}` REST URI can be called via browser using `http://$(minikube ip):8080/{path}` or using CLI like: 
+The simple `{path}` REST URI can be called via browser using `http://localhost:8080/{path}` or using CLI like: 
 
 include::ROOT:partial$invoke-service.adoc[tag=call]
 
@@ -549,42 +538,7 @@ The REST call about should return an response like:
 }
 ----
 
-Then you can stop the container by typing kbd:[Ctrl+C].
-
-[#qext-add-probes-to-k8s]
-=== Add probes to Kubernetes Quarkus Application
-
-We need to push the rebuilt containers to the container registry.
-
-include::ROOT:partial$build-containers.adoc[tag=tag-push]
-
-[#qext-health-check-k8s-delete-resources]
-=== Delete Kubernetes Resources
-
-:section-k8s: probes
-include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-delete]
-
-[#qext-health-check-k8s-apply-resources]
-=== Apply Kubernetes Resources
-
-Since we are using Kubernetes extension, configured at xref:03-containers-kubernetes.adoc[Cloud Native Deployment] section, the kubernetes resource has been updated with both probes.
-
-[#quarkusk8s-generated-kubernetes-resource-health-check]
-[source,bash,subs="+macros,+attributes"]
-----
-cat target/wiring-classes/META-INF/kubernetes/kubernetes.yml
-----
-copyToClipboard::quarkusk8s-generated-kubernetes-resource-health-check[]
-
-:doc-sec: k8s-delpoy-health-check
-include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-deploy]
-
-[#qext-health-check-invoke-k8s-svc]
-=== Invoke Kubernetes Service
-
-:doc-sec: k8s-invoke-health-check
-include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-invoke-svc]
-
+Then you can stop the App by typing kbd:[Ctrl+C].
 
 [#qext-custom-health-check]
 === Customizing Health Checks
@@ -636,23 +590,12 @@ public class FruitHealthCheck {
 ----
 copyToClipboard::quarkusp-fruit-checks[]
 
-[#qext-rebuild-container-images-custom-check]
-=== Rebuild container images
+[#qext-health-check-custom-run-quarkus-app-dev-mode]
+=== Run Quarkus Application in Development mode
 
-Let us rebuild the application after adding the health check extensions
+:section-build-run: health-check-custom
 
-:section-k8s: custom-check
-include::ROOT:partial$build-containers.adoc[tag=build]
-
-[#qext-check-custom-health-endpoint]
-=== Checking health check endpoint
-
-Lets start the newly built container:
-
-:doc-sec: k8s-run-custom-health-check
-include::ROOT:partial$build-containers.adoc[tag=run]
-
-After adding `smallrye-health` extension we should have REST endpoint called `/health` available. Lets invoke the `/health` endpoint to check the health of the Quarkus application and you'll see both health checks.
+include::ROOT:partial$run-dev-mode.adoc[]
 
 [#qext-call-health-custom]
 === Invoke Service
@@ -661,9 +604,9 @@ After adding `smallrye-health` extension we should have REST endpoint called `/h
 :path: health
 :k8s-env: minikube
 :cli-tool: curl
-:address: $(minikube ip)
+:address: localhost
 
-The simple `{path}` REST URI can be called via browser using `http://$(minikube ip)/{path}` or using CLI like: 
+The simple `{path}` REST URI can be called via browser using `http://localhost:8080/{path}` or using CLI like: 
 
 include::ROOT:partial$invoke-service.adoc[tag=call]
 
@@ -728,42 +671,16 @@ The REST call about should return an response like:
 
 Then you can stop the container by typing kbd:[Ctrl+C].
 
-[#qext-add-custom-probes-to-k8s]
-=== Add probes to Kubernetes Quarkus Application
 
-We need to push the rebuilt containers to the container registry.
+ifndef::workshop[]
 
-include::ROOT:partial$build-containers.adoc[tag=tag-push]
+[#qext-health-checks-kubernetes]
+=== Kubernetes Extension and Health Checks
 
-[#qext-custom-health-check-k8s-delete-resources]
-=== Delete Kubernetes Resources
+Kubernetes extension detects that Health Check extension is registered and registers them in generated Kubernetes resource.
 
-:section-k8s: custom-probes
-include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-delete]
+:doc-sec: k8s-health-check
 
-[#qext-custom-health-check-k8s-apply-resources]
-=== Apply Kubernetes Resources
+include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-prep]
 
-Since we are using Kubernetes extension, configured at xref:03-containers-kubernetes.adoc[Cloud Native Deployment] section, the kubernetes resource has been updated with both probes.
-
-[#quarkusk8s-generated-kubernetes-resource-custom-health-check]
-[source,bash,subs="+macros,+attributes"]
-----
-cat pass:[$TUTORIAL_HOME]/target/wiring-classes/META-INF/kubernetes/kubernetes.json
-----
-copyToClipboard::quarkusk8s-generated-kubernetes-resource-custom-health-check[]
-
-:doc-sec: k8s-deploy-custom-health-check
-include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-deploy]
-
-[#qext-custom-health-check-invoke-k8s-svc]
-=== Invoke Kubernetes Service
-
-:doc-sec: k8s-invoke-custom-health-check
-include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-invoke-svc]
-
-[#qext-custom-health-check-end-k8s-delete-resources]
-=== Delete Kubernetes Resources
-
-:section-k8s: health-check
-include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-delete]
+endif::workshop[]

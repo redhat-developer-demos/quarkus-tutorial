@@ -1,7 +1,9 @@
 * xref:01-setup.adoc[1. Setup]
 ** xref:01-setup.adoc#prerequisite[Prerequisites]
 ** xref:01-setup.adoc#download-tutorial-sources[Download Tutorial Sources]
+ifndef::workshop[]
 ** xref:01-setup.adoc#kubernetes-cluster[Kubernetes Cluster]
+endif::workshop[]
 ** xref:01-setup.adoc#setup-work-folder[Work Folder]
 
 
@@ -20,6 +22,7 @@
 *** xref:02-basics-fundas.adoc#basics-configuration-get-value[Get Configuration Value]
 *** xref:02-basics-fundas.adoc#basics-call-configuration[Invoke Service]
 
+ifndef::workshop[]
 * xref:03-containers-kubernetes.adoc[3. Cloud Native Deployment]
 ** xref:03-containers-kubernetes.adoc#conk8s-prerequisite[Prerequisites]
 ** xref:03-containers-kubernetes.adoc#conk8s-build-container-app[Containerize Quarkus Application]
@@ -29,6 +32,8 @@
 *** xref:03-containers-kubernetes.adoc#conk8s-k8s-apply-resources[Apply Kubernetes Resources]
 *** xref:03-containers-kubernetes.adoc#conk8s-invoke-k8s-svc[Invoke Kubernetes Service]
 *** xref:03-containers-kubernetes.adoc#conk8s-delete-k8s-app[Delete Kubernetes Resources]
+endif::workshop[]
+
 
 * xref:04-quarkus-extensions.adoc[4. Quarkus Extensions]
 ** xref:04-quarkus-extensions.adoc#qext-intro[What are Extensions ?]
@@ -55,16 +60,14 @@
 *** xref:04-quarkus-extensions.adoc#qext-turn-on-network[Turn Network On]
 ** xref:04-quarkus-extensions.adoc#qext-health-checks[Health Checks]
 *** xref:04-quarkus-extensions.adoc#qext-add-extensions[Add Extension]
-*** xref:04-quarkus-extensions.adoc#qext-rebuild-container-images[Rebuild Container Images]
-*** xref:04-quarkus-extensions.adoc#qext-check-health-endpoint[Check Health Endpoint]
+*** xref:04-quarkus-extensions.adoc#qext-health-check-default-run-quarkus-app-dev-mode[Run Quarkus Application in Development mode]
 *** xref:04-quarkus-extensions.adoc#qext-call-health-ep[Invoke Health Endpoint]
-*** xref:04-quarkus-extensions.adoc#qext-add-probes-to-k8s[Add Health Probes to Kubernetes Application]
-*** xref:04-quarkus-extensions.adoc#qext-invoke-k8s-svc[Invoke Service]
 *** xref:04-quarkus-extensions.adoc#qext-custom-health-check[Customizing Health Checks]
-*** xref:04-quarkus-extensions.adoc#qext-rebuild-container-images-custom-check[Rebuild Container Images]
-*** xref:04-quarkus-extensions.adoc#qext-check-custom-health-endpoint[Check Health Endpoint]
+*** xref:04-quarkus-extensions.adoc#qext-health-check-custom-run-quarkus-app-dev-mode[Run Quarkus Application in Development mode]
 *** xref:04-quarkus-extensions.adoc#qext-call-health-custom[Invoke Health Endpoint]
-*** xref:04-quarkus-extensions.adoc#qext-add-custom-probes-to-k8s[Add Health Probes to Kubernetes Application]
+ifndef::workshop[]
+*** xref:04-quarkus-extensions.adoc#qext-health-checks-kubernetes[Add Health Probes to Kubernetes Application]
+endif::workshop[]
 
 * xref:05-quarkus-panache.adoc[5. Hibernate with Quarkus]
 ** xref:05-quarkus-panache.adoc#quarkusp-demo-overview[Demo Overview]
@@ -76,12 +79,14 @@
 *** xref:05-quarkus-panache.adoc#quarkusp-edit-fruit-resource[Update Fruit Resource]
 *** xref:05-quarkus-panache.adoc#quarkusp-fruits-finder[Finders]
 ** xref:05-quarkus-panache.adoc#quarkusp-testing[Testing]
+ifndef::workshop[]
 ** xref:05-quarkus-panache.adoc#quarkusp-cloud-dev[Deploy on Kubernetes]
 *** xref:05-quarkus-panache.adoc#quarkusp-cloud-dev-build-container[Build Containers]
 *** xref:05-quarkus-panache.adoc#quarkusp-cloud-dev-prepare-app[Prepare Kubernetes Application]
 *** xref:05-quarkus-panache.adoc#quarkusp-cloud-dev-apply-resources[Apply Resources]
 *** xref:05-quarkus-panache.adoc#quarkusp-invoke-k8s-svc[Invoke Service]
 *** xref:05-quarkus-panache.adoc#quarkusp-persistence-k8s-delete-resources[Delete Kubernetes Resource]
+endif::workshop[]
 
 * xref:06-quarkus-reactive.adoc[6. Reactive Programming with Quarkus]
 ** xref:06-quarkus-reactive.adoc#quarkusrpb-demo-overview[Beer Demo Overview]
