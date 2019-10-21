@@ -9,7 +9,7 @@ At the end of this chapter you will be able to :
 * [x] Create a Quarkus Java Application
 * [x] Build and run the Java application in JVM mode.
 * [x] Build and run the Java application in Native mode.
-* [x] Build and run the Java Application in Developer mode
+* [x] Build and run the Java application in Developer mode
 
 [#basics-prerequisite]
 == Prerequisite

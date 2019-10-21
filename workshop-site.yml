@@ -14,6 +14,11 @@ content:
       start_path: documentation
 asciidoc:
   attributes:
+    quarkus-version: 0.24.0
+    minikube-version: 1.0.1+
+    openshift-version: 3.11+
+    minishift-version: 1.31+
+    graalvm-version: 19.1.1
     tutorial-namespace: quarkustutorial
     workshop: yes
   extensions:

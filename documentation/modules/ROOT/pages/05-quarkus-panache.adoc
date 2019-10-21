@@ -24,9 +24,9 @@ To get started with we will first have the database deployed:
 [#quarkus-fruit-app-db]
 ==== Deploy MariaDB Stack
 
-ifndef::workshop[]
 [tabs]
 ====
+ifndef::workshop[]
 kubectl::
 +
 --
@@ -60,14 +60,13 @@ NOTE: The actual pod name and NodePort will be different on your environment
 oc::
 +
 --
-endif::[]
+
 [#quarkusp-oc-deploy-db]
 [source,bash,subs="+macros,+attributes"]
 ----
 oc apply -n {tutorial-namespace} -f pass:[$TUTORIAL_HOME]/kubernetes-apps/mariadb.yaml
 ----
 copyToClipboard::quarkusp-oc-deploy-db[]
-ifndef::workshop[]
 
 A successful MariaDB deployment will have the following pods and services in the `{tutorial-namespace}` if it is running in a Kubernetes/OpenShift cluster.
 
@@ -89,6 +88,7 @@ mariadb      NodePort   10.105.40.135    <none>        3306:30125/TCP   2m21s
 
 NOTE: The actual pod name and NodePort will be different on your environment
 --
+endif::workshop[]
 docker::
 +
 --
@@ -108,14 +108,12 @@ docker run  --link mariadb -p 8082:8080 adminer:4.7.3-standalone
 copyToClipboard::quarkusp-docker-deploy-adminer[]
 --
 ====
-endif::[]
-
-ifndef::workshop[]
 
 To access to DB adminer:
 
 [tabs]
 ====
+ifndef::workshop[]
 minikube::
 +
 --
@@ -136,34 +134,13 @@ minishift openshift service db-adminer -n {tutorial-namespace}
 ----
 copyToClipboard::quarkusp-minishift-open-db-adminer[]
 --
+endif::workshop[]
 docker::
 +
 --
-Open in a browser the next page: http://localhost:8081[http://localhost:8082,window=_blank]
+Open in a browser the next page: http://localhost:8082[http://localhost:8082,window=_blank]
 --
 ====
-endif::[]
-
-ifdef::workshop[]
-To access the `db-adminer` from local machine, you need to expose the service `db-adminer`. Run the following command to expose the service 
-[#quarkusp-oc-expose-svc]
-[source,bash,subs="+macros,+attributes"]
-----
-oc -n {tutorial-namespace} expose svc db-adminer
-----
-copyToClipboard::quarkusp-oc-expose-svc[]
-
-To know the `db-adminer` public url run the following command:
-
-[#quarkusp-oc-get-route]
-[source,bash,subs="+macros,+attributes"]
-----
-oc -n {tutorial-namespace} get routes db-adminer -o jsonpath='{.spec.host}'
-----
-copyToClipboard::quarkusp-oc-get-route[]
-
-You can then open the URL in the browser to access the `adminer` console.
-endif::[]
 
 Use `mariadb` as host and `demodb` as database. 
 Any of the next parameters as authentication credentials are valid.
@@ -181,6 +158,8 @@ Any of the next parameters as authentication credentials are valid.
 [#quarkusp-access-db]
 ===== Accessing Database 
 To be able to access MariaDB database locally (`localhost` if you are not using the Docker approach), you need to `port-forward` the remote port to local port.
+
+ifndef::workshop[]
 
 Open a new terminal window and run the following command:
 
@@ -203,6 +182,8 @@ oc -n {tutorial-namespace} port-forward svc/mariadb 3306:3306
 ----
 copyToClipboard::quarkuspdb-oc-port-forward[]
 ====
+
+endif::workshop[]
 
 ==== Build Fruit Resource
 
@@ -658,8 +639,12 @@ copyToClipboard::quarkusp-test-class[]
 
 include::ROOT:partial$invoke-service.adoc[tag=test]
 
+ifndef::workshop[]
+
 [#quarkusp-cloud-dev]
 === Deploy on Kubernetes
+
+If you are using Kubernetes/OpenShift instead of Docker you can deploy the application to Kubernetes/OpenShift following the next steps:
 
 We need to build the `{quarkus-project-name}` application and container before deploying them on kubernetes.
 
@@ -677,15 +662,14 @@ include::ROOT:partial$build-containers.adoc[tag=build]
 
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-prep]
 
-ifdef::workshop[]
 ==== Tag and Push the application container
 
 As we have already built the container images, we might need to build and push it to remote container registry. The remote images from the container registry will be used in kubernetes deployments:
 
 With example variable settings as above, run the following commands to tag the images:
 
+:doc-sec: tag-push-panache
 include::ROOT:partial$build-containers.adoc[tag=tag-push]
-endif::[]
 
 [#quarkusp-cloud-dev-apply-resources]
 ==== Apply Resources
@@ -708,3 +692,5 @@ NOTE: `swagger-ui` is available only for `dev` and `test`, you can use REST API 
 
 :section-k8s: persistence
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-delete]
+
+endif::workshop[]
