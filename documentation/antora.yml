@@ -1,6 +1,6 @@
 name: quarkus-tutorial
 title: Quarkus Tutorial
-version: 0.21.2
+version: 0.24.0
 nav:
   - modules/ROOT/nav.adoc
 
