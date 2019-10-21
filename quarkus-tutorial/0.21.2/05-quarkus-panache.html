@@ -223,34 +223,22 @@
     <a class="nav-link" href="04-quarkus-extensions.html#qext-add-extensions">Add Extension</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="04-quarkus-extensions.html#qext-rebuild-container-images">Rebuild Container Images</a>
-  </li>
-  <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="04-quarkus-extensions.html#qext-check-health-endpoint">Check Health Endpoint</a>
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-health-check-default-run-quarkus-app-dev-mode">Run Quarkus Application in Development mode</a>
   </li>
   <li class="nav-item" data-depth="3">
     <a class="nav-link" href="04-quarkus-extensions.html#qext-call-health-ep">Invoke Health Endpoint</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="04-quarkus-extensions.html#qext-add-probes-to-k8s">Add Health Probes to Kubernetes Application</a>
-  </li>
-  <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="04-quarkus-extensions.html#qext-invoke-k8s-svc">Invoke Service</a>
-  </li>
-  <li class="nav-item" data-depth="3">
     <a class="nav-link" href="04-quarkus-extensions.html#qext-custom-health-check">Customizing Health Checks</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="04-quarkus-extensions.html#qext-rebuild-container-images-custom-check">Rebuild Container Images</a>
-  </li>
-  <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="04-quarkus-extensions.html#qext-check-custom-health-endpoint">Check Health Endpoint</a>
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-health-check-custom-run-quarkus-app-dev-mode">Run Quarkus Application in Development mode</a>
   </li>
   <li class="nav-item" data-depth="3">
     <a class="nav-link" href="04-quarkus-extensions.html#qext-call-health-custom">Invoke Health Endpoint</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="04-quarkus-extensions.html#qext-add-custom-probes-to-k8s">Add Health Probes to Kubernetes Application</a>
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-health-checks-kubernetes">Add Health Probes to Kubernetes Application</a>
   </li>
 </ul>
   </li>
@@ -538,7 +526,7 @@ The actual pod name and NodePort will be different on your environment
 </div>
 <div class="tab-pane" aria-labelledby="tabset2_docker">
 <div class="paragraph">
-<p>Open in a browser the next page: <a href="http://localhost:8081" target="_blank" rel="noopener">http://localhost:8082</a></p>
+<p>Open in a browser the next page: <a href="http://localhost:8082" target="_blank" rel="noopener">http://localhost:8082</a></p>
 </div>
 </div>
 </div>
@@ -1156,6 +1144,9 @@ Although it is not mandatory, by default <a href="http://rest-assured.io/">RestA
 <div class="sect2">
 <h3 id="quarkusp-cloud-dev"><a class="anchor" href="#quarkusp-cloud-dev"></a>Deploy on Kubernetes</h3>
 <div class="paragraph">
+<p>If you are using Kubernetes/OpenShift instead of Docker you can deploy the application to Kubernetes/OpenShift following the next steps:</p>
+</div>
+<div class="paragraph">
 <p>We need to build the <code>fruits-app</code> application and container before deploying them on kubernetes.</p>
 </div>
 <div class="admonitionblock note">
@@ -1306,6 +1297,21 @@ quarkus.application.name=fruits-app</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quakrusk8s-generated-kubernetes-resource"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+<div class="sect3">
+<h4 id="_tag_and_push_the_application_container"><a class="anchor" href="#_tag_and_push_the_application_container"></a>Tag and Push the application container</h4>
+<div class="paragraph">
+<p>As we have already built the container images, we might need to build and push it to remote container registry. The remote images from the container registry will be used in kubernetes deployments:</p>
+</div>
+<div class="paragraph">
+<p>With example variable settings as above, run the following commands to tag the images:</p>
+</div>
+<div id="tag-push-panache-tag-jvm-app" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker push example/fruits-app:1.0-SNAPSHOT</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#build-tag-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="sect3">
 <h4 id="quarkusp-cloud-dev-apply-resources"><a class="anchor" href="#quarkusp-cloud-dev-apply-resources"></a>Apply Resources</h4>

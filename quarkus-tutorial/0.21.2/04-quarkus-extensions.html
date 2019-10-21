@@ -223,34 +223,22 @@
     <a class="nav-link" href="#qext-add-extensions">Add Extension</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="#qext-rebuild-container-images">Rebuild Container Images</a>
-  </li>
-  <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="#qext-check-health-endpoint">Check Health Endpoint</a>
+    <a class="nav-link" href="#qext-health-check-default-run-quarkus-app-dev-mode">Run Quarkus Application in Development mode</a>
   </li>
   <li class="nav-item" data-depth="3">
     <a class="nav-link" href="#qext-call-health-ep">Invoke Health Endpoint</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="#qext-add-probes-to-k8s">Add Health Probes to Kubernetes Application</a>
-  </li>
-  <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="#qext-invoke-k8s-svc">Invoke Service</a>
-  </li>
-  <li class="nav-item" data-depth="3">
     <a class="nav-link" href="#qext-custom-health-check">Customizing Health Checks</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="#qext-rebuild-container-images-custom-check">Rebuild Container Images</a>
-  </li>
-  <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="#qext-check-custom-health-endpoint">Check Health Endpoint</a>
+    <a class="nav-link" href="#qext-health-check-custom-run-quarkus-app-dev-mode">Run Quarkus Application in Development mode</a>
   </li>
   <li class="nav-item" data-depth="3">
     <a class="nav-link" href="#qext-call-health-custom">Invoke Health Endpoint</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="#qext-add-custom-probes-to-k8s">Add Health Probes to Kubernetes Application</a>
+    <a class="nav-link" href="#qext-health-checks-kubernetes">Add Health Probes to Kubernetes Application</a>
   </li>
 </ul>
   </li>
@@ -659,7 +647,7 @@ public FruityVice getFruitInfoByName(@PathParam("name") String name) {
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-If you are in dev mode and you added new dependencies on the project, sometimes, if they are not in the local cache, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
+If you are in dev mode and you added new dependencies on the project, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
 </td>
 </tr>
 </table>
@@ -751,7 +739,7 @@ public FruityVice getFruitByName(@PathParam("name") String name);</code></pre>
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-If you are in dev mode and you added new dependencies on the project, sometimes, if they are not in the local cache, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
+If you are in dev mode and you added new dependencies on the project, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
 </td>
 </tr>
 </table>
@@ -847,7 +835,7 @@ If the error persits, then the fallback method is executed.</p>
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-If you are in dev mode and you added new dependencies on the project, sometimes, if they are not in the local cache, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
+If you are in dev mode and you added new dependencies on the project, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
 </td>
 </tr>
 </table>
@@ -923,7 +911,7 @@ If the invocation succeeds then the circuit is back to closed again.</p>
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-If you are in dev mode and you added new dependencies on the project, sometimes, if they are not in the local cache, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
+If you are in dev mode and you added new dependencies on the project, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
 </td>
 </tr>
 </table>
@@ -1006,114 +994,37 @@ You can use <code>@Retry</code> and <code>@Fallback</code> annotations together 
 </div>
 </div>
 <div class="sect2">
-<h3 id="qext-rebuild-container-images"><a class="anchor" href="#qext-rebuild-container-images"></a>Rebuild container images</h3>
+<h3 id="qext-health-check-default-run-quarkus-app-dev-mode"><a class="anchor" href="#qext-health-check-default-run-quarkus-app-dev-mode"></a>Run Quarkus Application in Development mode</h3>
 <div class="paragraph">
-<p>Let us rebuild the application after adding the health check extensions</p>
+<p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
 </div>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset1_jvm-mode"></a>JVM mode</p>
-</li>
-<li>
-<p><a id="tabset1_native-mode"></a>Native mode</p>
-</li>
-</ul>
-</div>
+<div id="health-check-default-build-run-dev" class="listingblock">
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset1_jvm-mode">
-<div id="health-check-build-quarkus-jvm-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#health-check-build-quarkus-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
-<div class="paragraph">
-<p>After successful maven build, run the following command to build the container:</p>
-</div>
-<div id="health-check-build-quarkus-jvm-app-container" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.jvm -t example/fruits-app:1.0-SNAPSHOT .</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#health-check-build-quarkus-jvm-app-container"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="tab-pane" aria-labelledby="tabset1_native-mode">
-<div id="health-check-build-quarkus-native-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package -Pnative -Dnative-image.docker-build=true <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#health-check-build-quarkus-native-app"><i class="fa fa-clipboard"></i></button><br/>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Using the <code>-Dnative-image.docker-build=true</code> is very important as need a linux native binary what will be containerized.</td>
-</tr>
-</table>
-</div>
-<div class="admonitionblock note">
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#health-check-default-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
+<div class="admonitionblock important">
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-note" title="Note"></i>
+<i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Native compilation will take few minutes to complete.
+If you are in dev mode and you added new dependencies on the project, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
 </td>
 </tr>
 </table>
-</div>
-<div class="paragraph">
-<p>After successful maven build, run the following command to build the container:</p>
-</div>
-<div id="health-check-build-quarkus-native-app-container" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/fruits-app:1.0-SNAPSHOT .</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#health-check-build-quarkus-native-app-container"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-For sake of simplicity the container name in both native and jvm mode are named identically. In real cases where you might need both containers, you&#8217;d like to name them differently to know exactly the package they are containing.
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="qext-check-health-endpoint"><a class="anchor" href="#qext-check-health-endpoint"></a>Checking health check endpoint</h3>
-<div class="paragraph">
-<p>Lets start the newly built container:</p>
-</div>
-<div id="k8s-run-health-check-run-jvm-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -it --rm -p 8080:8080 example/fruits-app:1.0-SNAPSHOT</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#build-run-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
-<div class="paragraph">
-<p>After adding <code>smallrye-health</code> extension we should have REST endpoint called <code>/health</code> available. Lets invoke the <code>/health</code> endpoint to check the health of the Quarkus application.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="qext-call-health-ep"><a class="anchor" href="#qext-call-health-ep"></a>Invoke Service</h3>
 <div class="paragraph">
-<p>The simple <code>health</code> REST URI can be called via browser using <code><a href="http://$(minikube" class="bare">http://$(minikube</a> ip):8080/health</code> or using CLI like:</p>
+<p>The simple <code>health</code> REST URI can be called via browser using <code><a href="http://localhost:8080/health" class="bare">http://localhost:8080/health</a></code> or using CLI like:</p>
 </div>
 <div id="basics-health-check-k8s-svc-call" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl $(minikube ip):8080/health</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/health</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-health-check-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
@@ -1129,159 +1040,8 @@ For sake of simplicity the container name in both native and jvm mode are named 
 </div>
 </div>
 <div class="paragraph">
-<p>Then you can stop the container by typing <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>.</p>
+<p>Then you can stop the App by typing <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>.</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="qext-add-probes-to-k8s"><a class="anchor" href="#qext-add-probes-to-k8s"></a>Add probes to Kubernetes Quarkus Application</h3>
-<div class="paragraph">
-<p>We need to push the rebuilt containers to the container registry.</p>
-</div>
-<div id="basics-health-check-tag-jvm-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker push example/fruits-app:1.0-SNAPSHOT</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#build-tag-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="sect2">
-<h3 id="qext-health-check-k8s-delete-resources"><a class="anchor" href="#qext-health-check-k8s-delete-resources"></a>Delete Kubernetes Resources</h3>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset2_kubectl"></a>kubectl</p>
-</li>
-<li>
-<p><a id="tabset2_oc"></a>oc</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset2_kubectl">
-<div id="probesk8s-delete-k8s-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl delete all --all</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#probesk8s-delete-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="tab-pane" aria-labelledby="tabset2_oc">
-<div id="probesk8s-delete-oc-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc delete all --all</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#probesk8s-delete-oc-app"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="qext-health-check-k8s-apply-resources"><a class="anchor" href="#qext-health-check-k8s-apply-resources"></a>Apply Kubernetes Resources</h3>
-<div class="paragraph">
-<p>Since we are using Kubernetes extension, configured at <a href="03-containers-kubernetes.html" class="page">Cloud Native Deployment</a> section, the kubernetes resource has been updated with both probes.</p>
-</div>
-<div id="quarkusk8s-generated-kubernetes-resource-health-check" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusk8s-generated-kubernetes-resource-health-check"><i class="fa fa-clipboard"></i></button><br/>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset3_kubectl"></a>kubectl</p>
-</li>
-<li>
-<p><a id="tabset3_oc"></a>oc</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset3_kubectl">
-<div id="k8s-delpoy-health-check-run-deploy-k8s-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f $TUTORIAL_HOME/target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="tab-pane" aria-labelledby="tabset3_oc">
-<div id="k8s-delpoy-health-check-oc-run-deploy-k8s-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f $TUTORIAL_HOME/target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-deploy-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="qext-health-check-invoke-k8s-svc"><a class="anchor" href="#qext-health-check-invoke-k8s-svc"></a>Invoke Kubernetes Service</h3>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset4_kubectl"></a>kubectl</p>
-</li>
-<li>
-<p><a id="tabset4_oc"></a>oc</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset4_kubectl">
-<div class="paragraph">
-<p>You need to create a <code>NodePort</code> to expose the application if you are in minikube.
-As generated resources creates a <code>ClusterIP</code> service, you need to patch it:</p>
-</div>
-<div id="k8s-invoke-health-check-k8s-run-expose-svc-nodeport" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl patch svc fruits-app --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"}]'</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-k8s-run-expose-svc-nodeport"><i class="fa fa-clipboard"></i></button><br/>
-<div id="k8s-invoke-health-check-run-deploy-k8s-service" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(minikube service -n quarkustutorial fruits-app --url)</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-k8s-service"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="tab-pane" aria-labelledby="tabset4_oc">
-<div class="paragraph">
-<p>With OpenShift we can create a route to make Quarkus application publicly accessible:</p>
-</div>
-<div id="k8s-invoke-health-check-oc-run-expose-svc-route" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc expose service fruits-app</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-expose-svc-route"><i class="fa fa-clipboard"></i></button><br/>
-<div class="paragraph">
-<p>Once the service is exposed we can use the following command to get the public url:</p>
-</div>
-<div id="k8s-invoke-health-check-oc-run-get-route" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(oc get routes fruits-app -o jsonpath='{.spec.host}')</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-get-route"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p>Now you can use the <code>SVC_URL</code> to call the service from the browser or via cli like:</p>
-</div>
-<div id="k8s-invoke-health-check-call-k8s-svc" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl $SVC_URL/fruit</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-call-k8s-svc"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="sect2">
 <h3 id="qext-custom-health-check"><a class="anchor" href="#qext-custom-health-check"></a>Customizing Health Checks</h3>
@@ -1344,114 +1104,37 @@ public class FruitHealthCheck {
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-fruit-checks"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 <div class="sect2">
-<h3 id="qext-rebuild-container-images-custom-check"><a class="anchor" href="#qext-rebuild-container-images-custom-check"></a>Rebuild container images</h3>
+<h3 id="qext-health-check-custom-run-quarkus-app-dev-mode"><a class="anchor" href="#qext-health-check-custom-run-quarkus-app-dev-mode"></a>Run Quarkus Application in Development mode</h3>
 <div class="paragraph">
-<p>Let us rebuild the application after adding the health check extensions</p>
+<p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
 </div>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset5_jvm-mode"></a>JVM mode</p>
-</li>
-<li>
-<p><a id="tabset5_native-mode"></a>Native mode</p>
-</li>
-</ul>
-</div>
+<div id="health-check-custom-build-run-dev" class="listingblock">
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset5_jvm-mode">
-<div id="custom-check-build-quarkus-jvm-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#custom-check-build-quarkus-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
-<div class="paragraph">
-<p>After successful maven build, run the following command to build the container:</p>
-</div>
-<div id="custom-check-build-quarkus-jvm-app-container" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.jvm -t example/fruits-app:1.0-SNAPSHOT .</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#custom-check-build-quarkus-jvm-app-container"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="tab-pane" aria-labelledby="tabset5_native-mode">
-<div id="custom-check-build-quarkus-native-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package -Pnative -Dnative-image.docker-build=true <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#custom-check-build-quarkus-native-app"><i class="fa fa-clipboard"></i></button><br/>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Using the <code>-Dnative-image.docker-build=true</code> is very important as need a linux native binary what will be containerized.</td>
-</tr>
-</table>
-</div>
-<div class="admonitionblock note">
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#health-check-custom-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
+<div class="admonitionblock important">
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-note" title="Note"></i>
+<i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Native compilation will take few minutes to complete.
+If you are in dev mode and you added new dependencies on the project, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
 </td>
 </tr>
 </table>
-</div>
-<div class="paragraph">
-<p>After successful maven build, run the following command to build the container:</p>
-</div>
-<div id="custom-check-build-quarkus-native-app-container" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/fruits-app:1.0-SNAPSHOT .</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#custom-check-build-quarkus-native-app-container"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-For sake of simplicity the container name in both native and jvm mode are named identically. In real cases where you might need both containers, you&#8217;d like to name them differently to know exactly the package they are containing.
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="qext-check-custom-health-endpoint"><a class="anchor" href="#qext-check-custom-health-endpoint"></a>Checking health check endpoint</h3>
-<div class="paragraph">
-<p>Lets start the newly built container:</p>
-</div>
-<div id="k8s-run-custom-health-check-run-jvm-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -it --rm -p 8080:8080 example/fruits-app:1.0-SNAPSHOT</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#build-run-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
-<div class="paragraph">
-<p>After adding <code>smallrye-health</code> extension we should have REST endpoint called <code>/health</code> available. Lets invoke the <code>/health</code> endpoint to check the health of the Quarkus application and you&#8217;ll see both health checks.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="qext-call-health-custom"><a class="anchor" href="#qext-call-health-custom"></a>Invoke Service</h3>
 <div class="paragraph">
-<p>The simple <code>health</code> REST URI can be called via browser using <code><a href="http://$(minikube" class="bare">http://$(minikube</a> ip)/health</code> or using CLI like:</p>
+<p>The simple <code>health</code> REST URI can be called via browser using <code><a href="http://localhost:8080/health" class="bare">http://localhost:8080/health</a></code> or using CLI like:</p>
 </div>
 <div id="custom-health-k8s-svc-call" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl $(minikube ip):8080/health</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/health</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#custom-health-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
@@ -1480,7 +1163,7 @@ For sake of simplicity the container name in both native and jvm mode are named 
 </div>
 <div id="custom-health-live-k8s-svc-call" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl $(minikube ip):8080/health/live</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/health/live</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#custom-health-live-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
@@ -1502,7 +1185,7 @@ For sake of simplicity the container name in both native and jvm mode are named 
 </div>
 <div id="custom-health-ready-k8s-svc-call" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl $(minikube ip):8080/health/ready</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/health/ready</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#custom-health-ready-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
@@ -1527,188 +1210,61 @@ For sake of simplicity the container name in both native and jvm mode are named 
 </div>
 </div>
 <div class="sect2">
-<h3 id="qext-add-custom-probes-to-k8s"><a class="anchor" href="#qext-add-custom-probes-to-k8s"></a>Add probes to Kubernetes Quarkus Application</h3>
+<h3 id="qext-health-checks-kubernetes"><a class="anchor" href="#qext-health-checks-kubernetes"></a>Kubernetes Extension and Health Checks</h3>
 <div class="paragraph">
-<p>We need to push the rebuilt containers to the container registry.</p>
+<p>Kubernetes extension detects that Health Check extension is registered and registers them in generated Kubernetes resource.</p>
 </div>
-<div id="custom-health-ready-tag-jvm-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker push example/fruits-app:1.0-SNAPSHOT</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#build-tag-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="sect2">
-<h3 id="qext-custom-health-check-k8s-delete-resources"><a class="anchor" href="#qext-custom-health-check-k8s-delete-resources"></a>Delete Kubernetes Resources</h3>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset6_kubectl"></a>kubectl</p>
-</li>
-<li>
-<p><a id="tabset6_oc"></a>oc</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset6_kubectl">
-<div id="custom-probesk8s-delete-k8s-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl delete all --all</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#custom-probesk8s-delete-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="tab-pane" aria-labelledby="tabset6_oc">
-<div id="custom-probesk8s-delete-oc-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc delete all --all</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#custom-probesk8s-delete-oc-app"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="qext-custom-health-check-k8s-apply-resources"><a class="anchor" href="#qext-custom-health-check-k8s-apply-resources"></a>Apply Kubernetes Resources</h3>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>Since we are using Kubernetes extension, configured at <a href="03-containers-kubernetes.html" class="page">Cloud Native Deployment</a> section, the kubernetes resource has been updated with both probes.</p>
+<p>If you have not deployed the application previously, you need to add Quarkus Kubernetes extension. This extension uses <a href="https://github.com/dekorateio/dekorate">Dekorate</a> to generate a default Kubernetes resource template.</p>
 </div>
-<div id="quarkusk8s-generated-kubernetes-resource-custom-health-check" class="listingblock">
+<div id="qext-mvn-add-kubernetes-extension" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat $TUTORIAL_HOME/target/wiring-classes/META-INF/kubernetes/kubernetes.json</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextensions="quarkus-kubernetes"</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusk8s-generated-kubernetes-resource-custom-health-check"><i class="fa fa-clipboard"></i></button><br/>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset7_kubectl"></a>kubectl</p>
-</li>
-<li>
-<p><a id="tabset7_oc"></a>oc</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset7_kubectl">
-<div id="k8s-deploy-custom-health-check-run-deploy-k8s-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f $TUTORIAL_HOME/target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="tab-pane" aria-labelledby="tabset7_oc">
-<div id="k8s-deploy-custom-health-check-oc-run-deploy-k8s-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f $TUTORIAL_HOME/target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-deploy-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="qext-custom-health-check-invoke-k8s-svc"><a class="anchor" href="#qext-custom-health-check-invoke-k8s-svc"></a>Invoke Kubernetes Service</h3>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset8_kubectl"></a>kubectl</p>
-</li>
-<li>
-<p><a id="tabset8_oc"></a>oc</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset8_kubectl">
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-mvn-add-kubernetes-extension"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
-<p>You need to create a <code>NodePort</code> to expose the application if you are in minikube.
-As generated resources creates a <code>ClusterIP</code> service, you need to patch it:</p>
-</div>
-<div id="k8s-invoke-custom-health-check-k8s-run-expose-svc-nodeport" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl patch svc fruits-app --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"}]'</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-k8s-run-expose-svc-nodeport"><i class="fa fa-clipboard"></i></button><br/>
-<div id="k8s-invoke-custom-health-check-run-deploy-k8s-service" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(minikube service -n quarkustutorial fruits-app --url)</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-k8s-service"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="tab-pane" aria-labelledby="tabset8_oc">
-<div class="paragraph">
-<p>With OpenShift we can create a route to make Quarkus application publicly accessible:</p>
-</div>
-<div id="k8s-invoke-custom-health-check-oc-run-expose-svc-route" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc expose service fruits-app</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-expose-svc-route"><i class="fa fa-clipboard"></i></button><br/>
-<div class="paragraph">
-<p>Once the service is exposed we can use the following command to get the public url:</p>
-</div>
-<div id="k8s-invoke-custom-health-check-oc-run-get-route" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(oc get routes fruits-app -o jsonpath='{.spec.host}')</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-get-route"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
+<p>You need to configure group and name of the Docker container used to deploy into Kubernetes.</p>
 </div>
 <div class="paragraph">
-<p>Now you can use the <code>SVC_URL</code> to call the service from the browser or via cli like:</p>
+<p>Add the following properties (if you haven&#8217;t already done it before) to $PROJECT_HOME/src/main/resources/application.properties:</p>
 </div>
-<div id="k8s-invoke-custom-health-check-call-k8s-svc" class="listingblock">
+<div id="quarkusk8s-update-props" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl $SVC_URL/fruit</code></pre>
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.kubernetes.group=example
+quarkus.application.name=fruits-app</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-call-k8s-svc"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusk8s-update-props"><i class="fa fa-clipboard"></i></button><br/>
+</td>
+</tr>
+</table>
 </div>
-<div class="sect2">
-<h3 id="qext-custom-health-check-end-k8s-delete-resources"><a class="anchor" href="#qext-custom-health-check-end-k8s-delete-resources"></a>Delete Kubernetes Resources</h3>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset9_kubectl"></a>kubectl</p>
-</li>
-<li>
-<p><a id="tabset9_oc"></a>oc</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>Now you need to run Maven goal to generate Kubernetes resource.</p>
 </div>
+<div id="quarkusk8s-generate-kubernetes" class="listingblock">
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset9_kubectl">
-<div id="health-checkk8s-delete-k8s-app" class="listingblock">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw package -DskipTests</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusk8s-generate-kubernetes"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>You can inspect the generated file by accessing next file:</p>
+</div>
+<div id="quakrusk8s-generated-kubernetes-resource" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl delete all --all</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#health-checkk8s-delete-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="tab-pane" aria-labelledby="tabset9_oc">
-<div id="health-checkk8s-delete-oc-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc delete all --all</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#health-checkk8s-delete-oc-app"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quakrusk8s-generated-kubernetes-resource"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>

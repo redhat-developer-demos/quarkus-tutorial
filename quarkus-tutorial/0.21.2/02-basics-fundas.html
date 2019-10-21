@@ -223,34 +223,22 @@
     <a class="nav-link" href="04-quarkus-extensions.html#qext-add-extensions">Add Extension</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="04-quarkus-extensions.html#qext-rebuild-container-images">Rebuild Container Images</a>
-  </li>
-  <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="04-quarkus-extensions.html#qext-check-health-endpoint">Check Health Endpoint</a>
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-health-check-default-run-quarkus-app-dev-mode">Run Quarkus Application in Development mode</a>
   </li>
   <li class="nav-item" data-depth="3">
     <a class="nav-link" href="04-quarkus-extensions.html#qext-call-health-ep">Invoke Health Endpoint</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="04-quarkus-extensions.html#qext-add-probes-to-k8s">Add Health Probes to Kubernetes Application</a>
-  </li>
-  <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="04-quarkus-extensions.html#qext-invoke-k8s-svc">Invoke Service</a>
-  </li>
-  <li class="nav-item" data-depth="3">
     <a class="nav-link" href="04-quarkus-extensions.html#qext-custom-health-check">Customizing Health Checks</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="04-quarkus-extensions.html#qext-rebuild-container-images-custom-check">Rebuild Container Images</a>
-  </li>
-  <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="04-quarkus-extensions.html#qext-check-custom-health-endpoint">Check Health Endpoint</a>
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-health-check-custom-run-quarkus-app-dev-mode">Run Quarkus Application in Development mode</a>
   </li>
   <li class="nav-item" data-depth="3">
     <a class="nav-link" href="04-quarkus-extensions.html#qext-call-health-custom">Invoke Health Endpoint</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="04-quarkus-extensions.html#qext-add-custom-probes-to-k8s">Add Health Probes to Kubernetes Application</a>
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-health-checks-kubernetes">Add Health Probes to Kubernetes Application</a>
   </li>
 </ul>
   </li>
@@ -374,7 +362,7 @@
 <p><i class="fa fa-check-square-o"></i> Build and run the Java application in Native mode.</p>
 </li>
 <li>
-<p><i class="fa fa-check-square-o"></i> Build and run the Java Application in Developer mode</p>
+<p><i class="fa fa-check-square-o"></i> Build and run the Java application in Developer mode</p>
 </li>
 </ul>
 </div>
@@ -679,7 +667,7 @@ docker run -it --rm -p 8080:8080 example/fruit-app:1.0-SNAPSHOT</code></pre>
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-If you are in dev mode and you added new dependencies on the project, sometimes, if they are not in the local cache, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
+If you are in dev mode and you added new dependencies on the project, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
 </td>
 </tr>
 </table>
