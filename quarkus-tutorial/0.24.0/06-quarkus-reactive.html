@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cloud Native Deployment :: Quarkus Tutorial</title>
-    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/0.21.2/03-containers-kubernetes.html">
+    <title>Reactive Programming :: Quarkus Tutorial</title>
+    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/0.24.0/06-quarkus-reactive.html">
     <meta name="generator" content="Antora 2.0.1">
     <link rel="stylesheet" href="../../_/css/site.css">
 <link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
@@ -28,7 +28,7 @@
 </header>
 <div class="main-wrapper">
 <div class="navigation-container"  data-component="quarkus-tutorial"
-  data-version="0.21.2" >
+  data-version="0.24.0" >
   <aside class="navigation">
     <div class="panels">
       <div class="navigation-menu is-active" data-panel="menu">
@@ -106,34 +106,34 @@
   </li>
 </ul>
   </li>
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <button class="nav-toggle"></button>
     <a class="nav-link" href="03-containers-kubernetes.html">3. Cloud Native Deployment</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#conk8s-prerequisite">Prerequisites</a>
+    <a class="nav-link" href="03-containers-kubernetes.html#conk8s-prerequisite">Prerequisites</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#conk8s-build-container-app">Containerize Quarkus Application</a>
+    <a class="nav-link" href="03-containers-kubernetes.html#conk8s-build-container-app">Containerize Quarkus Application</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#conk8s-call-svc">Invoke Service</a>
+    <a class="nav-link" href="03-containers-kubernetes.html#conk8s-call-svc">Invoke Service</a>
   </li>
   <li class="nav-item" data-depth="2">
     <button class="nav-toggle"></button>
-    <a class="nav-link" href="#conk8s-deploy-k8s-app">Deploy on Kubernetes</a>
+    <a class="nav-link" href="03-containers-kubernetes.html#conk8s-deploy-k8s-app">Deploy on Kubernetes</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="#conk8s-deploy-k8s-app">Tag Container Images</a>
+    <a class="nav-link" href="03-containers-kubernetes.html#conk8s-deploy-k8s-app">Tag Container Images</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="#conk8s-k8s-apply-resources">Apply Kubernetes Resources</a>
+    <a class="nav-link" href="03-containers-kubernetes.html#conk8s-k8s-apply-resources">Apply Kubernetes Resources</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="#conk8s-invoke-k8s-svc">Invoke Kubernetes Service</a>
+    <a class="nav-link" href="03-containers-kubernetes.html#conk8s-invoke-k8s-svc">Invoke Kubernetes Service</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="#conk8s-delete-k8s-app">Delete Kubernetes Resources</a>
+    <a class="nav-link" href="03-containers-kubernetes.html#conk8s-delete-k8s-app">Delete Kubernetes Resources</a>
   </li>
 </ul>
   </li>
@@ -301,19 +301,19 @@
   </li>
 </ul>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <button class="nav-toggle"></button>
     <a class="nav-link" href="06-quarkus-reactive.html">6. Reactive Programming with Quarkus</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <button class="nav-toggle"></button>
-    <a class="nav-link" href="06-quarkus-reactive.html#quarkusrpb-demo-overview">Beer Demo Overview</a>
+    <a class="nav-link" href="#quarkusrpb-demo-overview">Beer Demo Overview</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="06-quarkus-reactive.html#quarkusrpb-buld-beer-reactive">Build Beer Service</a>
+    <a class="nav-link" href="#quarkusrpb-buld-beer-reactive">Build Beer Service</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="06-quarkus-reactive.html#qext-reactive-beer-run-quarkus-app-dev-mode">Run Quarkus Application with Beer Service</a>
+    <a class="nav-link" href="#qext-reactive-beer-run-quarkus-app-dev-mode">Run Quarkus Application with Beer Service</a>
   </li>
 </ul>
   </li>
@@ -339,12 +339,12 @@
   <nav class="crumbs" aria-label="breadcrumbs">
   <ul>
     <li class="crumb"><a href="index.html">Quarkus Tutorial</a></li>
-    <li class="crumb"><a href="03-containers-kubernetes.html">3. Cloud Native Deployment</a></li>
+    <li class="crumb"><a href="06-quarkus-reactive.html">6. Reactive Programming with Quarkus</a></li>
   </ul>
 </nav>
 </div>
 <article class="doc">
-<h1>Cloud Native Deployment</h1>
+<h1>Reactive Programming</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -353,230 +353,297 @@
 <div class="ulist checklist">
 <ul class="checklist">
 <li>
-<p><i class="fa fa-check-square-o"></i> Containerize the Quarkus Application</p>
+<p><i class="fa fa-check-square-o"></i> Use reactive programming in Quarkus.</p>
 </li>
 <li>
-<p><i class="fa fa-check-square-o"></i> Build and run the Quarkus Application in Kubernetes</p>
+<p><i class="fa fa-check-square-o"></i> How to use Reactive programming for accessing Rest API services with pagination and back pressure.</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="conk8s-prerequisite"><a class="anchor" href="#conk8s-prerequisite"></a>Prerequisite</h2>
+<h2 id="quarkusrpb-demo-overview"><a class="anchor" href="#quarkusrpb-demo-overview"></a>Beer Demo Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The following checks ensure that each chapter exercises are done with the right environment settings.</p>
+<p>To demonstrate how to use reactive programming in Quarkus, you will be developing a REST client that connects to a beer database (<a href="https://punkapi.com/documentation/v2" class="bare">https://punkapi.com/documentation/v2</a>) to retrieve beer information.
+This API does not return all beers at once, but you need to use pagination to navigate through all beer database.</p>
 </div>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset1_minikube"></a>Minikube</p>
-</li>
-<li>
-<p><a id="tabset1_minishift"></a>Minishift</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset1_minikube">
-<div class="ulist">
-<ul>
-<li>
-<p>Set your local docker to use minikube docker daemon</p>
-</li>
-</ul>
-</div>
-<div id="minikube-set-env" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">eval $(minikube docker-env)</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#minikube-set-env"><i class="fa fa-clipboard"></i></button><br/>
-<div class="ulist">
-<ul>
-<li>
-<p>Kubernetes should be v1.12+</p>
-</li>
-</ul>
-</div>
-<div id="kubectl-version" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl version</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#kubectl-version"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="tab-pane" aria-labelledby="tabset1_minishift">
-<div class="ulist">
-<ul>
-<li>
-<p>Set your local docker to use minishift docker daemon</p>
-</li>
-</ul>
-</div>
-<div id="minishift-set-env" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">eval $(minishift docker-env)</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#minishift-set-env"><i class="fa fa-clipboard"></i></button><br/>
-<div class="ulist">
-<ul>
-<li>
-<p>OpenShift CLI should be 3.11+</p>
-</li>
-</ul>
-</div>
-<div id="oc-version" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc version</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#oc-version"><i class="fa fa-clipboard"></i></button><br/>
-<div class="ulist">
-<ul>
-<li>
-<p>Make sure to be on <code>quarkustutorial</code> OpenShift project</p>
-</li>
-</ul>
-</div>
-<div id="right-openshift-project" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc project -q</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#right-openshift-project"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
-<p>If you are not on <code>quarkustutorial</code> project, then run following command to change to <code>quarkustutorial</code> project:</p>
+<p>In this section, you are going to develop a service that returns all beers with an <em>abv</em> value greater than <em>7.0</em> and using a reactive approach as a solution.</p>
 </div>
-<div id="change-to-openshift-project" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc project quarkustutorial</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#change-to-openshift-project"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="conk8s-build-container-app"><a class="anchor" href="#conk8s-build-container-app"></a>Containerize Quarkus Application</h2>
-<div class="sectionbody">
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset2_jvm-mode"></a>JVM mode</p>
-</li>
-<li>
-<p><a id="tabset2_native-mode"></a>Native mode</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset2_jvm-mode">
-<div id="basics-build-quarkus-jvm-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-quarkus-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
+<div class="sect2">
+<h3 id="quarkusrpb-buld-beer-reactive"><a class="anchor" href="#quarkusrpb-buld-beer-reactive"></a>Build Beer Service</h3>
 <div class="paragraph">
-<p>After successful maven build, run the following command to build the container:</p>
+<p>The skeleton project to get started is the same you created at <a href="02-basics-fundas.html" class="page">Basics and Fundamentals</a>.</p>
 </div>
-<div id="basics-build-quarkus-jvm-app-container" class="listingblock">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+For the easier reference, we shall call the <code>fruits-app</code> project folder as $PROJECT_HOME
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="quarkusrpb-add-reactive"><a class="anchor" href="#quarkusrpb-add-reactive"></a>Add Extensions</h4>
+<div id="qext-mvn-add-reactive-extensions" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.jvm -t example/fruits-app:1.0-SNAPSHOT .</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-rest-client, quarkus-smallrye-reactive-streams-operators"</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-quarkus-jvm-app-container"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-mvn-add-reactive-extensions"><i class="fa fa-clipboard"></i></button><br/>
 </div>
-<div class="tab-pane" aria-labelledby="tabset2_native-mode">
-<div id="basics-build-quarkus-native-app" class="listingblock">
+<div class="sect3">
+<h4 id="quarkusrpb-create-pojo"><a class="anchor" href="#quarkusrpb-create-pojo"></a>Create Beer POJO</h4>
+<div class="paragraph">
+<p>Let&#8217;s create the <code>Beer</code> pojo.</p>
+</div>
+<div class="paragraph">
+<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>Beer</code> with the following contents:</p>
+</div>
+<div id="qext-quarkusrpb-beer-pojo" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package -Pnative -Dnative-image.docker-build=true <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+
+public class Beer {
+
+    private String name;
+    private String tagline;
+    private double abv;
+    private String description;
+
+    // generate getters/setters</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-quarkus-native-app"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-quarkusrpb-beer-pojo"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+<div class="sect3">
+<h4 id="quarkusrpb-create-beer-client"><a class="anchor" href="#quarkusrpb-create-beer-client"></a>Create Rest Client to Punk Beer API</h4>
+<div class="paragraph">
+<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>BeerGateway</code> with the following contents:</p>
+</div>
+<div id="qext-quarkusrpb-beer-client" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+
+import java.util.List;
+import java.util.concurrent.CompletionStage;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
+@Path("/v2")
+@RegisterRestClient
+public interface BeerGateway {
+
+    @GET
+    @Path("/beers")
+    @Produces(MediaType.APPLICATION_JSON)
+    CompletionStage&lt;List&lt;Beer&gt;&gt; getBeers(@QueryParam("page") int page); <i class="conum" data-value="1"></i><b>(1)</b>
+
+}</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-quarkusrpb-beer-client"><i class="fa fa-clipboard"></i></button><br/>
 <div class="colist arabic">
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Using the <code>-Dnative-image.docker-build=true</code> is very important as need a linux native binary what will be containerized.</td>
+<td>Retrieves all beers from a specific page.</td>
 </tr>
 </table>
 </div>
-<div class="admonitionblock note">
+<div class="sect4">
+<h5 id="quarkusrpb-configure-props"><a class="anchor" href="#quarkusrpb-configure-props"></a>Edit the application.properties</h5>
+<div class="paragraph">
+<p>Add the following properties to $PROJECT_HOME/src/main/resources/application.properties:</p>
+</div>
+<div id="qext-quarkusrpb-update-props" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">com.example.BeerGateway/mp-rest/url=https://api.punkapi.com</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-quarkusrpb-update-props"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+</div>
+<div class="sect3">
+<h4 id="quarkusrpb-beer-reactive-service"><a class="anchor" href="#quarkusrpb-beer-reactive-service"></a>Create Beer Punk API Reactive Service</h4>
+<div class="paragraph">
+<p>Let&#8217;s create the service that uses <code>BeerGateway</code> to retrieve beer information by page and reactively emits each of the beer information.</p>
+</div>
+<div class="paragraph">
+<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>BeerService</code> with the following contents:</p>
+</div>
+<div id="qext-quarkusrpb-beer-service" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.enterprise.context.ApplicationScoped;
+
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+
+import io.reactivex.Flowable;
+
+
+@ApplicationScoped
+public class BeerService {
+
+    ExecutorService executor = Executors.newSingleThreadExecutor(); <i class="conum" data-value="1"></i><b>(1)</b>
+
+    @RestClient
+    BeerGateway beerGateway;
+
+    public Flowable&lt;Beer&gt; beers() {
+        Flowable&lt;List&lt;Beer&gt;&gt; beerStream = Flowable.generate) -&gt; 1, (page, emitter) -&gt; { <i class="conum" data-value="2"></i><b>(2)</b>              beerGateway.getBeers(page).thenAcceptAsync(beers -&gt; {                      if (beers.isEmpty( {
+                        emitter.onComplete(); <i class="conum" data-value="3"></i><b>(3)</b>
+                    } else {
+                        emitter.onNext(beers); <i class="conum" data-value="4"></i><b>(4)</b>
+                    }
+
+                }, executor);
+
+                return page + 1; <i class="conum" data-value="5"></i><b>(5)</b>
+            });
+
+            return beerStream.flatMap(Flowable::fromIterable); <i class="conum" data-value="6"></i><b>(6)</b>
+    }
+
+}</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-quarkusrpb-beer-service"><i class="fa fa-clipboard"></i></button><br/>
+<div class="colist arabic">
 <table>
 <tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Native compilation will take few minutes to complete.
-</td>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This executor is used to serialize calls and not using multi-threading.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Gets first batch of beers</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Sends an event that the process is completed</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Emits each beer</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Gets beers from next page</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Flatten the list of beers event into event of beers</td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>After successful maven build, run the following command to build the container:</p>
+<p>So far nothing really new, but notice that now instead of reading all the beers, put them in memory and then filter out by any parameter, you are just emitting them individually per page.
+The caller is responsible to manipulate this information as it starts receiving the information and it is not necessary to store all beers in memory but just the ones that matches any condition.</p>
 </div>
-<div id="basics-build-quarkus-native-app-container" class="listingblock">
+<div class="paragraph">
+<p>Notice that until a caller subscribes to a stream (<code>Flowable</code> in this case), the logic is not executed.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="quarkusrpb-beer-resource"><a class="anchor" href="#quarkusrpb-beer-resource"></a>Create Beer Resource</h4>
+<div class="paragraph">
+<p>The last step is to manipulate the beer <em>stream</em> created in the previous section to filter out by <em>abv</em> and return the result to the caller.</p>
+</div>
+<div class="paragraph">
+<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>BeerResource</code> with the following contents:</p>
+</div>
+<div id="qext-quarkusrpb-beer-resource" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/fruits-app:1.0-SNAPSHOT .</code></pre>
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+
+import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.reactivestreams.Publisher;
+
+@Path("/beer")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public class BeerResource {
+
+    @Inject
+    BeerService beerService; <i class="conum" data-value="1"></i><b>(1)</b>
+
+    @GET
+    public Publisher&lt;Beer&gt; hello() {
+        return beerService.beers() <i class="conum" data-value="2"></i><b>(2)</b>
+                .filter(b -&gt; b.getAbv() &gt; 7.0); <i class="conum" data-value="3"></i><b>(3)</b>
+                <i class="conum" data-value="4"></i><b>(4)</b>
+    }
+}</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-quarkus-native-app-container"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-</div>
-<div class="admonitionblock note">
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-quarkusrpb-beer-resource"><i class="fa fa-clipboard"></i></button><br/>
+<div class="colist arabic">
 <table>
 <tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-For sake of simplicity the container name in both native and jvm mode are named identically. In real cases where you might need both containers, you&#8217;d like to name them differently to know exactly the package they are containing.
-</td>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Injects <code>BeerService</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Gets the beer stream</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>For each beer emitted checks that <em>abv</em> is greater than 7</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Automatically subscribes to the stream and get back the result as <code>List&lt;Beer&gt;</code></td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>After containerizing the application, we can verify the container by running the following commands:</p>
+<p>The big change here is that now instead of having to deal with all beers in memory and then apply some operations, you are just loading into memory a <em>page</em> of beers, then filter them and finally return them to the caller.</p>
 </div>
-<div id="container-run-jvm-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -it --rm -p 8080:8080 example/fruits-app:1.0-SNAPSHOT</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#build-run-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
-<p>You can <a href="#conk8s-call-svc">Invoke Service</a> to see a response like <code>hello</code>.</p>
+<p>Another big advantage is that now the <em>beer servcie</em> is just called if the consumer requests it.
+If the operation is canceled/aborted before completion, then you also save IO by not executing the operations.</p>
+</div>
+<div class="paragraph">
+<p>Notice that one of the big advantages of this approach (apart from the memory usage) is that you can apply any reactive operator without modifying the creation of the stream.</p>
+</div>
+</div>
 </div>
 <div class="sect2">
-<h3 id="conk8s-call-svc"><a class="anchor" href="#conk8s-call-svc"></a>Invoke Service</h3>
+<h3 id="qext-reactive-beer-run-quarkus-app-dev-mode"><a class="anchor" href="#qext-reactive-beer-run-quarkus-app-dev-mode"></a>Run Quarkus Application in Development mode</h3>
 <div class="paragraph">
-<p>The simple <code>hello</code> REST URI can be called via browser using <code><a href="http://$(minikube" class="bare">http://$(minikube</a> ip)/fruit</code> or using CLI like:</p>
+<p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
 </div>
-<div id="basics-k8s-svc-call" class="listingblock">
+<div id="beer-reactive-build-run-dev" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl $(minikube ip):8080/fruit</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
-<div class="paragraph">
-<p>Then you can stop the container by typing <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="conk8s-deploy-k8s-app"><a class="anchor" href="#conk8s-deploy-k8s-app"></a>Deploy Quarkus Application in Kubernetes</h2>
-<div class="sectionbody">
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#beer-reactive-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -584,176 +651,36 @@ For sake of simplicity the container name in both native and jvm mode are named 
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-<div class="paragraph">
-<p>If you have not deployed the application previously, you need to add Quarkus Kubernetes extension. This extension uses <a href="https://github.com/dekorateio/dekorate">Dekorate</a> to generate a default Kubernetes resource template.</p>
-</div>
-<div id="qext-mvn-add-kubernetes-extension" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextensions="quarkus-kubernetes"</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-mvn-add-kubernetes-extension"><i class="fa fa-clipboard"></i></button><br/>
-<div class="paragraph">
-<p>You need to configure group and name of the Docker container used to deploy into Kubernetes.</p>
-</div>
-<div class="paragraph">
-<p>Add the following properties (if you haven&#8217;t already done it before) to $PROJECT_HOME/src/main/resources/application.properties:</p>
-</div>
-<div id="quarkusk8s-update-props" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.kubernetes.group=example
-quarkus.application.name=fruits-app</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusk8s-update-props"><i class="fa fa-clipboard"></i></button><br/>
+If you are in dev mode and you added new dependencies on the project, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
 </td>
 </tr>
 </table>
 </div>
+<div class="sect3">
+<h4 id="qext-call-beer-reactive-service"><a class="anchor" href="#qext-call-beer-reactive-service"></a>Invoke Service</h4>
 <div class="paragraph">
-<p>Now you need to run Maven goal to generate Kubernetes resource.</p>
+<p>The simple <code>beer</code> REST URI can be called via browser using <a href="http://localhost:8080/beer" class="bare">http://localhost:8080/beer</a> or using CLI like:</p>
 </div>
-<div id="quarkusk8s-generate-kubernetes" class="listingblock">
+<div id="beer-reactive-k8s-svc-call" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw package -DskipTests</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/beer</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusk8s-generate-kubernetes"><i class="fa fa-clipboard"></i></button><br/>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#beer-reactive-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
-<p>You can inspect the generated file by accessing next file:</p>
+<p>The REST call about should return an response like:</p>
 </div>
-<div id="quakrusk8s-generated-kubernetes-resource" class="listingblock">
+<div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quakrusk8s-generated-kubernetes-resource"><i class="fa fa-clipboard"></i></button><br/>
-<div class="sect2">
-<h3 id="conk8s-k8s-apply-resources"><a class="anchor" href="#conk8s-k8s-apply-resources"></a>Apply Kubernetes Resources</h3>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset3_kubectl"></a>kubectl</p>
-</li>
-<li>
-<p><a id="tabset3_oc"></a>oc</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset3_kubectl">
-<div id="basics-run-deploy-k8s-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f $TUTORIAL_HOME/target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="tab-pane" aria-labelledby="tabset3_oc">
-<div id="basics-oc-run-deploy-k8s-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f $TUTORIAL_HOME/target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-deploy-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="conk8s-invoke-k8s-svc"><a class="anchor" href="#conk8s-invoke-k8s-svc"></a>Invoke Kubernetes Service</h3>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset4_kubectl"></a>kubectl</p>
-</li>
-<li>
-<p><a id="tabset4_oc"></a>oc</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset4_kubectl">
-<div class="paragraph">
-<p>You need to create a <code>NodePort</code> to expose the application if you are in minikube.
-As generated resources creates a <code>ClusterIP</code> service, you need to patch it:</p>
-</div>
-<div id="container-k8s-run-expose-svc-nodeport" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl patch svc fruits-app --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"}]'</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-k8s-run-expose-svc-nodeport"><i class="fa fa-clipboard"></i></button><br/>
-<div id="container-run-deploy-k8s-service" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(minikube service -n quarkustutorial fruits-app --url)</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-k8s-service"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="tab-pane" aria-labelledby="tabset4_oc">
-<div class="paragraph">
-<p>With OpenShift we can create a route to make Quarkus application publicly accessible:</p>
-</div>
-<div id="container-oc-run-expose-svc-route" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc expose service fruits-app</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-expose-svc-route"><i class="fa fa-clipboard"></i></button><br/>
-<div class="paragraph">
-<p>Once the service is exposed we can use the following command to get the public url:</p>
-</div>
-<div id="container-oc-run-get-route" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(oc get routes fruits-app -o jsonpath='{.spec.host}')</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-get-route"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p>Now you can use the <code>SVC_URL</code> to call the service from the browser or via cli like:</p>
-</div>
-<div id="container-call-k8s-svc" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl $SVC_URL/fruit</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-call-k8s-svc"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="sect2">
-<h3 id="conk8s-delete-k8s-app"><a class="anchor" href="#conk8s-delete-k8s-app"></a>Delete Kubernetes Resources</h3>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset5_kubectl"></a>kubectl</p>
-</li>
-<li>
-<p><a id="tabset5_oc"></a>oc</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset5_kubectl">
-<div id="delete-basicsk8s-delete-k8s-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl delete all --all</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#delete-basicsk8s-delete-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="tab-pane" aria-labelledby="tabset5_oc">
-<div id="delete-basicsk8s-delete-oc-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc delete all --all</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#delete-basicsk8s-delete-oc-app"><i class="fa fa-clipboard"></i></button><br/>
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">[
+   {
+      "abv":7.2,
+      "description":"An Imperial Pilsner in collaboration with beer writers...." ,
+      "name":"Avery Brown Dredge",
+      "tagline":"Bloggers' Imperial Pilsner."
+   },
+   ...
+]</code></pre>
 </div>
 </div>
 </div>
