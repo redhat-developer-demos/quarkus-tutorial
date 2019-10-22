@@ -717,9 +717,9 @@ Add the following properties to `pass:[$PROJECT_HOME]/src/main/resources/applica
 [source,config,subs="+macros,+attributes"]
 ----
 mp.jwt.verify.publickey.location=https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/0c6d1ed65d38e4dd48992f7410a29aa4e5a35131/quarkus.jwt.pub.jwk.json
-# 1
+# <1>
 mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac
-# 2
+# <2>
 ----
 copyToClipboard::quarkussec-config-jwt[]
 <1> Sets the location of publick key to verify the token
