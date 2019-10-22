@@ -242,6 +242,33 @@
   </li>
 </ul>
   </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="#qext-jwt">Securing endpoints with JWT</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#qext-add-jwt-extensions">Add Extension</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#qext-configure-jwt-parameters">Configuring JWT parameters</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#qext-jwt-inject-claim">Injecting Claims</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#qext-jwt-claim-quarkus-app-dev-mode">Run Quarkus Application in Development mode</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#qext-call-jwt-claim">Invoke Endpoint</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#qext-jwt-inject-rbac">Add RBAC</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#qext-call-jwt-rbac">Invoke Endpoint</a>
+  </li>
+</ul>
+  </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
@@ -366,6 +393,9 @@
 </li>
 <li>
 <p><i class="fa fa-check-square-o"></i> How to add health checks</p>
+</li>
+<li>
+<p><i class="fa fa-check-square-o"></i> How to secure your endpoints with JWT</p>
 </li>
 </ul>
 </div>
@@ -1265,6 +1295,287 @@ quarkus.application.name=fruits-app</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quakrusk8s-generated-kubernetes-resource"><i class="fa fa-clipboard"></i></button><br/>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset1_kubectl"></a>kubectl</p>
+</li>
+<li>
+<p><a id="tabset1_oc"></a>oc</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset1_kubectl">
+<div id="health-checkk8s-delete-k8s-app" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl delete all --all</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#health-checkk8s-delete-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_oc">
+<div id="health-checkk8s-delete-oc-app" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc delete all --all</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#health-checkk8s-delete-oc-app"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="qext-jwt"><a class="anchor" href="#qext-jwt"></a>Securing endpoints with JWT</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In a microservices architecture, and generally speaking, any kind of application, might need to be protected so only certain users can access to the defined endpoint.
+Quarkus provides an integration to the <a href="https://github.com/eclipse/microprofile-jwt-auth">MicroProfile JWT RBAC</a> spec.</p>
+</div>
+<div class="paragraph">
+<p>So let&#8217;s see how you can start using JWT for role based access control (RBAC) of endpoints.</p>
+</div>
+<div class="sect2">
+<h3 id="qext-add-jwt-extensions"><a class="anchor" href="#qext-add-jwt-extensions"></a>Adding JWT RBAC extension</h3>
+<div class="paragraph">
+<p>To add JWT RBAC extension (<code>quarkus-smallrye-jwt</code>) to the Quarkus application, run the following command from <code>fruits-app</code> project directory:</p>
+</div>
+<div id="qext-mvn-add-jwt-extension" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-smallrye-jwt"</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-mvn-add-jwt-extension"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+<div class="sect2">
+<h3 id="qext-configure-jwt-parameters"><a class="anchor" href="#qext-configure-jwt-parameters"></a>Configuring JWT parameters</h3>
+<div class="paragraph">
+<p>Add the following properties to <code>$PROJECT_HOME/src/main/resources/application.properties</code>:</p>
+</div>
+<div id="quarkussec-config-jwt" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">mp.jwt.verify.publickey.location=https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/0c6d1ed65d38e4dd48992f7410a29aa4e5a35131/quarkus.jwt.pub.jwk.json
+<i class="conum" data-value="1"></i><b>(1)</b>
+mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac
+<i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkussec-config-jwt"><i class="fa fa-clipboard"></i></button><br/>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Sets the location of publick key to verify the token</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Issuer of the token</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>We are also providing a valid token that can be verified by the configured public key:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">{
+  "kid": "/privateKey.pem",
+  "typ": "JWT",
+  "alg": "RS256"
+},
+{
+  "sub": "jdoe-using-jwt-rbac",
+  "aud": "using-jwt-rbac",
+  "upn": "jdoe@quarkus.io",
+  "birthdate": "2001-07-13",
+  "auth_time": 1570094171,
+  "iss": "https://quarkus.io/using-jwt-rbac", <i class="conum" data-value="1"></i><b>(1)</b>
+  "roleMappings": {
+    "group2": "Group2MappedRole",
+    "group1": "Group1MappedRole"
+  },
+  "groups": [ <i class="conum" data-value="2"></i><b>(2)</b>
+    "Echoer",
+    "Tester",
+    "Subscriber",
+    "group2"
+  ],
+  "preferred_username": "jdoe",
+  "exp": 2200814171,
+  "iat": 1570094171,
+  "jti": "a-123"
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The issuer you set in <code>application.properties</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>groups</code> field is used by <code>MicroProfile JWT RBAC</code> to get the access groups (or roles) that the owner of the token has</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="qext-jwt-inject-claim"><a class="anchor" href="#qext-jwt-inject-claim"></a>Inject claims into an Object</h3>
+<div class="paragraph">
+<p>You can inject any defined claim into an object by using <code>@Claim</code> annotation:</p>
+</div>
+<div class="paragraph">
+<p>Open <code>$PROJECT_HOME/src/main/java/java/com/example/FruitResource.java</code> and inject username claim:</p>
+</div>
+<div id="quarkussec-jwt-claim-username" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">@Claim(standard = Claims.preferred_username)
+String username;
+
+@GET
+@Path("/claim")
+public String getClaim() {
+    return username;
+}</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkussec-jwt-claim-username"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="qext-jwt-claim-quarkus-app-dev-mode"><a class="anchor" href="#qext-jwt-claim-quarkus-app-dev-mode"></a>Run Quarkus Application in Development mode</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
+</div>
+<div id="jwt-claim-build-run-dev" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#jwt-claim-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+If you are in dev mode and you added new dependencies on the project, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="qext-call-jwt-claim"><a class="anchor" href="#qext-call-jwt-claim"></a>Invoke Service</h3>
+<div class="paragraph">
+<p>The simple <code>fruit/claim</code> REST URI can be called via browser using <a href="http://localhost:8080/fruit/claim" class="bare">http://localhost:8080/fruit/claim</a> or using CLI like:</p>
+</div>
+<div id="jwt-claim-k8s-svc-call" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/5f8c5b7a9c11ed455f4910ed2032d79612b5e6f6/quarkus.jwt.token -s)
+curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#jwt-claim-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>And you&#8217;ll see the <code>preferred_username</code> field for the given token (<code>jdoe</code>).</p>
+</div>
+<div class="paragraph">
+<p>MircoProfile JWT RBAC spec is providing out-of-the-box the validation of the given token.
+These validations include for example that the token has not been modified, has not expired or the issuer is the expected one.</p>
+</div>
+<div class="paragraph">
+<p>To validate this just invoke again the service but changing the token:</p>
+</div>
+<div id="jwt-claim-k8s-svc-call" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=XXXX
+curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#jwt-claim-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>And now the invocation returns and HTTP code <code>401 Unauthorized</code> because the token is invalid.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="qext-jwt-inject-rbac"><a class="anchor" href="#qext-jwt-inject-rbac"></a>Adds RBAC to the endpoint</h3>
+<div class="paragraph">
+<p>So far, you&#8217;ve seen how to get claims from the provided JWT token, but anyone could access that endpoint, let&#8217;s protected it with a role.
+For this case you need to use a role that is defined in JWT token into <code>groups</code> claim (ie <code>Subscriber</code>).</p>
+</div>
+<div class="paragraph">
+<p>Open <code>$PROJECT_HOME/src/main/java/java/com/example/FruitResource.java</code> and annotate the method with <code>javax.annotation.security.RolesAllowed</code>:</p>
+</div>
+<div id="quarkussec-jwt-rbac" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">@GET
+@Path("/claim")
+@RolesAllowed("Subscriber")
+public String getClaim() {
+    return username;
+}</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkussec-jwt-rbac"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+<div class="sect2">
+<h3 id="qext-call-jwt-rbac"><a class="anchor" href="#qext-call-jwt-rbac"></a>Invoke Service</h3>
+<div class="paragraph">
+<p>The simple <code>fruit/claim</code> REST URI can be called via browser using <a href="http://localhost:8080/fruit/claim" class="bare">http://localhost:8080/fruit/claim</a> or using CLI like:</p>
+</div>
+<div id="rjwt-rbac-k8s-svc-call" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/5f8c5b7a9c11ed455f4910ed2032d79612b5e6f6/quarkus.jwt.token -s)
+curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#rjwt-rbac-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>And you&#8217;ll see the <code>preferred_username</code> field for given token (<code>jdoe</code>).</p>
+</div>
+<div class="paragraph">
+<p>But the big difference now, and it is that you see the result only because the token contains in <code>groups</code> claim the <code>Subscriber</code> role.</p>
+</div>
+<div class="paragraph">
+<p>Open <code>$PROJECT_HOME/src/main/java/java/com/example/FruitResource.java</code> and change the  <code>RolesAllowed</code> value to <code>Subscriber2</code>:</p>
+</div>
+<div id="quarkussec-jwt-rbac-invalid" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">@GET
+@Path("/claim")
+@RolesAllowed("Subscriber2")
+public String getClaim() {
+    return username;
+}</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkussec-jwt-rbac-invalid"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>And then do the request again:</p>
+</div>
+<div class="paragraph">
+<p>The simple <code>fruit/claim</code> REST URI can be called via browser using <a href="http://localhost:8080/fruit/claim" class="bare">http://localhost:8080/fruit/claim</a> or using CLI like:</p>
+</div>
+<div id="rjwt-rbac-k8s-svc-call" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/5f8c5b7a9c11ed455f4910ed2032d79612b5e6f6/quarkus.jwt.token -s)
+curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#rjwt-rbac-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>And the output now is different: <code>Access forbidden: role not allowed</code>.</p>
+</div>
+<div class="paragraph">
+<p>This is the result because the provided token does not contain <code>Subscriber2</code> in the <code>groups</code> claim.</p>
+</div>
 </div>
 </div>
 </div>
