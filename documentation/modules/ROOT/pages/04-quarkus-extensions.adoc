@@ -581,7 +581,7 @@ public class FruitHealthCheck {
     @ApplicationScoped
     @Readiness
     HealthCheck readyCheck() {
-      return HealthStatus.state("successful-read", this::isReady)
+      return HealthStatus.state("successful-read", this::isReady);
     }
 
     private boolean isReady() {
@@ -684,6 +684,7 @@ Kubernetes extension detects that Health Check extension is registered and regis
 
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-prep]
 
+<<<<<<< HEAD
 :section-k8s: health-check
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-delete]
 endif::workshop[]
@@ -881,3 +882,6 @@ And the output now is different: `Access forbidden: role not allowed`.
 
 This is the result because the provided token does not contain `Subscriber2` in the `groups` claim.
 =======
+=======
+endif::workshop[]
+>>>>>>> Fix compile problem (#47)
