@@ -16,7 +16,12 @@ which allows you to run this entire tutorial within a contianer that will have a
 
 === CLI Tools
 
-The following CLI tools are required for running the exercises in this tutorial. 
+The following CLI tools are required for running the exercises in this tutorial.
+ifndef::workshop[]
+Kubernetes/OpenShift are required only in case you want to deploy the application into them.
+endiff::workshop[]
+
+GraalVM is not mandatory if you have Docker installed.
 
 [tabs]
 ====
@@ -28,7 +33,7 @@ https://quay.io/repository/rhdevelopers/tutorial-tools?tab=tags[tutorial tools] 
 [#docker-pull-tutorials-cli]
 [source,bash]
 -----
-docker pull quay.io/rhdevelopers/tutorial-tools:0.0.1
+docker pull quay.io/rhdevelopers/tutorial-tools:0.0.2
 -----
 copyToClipboard::docker-pull-tutorials-cli[]
 
@@ -43,6 +48,7 @@ Please have them installed and configured before you get started with any of the
 |===
 |**Tool**|**macOS**|**Fedora**|**Windows**
 
+ifndef::workshop[]
 | **Kubernetes**
 | `brew install kubernetes-cli`
 | https://github.com/kubernetes/kubernetes/releases[Kubernetes Releases]
@@ -57,6 +63,7 @@ Please have them installed and configured before you get started with any of the
 | https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-mac-4.1.8.tar.gz[openshift-client-linux-4.x]
 | https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux-4.1.8.tar.gz[openshift-client-linux-4.x]
 | https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-windows-4.1.8.zip[openshift-client-linux-4.x]
+endif::workshop[]
 
 | **git**
 | https://git-scm.com/download/mac
@@ -83,10 +90,12 @@ Please have them installed and configured before you get started with any of the
 | https://github.com/oracle/graal/releases/download/vm-{graalvm-version}/graalvm-ce-linux-amd64-{graalvm-version}.tar.gz[GraalVM Community Edition {graalvm-version}]
 | Not Supported
 
+ifndef::workshop[]
 | **stern**
 | `brew install stern`
 | https://github.com/wercker/stern/releases
 | https://github.com/wercker/stern/releases
+endif::workshop[]
 
 |===
 --
@@ -121,10 +130,9 @@ This tutorial was developed and tested with:
 - Graal VM `{graalvm-version}`
 ====
 
+ifndef::workshop[]
 [#kubernetes-cluster]
 == Kubernetes Cluster
-
-ifndef::workshop[]
 
 [tabs]
 ====
@@ -156,9 +164,6 @@ oc new-project {tutorial-namespace}
 copyToClipboard::quarkus-start-minishift[]
 --
 ====
-endif::[]
-
-ifndef::workshop[]
 
 Prepare your shell environment
 
@@ -170,9 +175,6 @@ export TUTORIAL_HOME=pass:[`pwd`]
 export GRAALVM_HOME='PUT THE LOCATION  WHERE YOU HAVE EXTRACTED GRAAL VM'
 ----
 copyToClipboard::quarkus-tutorial-shell-env[]
-endif::[]
-
-ifdef::workshop[]
 
 Prepare your shell environment:
 
@@ -202,9 +204,8 @@ ifdef::openshift-console-url[]
 You can also access the Openshift Console via url {openshift-console-url}
 endif::[]
 
-endif::[]
-
 IMPORTANT: If you are in `MAC OSX`, the variable should point to `Home` sub-directory: `export GRAALVM_HOME=$HOME/Development/graalvm/Contents/Home/`
+endif::workshop[]
 
 [#setup-work-folder]
 == Work folder (Optional)
