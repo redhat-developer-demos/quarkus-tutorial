@@ -3,6 +3,7 @@
 
 include::_attributes.adoc[]
 :project-dir: fruits-app
+:quarkus-project-name: fruits-app
 
 At the end of this chapter you will be able to :
 
