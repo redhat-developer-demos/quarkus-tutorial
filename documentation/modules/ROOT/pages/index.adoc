@@ -37,6 +37,7 @@ endif::workshop[]
 * xref:04-quarkus-extensions.adoc#qext-rest-client[Rest Client]
 * xref:04-quarkus-extensions.adoc#qext-fault-tolerance[Fault Tolerance]
 * xref:04-quarkus-extensions.adoc#qext-health-checks[Health Checks]
+* xref:04-quarkus-extensions.adoc#qext-jwt[JWT RBAC]
 
 [.tile]
 .xref:05-quarkus-panache.adoc[Database Interactive Applications]
