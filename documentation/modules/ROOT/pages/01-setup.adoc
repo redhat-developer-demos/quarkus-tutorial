@@ -34,9 +34,11 @@ https://quay.io/repository/rhdevelopers/tutorial-tools?tab=tags[tutorial tools] 
 [source,bash]
 -----
 docker pull quay.io/rhdevelopers/tutorial-tools:0.0.2
+docker run -ti --rm quay.io/rhdevelopers/tutorial-tools:0.0.2 bash
 -----
 copyToClipboard::docker-pull-tutorials-cli[]
 
+Then you can 
 --
 
 Locally::
@@ -101,9 +103,11 @@ endif::workshop[]
 --
 ====
 
+ifndef::workshop[]
 [#remote-docker-repository]
 == Remote Repository
 For some parts of the tutorial, you will be pushing and pulling container images to and from a remote image repository. You will need an account with push rights. You can create a free account on https://quay.io[Red Hat Quay.io].
+endif::workshop[]
 
 [#download-tutorial-sources]
 == Download Tutorial Sources
