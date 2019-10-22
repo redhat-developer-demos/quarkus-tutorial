@@ -877,12 +877,4 @@ include::ROOT:partial$invoke-service.adoc[tag=callToken]
 
 And the output now is different: `Access forbidden: role not allowed`.
 
-<<<<<<< HEAD
 This is the result because the provided token does not contain `Subscriber2` in the `groups` claim.
-=======
-=======
-endif::workshop[]
->>>>>>> Fix compile problem (#47)
-=======
-This is the result because the provided token does not contain `Subscriber2` in the `groups` claim.
->>>>>>> Adds JWT section
