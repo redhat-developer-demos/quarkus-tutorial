@@ -580,7 +580,7 @@ public class FruitHealthCheck {
     @ApplicationScoped
     @Readiness
     HealthCheck readyCheck() {
-      return HealthStatus.state("successful-read", this::isReady)
+      return HealthStatus.state("successful-read", this::isReady);
     }
 
     private boolean isReady() {
