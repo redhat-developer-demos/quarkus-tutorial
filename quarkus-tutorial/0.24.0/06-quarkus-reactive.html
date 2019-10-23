@@ -476,6 +476,7 @@ public interface BeerGateway {
     @GET
     @Path("/beers")
     @Produces(MediaType.APPLICATION_JSON)
+    @ClientHeaderParam(name="user-agent", value="curl/7.54.0")
     CompletionStage&lt;List&lt;Beer&gt;&gt; getBeers(@QueryParam("page") int page); <i class="conum" data-value="1"></i><b>(1)</b>
 
 }</code></pre>
@@ -535,7 +536,11 @@ public class BeerService {
     BeerGateway beerGateway;
 
     public Flowable&lt;Beer&gt; beers() {
-        Flowable&lt;List&lt;Beer&gt;&gt; beerStream = Flowable.generate) -&gt; 1, (page, emitter) -&gt; { <i class="conum" data-value="2"></i><b>(2)</b>              beerGateway.getBeers(page).thenAcceptAsync(beers -&gt; {                      if (beers.isEmpty( {
+        Flowable&lt;List&lt;Beer&gt;&gt; beerStream = Flowable.generate( () -&gt; 1, (page, emitter) -&gt; { <i class="conum" data-value="2"></i><b>(2)</b>
+
+            beerGateway.getBeers(page).thenAcceptAsync(beers -&gt; {
+
+                    if (beers.isEmpty()) {
                         emitter.onComplete(); <i class="conum" data-value="3"></i><b>(3)</b>
                     } else {
                         emitter.onNext(beers); <i class="conum" data-value="4"></i><b>(4)</b>
