@@ -784,7 +784,7 @@ copyToClipboard::quarkussec-jwt-claim-username[]
 [#qext-jwt-claim-quarkus-app-dev-mode]
 == Run Quarkus Application in Development mode
 
-:section-build-run: jwt-claim
+:section-build-run: jwt-claim-dev
 
 include::ROOT:partial$run-dev-mode.adoc[]
 
