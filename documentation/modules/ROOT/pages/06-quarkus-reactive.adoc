@@ -85,6 +85,7 @@ public interface BeerGateway {
     @GET
     @Path("/beers")
     @Produces(MediaType.APPLICATION_JSON)
+    @ClientHeaderParam(name="user-agent", value="curl/7.54.0")
     CompletionStage<List<Beer>> getBeers(@QueryParam("page") int page); //<1>
     
 }
@@ -137,7 +138,7 @@ public class BeerService {
     BeerGateway beerGateway;
 
     public Flowable<Beer> beers() {
-        Flowable<List<Beer>> beerStream = Flowable.generate(() -> 1, (page, emitter) -> { // <2>
+        Flowable<List<Beer>> beerStream = Flowable.generate( () -> 1, (page, emitter) -> { // <2>
 
             beerGateway.getBeers(page).thenAcceptAsync(beers -> {
                 
