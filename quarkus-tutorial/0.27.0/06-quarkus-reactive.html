@@ -477,7 +477,7 @@ public interface BeerGateway {
     @Path("/beers")
     @Produces(MediaType.APPLICATION_JSON)
     @ClientHeaderParam(name="user-agent", value="curl/7.54.0")
-    CompletionStage&lt;List&lt;Beer&gt;&gt; getBeers(@QueryParam("page") int page); <i class="conum" data-value="1"></i><b>(1)</b>
+    List&lt;Beer&gt; getBeers(@QueryParam("page") int page); <i class="conum" data-value="1"></i><b>(1)</b>
 
 }</code></pre>
 </div>
@@ -517,41 +517,33 @@ public interface BeerGateway {
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import javax.enterprise.context.ApplicationScoped;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import io.reactivex.Flowable;
-
+import io.reactivex.schedulers.Schedulers;
 
 @ApplicationScoped
 public class BeerService {
-
-    ExecutorService executor = Executors.newSingleThreadExecutor(); <i class="conum" data-value="1"></i><b>(1)</b>
 
     @RestClient
     BeerGateway beerGateway;
 
     public Flowable&lt;Beer&gt; beers() {
-        Flowable&lt;List&lt;Beer&gt;&gt; beerStream = Flowable.generate( () -&gt; 1, (page, emitter) -&gt; { <i class="conum" data-value="2"></i><b>(2)</b>
+        Flowable&lt;List&lt;Beer&gt;&gt; beerStream = Flowable.generate) -&gt; 1, (page, emitter) -&gt; { <i class="conum" data-value="1"></i><b>(1)</b>             final List&lt;Beer&gt; beers = beerGateway.getBeers(page);             if (beers.isEmpty( {
+                emitter.onComplete(); <i class="conum" data-value="2"></i><b>(2)</b>
+            } else {
+                emitter.onNext(beers); <i class="conum" data-value="3"></i><b>(3)</b>
+            }
 
-            beerGateway.getBeers(page).thenAcceptAsync(beers -&gt; {
+            return page + 1; <i class="conum" data-value="4"></i><b>(4)</b>
+        });
 
-                    if (beers.isEmpty()) {
-                        emitter.onComplete(); <i class="conum" data-value="3"></i><b>(3)</b>
-                    } else {
-                        emitter.onNext(beers); <i class="conum" data-value="4"></i><b>(4)</b>
-                    }
-
-                }, executor);
-
-                return page + 1; <i class="conum" data-value="5"></i><b>(5)</b>
-            });
-
-            return beerStream.flatMap(Flowable::fromIterable); <i class="conum" data-value="6"></i><b>(6)</b>
+        return beerStream
+                .subscribeOn(Schedulers.io())
+                .flatMap(Flowable::fromIterable); <i class="conum" data-value="5"></i><b>(5)</b>
     }
 
 }</code></pre>
@@ -562,26 +554,22 @@ public class BeerService {
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>This executor is used to serialize calls and not using multi-threading.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
 <td>Gets first batch of beers</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
 <td>Sends an event that the process is completed</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
 <td>Emits each beer</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
 <td>Gets beers from next page</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
 <td>Flatten the list of beers event into event of beers</td>
 </tr>
 </table>
