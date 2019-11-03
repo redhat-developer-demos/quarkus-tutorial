@@ -56,7 +56,7 @@ Docker-Native mode::
 [source,bash,subs="+macros,+attributes"]
 ----
 cd pass:[$TUTORIAL_HOME]/work/{project-dir} && \
-./mvnw package -DskipTests -Pnative -Dnative-image.docker-build=true
+./mvnw package -DskipTests -Pnative -Dquarkus.native.container-build=true
 ----
 copyToClipboard::basics-build-quarkus-native-docker-app[]
 
@@ -67,7 +67,7 @@ To run the application in native mode you need to build a Docker image using the
 [#basics-build-run-native-docker-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-docker build -f src/main/docker/Dockerfile.jvm -t example/{quarkus-project-name}:1.0-SNAPSHOT . && \
+docker build -f src/main/docker/Dockerfile.native -t example/{quarkus-project-name}:1.0-SNAPSHOT . && \
 docker run -it --rm -p 8080:8080 example/{quarkus-project-name}:1.0-SNAPSHOT
 ----
 copyToClipboard::basics-build-run-native-docker-app[]

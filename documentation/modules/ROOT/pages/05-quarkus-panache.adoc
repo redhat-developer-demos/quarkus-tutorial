@@ -33,7 +33,7 @@ kubectl::
 [#quarkusp-deploy-db]
 [source,bash,subs="+macros,+attributes"]
 ----
-kubectl apply -n {tutorial-namespace} -f pass:[$TUTORIAL_HOME]/kubernetes-apps/mariadb.yaml
+kubectl apply -n {tutorial-namespace} -f pass:[$TUTORIAL_HOME]/kubernetes-app/mariadb.yaml
 ----
 copyToClipboard::quarkusp-deploy-db[]
 
@@ -64,7 +64,7 @@ oc::
 [#quarkusp-oc-deploy-db]
 [source,bash,subs="+macros,+attributes"]
 ----
-oc apply -n {tutorial-namespace} -f pass:[$TUTORIAL_HOME]/kubernetes-apps/mariadb.yaml
+oc apply -n {tutorial-namespace} -f pass:[$TUTORIAL_HOME]/kubernetes-app/mariadb.yaml
 ----
 copyToClipboard::quarkusp-oc-deploy-db[]
 
@@ -161,7 +161,7 @@ To be able to access MariaDB database locally (`localhost` if you are not using 
 
 ifndef::workshop[]
 
-Open a new terminal window and run the following command:
+Open a new terminal window and run the following command (blocking):
 
 [tabs]
 ====
@@ -201,6 +201,14 @@ NOTE: For the easier reference, we shall call the `fruits-app` project folder as
 ----
 copyToClipboard::qext-mvn-add-persistence-extensions[]
 
+[NOTE]
+====
+If you use `tutorial-tools`, start MariaDB from the same Docker engine.
+Stop the `tutorial-tools` container and restart it with a link to mariadb
+
+`docker run -ti -p 8080:8080 -v `pwd`/work:/work -v `mvn help:evaluate -Dexpression=settings.localRepository | grep -v '\[INFO\]'`:/opt/developer/.m2/repository --link mariadb:mariadb --rm quay.io/rhdevelopers/tutorial-tools:0.0.3 bash`
+====
+
 [#quarkusp-configure-props]
 ===== Edit the application.properties
 
@@ -214,6 +222,8 @@ Add the following properties to `pass:[$PROJECT_HOME]/src/main/resources/applica
 quarkus.datasource.url = jdbc:mariadb://mariadb:3306/demodb 
 # <2>
 %dev.quarkus.datasource.url = jdbc:mariadb://127.0.0.1:3306/demodb 
+# <3>
+%fromtools.quarkus.datasource.url = jdbc:mariadb://mariadb:3306/demodb
 quarkus.datasource.driver = org.mariadb.jdbc.MariaDbDataSource
 quarkus.hibernate-orm.dialect = org.hibernate.dialect.MariaDB103Dialect 
 quarkus.datasource.username = demo
@@ -228,6 +238,9 @@ copyToClipboard::quarkuspdb-update-props[]
 
 <1> URL used when app is running in production (native or JAR)
 <2> URL used when app is running in development mode
+<2> URL used when app is running in development mode via tutorial-tools
+
+NOTE: In tutorial-tools, we use the mariadb DNS name using the profile `fromtools`. Start Quarkus dev with this command `./mvnw compile quarkus:dev -Dquarkus.profile=fromtools`.
 
 ===== Test Database connection
 
@@ -251,7 +264,7 @@ Listening for transport dt_socket at address: 5005
 2019-05-26 12:27:59,392 INFO  [io.quarkus] (main) Installed features: [agroal, cdi, hibernate-orm, jdbc-mariadb, narayana-jta, resteasy, resteasy-jsonb, smallrye-health, smallrye-openapi, swagger-ui]
 ----
 
-As you would have noticed there is no database logs thats because we dont have any database related code yet:
+As you would have noticed there is no database logs. That's because we dont have any database related code yet:
 
 [#quarkusp-create-fruit-entity]
 ===== Create Fruit Entity
@@ -351,7 +364,7 @@ You have accessed the application using http://localhost:8080/fruit. If you want
 [#qext-mvn-add-swagger-ui-extensions]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:add-extension -Dextension="quarkus-swagger-ui"
+./mvnw quarkus:add-extension -Dextension="openapi"
 ----
 copyToClipboard::qext-mvn-add-swagger-ui-extensions[]
 

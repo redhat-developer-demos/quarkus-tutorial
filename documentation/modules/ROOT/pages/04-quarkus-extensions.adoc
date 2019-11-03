@@ -770,7 +770,7 @@ Open `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruitResource.java` an
 [#quarkussec-jwt-claim-username]
 [source,config,subs="+macros"]
 ----
-@Claim(standard = Claims.preferred_username)
+@Inject @Claim(standard = Claims.preferred_username)
 String username;
 
 @GET
@@ -780,6 +780,8 @@ public String getClaim() {
 }
 ----
 copyToClipboard::quarkussec-jwt-claim-username[]
+
+Rename the `@Path` used in `FruityVice getFruitInfoByName` to `@Path("name-{name})"` to avoid conflict with the path `/fruit/claim`.
 
 [#qext-jwt-claim-quarkus-app-dev-mode]
 == Run Quarkus Application in Development mode

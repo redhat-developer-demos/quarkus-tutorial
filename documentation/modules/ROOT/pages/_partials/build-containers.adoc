@@ -14,7 +14,7 @@ JVM mode::
 ----
 copyToClipboard::{section-k8s}-build-quarkus-jvm-app[]
 
-After successful maven build, run the following command to build the container:
+After successful maven build, run the following command to build the container - choose the terminal of the target environment you wish to use (docker, minishift or minokube) as you want to build and publish the image in the right registry:
 
 [#{section-k8s}-build-quarkus-jvm-app-container]
 [source,bash,subs="+macros,+attributes"]
@@ -37,7 +37,7 @@ copyToClipboard::{section-k8s}-build-quarkus-native-app[]
 
 NOTE: Native compilation will take few minutes to complete.
 
-After successful maven build, run the following command to build the container:
+After successful maven build, run the following command to build the container - choose the terminal of the target environment you wish to use (docker, minishift or minokube) as you want to build and publish the image in the right registry:
 
 [#{section-k8s}-build-quarkus-native-app-container]
 [source,bash,subs="+macros,+attributes"]

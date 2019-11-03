@@ -25,7 +25,7 @@ Create the `fruits-app` folder and navigate to the folder:
 [#quarkusp-nav-to-work-folder]
 [source,bash,subs="+macros,+attributes"]
 ----
-mkdir -p $TUTORIAL_HOME/work/fruits-app && cd $TUTORIAL_HOME/work/`basename $_`
+mkdir -p $TUTORIAL_HOME/work && cd $TUTORIAL_HOME/work
 # set the Quarkus release environment variable 
 export QUARKUS_VERSION={page-component-version}
 ----
@@ -40,6 +40,7 @@ mvn io.quarkus:quarkus-maven-plugin:pass:[$QUARKUS_VERSION]:create \
   -DprojectVersion="1.0-SNAPSHOT" \
   -DclassName="FruitResource" \
   -Dpath="fruit"
+cd fruits-app
 ----
 copyToClipboard::quarkusp-mv-create-fruits-app[]
 
@@ -58,6 +59,8 @@ code .
 copyToClipboard::basics-ide-quarkus-project[]
 
 NOTE: All further sections of this tutorial assumes the application name to be `fruits-app`.
+
+INFO: If you use `tutorial-tools`, your host `quarkus-tutorial/work` contains the application code ; point your IDE to this directory.
 
 [#basics-build-run-quarkus-app]
 == Build and Run the Quarkus Application
@@ -162,7 +165,7 @@ copyToClipboard::basics-update-custom-logging-props[]
 
 [#basics-call-svc-logging]
 === Invoke Service
-The simple `hello` REST URI can be called from the browser using http://localhost:8080[http://localhost:8080[http://localhost:8080,window=_blank],window=_blank] or using cli like: 
+The simple `hello` REST URI can be called from the browser using http://localhost:8080[http://localhost:8080,window=_blank],window=_blank] or using cli like: 
 
 :doc-sec: basics-log
 :k8s-cli: k8s
@@ -227,7 +230,7 @@ copyToClipboard::basics-configuration-get-value-code[]
 
 [#basics-call-configuration]
 === Invoke Service
-The simple `hello` REST URI can be called from the browser using http://localhost:8080[http://localhost:8080[http://localhost:8080,window=_blank],window=_blank] or using cli like: 
+The simple `hello` REST URI can be called from the browser using http://localhost:8080[http://localhost:8080,window=_blank],window=_blank] or using cli like: 
 
 :doc-sec: basics-conf
 :k8s-cli: k8s
