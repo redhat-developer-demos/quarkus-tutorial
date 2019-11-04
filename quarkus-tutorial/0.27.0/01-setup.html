@@ -399,9 +399,10 @@ which allows you to run this entire tutorial within a contianer that will have a
 <div class="sect2">
 <h3 id="_cli_tools"><a class="anchor" href="#_cli_tools"></a>CLI Tools</h3>
 <div class="paragraph">
-<p>The following CLI tools are required for running the exercises in this tutorial.
-Kubernetes/OpenShift are required only in case you want to deploy the application into them.
-endiff::workshop[]</p>
+<p>The following CLI tools are required for running the exercises in this tutorial.</p>
+</div>
+<div class="paragraph">
+<p>Kubernetes/OpenShift are required only in case you want to deploy the application into them.</p>
 </div>
 <div class="paragraph">
 <p>GraalVM is not mandatory if you have Docker installed.</p>
@@ -411,6 +412,9 @@ endiff::workshop[]</p>
 <ul>
 <li>
 <p><a id="tabset1_container-image"></a>Container Image</p>
+</li>
+<li>
+<p><a id="tabset1_locally"></a>Locally</p>
 </li>
 </ul>
 </div>
@@ -438,8 +442,85 @@ docker run -ti -p 8080:8080 -v `pwd`/work:/work \
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#docker-pull-tutorials-cli"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
-<p>+</p>
+<p>Alternatively, you can chose to install things locally.</p>
 </div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_locally">
+<div class="paragraph">
+<p>Please have them installed and configured before you get started with any of the tutorial chapters.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>Tool</strong></th>
+<th class="tableblock halign-left valign-top"><strong>macOS</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Fedora</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Windows</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Kubernetes</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>brew install kubernetes-cli</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/kubernetes/kubernetes/releases">Kubernetes Releases</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/kubernetes/kubernetes/releases">Kubernetes Releases</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>(OR)</strong></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>OpenShift client(oc)</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.1.8/openshift-client-mac-4.1.8.tar.gz">openshift-client-linux-4.x</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.1.8/openshift-client-linux-4.1.8.tar.gz">openshift-client-linux-4.x</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.1.8/openshift-client-windows-4.1.8.zip">openshift-client-linux-4.x</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>git</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://git-scm.com/download/mac" class="bare">https://git-scm.com/download/mac</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dnf install git</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Make sure you have the <a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10">Windows Subsystem for Linux</a> installed</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Docker</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.docker.com/products/docker-desktop">Docker Desktop for Mac</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dnf install docker</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.docker.com/products/docker-desktop">Docker Desktop for Windows</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Java 8</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>brew tap AdoptOpenJDK/openjdk &amp;&amp; brew cask install adoptopenjdk8</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dnf install java-1.8.0-openjdk.x86_64</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://adoptopenjdk.net">Windows</a> (Make sure you set the <code>JAVA_HOME</code> environment variable and add <code>%JAVA_HOME%\bin</code> to your <code>PATH</code>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Apache Maven 3.6.0+</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">brew install maven</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dnf install maven</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://maven.apache.org/download.cgi">Windows</a> (Make sure you set the <code>MAVEN_HOME</code> environment variable and add <code>%MAVEN_HOME%\bin</code> to your <code>PATH</code>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Graal VM</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/graal/releases/download/vm-19.2.1/graalvm-ce-darwin-amd64-19.2.1.tar.gz">GraalVM Community Edition 19.2.1</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/graal/releases/download/vm-19.2.1/graalvm-ce-linux-amd64-19.2.1.tar.gz">GraalVM Community Edition 19.2.1</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not Supported</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>stern</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>brew install stern</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/wercker/stern/releases" class="bare">https://github.com/wercker/stern/releases</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/wercker/stern/releases" class="bare">https://github.com/wercker/stern/releases</a></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
