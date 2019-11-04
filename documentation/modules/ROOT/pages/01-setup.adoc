@@ -17,9 +17,10 @@ which allows you to run this entire tutorial within a contianer that will have a
 === CLI Tools
 
 The following CLI tools are required for running the exercises in this tutorial.
+
 ifndef::workshop[]
 Kubernetes/OpenShift are required only in case you want to deploy the application into them.
-endiff::workshop[]
+endif::workshop[]
 
 GraalVM is not mandatory if you have Docker installed.
 
@@ -47,12 +48,9 @@ docker run -ti -p 8080:8080 -v `pwd`/work:/work \
 # -v `mvn ...` will map your ~/.m2/repository of your host to the container repository to save downloading again between image runs
 -----
 copyToClipboard::docker-pull-tutorials-cli[]
-+
-
---
 
 Alternatively, you can chose to install things locally.
-
+--
 Locally::
 +
 --
