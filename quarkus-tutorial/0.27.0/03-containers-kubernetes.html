@@ -395,6 +395,13 @@
 <div class="paragraph">
 <p>The following checks ensure that each chapter exercises are done with the right environment settings.</p>
 </div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>Make sure to use separate terminal windows or tabs between commands you run to target Docker for Mac/Windows and commands for Minikube/minishift as both will point to different docker engines.</p>
+</div>
+</div>
+</div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
 <ul>
@@ -512,7 +519,7 @@
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-quarkus-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
-<p>After successful maven build, run the following command to build the container:</p>
+<p>After successful maven build, run the following command to build the container - choose the terminal of the target environment you wish to use (docker, minishift or minokube) as you want to build and publish the image in the right registry:</p>
 </div>
 <div id="basics-build-quarkus-jvm-app-container" class="listingblock">
 <div class="content">
@@ -549,7 +556,7 @@ Native compilation will take few minutes to complete.
 </table>
 </div>
 <div class="paragraph">
-<p>After successful maven build, run the following command to build the container:</p>
+<p>After successful maven build, run the following command to build the container - choose the terminal of the target environment you wish to use (docker, minishift or minokube) as you want to build and publish the image in the right registry:</p>
 </div>
 <div id="basics-build-quarkus-native-app-container" class="listingblock">
 <div class="content">
@@ -628,7 +635,7 @@ For sake of simplicity the container name in both native and jvm mode are named 
 </div>
 <div id="quarkusk8s-update-props" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.kubernetes.group=example
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">kubernetes.group=example
 quarkus.application.name=fruits-app</code></pre>
 </div>
 </div>
@@ -651,7 +658,7 @@ quarkus.application.name=fruits-app</code></pre>
 </div>
 <div id="quakrusk8s-generated-kubernetes-resource" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat target/kubernetes/kubernetes.yml</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quakrusk8s-generated-kubernetes-resource"><i class="fa fa-clipboard"></i></button><br/>
@@ -672,7 +679,7 @@ quarkus.application.name=fruits-app</code></pre>
 <div class="tab-pane" aria-labelledby="tabset3_kubectl">
 <div id="basics-run-deploy-k8s-app" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f $TUTORIAL_HOME/target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f $TUTORIAL_HOME/target/kubernetes/kubernetes.yml</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
@@ -680,12 +687,32 @@ quarkus.application.name=fruits-app</code></pre>
 <div class="tab-pane" aria-labelledby="tabset3_oc">
 <div id="basics-oc-run-deploy-k8s-app" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f $TUTORIAL_HOME/target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f $TUTORIAL_HOME/target/kubernetes/kubernetes.yml</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-deploy-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>A bug in the Dekorate library prevents Quarkus 0.27.0 to set the proper image name (see <a href="https://github.com/quarkusio/quarkus/issues/5135">bug report</a>).
+You can check the failure by running <code>kubectl get pods</code> and check that the fruit one is 0/1 and fails due to an image error.</p>
+</div>
+<div class="paragraph">
+<p>Edit the kubernetes resource to update the image via <code>kubectl edit deployment fruits-app</code> and search for the <code>image</code> property.
+Change the prefix from your username (or <code>developer</code>) to <code>example</code> which is the correct group under which we published our image earlier.
+Save and exit and the deployment should succeed.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">

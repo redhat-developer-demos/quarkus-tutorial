@@ -401,6 +401,13 @@
 <div class="paragraph">
 <p>The following checks ensure that each chapter exercises are done with the right environment settings.</p>
 </div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>Make sure to use separate terminal windows or tabs between commands you run to target Docker for Mac/Windows and commands for Minikube/minishift as both will point to different docker engines.</p>
+</div>
+</div>
+</div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
 <ul>
@@ -503,7 +510,7 @@
 </div>
 <div id="quarkusp-nav-to-work-folder" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir -p $TUTORIAL_HOME/work/fruits-app &amp;&amp; cd $TUTORIAL_HOME/work/`basename $_`
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir -p $TUTORIAL_HOME/work &amp;&amp; cd $TUTORIAL_HOME/work
 # set the Quarkus release environment variable
 export QUARKUS_VERSION=0.27.0</code></pre>
 </div>
@@ -516,7 +523,8 @@ export QUARKUS_VERSION=0.27.0</code></pre>
   -DprojectArtifactId="fruits-app" \
   -DprojectVersion="1.0-SNAPSHOT" \
   -DclassName="FruitResource" \
-  -Dpath="fruit"</code></pre>
+  -Dpath="fruit"
+cd fruits-app</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-mv-create-fruits-app"><i class="fa fa-clipboard"></i></button><br/>
@@ -548,6 +556,9 @@ All further sections of this tutorial assumes the application name to be <code>f
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>INFO: If you use <code>tutorial-tools</code>, your host <code>quarkus-tutorial/work</code> contains the application code ; point your IDE to this directory.</p>
 </div>
 </div>
 </div>
@@ -635,7 +646,7 @@ Native compilation will take few minutes to complete.
 <div id="basics-build-quarkus-native-docker-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work/fruits-app &amp;&amp; \
-./mvnw package -DskipTests -Pnative -Dnative-image.docker-build=true</code></pre>
+./mvnw package -DskipTests -Pnative -Dquarkus.native.container-build=true</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-quarkus-native-docker-app"><i class="fa fa-clipboard"></i></button><br/>
@@ -656,7 +667,7 @@ Native compilation will take few minutes to complete.
 </div>
 <div id="basics-build-run-native-docker-app" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.jvm -t example/fruits-app:1.0-SNAPSHOT . &amp;&amp; \
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/fruits-app:1.0-SNAPSHOT . &amp;&amp; \
 docker run -it --rm -p 8080:8080 example/fruits-app:1.0-SNAPSHOT</code></pre>
 </div>
 </div>
@@ -687,18 +698,6 @@ docker run -it --rm -p 8080:8080 example/fruits-app:1.0-SNAPSHOT</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-If you are in dev mode and you added new dependencies on the project, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
-</td>
-</tr>
-</table>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -817,7 +816,7 @@ public class FruitResource {
 <div class="sect2">
 <h3 id="basics-call-svc-logging"><a class="anchor" href="#basics-call-svc-logging"></a>Invoke Service</h3>
 <div class="paragraph">
-<p>The simple <code>hello</code> REST URI can be called from the browser using <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080[http://localhost:8080</a>,window=_blank] or using cli like:</p>
+<p>The simple <code>hello</code> REST URI can be called from the browser using <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a>,window=_blank] or using cli like:</p>
 </div>
 <div id="basics-log-k8s-svc-call" class="listingblock">
 <div class="content">
@@ -887,7 +886,7 @@ public class FruitResource {
 <div class="sect2">
 <h3 id="basics-call-configuration"><a class="anchor" href="#basics-call-configuration"></a>Invoke Service</h3>
 <div class="paragraph">
-<p>The simple <code>hello</code> REST URI can be called from the browser using <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080[http://localhost:8080</a>,window=_blank] or using cli like:</p>
+<p>The simple <code>hello</code> REST URI can be called from the browser using <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a>,window=_blank] or using cli like:</p>
 </div>
 <div id="basics-conf-k8s-svc-call" class="listingblock">
 <div class="content">

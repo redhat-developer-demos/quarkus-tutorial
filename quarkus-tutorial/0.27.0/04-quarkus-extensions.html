@@ -670,18 +670,6 @@ public FruityVice getFruitInfoByName(@PathParam("name") String name) {
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#rest-client-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-If you are in dev mode and you added new dependencies on the project, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
-</td>
-</tr>
-</table>
-</div>
 <div class="sect2">
 <h3 id="qext-call-fruity-rest-client"><a class="anchor" href="#qext-call-fruity-rest-client"></a>Invoke Service</h3>
 <div class="paragraph">
@@ -762,18 +750,6 @@ public FruityVice getFruitByName(@PathParam("name") String name);</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-If you are in dev mode and you added new dependencies on the project, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
-</td>
-</tr>
-</table>
-</div>
 </div>
 <div class="sect2">
 <h3 id="qext-call-fruity-fault-tolerance-retry"><a class="anchor" href="#qext-call-fruity-fault-tolerance-retry"></a>Invoke Service</h3>
@@ -858,18 +834,6 @@ If the error persits, then the fallback method is executed.</p>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-fallback-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-If you are in dev mode and you added new dependencies on the project, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
-</td>
-</tr>
-</table>
-</div>
 </div>
 <div class="sect2">
 <h3 id="qext-call-fruity-fault-tolerance-fallback"><a class="anchor" href="#qext-call-fruity-fault-tolerance-fallback"></a>Invoke Service</h3>
@@ -934,18 +898,6 @@ If the invocation succeeds then the circuit is back to closed again.</p>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-circuit-breaker-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-If you are in dev mode and you added new dependencies on the project, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
-</td>
-</tr>
-</table>
-</div>
 </div>
 <div class="sect2">
 <h3 id="qext-call-fruity-fault-tolerance-circuit-breaker"><a class="anchor" href="#qext-call-fruity-fault-tolerance-circuit-breaker"></a>Invoke Service</h3>
@@ -1034,18 +986,6 @@ You can use <code>@Retry</code> and <code>@Fallback</code> annotations together 
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#health-check-default-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-If you are in dev mode and you added new dependencies on the project, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
-</td>
-</tr>
-</table>
-</div>
 </div>
 <div class="sect2">
 <h3 id="qext-call-health-ep"><a class="anchor" href="#qext-call-health-ep"></a>Invoke Service</h3>
@@ -1144,18 +1084,6 @@ public class FruitHealthCheck {
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#health-check-custom-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-If you are in dev mode and you added new dependencies on the project, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
-</td>
-</tr>
-</table>
-</div>
 </div>
 <div class="sect2">
 <h3 id="qext-call-health-custom"><a class="anchor" href="#qext-call-health-custom"></a>Invoke Service</h3>
@@ -1268,7 +1196,7 @@ If you are in dev mode and you added new dependencies on the project, you might 
 </div>
 <div id="quarkusk8s-update-props" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.kubernetes.group=example
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">kubernetes.group=example
 quarkus.application.name=fruits-app</code></pre>
 </div>
 </div>
@@ -1291,7 +1219,7 @@ quarkus.application.name=fruits-app</code></pre>
 </div>
 <div id="quakrusk8s-generated-kubernetes-resource" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat target/kubernetes/kubernetes.yml</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quakrusk8s-generated-kubernetes-resource"><i class="fa fa-clipboard"></i></button><br/>
@@ -1433,7 +1361,7 @@ mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac
 </div>
 <div id="quarkussec-jwt-claim-username" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">@Claim(standard = Claims.preferred_username)
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">@Inject @Claim(standard = Claims.preferred_username)
 String username;
 
 @GET
@@ -1444,6 +1372,9 @@ public String getClaim() {
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkussec-jwt-claim-username"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>Rename the <code>@Path</code> used in <code>FruityVice getFruitInfoByName</code> to <code>@Path("name-{name})"</code> to avoid conflict with the path <code>/fruit/claim</code>.</p>
+</div>
 </div>
 </div>
 </div>
@@ -1459,18 +1390,6 @@ public String getClaim() {
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#jwt-claim-dev-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-If you are in dev mode and you added new dependencies on the project, you might need to stop the dev mode (<span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>) and start it again.
-</td>
-</tr>
-</table>
-</div>
 <div class="sect2">
 <h3 id="qext-call-jwt-claim"><a class="anchor" href="#qext-call-jwt-claim"></a>Invoke Service</h3>
 <div class="paragraph">

@@ -423,7 +423,7 @@
 <div class="tab-pane" aria-labelledby="tabset1_kubectl">
 <div id="quarkusp-deploy-db" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -n quarkustutorial -f $TUTORIAL_HOME/kubernetes-apps/mariadb.yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -n quarkustutorial -f $TUTORIAL_HOME/kubernetes-app/mariadb.yaml</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-deploy-db"><i class="fa fa-clipboard"></i></button><br/>
@@ -462,7 +462,7 @@ The actual pod name and NodePort will be different on your environment
 <div class="tab-pane" aria-labelledby="tabset1_oc">
 <div id="quarkusp-oc-deploy-db" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -n quarkustutorial -f $TUTORIAL_HOME/kubernetes-apps/mariadb.yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -n quarkustutorial -f $TUTORIAL_HOME/kubernetes-app/mariadb.yaml</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-oc-deploy-db"><i class="fa fa-clipboard"></i></button><br/>
@@ -595,7 +595,7 @@ Any of the next parameters as authentication credentials are valid.</p>
 <p>To be able to access MariaDB database locally (<code>localhost</code> if you are not using the Docker approach), you need to <code>port-forward</code> the remote port to local port.</p>
 </div>
 <div class="paragraph">
-<p>Open a new terminal window and run the following command:</p>
+<p>Open a new terminal window and run the following command (blocking):</p>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -654,6 +654,24 @@ For the easier reference, we shall call the <code>fruits-app</code> project fold
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-mvn-add-persistence-extensions"><i class="fa fa-clipboard"></i></button><br/>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you use <code>tutorial-tools</code>, start MariaDB from the same Docker engine.
+Stop the <code>tutorial-tools</code> container and restart it with a link to mariadb</p>
+</div>
+<div class="paragraph">
+<p><code>docker run -ti -p 8080:8080 -v `pwd</code>/work:/work -v <code>mvn help:evaluate -Dexpression=settings.localRepository | grep -v '\[INFO\]'</code>:/opt/developer/.m2/repository --link mariadb:mariadb --rm quay.io/rhdevelopers/tutorial-tools:0.0.3 bash`</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect4">
 <h5 id="quarkusp-configure-props"><a class="anchor" href="#quarkusp-configure-props"></a>Edit the application.properties</h5>
@@ -667,6 +685,8 @@ For the easier reference, we shall call the <code>fruits-app</code> project fold
 quarkus.datasource.url = jdbc:mariadb://mariadb:3306/demodb
 <i class="conum" data-value="2"></i><b>(2)</b>
 %dev.quarkus.datasource.url = jdbc:mariadb://127.0.0.1:3306/demodb
+<i class="conum" data-value="3"></i><b>(3)</b>
+%fromtools.quarkus.datasource.url = jdbc:mariadb://mariadb:3306/demodb
 quarkus.datasource.driver = org.mariadb.jdbc.MariaDbDataSource
 quarkus.hibernate-orm.dialect = org.hibernate.dialect.MariaDB103Dialect
 quarkus.datasource.username = demo
@@ -688,6 +708,22 @@ quarkus.hibernate-orm.log.sql = true</code></pre>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
 <td>URL used when app is running in development mode</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>URL used when app is running in development mode via tutorial-tools</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+In tutorial-tools, we use the mariadb DNS name using the profile <code>fromtools</code>. Start Quarkus dev with this command <code>./mvnw compile quarkus:dev -Dquarkus.profile=fromtools</code>.
+</td>
 </tr>
 </table>
 </div>
@@ -717,7 +753,7 @@ quarkus.hibernate-orm.log.sql = true</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>As you would have noticed there is no database logs thats because we dont have any database related code yet:</p>
+<p>As you would have noticed there is no database logs. That&#8217;s because we dont have any database related code yet:</p>
 </div>
 </div>
 <div class="sect4">
@@ -833,7 +869,7 @@ public class Fruit extends PanacheEntity {
 </div>
 <div id="qext-mvn-add-swagger-ui-extensions" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-swagger-ui"</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="openapi"</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-mvn-add-swagger-ui-extensions"><i class="fa fa-clipboard"></i></button><br/>
@@ -1210,7 +1246,7 @@ You can stop the <code>port-forward</code> and Quarkus application running in de
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#persistence-build-quarkus-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
-<p>After successful maven build, run the following command to build the container:</p>
+<p>After successful maven build, run the following command to build the container - choose the terminal of the target environment you wish to use (docker, minishift or minokube) as you want to build and publish the image in the right registry:</p>
 </div>
 <div id="persistence-build-quarkus-jvm-app-container" class="listingblock">
 <div class="content">
@@ -1247,7 +1283,7 @@ Native compilation will take few minutes to complete.
 </table>
 </div>
 <div class="paragraph">
-<p>After successful maven build, run the following command to build the container:</p>
+<p>After successful maven build, run the following command to build the container - choose the terminal of the target environment you wish to use (docker, minishift or minokube) as you want to build and publish the image in the right registry:</p>
 </div>
 <div id="persistence-build-quarkus-native-app-container" class="listingblock">
 <div class="content">
@@ -1297,7 +1333,7 @@ For sake of simplicity the container name in both native and jvm mode are named 
 </div>
 <div id="quarkusk8s-update-props" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.kubernetes.group=example
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">kubernetes.group=example
 quarkus.application.name=fruits-app</code></pre>
 </div>
 </div>
@@ -1320,7 +1356,7 @@ quarkus.application.name=fruits-app</code></pre>
 </div>
 <div id="quakrusk8s-generated-kubernetes-resource" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat target/kubernetes/kubernetes.yml</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quakrusk8s-generated-kubernetes-resource"><i class="fa fa-clipboard"></i></button><br/>
@@ -1360,7 +1396,7 @@ quarkus.application.name=fruits-app</code></pre>
 <div class="tab-pane" aria-labelledby="tabset5_kubectl">
 <div id="k8s-deploy-panache-run-deploy-k8s-app" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f $TUTORIAL_HOME/target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f $TUTORIAL_HOME/target/kubernetes/kubernetes.yml</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-run-deploy-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
@@ -1368,7 +1404,7 @@ quarkus.application.name=fruits-app</code></pre>
 <div class="tab-pane" aria-labelledby="tabset5_oc">
 <div id="k8s-deploy-panache-oc-run-deploy-k8s-app" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f $TUTORIAL_HOME/target/wiring-classes/META-INF/kubernetes/kubernetes.yml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f $TUTORIAL_HOME/target/kubernetes/kubernetes.yml</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#conk8s-oc-run-deploy-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
