@@ -1,6 +1,11 @@
 
 The following checks ensure that each chapter exercises are done with the right environment settings.
 
+[INFO]
+====
+Make sure to use separate terminal windows or tabs between commands you run to target Docker for Mac/Windows and commands for Minikube/minishift as both will point to different docker engines.
+====
+
 ifdef::workshop[]
 
 include::ROOT:partial$openshift-prereq-cli.adoc[]

@@ -66,6 +66,16 @@ endif::[]
 :container:
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-deploy]
 
+[WARNING]
+====
+A bug in the Dekorate library prevents Quarkus 0.27.0 to set the proper image name (see https://github.com/quarkusio/quarkus/issues/5135[bug report]).
+You can check the failure by running `kubectl get pods` and check that the fruit one is 0/1 and fails due to an image error.
+
+Edit the kubernetes resource to update the image via `kubectl edit deployment fruits-app` and search for the `image` property.
+Change the prefix from your username (or `developer`) to `example` which is the correct group under which we published our image earlier.
+Save and exit and the deployment should succeed.
+====
+
 [#conk8s-invoke-k8s-svc]
 === Invoke Kubernetes Service
 

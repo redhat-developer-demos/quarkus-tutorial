@@ -20,7 +20,7 @@ Add the following properties (if you haven't already done it before) to pass:[$P
 [#quarkusk8s-update-props]
 [source,config,subs="+macros,+attributes"]
 ----
-quarkus.kubernetes.group=example
+kubernetes.group=example
 quarkus.application.name={quarkus-project-name}
 ----
 copyToClipboard::quarkusk8s-update-props[]
@@ -41,7 +41,7 @@ You can inspect the generated file by accessing next file:
 [#quakrusk8s-generated-kubernetes-resource]
 [source,bash,subs="+macros,+attributes"]
 ----
-cat target/wiring-classes/META-INF/kubernetes/kubernetes.yml
+cat target/kubernetes/kubernetes.yml
 ----
 copyToClipboard::quakrusk8s-generated-kubernetes-resource[]
 
@@ -58,7 +58,7 @@ kubectl::
 [#{doc-sec}-run-deploy-k8s-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-kubectl apply -f pass:[$TUTORIAL_HOME]/target/wiring-classes/META-INF/kubernetes/kubernetes.yml
+kubectl apply -f pass:[$TUTORIAL_HOME]/target/kubernetes/kubernetes.yml
 ----
 copyToClipboard::conk8s-run-deploy-k8s-app[]
 --
@@ -70,7 +70,7 @@ endif::[]
 [#{doc-sec}-oc-run-deploy-k8s-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-oc apply -f pass:[$TUTORIAL_HOME]/target/wiring-classes/META-INF/kubernetes/kubernetes.yml
+oc apply -f pass:[$TUTORIAL_HOME]/target/kubernetes/kubernetes.yml
 ----
 copyToClipboard::conk8s-oc-run-deploy-k8s-app[]
 ifndef::workshop[]

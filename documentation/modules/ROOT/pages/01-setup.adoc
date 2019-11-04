@@ -33,13 +33,25 @@ https://quay.io/repository/rhdevelopers/tutorial-tools?tab=tags[tutorial tools] 
 [#docker-pull-tutorials-cli]
 [source,bash]
 -----
-docker pull quay.io/rhdevelopers/tutorial-tools:0.0.2
-docker run -ti --rm quay.io/rhdevelopers/tutorial-tools:0.0.2 bash
+docker pull quay.io/rhdevelopers/tutorial-tools:0.0.3
+mkdir quarkus-tutorial
+cd quarkus-tutorial
+mkdir work
+docker run -ti -p 8080:8080 -v `pwd`/work:/work \
+  -v `mvn help:evaluate -Dexpression=settings.localRepository | grep \
+  -v '\[INFO\]'`:/opt/developer/.m2/repository 
+  --rm quay.io/rhdevelopers/tutorial-tools:0.0.3 bash
+
+# -p will map Quarkus running in the container to your host port
+# -v `pwd`... will map the host work subdirectory to the container /work directory, this is where you will create your application
+# -v `mvn ...` will map your ~/.m2/repository of your host to the container repository to save downloading again between image runs
 -----
 copyToClipboard::docker-pull-tutorials-cli[]
++
 
-Then you can 
 --
+
+Alternatively, you can chose to install things locally.
 
 Locally::
 +
@@ -62,9 +74,9 @@ ifndef::workshop[]
 |
 
 | **OpenShift client(oc)**
-| https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-mac-4.1.8.tar.gz[openshift-client-linux-4.x]
-| https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux-4.1.8.tar.gz[openshift-client-linux-4.x]
-| https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-windows-4.1.8.zip[openshift-client-linux-4.x]
+| https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.1.8/openshift-client-mac-4.1.8.tar.gz[openshift-client-linux-4.x]
+| https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.1.8/openshift-client-linux-4.1.8.tar.gz[openshift-client-linux-4.x]
+| https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.1.8/openshift-client-windows-4.1.8.zip[openshift-client-linux-4.x]
 endif::workshop[]
 
 | **git**
@@ -122,6 +134,8 @@ copyToClipboard::cloneRepo[]
 
 The `work` folder in `$TUTORIAL_HOME` can be used to download the demo application resources and refer to them during the exercises. The `work` folder has a README with instructions on the source code repo and git commands to clone the sources.
 
+NOTE: if you use `tutorial-tools`, this step is optional.
+
 [IMPORTANT,subs="+macros,+attributes"]
 ====
 
@@ -169,6 +183,11 @@ copyToClipboard::quarkus-start-minishift[]
 --
 ====
 
+[NOTE]
+====
+On macOS, you might need to install hyperkit and  pass it as the main engine adding `--vm-driver=hyperkit` after `--disk-size=50g`.
+====
+
 Prepare your shell environment
 
 [#quarkus-tutorial-shell-env]
@@ -184,6 +203,17 @@ Prepare your shell environment:
 
 It is not necessary to install GraalVM as the native compilation can be done within a Docker container.
 The only limitation, in this case, is to have Docker installed and the produced native executable will only be runnable inside a container.
+GraalVM is already installed in `tutorial-tools`.
+
+If you installed GraalVM, make sure to also install `native-image` 
+
+[#quarkus-tutorial-graalvm-native]
+[source,bash,subs="+macros,+attributes"]
+----
+gu install native-image
+----
+copyToClipboard::quarkus-tutorial-graalvm-native[]
+
 
 [#quarkus-tutorial-shell-env]
 [source,bash,subs="+macros,+attributes"]
