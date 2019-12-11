@@ -8,7 +8,7 @@ site:
 
 content:
   sources:
-    - url: git@github.com:yanaga/quarkus-tutorial.git
+    - url: git@github.com:redhat-developer-demos/quarkus-tutorial.git
       tags: []
       branches: master
       start_path: documentation
