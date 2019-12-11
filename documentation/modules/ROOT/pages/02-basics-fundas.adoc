@@ -117,8 +117,7 @@ You can configure Quarkus logging by setting the following parameters to pass:[$
 [#basics-update-logging-props]
 [source,config,subs="+macros,+attributes"]
 ----
-quarkus.log.console.enable=true
-quarkus.log.console.level=DEBUG
+quarkus.log.console.level=INFO
 ----
 copyToClipboard::basics-update-logging-props[]
 
@@ -147,7 +146,7 @@ public class FruitResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        logger.debug("Hello method is called.");
+        logger.info("Hello method is called.");
         return "hello";
     }
 }

@@ -8,14 +8,14 @@ site:
 
 content:
   sources:
-    - url: git@github.com:redhat-developer-demos/quarkus-tutorial.git
+    - url: git@github.com:yanaga/quarkus-tutorial.git
       tags: []
       branches: master
       start_path: documentation
 asciidoc:
   attributes:
     tutorial-namespace: quarkustutorial
-    quarkus-version: 0.27.0
+    quarkus-version: 1.0.1.Final
     minikube-version: 1.0.1+
     openshift-version: 3.11+
     minishift-version: 1.31+
