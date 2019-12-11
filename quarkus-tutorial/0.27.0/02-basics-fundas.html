@@ -766,8 +766,7 @@ Although it is not mandatory, by default <a href="http://rest-assured.io/">RestA
 </div>
 <div id="basics-update-logging-props" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.log.console.enable=true
-quarkus.log.console.level=DEBUG</code></pre>
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.log.console.level=INFO</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-update-logging-props"><i class="fa fa-clipboard"></i></button><br/>
@@ -797,7 +796,7 @@ public class FruitResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        logger.debug("Hello method is called.");
+        logger.info("Hello method is called.");
         return "hello";
     }
 }</code></pre>
