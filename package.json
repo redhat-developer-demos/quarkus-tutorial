@@ -2,7 +2,11 @@
   "name": "quarkus-tutorial-site",
   "description": "Quarkus Tutorial Documentation",
   "homepage": "https://redhat-developer-demos.github.io/quarkus-tutorial",
-  "author": {"email": "kamesh.sampath@hotmail.com","name": "Kamesh Sampath","url": "https://twitter.com/@kamesh_sampath"},
+  "author": {
+    "email": "kamesh.sampath@hotmail.com",
+    "name": "Kamesh Sampath",
+    "url": "https://twitter.com/@kamesh_sampath"
+  },
   "dependencies": {
     "@antora/cli": "2.0.0",
     "@antora/site-generator-default": "2.0.0",
@@ -31,5 +35,5 @@
     "presets": [
       "@babel/preset-env"
     ]
-  }  
+  }
 }

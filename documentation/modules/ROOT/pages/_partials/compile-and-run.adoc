@@ -49,7 +49,7 @@ Tests will fail on Windows as there is no graalvm support for windows, you can w
 =====
 
 --
-Docker-Native mode::
+Native container-build mode::
 +
 --
 [#basics-build-quarkus-native-docker-app]

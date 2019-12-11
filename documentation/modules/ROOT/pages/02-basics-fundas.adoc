@@ -12,10 +12,13 @@ At the end of this chapter you will be able to :
 * [x] Build and run the Java application in Native mode.
 * [x] Build and run the Java application in Developer mode
 
+////
+
 [#basics-prerequisite]
 == Prerequisite
 
 include::partial$prereq-cli.adoc[]
+////
 
 [#basics-create-quarkus-app]
 == Create Quarkus Application
@@ -82,7 +85,7 @@ _Development_ mode enables hot deployment with background compilation, which mea
 include::ROOT:partial$run-dev-mode.adoc[]
 
 [#basics-update]
-== Updating of code
+== Updating the code
 
 NOTE: Only if running in Development mode
 
@@ -112,7 +115,7 @@ include::ROOT:partial$invoke-service.adoc[tag=test]
 [#basics-logging]
 == Configuring Logging
 
-You can configure Quarkus logging by setting the following parameters to pass:[$PROJECT_HOME]/src/main/resources/application.properties: 
+You can configure Quarkus logging by setting the following parameters to `$PROJECT_HOME/src/main/resources/application.properties`: 
 
 [#basics-update-logging-props]
 [source,config,subs="+macros,+attributes"]
@@ -124,7 +127,7 @@ copyToClipboard::basics-update-logging-props[]
 Also you can configure your application logger level.
 Let's add a logger and configure it.
 
-Open the following Java class pass:[$PROJECT_HOME]/src/main/java/com/example/FruitResource.java and copy the next content in its body:
+Open the following Java class `$PROJECT_HOME/src/main/java/com/example/FruitResource.java` and copy the next content in its body:
 
 [#basics-custom-log-manager]
 [source,java,subs="+macros"]
@@ -153,18 +156,18 @@ public class FruitResource {
 ----
 copyToClipboard::basics-custom-log-manager[]
 
-And configure `DEBUG` mode for the service to pass:[$PROJECT_HOME]/src/main/resources/application.properties: 
+And configure `INFO` mode for the service to `$PROJECT_HOME/src/main/resources/application.properties`: 
 
 [#basics-update-custom-logging-props]
 [source,config,subs="+macros,+attributes"]
 ----
-quarkus.log.category."com.example".level=DEBUG
+quarkus.log.category."com.example".level=INFO
 ----
 copyToClipboard::basics-update-custom-logging-props[]
 
 [#basics-call-svc-logging]
 === Invoke Service
-The simple `hello` REST URI can be called from the browser using http://localhost:8080[http://localhost:8080,window=_blank],window=_blank] or using cli like: 
+The simple `hello` REST URI can be called from the browser using http://localhost:8080[http://localhost:8080,window=_blank] or using cli like: 
 
 :doc-sec: basics-log
 :k8s-cli: k8s
@@ -176,7 +179,7 @@ include::ROOT:partial$invoke-service.adoc[tag=call]
 
 And if you inspect the console output, you see the logging message:
 
-`2019-08-13 18:12:53,284 DEBUG [com.exa.FruitResource] (executor-thread-1) Hello method is called.`
+`2019-12-11 14:00:56,219 INFO  [com.exa.FruitResource] (vert.x-worker-thread-2) Hello method is called.`
 
 [#basics-configuration]
 == Configuration
@@ -187,7 +190,7 @@ Quarkus relies on MicroProfile Config specification and the main configuration i
 [#basics-configuration-new-property]
 === Add a new property
 
-Add the following property to `$PROJECT_HOME]/src/main/resources/application.properties`:
+Add the following property to `$PROJECT_HOME/src/main/resources/application.properties`:
 
 [#basics-configuration-add-new-property]
 [source,config,subs="+macros,+attributes"]
@@ -229,7 +232,7 @@ copyToClipboard::basics-configuration-get-value-code[]
 
 [#basics-call-configuration]
 === Invoke Service
-The simple `hello` REST URI can be called from the browser using http://localhost:8080[http://localhost:8080,window=_blank],window=_blank] or using cli like: 
+The simple `hello` REST URI can be called from the browser using http://localhost:8080[http://localhost:8080,window=_blank] or using cli like: 
 
 :doc-sec: basics-conf
 :k8s-cli: k8s
