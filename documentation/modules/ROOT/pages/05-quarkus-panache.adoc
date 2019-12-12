@@ -660,6 +660,7 @@ include::ROOT:partial$invoke-service.adoc[tag=test]
 
 ifndef::workshop[]
 
+////
 [#quarkusp-cloud-dev]
 === Deploy on Kubernetes
 
@@ -713,3 +714,4 @@ NOTE: `swagger-ui` is available only for `dev` and `test`, you can use REST API 
 include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-delete]
 
 endif::workshop[]
+////
