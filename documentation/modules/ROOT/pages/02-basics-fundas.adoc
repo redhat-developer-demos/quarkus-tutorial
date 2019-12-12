@@ -47,7 +47,7 @@ copyToClipboard::quarkusp-nav-to-work-folder[]
 [#quarkusp-mv-create-fruits-app]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn io.quarkus:quarkus-maven-plugin:pass:[$QUARKUS_VERSION]:create \
+mvn "io.quarkus:quarkus-maven-plugin:pass:[$QUARKUS_VERSION]:create" \
   -DprojectGroupId="com.example" \
   -DprojectArtifactId="fruits-app" \
   -DprojectVersion="1.0-SNAPSHOT" \
