@@ -459,8 +459,14 @@ For the easier reference, we shall call the <code>fruits-app</code> project fold
 <p>If you use <code>tutorial-tools</code>, start MariaDB from the same Docker engine.
 Stop the <code>tutorial-tools</code> container and restart it with a link to mariadb</p>
 </div>
-<div class="paragraph">
-<p><code>docker run -ti -p 8080:8080 -v `pwd</code>/work:/work -v <code>mvn help:evaluate -Dexpression=settings.localRepository | grep -v '\[INFO\]'</code>:/opt/developer/.m2/repository --link mariadb:mariadb --rm quay.io/rhdevelopers/tutorial-tools:0.0.3 bash`</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -ti -p 8080:8080 \
+  -v `pwd`/work:/work \
+  -v `mvn help:evaluate -Dexpression=settings.localRepository | grep -v '\[INFO\]'`:/opt/developer/.m2/repository \
+  --link mariadb:mariadb \
+  --rm quay.io/rhdevelopers/tutorial-tools:0.0.3 bash</code></pre>
+</div>
 </div>
 </td>
 </tr>
