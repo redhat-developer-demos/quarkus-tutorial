@@ -230,6 +230,7 @@ quarkus.datasource.url = jdbc:mariadb://mariadb:3306/demodb
 %dev.quarkus.datasource.url = jdbc:mariadb://127.0.0.1:3306/demodb 
 # <3>
 %fromtools.quarkus.datasource.url = jdbc:mariadb://mariadb:3306/demodb
+%test.quarkus.datasource.url=jdbc:mariadb://127.0.0.1:3306/demodb
 quarkus.datasource.driver = org.mariadb.jdbc.MariaDbDataSource
 quarkus.hibernate-orm.dialect = org.hibernate.dialect.MariaDB103Dialect 
 quarkus.datasource.username = demo
