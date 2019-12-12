@@ -438,7 +438,7 @@ cd quarkus-tutorial
 mkdir work
 docker run -ti -p 8080:8080 -v `pwd`/work:/work \
   -v `mvn help:evaluate -Dexpression=settings.localRepository | grep \
-  -v '\[INFO\]'`:/opt/developer/.m2/repository
+  -v '\[INFO\]'`:/opt/developer/.m2/repository \
   --rm quay.io/rhdevelopers/tutorial-tools:0.0.3 bash
 
 # -p will map Quarkus running in the container to your host port
