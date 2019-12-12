@@ -1,17 +1,7 @@
 * xref:01-setup.adoc[1. Setup]
 ** xref:01-setup.adoc#requirements[Required Tools]
-////
-** xref:01-setup.adoc#download-tutorial-sources[Download Tutorial Sources]
-ifndef::workshop[]
-** xref:01-setup.adoc#kubernetes-cluster[Kubernetes Cluster]
-endif::workshop[]
-** xref:01-setup.adoc#setup-work-folder[Work Folder]
-////
 
 * xref:02-basics-fundas.adoc[2.Basics and Fundamentals]
-////
-** xref:02-basics-fundas.adoc#basics-prerequisite[Prerequisites]
-////
 ** xref:02-basics-fundas.adoc#basics-create-quarkus-app[Create Quarkus Application]
 ** xref:02-basics-fundas.adoc#basics-ide-quarkus-project[Open Application in IDE]
 ** xref:02-basics-fundas.adoc#basics-build-run-quarkus-app[Build and Run Application]
