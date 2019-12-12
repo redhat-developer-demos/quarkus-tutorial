@@ -1235,7 +1235,7 @@ mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Sets the location of publick key to verify the token</td>
+<td>Sets the location of public key to verify the token</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -1429,7 +1429,7 @@ curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#rjwt-rbac-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
-<p>And the output now is different: <code>Access forbidden: role not allowed</code>.</p>
+<p>And the output now is different: <code>Forbidden</code>.</p>
 </div>
 <div class="paragraph">
 <p>This is the result because the provided token does not contain <code>Subscriber2</code> in the <code>groups</code> claim.</p>
