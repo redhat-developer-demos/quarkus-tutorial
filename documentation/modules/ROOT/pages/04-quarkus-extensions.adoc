@@ -722,7 +722,7 @@ mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac
 # <2>
 ----
 copyToClipboard::quarkussec-config-jwt[]
-<1> Sets the location of publick key to verify the token
+<1> Sets the location of public key to verify the token
 <2> Issuer of the token
 
 We are also providing a valid token that can be verified by the configured public key:
@@ -877,6 +877,6 @@ The simple `{path}` REST URI can be called via browser using http://localhost:80
 
 include::ROOT:partial$invoke-service.adoc[tag=callToken]
 
-And the output now is different: `Access forbidden: role not allowed`.
+And the output now is different: `Forbidden`.
 
 This is the result because the provided token does not contain `Subscriber2` in the `groups` claim.
