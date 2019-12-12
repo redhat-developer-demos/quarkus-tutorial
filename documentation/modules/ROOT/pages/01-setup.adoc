@@ -1,8 +1,8 @@
 = Setup
 include::_attributes.adoc[]
 
-[[prerequisite]]
-== Prerequisite Tools
+[[requirements]]
+== Required Tools
 
 === IDE
 
@@ -60,28 +60,6 @@ Please have them installed and configured before you get started with any of the
 |===
 |**Tool**|**macOS**|**Fedora**|**Windows**
 
-ifndef::workshop[]
-| **Kubernetes**
-| `brew install kubernetes-cli`
-| https://github.com/kubernetes/kubernetes/releases[Kubernetes Releases]
-| https://github.com/kubernetes/kubernetes/releases[Kubernetes Releases]
-
-|
-| **(OR)**
-|
-|
-
-| **OpenShift client(oc)**
-| https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.1.8/openshift-client-mac-4.1.8.tar.gz[openshift-client-linux-4.x]
-| https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.1.8/openshift-client-linux-4.1.8.tar.gz[openshift-client-linux-4.x]
-| https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.1.8/openshift-client-windows-4.1.8.zip[openshift-client-linux-4.x]
-endif::workshop[]
-
-| **git**
-| https://git-scm.com/download/mac
-| `dnf install git`
-| Make sure you have the https://docs.microsoft.com/en-us/windows/wsl/install-win10[Windows Subsystem for Linux] installed
-
 | **Docker**
 | https://www.docker.com/products/docker-desktop[Docker Desktop for Mac]
 | `dnf install docker`
@@ -102,17 +80,15 @@ endif::workshop[]
 | https://github.com/oracle/graal/releases/download/vm-{graalvm-version}/graalvm-ce-linux-amd64-{graalvm-version}.tar.gz[GraalVM Community Edition {graalvm-version}]
 | Not Supported
 
-ifndef::workshop[]
-| **stern**
-| `brew install stern`
-| https://github.com/wercker/stern/releases
-| https://github.com/wercker/stern/releases
-endif::workshop[]
-
+| **MariaDB**
+| `brew install mariadb`
+| `dnf install mariadb mariadb-server`
+| https://downloads.mariadb.org/mariadb/10.4.11/[MariaDB Windows version]
 |===
 --
 ====
 
+////
 ifndef::workshop[]
 [#remote-docker-repository]
 == Remote Repository
@@ -243,3 +219,4 @@ endif::workshop[]
 == Work folder (Optional)
 
 The work folder i.e `$TUTORIAL_HOME/work` can be used as a work directory during the build. 
+////

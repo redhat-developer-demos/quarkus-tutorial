@@ -12,9 +12,9 @@ At the end of this chapter you will be able to :
 [#quarkusp-demo-overview]
 == Demo Overview 
 
-To demonstrate using Hibernate with Panache, you will be developing an application called "Fruits". Its a simple CRUD REST API that handles information about Fruits.
+To demonstrate using Hibernate with Panache, you will be developing an application called "Fruits". It's a simple CRUD REST API that handles information about Fruits.
 
-For the demonstration we will use https://mariadb.org/[MariaDB] as a backing database.
+For the demonstration we will use https://mariadb.org/[MariaDB] as the backing database.
 
 [#quarkusp-fruitapp-dev]
 === Build and Deploy
@@ -26,6 +26,7 @@ To get started with we will first have the database deployed:
 
 [tabs]
 ====
+////
 ifndef::workshop[]
 kubectl::
 +
@@ -89,6 +90,7 @@ mariadb      NodePort   10.105.40.135    <none>        3306:30125/TCP   2m21s
 NOTE: The actual pod name and NodePort will be different on your environment
 --
 endif::workshop[]
+////
 docker::
 +
 --
@@ -109,10 +111,11 @@ copyToClipboard::quarkusp-docker-deploy-adminer[]
 --
 ====
 
-To access to DB adminer:
+To access the DB adminer page:
 
 [tabs]
 ====
+////
 ifndef::workshop[]
 minikube::
 +
@@ -135,6 +138,7 @@ minishift openshift service db-adminer -n {tutorial-namespace}
 copyToClipboard::quarkusp-minishift-open-db-adminer[]
 --
 endif::workshop[]
+////
 docker::
 +
 --
@@ -143,7 +147,7 @@ Open in a browser the next page: http://localhost:8082[http://localhost:8082,win
 ====
 
 Use `mariadb` as host and `demodb` as database. 
-Any of the next parameters as authentication credentials are valid.
+Any of the credentials below can be used to connect to the database:
 
 .DB access details
 [cols="<,^,>",options="header"]
@@ -155,6 +159,7 @@ Any of the next parameters as authentication credentials are valid.
 
 |===
 
+////
 [#quarkusp-access-db]
 ===== Accessing Database 
 To be able to access MariaDB database locally (`localhost` if you are not using the Docker approach), you need to `port-forward` the remote port to local port.
@@ -184,6 +189,7 @@ copyToClipboard::quarkuspdb-oc-port-forward[]
 ====
 
 endif::workshop[]
+////
 
 ==== Build Fruit Resource
 
