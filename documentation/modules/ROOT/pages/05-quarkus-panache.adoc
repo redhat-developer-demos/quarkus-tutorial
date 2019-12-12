@@ -12,17 +12,17 @@ At the end of this chapter you will be able to :
 [#quarkusp-demo-overview]
 == Demo Overview 
 
-To demonstrate using Hibernate with Panache, you will be developing an application called "Fruits". It's a simple CRUD REST API that handles information about Fruits.
+You'll learn how easy and productive is Quarkus with Hibernate with Panache. For this, we'll developer an application called "Fruits". It's a simple CRUD REST API that handles information about fruits.
 
-For the demonstration we will use https://mariadb.org/[MariaDB] as the backing database.
+We'll use https://mariadb.org/[MariaDB] as our backing database.
 
 [#quarkusp-fruitapp-dev]
 === Build and Deploy
 
-To get started with we will first have the database deployed:
+First, we need a running instance of our database:
 
 [#quarkus-fruit-app-db]
-==== Deploy MariaDB Stack
+==== Running MariaDB
 
 [tabs]
 ====

@@ -23,6 +23,16 @@ include::partial$prereq-cli.adoc[]
 [#basics-create-quarkus-app]
 == Create Quarkus Application
 
+Create an empty folder called `quarkus-tutorial`. We'll call it our `$TUTORIAL_HOME`.
+
+[#create-tutorial-folder]
+[source,bash,subs="+macros,+attributes"]
+----
+mkdir quarkus-tutorial && cd quarkus-tutorial
+export TUTORIAL_HOME=`pwd`
+----
+copyToClipboard::create-tutorial-folder[]
+
 Create the `fruits-app` folder and navigate to the folder:
 
 [#quarkusp-nav-to-work-folder]
@@ -73,6 +83,15 @@ include::ROOT:partial$compile-and-run.adoc[]
 
 You can <<basics-call-svc>> to see a response like `hello`.
 
+[#basics-testing]
+== Testing Fruit Resource
+
+The scaffolding process also creates a test case for the `fruit` endpoint.
+
+Open the next class `$PROJECT_HOME/src/test/java/com/example/FruitResourceTest.java` to see how a test looks like.
+
+include::ROOT:partial$invoke-service.adoc[tag=test]
+
 [#basics-run-quarkus-app-dev-mode]
 == Run Quarkus Application in Development mode
 
@@ -103,14 +122,6 @@ The simple `hello` REST URI can be called from the browser using http://localhos
 :address: localhost
 include::ROOT:partial$invoke-service.adoc[tag=call]
 
-[#basics-testing]
-== Testing Fruit Resource
-
-The scaffolding process also creates a test case for the `fruit` endpoint.
-
-Open the next class `$PROJECT_HOME/src/test/java/com/example/FruitResourceTest.java` to see how a test looks like.
-
-include::ROOT:partial$invoke-service.adoc[tag=test]
 
 [#basics-logging]
 == Configuring Logging
@@ -195,7 +206,7 @@ Add the following property to `$PROJECT_HOME/src/main/resources/application.prop
 [#basics-configuration-add-new-property]
 [source,config,subs="+macros,+attributes"]
 ----
-greetings.message = hello
+greetings.message = Hello y'all!
 ----
 copyToClipboard::basics-configuration-add-new-property[]
 

@@ -113,7 +113,7 @@ copyToClipboard::qext-mvn-add-rest-client-extension[]
 
 We need to create a POJO object that is used to unmarshal JSON message from http://www.fruityvice.com to Java object.
 
-Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `FruityVice` with the following contents:
+Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `FruityVice.java` with the following contents:
 
 [#quarkusrc-fruity-vice-pojo]
 [source,java,subs="+macros,+attributes"]
@@ -173,7 +173,7 @@ copyToClipboard::quarkusrc-fruity-vice-pojo[]
 
 The next thing is to create a Java interface that acts as a client between code and external service.
 
-Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `FruityViceService` with the following contents:
+Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `FruityViceService.java` with the following contents:
 
 [#quarkusrc-fruity-vice-service]
 [source,java,subs="+macros"]
@@ -298,7 +298,7 @@ copyToClipboard::qext-mvn-add-fault-tolernace-extension[]
 
 Let's add the retry policy in `FruityViceService`.
 
-Add the `org.eclipse.microprofile.faulttolerance.Retry;` annotation to `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruityViceService.java`:
+Add the `org.eclipse.microprofile.faulttolerance.Retry` annotation to `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruityViceService.java`:
 
 [#quarkusft-retry-fruit-vice-service]
 [source,config,subs="+macros"]
