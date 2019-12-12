@@ -338,6 +338,16 @@
 <h2 id="basics-create-quarkus-app"><a class="anchor" href="#basics-create-quarkus-app"></a>Create Quarkus Application</h2>
 <div class="sectionbody">
 <div class="paragraph">
+<p>Create an empty folder called <code>quarkus-tutorial</code>. We&#8217;ll call it our <code>$TUTORIAL_HOME</code>.</p>
+</div>
+<div id="create-tutorial-folder" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir quarkus-tutorial &amp;&amp; cd quarkus-tutorial
+export TUTORIAL_HOME=`pwd`</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#create-tutorial-folder"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
 <p>Create the <code>fruits-app</code> folder and navigate to the folder:</p>
 </div>
 <div id="quarkusp-nav-to-work-folder" class="listingblock">
@@ -513,6 +523,30 @@ docker run -it --rm -p 8080:8080 example/fruits-app:1.0-SNAPSHOT</code></pre>
 </div>
 </div>
 <div class="sect1">
+<h2 id="basics-testing"><a class="anchor" href="#basics-testing"></a>Testing Fruit Resource</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The scaffolding process also creates a test case for the <code>fruit</code> endpoint.</p>
+</div>
+<div class="paragraph">
+<p>Open the next class <code>$PROJECT_HOME/src/test/java/com/example/FruitResourceTest.java</code> to see how a test looks like.</p>
+</div>
+<div class="paragraph">
+<p>When running this test, the application is started once, then all tests are executed, and finally, the application is stopped.
+Although it is not mandatory, by default <a href="http://rest-assured.io/">RestAssured</a> project is used to test Rest endpoints but it is up to you to change that.</p>
+</div>
+<div class="paragraph">
+<p>You can run the test either in IDE or by running Maven:</p>
+</div>
+<div id="basics-run-tests" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw clean compile test</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-run-tests"><i class="fa fa-clipboard"></i></button><br/>
+</div>
+</div>
+<div class="sect1">
 <h2 id="basics-run-quarkus-app-dev-mode"><a class="anchor" href="#basics-run-quarkus-app-dev-mode"></a>Run Quarkus Application in Development mode</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -564,30 +598,6 @@ Only if running in Development mode
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-<div class="sect1">
-<h2 id="basics-testing"><a class="anchor" href="#basics-testing"></a>Testing Fruit Resource</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The scaffolding process also creates a test case for the <code>fruit</code> endpoint.</p>
-</div>
-<div class="paragraph">
-<p>Open the next class <code>$PROJECT_HOME/src/test/java/com/example/FruitResourceTest.java</code> to see how a test looks like.</p>
-</div>
-<div class="paragraph">
-<p>When running this test, the application is started once, then all tests are executed, and finally, the application is stopped.
-Although it is not mandatory, by default <a href="http://rest-assured.io/">RestAssured</a> project is used to test Rest endpoints but it is up to you to change that.</p>
-</div>
-<div class="paragraph">
-<p>You can run the test either in IDE or by running Maven:</p>
-</div>
-<div id="basics-run-tests" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw clean compile test</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-run-tests"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 <div class="sect1">
@@ -678,7 +688,7 @@ Quarkus relies on MicroProfile Config specification and the main configuration i
 </div>
 <div id="basics-configuration-add-new-property" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">greetings.message = hello</code></pre>
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">greetings.message = Hello y'all!</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-configuration-add-new-property"><i class="fa fa-clipboard"></i></button><br/>

@@ -340,51 +340,39 @@ which allows you to run this entire tutorial within a contianer that will have a
 <div class="paragraph">
 <p>The following CLI tools are required for running the exercises in this tutorial.</p>
 </div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>Kubernetes/OpenShift are required only in case you want to deploy the application into them.</p>
+<p>If you&#8217;re running locally, your only requirements are Java 8+, Maven 3.6.0+, and MariaDB if you want to try Hibernate with Panache.</p>
 </div>
 <div class="paragraph">
-<p>GraalVM is not mandatory if you have Docker installed.</p>
+<p>GraalVM is only required if you intend to build a native image.</p>
+</div>
+<div class="paragraph">
+<p>Docker is only required if you want to build a container or run MariaDB as a container.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset1_container-image"></a>Container Image</p>
+<p><a id="tabset1_local-installation"></a>Local  Installation</p>
 </li>
 <li>
-<p><a id="tabset1_locally"></a>Locally</p>
+<p><a id="tabset1_container-image"></a>Container Image</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset1_container-image">
-<div class="paragraph">
-<p>If you have <a href="https://www.docker.com/products/docker-desktop">Docker for Mac or Windows or Linux</a>  then you can pull the linux container image
-<a href="https://quay.io/repository/rhdevelopers/tutorial-tools?tab=tags">tutorial tools</a> which has all the tools listed below installed and pre-configured.</p>
-</div>
-<div id="docker-pull-tutorials-cli" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker pull quay.io/rhdevelopers/tutorial-tools:0.0.3
-mkdir quarkus-tutorial
-cd quarkus-tutorial
-mkdir work
-docker run -ti -p 8080:8080 -v `pwd`/work:/work \
-  -v `mvn help:evaluate -Dexpression=settings.localRepository | grep \
-  -v '\[INFO\]'`:/opt/developer/.m2/repository
-  --rm quay.io/rhdevelopers/tutorial-tools:0.0.3 bash
-
-# -p will map Quarkus running in the container to your host port
-# -v `pwd`... will map the host work subdirectory to the container /work directory, this is where you will create your application
-# -v `mvn ...` will map your ~/.m2/repository of your host to the container repository to save downloading again between image runs</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#docker-pull-tutorials-cli"><i class="fa fa-clipboard"></i></button><br/>
-<div class="paragraph">
-<p>Alternatively, you can chose to install things locally.</p>
-</div>
-</div>
-<div class="tab-pane" aria-labelledby="tabset1_locally">
+<div class="tab-pane" aria-labelledby="tabset1_local-installation">
 <div class="paragraph">
 <p>Please have them installed and configured before you get started with any of the tutorial chapters.</p>
 </div>
@@ -436,6 +424,29 @@ docker run -ti -p 8080:8080 -v `pwd`/work:/work \
 </tr>
 </tbody>
 </table>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_container-image">
+<div class="paragraph">
+<p>If you have <a href="https://www.docker.com/products/docker-desktop">Docker for Mac or Windows or Linux</a>  then you can pull the linux container image
+<a href="https://quay.io/repository/rhdevelopers/tutorial-tools?tab=tags">tutorial tools</a> which has all the tools listed below installed and pre-configured.</p>
+</div>
+<div id="docker-pull-tutorials-cli" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker pull quay.io/rhdevelopers/tutorial-tools:0.0.3
+mkdir quarkus-tutorial
+cd quarkus-tutorial
+mkdir work
+docker run -ti -p 8080:8080 -v `pwd`/work:/work \
+  -v `mvn help:evaluate -Dexpression=settings.localRepository | grep \
+  -v '\[INFO\]'`:/opt/developer/.m2/repository
+  --rm quay.io/rhdevelopers/tutorial-tools:0.0.3 bash
+
+# -p will map Quarkus running in the container to your host port
+# -v `pwd`... will map the host work subdirectory to the container /work directory, this is where you will create your application
+# -v `mvn ...` will map your ~/.m2/repository of your host to the container repository to save downloading again between image runs</code></pre>
+</div>
+</div>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#docker-pull-tutorials-cli"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>

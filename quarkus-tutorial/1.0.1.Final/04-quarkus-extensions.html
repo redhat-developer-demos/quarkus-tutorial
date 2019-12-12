@@ -467,7 +467,7 @@ Two endpoints are the important ones for this workshop:</p>
 <p>We need to create a POJO object that is used to unmarshal JSON message from <a href="http://www.fruityvice.com" class="bare">http://www.fruityvice.com</a> to Java object.</p>
 </div>
 <div class="paragraph">
-<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>FruityVice</code> with the following contents:</p>
+<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>FruityVice.java</code> with the following contents:</p>
 </div>
 <div id="quarkusrc-fruity-vice-pojo" class="listingblock">
 <div class="content">
@@ -528,7 +528,7 @@ public class FruityVice {
 <p>The next thing is to create a Java interface that acts as a client between code and external service.</p>
 </div>
 <div class="paragraph">
-<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>FruityViceService</code> with the following contents:</p>
+<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>FruityViceService.java</code> with the following contents:</p>
 </div>
 <div id="quarkusrc-fruity-vice-service" class="listingblock">
 <div class="content">
@@ -662,7 +662,7 @@ Quarkus integrates with <a href="https://github.com/eclipse/microprofile-fault-t
 <p>Let&#8217;s add the retry policy in <code>FruityViceService</code>.</p>
 </div>
 <div class="paragraph">
-<p>Add the <code>org.eclipse.microprofile.faulttolerance.Retry;</code> annotation to <code>$PROJECT_HOME/src/main/java/java/com/example/FruityViceService.java</code>:</p>
+<p>Add the <code>org.eclipse.microprofile.faulttolerance.Retry</code> annotation to <code>$PROJECT_HOME/src/main/java/java/com/example/FruityViceService.java</code>:</p>
 </div>
 <div id="quarkusft-retry-fruit-vice-service" class="listingblock">
 <div class="content">
