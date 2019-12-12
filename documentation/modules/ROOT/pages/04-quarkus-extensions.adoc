@@ -260,7 +260,7 @@ The simple `{path}` REST URI can be called via browser using http://localhost:80
 
 include::ROOT:partial$invoke-service.adoc[tag=call]
 
-The REST call about should return an response like:
+The REST call should return an response like:
 
 [source,json]
 ----
@@ -333,7 +333,7 @@ The simple `{path}` REST URI can be called via browser using http://localhost:80
 
 include::ROOT:partial$invoke-service.adoc[tag=call]
 
-The REST call about should return an response like:
+The REST call should return an response like:
 
 [source,json]
 ----
@@ -346,7 +346,7 @@ The REST call about should return an response like:
 }
 ----
 
-No change of previous calls done in <<Adding Rest Client extension>> section, but now switch off your network so you do not have access to http://www.fruityvice.com.
+No change from calls done previously, but now switch off your network so you do not have access to http://www.fruityvice.com.
 And make again a request to http://localhost:8080/{path}.
 
 :doc-sec: fault-tolerance-retry-no-network
