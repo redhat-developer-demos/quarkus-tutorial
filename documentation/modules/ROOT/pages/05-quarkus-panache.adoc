@@ -212,7 +212,14 @@ copyToClipboard::qext-mvn-add-persistence-extensions[]
 If you use `tutorial-tools`, start MariaDB from the same Docker engine.
 Stop the `tutorial-tools` container and restart it with a link to mariadb
 
-`docker run -ti -p 8080:8080 -v `pwd`/work:/work -v `mvn help:evaluate -Dexpression=settings.localRepository | grep -v '\[INFO\]'`:/opt/developer/.m2/repository --link mariadb:mariadb --rm quay.io/rhdevelopers/tutorial-tools:0.0.3 bash`
+[source,bash,subs="+macros,+attributes"]
+----
+docker run -ti -p 8080:8080 \
+  -v `pwd`/work:/work \
+  -v `mvn help:evaluate -Dexpression=settings.localRepository | grep -v '\[INFO\]'`:/opt/developer/.m2/repository \
+  --link mariadb:mariadb \
+  --rm quay.io/rhdevelopers/tutorial-tools:0.0.3 bash
+----
 ====
 
 [#quarkusp-configure-props]
