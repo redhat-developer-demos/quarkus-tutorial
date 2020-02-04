@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Basics and Fundamentals :: Quarkus Tutorial</title>
-    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/1.0.1.Final/02-basics-fundas.html">
+    <title>Setup :: Quarkus Tutorial</title>
+    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/1.2.0.Final/01-setup.html">
     <meta name="generator" content="Antora 2.0.1">
     <link rel="stylesheet" href="../../_/css/site.css">
 <link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
@@ -28,7 +28,7 @@
 </header>
 <div class="main-wrapper">
 <div class="navigation-container"  data-component="quarkus-tutorial"
-  data-version="1.0.1.Final" >
+  data-version="1.2.0.Final" >
   <aside class="navigation">
     <div class="panels">
       <div class="navigation-menu is-active" data-panel="menu">
@@ -37,58 +37,58 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <button class="nav-toggle"></button>
     <a class="nav-link" href="01-setup.html">1. Setup</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="01-setup.html#requirements">Required Tools</a>
+    <a class="nav-link" href="#requirements">Required Tools</a>
   </li>
 </ul>
   </li>
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <button class="nav-toggle"></button>
     <a class="nav-link" href="02-basics-fundas.html">2.Basics and Fundamentals</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#basics-create-quarkus-app">Create Quarkus Application</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-create-quarkus-app">Create Quarkus Application</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#basics-ide-quarkus-project">Open Application in IDE</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-ide-quarkus-project">Open Application in IDE</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#basics-build-run-quarkus-app">Build and Run Application</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-build-run-quarkus-app">Build and Run Application</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#basics-update-code">Update Code</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-update-code">Update Code</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#basics-call-svc">Invoke Service</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-call-svc">Invoke Service</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#basics-testing">Testing</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-testing">Testing</a>
   </li>
   <li class="nav-item" data-depth="2">
     <button class="nav-toggle"></button>
-    <a class="nav-link" href="#basics-logging">Configuring Logging</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-logging">Configuring Logging</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="#basics-call-svc-logging">Invoke Service</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-call-svc-logging">Invoke Service</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="2">
     <button class="nav-toggle"></button>
-    <a class="nav-link" href="#basics-configuration">Configuration</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-configuration">Configuration</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="#basics-configuration-new-property">Add New Property</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-configuration-new-property">Add New Property</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="#basics-configuration-get-value">Get Configuration Value</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-configuration-get-value">Get Configuration Value</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="#basics-call-configuration">Invoke Service</a>
+    <a class="nav-link" href="02-basics-fundas.html#basics-call-configuration">Invoke Service</a>
   </li>
 </ul>
   </li>
@@ -305,436 +305,151 @@
   <nav class="crumbs" aria-label="breadcrumbs">
   <ul>
     <li class="crumb"><a href="index.html">Quarkus Tutorial</a></li>
-    <li class="crumb"><a href="02-basics-fundas.html">2.Basics and Fundamentals</a></li>
+    <li class="crumb"><a href="01-setup.html">1. Setup</a></li>
   </ul>
 </nav>
 </div>
 <article class="doc">
-<h1>Basics and Fundamentals</h1>
-<div id="preamble">
-<div class="sectionbody">
-<div class="paragraph">
-<p>At the end of this chapter you will be able to :</p>
-</div>
-<div class="ulist checklist">
-<ul class="checklist">
-<li>
-<p><i class="fa fa-check-square-o"></i> Create a Quarkus Java Application</p>
-</li>
-<li>
-<p><i class="fa fa-check-square-o"></i> Build and run the Java application in JVM mode.</p>
-</li>
-<li>
-<p><i class="fa fa-check-square-o"></i> Build and run the Java application in Native mode.</p>
-</li>
-<li>
-<p><i class="fa fa-check-square-o"></i> Build and run the Java application in Developer mode</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
+<h1>Setup</h1>
 <div class="sect1">
-<h2 id="basics-create-quarkus-app"><a class="anchor" href="#basics-create-quarkus-app"></a>Create Quarkus Application</h2>
+<h2 id="requirements"><a class="anchor" href="#requirements"></a>Required Tools</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_ide"><a class="anchor" href="#_ide"></a>IDE</h3>
 <div class="paragraph">
-<p>Create an empty folder called <code>quarkus-tutorial</code>. We&#8217;ll call it our <code>$TUTORIAL_HOME</code>.</p>
+<p>You can use any Java IDE for this tutorial but if you didn&#8217;t try it before, we recommend <a href="https://code.visualstudio.com/download">VS Code</a> with the <a href="https://code.visualstudio.com/docs/languages/java">Java Extension Pack</a>.</p>
 </div>
-<div id="create-tutorial-folder" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir quarkus-tutorial &amp;&amp; cd quarkus-tutorial
-export TUTORIAL_HOME=`pwd`</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#create-tutorial-folder"><i class="fa fa-clipboard"></i></button><br/>
-<div class="paragraph">
-<p>Create the <code>fruits-app</code> folder and navigate to the folder:</p>
-</div>
-<div id="quarkusp-nav-to-work-folder" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir -p $TUTORIAL_HOME/work &amp;&amp; cd $TUTORIAL_HOME/work
-# set the Quarkus release environment variable
-export QUARKUS_VERSION=1.0.1.Final</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-nav-to-work-folder"><i class="fa fa-clipboard"></i></button><br/>
-<div id="quarkusp-mv-create-fruits-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn "io.quarkus:quarkus-maven-plugin:${QUARKUS_VERSION}:create" \
-  -DprojectGroupId="com.example" \
-  -DprojectArtifactId="fruits-app" \
-  -DprojectVersion="1.0-SNAPSHOT" \
-  -DclassName="FruitResource" \
-  -Dpath="fruit"
-cd fruits-app</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-mv-create-fruits-app"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-<div class="sect1">
-<h2 id="basics-ide-quarkus-app"><a class="anchor" href="#basics-ide-quarkus-app"></a>Open the Project in IDE</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Open or import the generated project into your IDE.</p>
-</div>
-<div class="paragraph">
-<p>If you are using <strong>vscode</strong> you can open the project by:</p>
-</div>
-<div id="basics-ide-quarkus-project" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">code .</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-ide-quarkus-project"><i class="fa fa-clipboard"></i></button><br/>
-<div class="admonitionblock note">
+<div class="admonitionblock tip">
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-note" title="Note"></i>
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-All further sections of this tutorial assumes the application name to be <code>fruits-app</code>.
+<div class="paragraph">
+<p>If you are using vscode then install vscode <a href="https://aka.ms/vscode-remote/download/extension">Remote Development Extension pack</a>,
+which allows you to run this entire tutorial within a contianer that will have all tools configured.</p>
+</div>
 </td>
 </tr>
 </table>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_cli_tools"><a class="anchor" href="#_cli_tools"></a>CLI Tools</h3>
 <div class="paragraph">
-<p>INFO: If you use <code>tutorial-tools</code>, your host <code>quarkus-tutorial/work</code> contains the application code ; point your IDE to this directory.</p>
+<p>The following CLI tools are required for running the exercises in this tutorial.</p>
 </div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you&#8217;re running locally, your only requirements are Java 8+, Maven 3.6.0+, and MariaDB if you want to try Hibernate with Panache.</p>
 </div>
+<div class="paragraph">
+<p>GraalVM is only required if you intend to build a native image.</p>
 </div>
-<div class="sect1">
-<h2 id="basics-build-run-quarkus-app"><a class="anchor" href="#basics-build-run-quarkus-app"></a>Build and Run the Quarkus Application</h2>
-<div class="sectionbody">
+<div class="paragraph">
+<p>Docker is only required if you want to build a container or run MariaDB as a container.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset1_jvm-mode"></a>JVM mode</p>
+<p><a id="tabset1_local-installation"></a>Local  Installation</p>
 </li>
 <li>
-<p><a id="tabset1_native-mode"></a>Native mode</p>
-</li>
-<li>
-<p><a id="tabset1_native-container-build-mode"></a>Native container-build mode</p>
+<p><a id="tabset1_container-image"></a>Container Image</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset1_jvm-mode">
-<div id="basics-build-quarkus-jvm-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work/fruits-app &amp;&amp; \
-./mvnw -DskipTests clean package</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-quarkus-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
+<div class="tab-pane" aria-labelledby="tabset1_local-installation">
 <div class="paragraph">
-<p>To run the application in jvm mode</p>
+<p>Please have them installed and configured before you get started with any of the tutorial chapters.</p>
 </div>
-<div id="basics-build-run-jvm-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">java -jar target/fruits-app-1.0-SNAPSHOT-runner.jar</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-run-jvm-app"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="tab-pane" aria-labelledby="tabset1_native-mode">
-<div id="basics-build-quarkus-native-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work/fruits-app &amp;&amp; \
-./mvnw -DskipTests clean package -Pnative</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-quarkus-native-app"><i class="fa fa-clipboard"></i></button><br/>
-<div class="admonitionblock note">
-<table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
 <tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Native compilation will take few minutes to complete.
-</td>
+<th class="tableblock halign-left valign-top"><strong>Tool</strong></th>
+<th class="tableblock halign-left valign-top"><strong>macOS</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Fedora</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Windows</strong></th>
 </tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Docker</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.docker.com/products/docker-desktop">Docker Desktop for Mac</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dnf install docker</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.docker.com/products/docker-desktop">Docker Desktop for Windows</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Java 8</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>brew tap AdoptOpenJDK/openjdk &amp;&amp; brew cask install adoptopenjdk8</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dnf install java-1.8.0-openjdk.x86_64</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://adoptopenjdk.net">Windows</a> (Make sure you set the <code>JAVA_HOME</code> environment variable and add <code>%JAVA_HOME%\bin</code> to your <code>PATH</code>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Apache Maven 3.6.0+</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">brew install maven</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dnf install maven</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://maven.apache.org/download.cgi">Windows</a> (Make sure you set the <code>MAVEN_HOME</code> environment variable and add <code>%MAVEN_HOME%\bin</code> to your <code>PATH</code>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Graal VM</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/graal/releases/download/vm-19.3.1/graalvm-ce-darwin-amd64-19.3.1.tar.gz">GraalVM Community Edition 19.3.1</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/graal/releases/download/vm-19.3.1/graalvm-ce-linux-amd64-19.3.1.tar.gz">GraalVM Community Edition 19.3.1</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not Supported</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>MariaDB</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>brew install mariadb</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dnf install mariadb mariadb-server</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://downloads.mariadb.org/mariadb/10.4.11/">MariaDB Windows version</a></p></td>
+</tr>
+</tbody>
 </table>
 </div>
+<div class="tab-pane" aria-labelledby="tabset1_container-image">
 <div class="paragraph">
-<p>To run the application in native mode</p>
+<p>If you have <a href="https://www.docker.com/products/docker-desktop">Docker for Mac or Windows or Linux</a>  then you can pull the linux container image
+<a href="https://quay.io/repository/rhdevelopers/tutorial-tools?tab=tags">tutorial tools</a> which has all the tools listed below installed and pre-configured.</p>
 </div>
-<div id="basics-build-run-native-app" class="listingblock">
+<div id="docker-pull-tutorials-cli" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./target/fruits-app-1.0-SNAPSHOT-runner</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-run-native-app"><i class="fa fa-clipboard"></i></button><br/>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Tests will fail on Windows as there is no graalvm support for windows, you can workaround it using <code>-DskipTests</code> option.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="tab-pane" aria-labelledby="tabset1_native-container-build-mode">
-<div id="basics-build-quarkus-native-docker-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work/fruits-app &amp;&amp; \
-./mvnw package -DskipTests -Pnative -Dquarkus.native.container-build=true</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-quarkus-native-docker-app"><i class="fa fa-clipboard"></i></button><br/>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Native compilation will take few minutes to complete.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>To run the application in native mode you need to build a Docker image using the native file generated in previous step:</p>
-</div>
-<div id="basics-build-run-native-docker-app" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/fruits-app:1.0-SNAPSHOT . &amp;&amp; \
-docker run -it --rm -p 8080:8080 example/fruits-app:1.0-SNAPSHOT</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-run-native-docker-app"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p>You can <a href="#basics-call-svc">Invoke Service</a> to see a response like <code>hello</code>.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="basics-testing"><a class="anchor" href="#basics-testing"></a>Testing Fruit Resource</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The scaffolding process also creates a test case for the <code>fruit</code> endpoint.</p>
-</div>
-<div class="paragraph">
-<p>Open the next class <code>$PROJECT_HOME/src/test/java/com/example/FruitResourceTest.java</code> to see how a test looks like.</p>
-</div>
-<div class="paragraph">
-<p>When running this test, the application is started once, then all tests are executed, and finally, the application is stopped.
-Although it is not mandatory, by default <a href="http://rest-assured.io/">RestAssured</a> project is used to test Rest endpoints but it is up to you to change that.</p>
-</div>
-<div class="paragraph">
-<p>You can run the test either in IDE or by running Maven:</p>
-</div>
-<div id="basics-run-tests" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw clean compile test</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-run-tests"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-<div class="sect1">
-<h2 id="basics-run-quarkus-app-dev-mode"><a class="anchor" href="#basics-run-quarkus-app-dev-mode"></a>Run Quarkus Application in Development mode</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Stop the Quarkus application that might be running in <code>jvm</code> or <code>native</code> mode.</p>
-</div>
-<div class="paragraph">
-<p><em>Development</em> mode enables hot deployment with background compilation, which means that when you modify your Java files and/or your resource files and refresh your browser, these changes will automatically take effect.</p>
-</div>
-<div class="paragraph">
-<p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
-</div>
-<div id="basics-build-run-dev" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-<div class="sect1">
-<h2 id="basics-update"><a class="anchor" href="#basics-update"></a>Updating the code</h2>
-<div class="sectionbody">
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Only if running in Development mode
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>You can edit the Java source(s) in your IDE. When you save and hit refresh in your browser, you will notice browser showing the new changes.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="basics-call-svc"><a class="anchor" href="#basics-call-svc"></a>Invoke Service</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The simple <code>hello</code> REST URI can be called from the browser using <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a> or using cli in a new terminal window like:</p>
-</div>
-<div id="basics-k8s-svc-call" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-<div class="sect1">
-<h2 id="basics-logging"><a class="anchor" href="#basics-logging"></a>Configuring Logging</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>You can configure Quarkus logging by setting the following parameters to <code>$PROJECT_HOME/src/main/resources/application.properties</code>:</p>
-</div>
-<div id="basics-update-logging-props" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.log.console.level=INFO</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-update-logging-props"><i class="fa fa-clipboard"></i></button><br/>
-<div class="paragraph">
-<p>Also you can configure your application logger level.
-Let&#8217;s add a logger and configure it.</p>
-</div>
-<div class="paragraph">
-<p>Open the following Java class <code>$PROJECT_HOME/src/main/java/com/example/FruitResource.java</code> and copy the next content in its body:</p>
-</div>
-<div id="basics-custom-log-manager" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker pull quay.io/rhdevelopers/tutorial-tools:0.0.3
+mkdir quarkus-tutorial
+cd quarkus-tutorial
+mkdir work
+docker run -ti -p 8080:8080 -v `pwd`/work:/work \
+  -v `mvn help:evaluate -Dexpression=settings.localRepository | grep \
+  -v '\[INFO\]'`:/opt/developer/.m2/repository \
+  --rm quay.io/rhdevelopers/tutorial-tools:0.0.3 bash
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import org.jboss.logging.Logger;
-
-@Path("/fruit")
-public class FruitResource {
-
-    Logger logger = Logger.getLogger(FruitResource.class);
-
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
-        logger.info("Hello method is called.");
-        return "hello";
-    }
-}</code></pre>
+# -p will map Quarkus running in the container to your host port
+# -v `pwd`... will map the host work subdirectory to the container /work directory, this is where you will create your application
+# -v `mvn ...` will map your ~/.m2/repository of your host to the container repository to save downloading again between image runs</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-custom-log-manager"><i class="fa fa-clipboard"></i></button><br/>
-<div class="paragraph">
-<p>And configure <code>INFO</code> mode for the service to <code>$PROJECT_HOME/src/main/resources/application.properties</code>:</p>
-</div>
-<div id="basics-update-custom-logging-props" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.log.category."com.example".level=INFO</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-update-custom-logging-props"><i class="fa fa-clipboard"></i></button><br/>
-<div class="sect2">
-<h3 id="basics-call-svc-logging"><a class="anchor" href="#basics-call-svc-logging"></a>Invoke Service</h3>
-<div class="paragraph">
-<p>The simple <code>hello</code> REST URI can be called from the browser using <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a> or using cli like:</p>
-</div>
-<div id="basics-log-k8s-svc-call" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-log-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
-<div class="paragraph">
-<p>And if you inspect the console output, you see the logging message:</p>
-</div>
-<div class="paragraph">
-<p><code>2019-12-11 14:00:56,219 INFO  [com.exa.FruitResource] (vert.x-worker-thread-2) Hello method is called.</code></p>
+<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#docker-pull-tutorials-cli"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="basics-configuration"><a class="anchor" href="#basics-configuration"></a>Configuration</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Hardcoded values in your code is a no go, let&#8217;s see how to add configuration to your application.
-Quarkus relies on MicroProfile Config specification and the main configuration is  <code>application.properties</code>.</p>
-</div>
-<div class="sect2">
-<h3 id="basics-configuration-new-property"><a class="anchor" href="#basics-configuration-new-property"></a>Add a new property</h3>
-<div class="paragraph">
-<p>Add the following property to <code>$PROJECT_HOME/src/main/resources/application.properties</code>:</p>
-</div>
-<div id="basics-configuration-add-new-property" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">greetings.message = Hello y'all!</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-configuration-add-new-property"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="sect2">
-<h3 id="basics-configuration-get-value"><a class="anchor" href="#basics-configuration-get-value"></a>Get Configuration Value</h3>
-<div class="paragraph">
-<p>Open the following Java class <code>$PROJECT_HOME/src/main/java/com/example/FruitResource.java</code> and copy the next content in its body:</p>
-</div>
-<div id="basics-configuration-get-value-code" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-
-@Path("/fruit")
-public class FruitResource {
-
-    @ConfigProperty(name = "greetings.message")
-    String message;
-
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
-        return message;
-    }
-}</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-configuration-get-value-code"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-<div class="sect2">
-<h3 id="basics-call-configuration"><a class="anchor" href="#basics-call-configuration"></a>Invoke Service</h3>
-<div class="paragraph">
-<p>The simple <code>hello</code> REST URI can be called from the browser using <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a> or using cli like:</p>
-</div>
-<div id="basics-conf-k8s-svc-call" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-conf-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
 </div>
 </div>
 </div>

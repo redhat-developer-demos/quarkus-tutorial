@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Setup :: Quarkus Tutorial</title>
-    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/1.0.1.Final/01-setup.html">
+    <title>Frequently Asked Questions :: Quarkus Tutorial</title>
+    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/1.2.0.Final/faq.html">
     <meta name="generator" content="Antora 2.0.1">
     <link rel="stylesheet" href="../../_/css/site.css">
 <link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
@@ -28,7 +28,7 @@
 </header>
 <div class="main-wrapper">
 <div class="navigation-container"  data-component="quarkus-tutorial"
-  data-version="1.0.1.Final" >
+  data-version="1.2.0.Final" >
   <aside class="navigation">
     <div class="panels">
       <div class="navigation-menu is-active" data-panel="menu">
@@ -37,12 +37,12 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <button class="nav-toggle"></button>
     <a class="nav-link" href="01-setup.html">1. Setup</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#requirements">Required Tools</a>
+    <a class="nav-link" href="01-setup.html#requirements">Required Tools</a>
   </li>
 </ul>
   </li>
@@ -305,154 +305,13 @@
   <nav class="crumbs" aria-label="breadcrumbs">
   <ul>
     <li class="crumb"><a href="index.html">Quarkus Tutorial</a></li>
-    <li class="crumb"><a href="01-setup.html">1. Setup</a></li>
+    <li class="crumb"><a href="faq.html">Frequently Asked Questions</a></li>
   </ul>
 </nav>
 </div>
 <article class="doc">
-<h1>Setup</h1>
-<div class="sect1">
-<h2 id="requirements"><a class="anchor" href="#requirements"></a>Required Tools</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_ide"><a class="anchor" href="#_ide"></a>IDE</h3>
-<div class="paragraph">
-<p>You can use any Java IDE for this tutorial but if you didn&#8217;t try it before, we recommend <a href="https://code.visualstudio.com/download">VS Code</a> with the <a href="https://code.visualstudio.com/docs/languages/java">Java Extension Pack</a>.</p>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>If you are using vscode then install vscode <a href="https://aka.ms/vscode-remote/download/extension">Remote Development Extension pack</a>,
-which allows you to run this entire tutorial within a contianer that will have all tools configured.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_cli_tools"><a class="anchor" href="#_cli_tools"></a>CLI Tools</h3>
-<div class="paragraph">
-<p>The following CLI tools are required for running the exercises in this tutorial.</p>
-</div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>If you&#8217;re running locally, your only requirements are Java 8+, Maven 3.6.0+, and MariaDB if you want to try Hibernate with Panache.</p>
-</div>
-<div class="paragraph">
-<p>GraalVM is only required if you intend to build a native image.</p>
-</div>
-<div class="paragraph">
-<p>Docker is only required if you want to build a container or run MariaDB as a container.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset1_local-installation"></a>Local  Installation</p>
-</li>
-<li>
-<p><a id="tabset1_container-image"></a>Container Image</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset1_local-installation">
-<div class="paragraph">
-<p>Please have them installed and configured before you get started with any of the tutorial chapters.</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top"><strong>Tool</strong></th>
-<th class="tableblock halign-left valign-top"><strong>macOS</strong></th>
-<th class="tableblock halign-left valign-top"><strong>Fedora</strong></th>
-<th class="tableblock halign-left valign-top"><strong>Windows</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Docker</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.docker.com/products/docker-desktop">Docker Desktop for Mac</a></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dnf install docker</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.docker.com/products/docker-desktop">Docker Desktop for Windows</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Java 8</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>brew tap AdoptOpenJDK/openjdk &amp;&amp; brew cask install adoptopenjdk8</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dnf install java-1.8.0-openjdk.x86_64</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://adoptopenjdk.net">Windows</a> (Make sure you set the <code>JAVA_HOME</code> environment variable and add <code>%JAVA_HOME%\bin</code> to your <code>PATH</code>)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Apache Maven 3.6.0+</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">brew install maven</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">dnf install maven</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://maven.apache.org/download.cgi">Windows</a> (Make sure you set the <code>MAVEN_HOME</code> environment variable and add <code>%MAVEN_HOME%\bin</code> to your <code>PATH</code>)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Graal VM</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/graal/releases/download/vm-19.2.1/graalvm-ce-darwin-amd64-19.2.1.tar.gz">GraalVM Community Edition 19.2.1</a></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/graal/releases/download/vm-19.2.1/graalvm-ce-linux-amd64-19.2.1.tar.gz">GraalVM Community Edition 19.2.1</a></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Not Supported</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>MariaDB</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>brew install mariadb</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dnf install mariadb mariadb-server</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://downloads.mariadb.org/mariadb/10.4.11/">MariaDB Windows version</a></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="tab-pane" aria-labelledby="tabset1_container-image">
-<div class="paragraph">
-<p>If you have <a href="https://www.docker.com/products/docker-desktop">Docker for Mac or Windows or Linux</a>  then you can pull the linux container image
-<a href="https://quay.io/repository/rhdevelopers/tutorial-tools?tab=tags">tutorial tools</a> which has all the tools listed below installed and pre-configured.</p>
-</div>
-<div id="docker-pull-tutorials-cli" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker pull quay.io/rhdevelopers/tutorial-tools:0.0.3
-mkdir quarkus-tutorial
-cd quarkus-tutorial
-mkdir work
-docker run -ti -p 8080:8080 -v `pwd`/work:/work \
-  -v `mvn help:evaluate -Dexpression=settings.localRepository | grep \
-  -v '\[INFO\]'`:/opt/developer/.m2/repository \
-  --rm quay.io/rhdevelopers/tutorial-tools:0.0.3 bash
+<h1>Frequently Asked Questions</h1>
 
-# -p will map Quarkus running in the container to your host port
-# -v `pwd`... will map the host work subdirectory to the container /work directory, this is where you will create your application
-# -v `mvn ...` will map your ~/.m2/repository of your host to the container repository to save downloading again between image runs</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#docker-pull-tutorials-cli"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
 </article>
   </main>
 </div>
