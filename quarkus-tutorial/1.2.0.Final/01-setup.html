@@ -348,7 +348,7 @@ which allows you to run this entire tutorial within a contianer that will have a
 </td>
 <td class="content">
 <div class="paragraph">
-<p>If you&#8217;re running locally, your only requirements are Java 8+ and Maven 3.6.0+.</p>
+<p>If you&#8217;re running locally, your only requirements are Java 11 and Maven 3.6.0+. You can use Java 8, but support for native compilation will be disabled soon.</p>
 </div>
 <div class="paragraph">
 <p>GraalVM is only required if you intend to build a native image.</p>
@@ -399,15 +399,15 @@ which allows you to run this entire tutorial within a contianer that will have a
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.docker.com/products/docker-desktop">Docker Desktop for Windows</a></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Java 8</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>brew tap AdoptOpenJDK/openjdk &amp;&amp; brew cask install adoptopenjdk8</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dnf install java-1.8.0-openjdk.x86_64</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://adoptopenjdk.net">Windows</a> (Make sure you set the <code>JAVA_HOME</code> environment variable and add <code>%JAVA_HOME%\bin</code> to your <code>PATH</code>)</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Java 11</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>brew tap AdoptOpenJDK/openjdk &amp;&amp; brew cask install adoptopenjdk11</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>dnf install java-11-openjdk.x86_64</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://adoptopenjdk.net">Windows</a> (Make sure you set the <code>JAVA_HOME</code> environment variable and add <code>%JAVA_HOME%\bin</code> to your <code>PATH</code>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Java 8</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>brew tap AdoptOpenJDK/openjdk &amp;&amp; brew cask install adoptopenjdk8</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dnf install java-1.8.0-openjdk.x86_64</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://adoptopenjdk.net">Windows</a> (Make sure you set the <code>JAVA_HOME</code> environment variable and add <code>%JAVA_HOME%\bin</code> to your <code>PATH</code>)</p></td>
 </tr>
 <tr>
