@@ -26,11 +26,11 @@ endif::workshop[]
 
 [WARNING]
 ====
-If you're running locally, your only requirements are Java 8+, Maven 3.6.0+, and MariaDB if you want to try Hibernate with Panache.
+If you're running locally, your only requirements are Java 8+ and Maven 3.6.0+.
 
 GraalVM is only required if you intend to build a native image.
 
-Docker is only required if you want to build a container or run MariaDB as a container.
+Docker is only required if you want to build a container.
 ====
 
 [tabs]
@@ -54,20 +54,21 @@ Please have them installed and configured before you get started with any of the
 | `dnf install java-1.8.0-openjdk.x86_64`
 | https://adoptopenjdk.net[Windows] (Make sure you set the `JAVA_HOME` environment variable and add `%JAVA_HOME%\bin` to your `PATH`)
 
+| **Java 11**
+| `brew tap AdoptOpenJDK/openjdk && brew cask install adoptopenjdk11`
+| `dnf install java-11-openjdk.x86_64`
+| https://adoptopenjdk.net[Windows] (Make sure you set the `JAVA_HOME` environment variable and add `%JAVA_HOME%\bin` to your `PATH`)
+
 | **Apache Maven 3.6.0+**
 | brew install maven
 | dnf install maven
 | https://maven.apache.org/download.cgi[Windows] (Make sure you set the `MAVEN_HOME` environment variable and add `%MAVEN_HOME%\bin` to your `PATH`)
 
 | **Graal VM**
-| https://github.com/oracle/graal/releases/download/vm-{graalvm-version}/graalvm-ce-darwin-amd64-{graalvm-version}.tar.gz[GraalVM Community Edition {graalvm-version}]
-| https://github.com/oracle/graal/releases/download/vm-{graalvm-version}/graalvm-ce-linux-amd64-{graalvm-version}.tar.gz[GraalVM Community Edition {graalvm-version}]
-| Not Supported
+| https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-{graalvm-version}/graalvm-ce-java11-darwin-amd64-{graalvm-version}.tar.gz[GraalVM Community Edition {graalvm-version}]
+| https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-{graalvm-version}/graalvm-ce-java11-linux-amd64-{graalvm-version}.tar.gz[GraalVM Community Edition {graalvm-version}]
+| https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-{graalvm-version}/graalvm-ce-java11-windows-amd64-{graalvm-version}.zip[GraalVM Community Edition {graalvm-version}]
 
-| **MariaDB**
-| `brew install mariadb`
-| `dnf install mariadb mariadb-server`
-| https://downloads.mariadb.org/mariadb/10.4.11/[MariaDB Windows version]
 |===
 --
 Container Image::
