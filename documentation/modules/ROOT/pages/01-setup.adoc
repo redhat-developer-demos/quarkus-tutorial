@@ -26,7 +26,7 @@ endif::workshop[]
 
 [WARNING]
 ====
-If you're running locally, your only requirements are Java 8+ and Maven 3.6.0+.
+If you're running locally, your only requirements are Java 11 and Maven 3.6.0+. You can use Java 8, but support for native compilation will be disabled soon.
 
 GraalVM is only required if you intend to build a native image.
 
@@ -49,14 +49,14 @@ Please have them installed and configured before you get started with any of the
 | `dnf install docker`
 | https://www.docker.com/products/docker-desktop[Docker Desktop for Windows]
 
-| **Java 8**
-| `brew tap AdoptOpenJDK/openjdk && brew cask install adoptopenjdk8`
-| `dnf install java-1.8.0-openjdk.x86_64`
-| https://adoptopenjdk.net[Windows] (Make sure you set the `JAVA_HOME` environment variable and add `%JAVA_HOME%\bin` to your `PATH`)
-
 | **Java 11**
 | `brew tap AdoptOpenJDK/openjdk && brew cask install adoptopenjdk11`
 | `dnf install java-11-openjdk.x86_64`
+| https://adoptopenjdk.net[Windows] (Make sure you set the `JAVA_HOME` environment variable and add `%JAVA_HOME%\bin` to your `PATH`)
+
+| **Java 8**
+| `brew tap AdoptOpenJDK/openjdk && brew cask install adoptopenjdk8`
+| `dnf install java-1.8.0-openjdk.x86_64`
 | https://adoptopenjdk.net[Windows] (Make sure you set the `JAVA_HOME` environment variable and add `%JAVA_HOME%\bin` to your `PATH`)
 
 | **Apache Maven 3.6.0+**
