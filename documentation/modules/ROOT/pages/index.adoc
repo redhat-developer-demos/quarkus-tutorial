@@ -36,6 +36,11 @@ endif::workshop[]
 ////
 
 [.tile]
+.xref:05-quarkus-panache.adoc[Database Interactive Applications]
+* xref:05-quarkus-panache.adoc#quarkusp-fruitapp-dev[Build a Quarkus Hibernate Application]
+* xref:05-quarkus-panache.adoc#quarkusp-what-is-panache[Enhance Hibernate ORM with Panache]
+
+[.tile]
 .xref:04-quarkus-extensions.adoc[Quarkus Extensions]
 * xref:04-quarkus-extensions.adoc#qext-list-extensions[List Extensions]
 * xref:04-quarkus-extensions.adoc#qext-rest-client[Rest Client]
@@ -43,10 +48,6 @@ endif::workshop[]
 * xref:04-quarkus-extensions.adoc#qext-health-checks[Health Checks]
 * xref:04-quarkus-extensions.adoc#qext-jwt[JWT RBAC]
 
-[.tile]
-.xref:05-quarkus-panache.adoc[Database Interactive Applications]
-* xref:05-quarkus-panache.adoc#quarkusp-fruitapp-dev[Build a Quarkus Hibernate Application]
-* xref:05-quarkus-panache.adoc#quarkusp-what-is-panache[Enhance Hibernate ORM with Panache]
 ////
 ifndef::workshop[]
 * xref:05-quarkus-panache.adoc#quarkusp-cloud-dev[Deploy on Kubernetes]
