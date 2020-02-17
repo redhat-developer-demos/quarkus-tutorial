@@ -86,13 +86,13 @@ public interface BeerGateway {
     @Path("/beers")
     @Produces(MediaType.APPLICATION_JSON)
     @ClientHeaderParam(name="user-agent", value="curl/7.54.0")
-    List<Beer> getBeers(@QueryParam("page") int page); //<1>
+    List<Beer> getBeers(@QueryParam("page") int page); //1
     
 }
 ----
 copyToClipboard::qext-quarkusrpb-beer-client[]
 
-<1> Retrieves all beers from a specific page.
+. Retrieves all beers from a specific page.
 
 [#quarkusrpb-configure-props]
 ===== Edit the application.properties
@@ -134,31 +134,31 @@ public class BeerService {
     BeerGateway beerGateway;
 
     public Flowable<Beer> beers() {
-        Flowable<List<Beer>> beerStream = Flowable.generate(() -> 1, (page, emitter) -> { // <1>
+        Flowable<List<Beer>> beerStream = Flowable.generate(() -> 1, (page, emitter) -> { //1
             final List<Beer> beers = beerGateway.getBeers(page);
             if (beers.isEmpty()) {
-                emitter.onComplete(); // <2>
+                emitter.onComplete(); //2
             } else {
-                emitter.onNext(beers); // <3>
+                emitter.onNext(beers); //3
             }
 
-            return page + 1; // <4>
+            return page + 1; //4
         });
 
         return beerStream
                 .subscribeOn(Schedulers.io())
-                .flatMap(Flowable::fromIterable); // <5>
+                .flatMap(Flowable::fromIterable); //5
     }
 
 }
 ----
 copyToClipboard::qext-quarkusrpb-beer-service[]
 
-<1> Gets first batch of beers
-<2> Sends an event that the process is completed
-<3> Emits each beer
-<4> Gets beers from next page
-<5> Flatten the list of beers event into event of beers
+. Gets first batch of beers
+. Sends an event that the process is completed
+. Emits each beer
+. Gets beers from next page
+. Flatten the list of beers event into event of beers
 
 So far nothing really new, but notice that now instead of reading all the beers, put them in memory and then filter out by any parameter, you are just emitting them individually per page.
 The caller is responsible to manipulate this information as it starts receiving the information and it is not necessary to store all beers in memory but just the ones that matches any condition.
@@ -192,22 +192,22 @@ import org.reactivestreams.Publisher;
 public class BeerResource {
 
     @Inject
-    BeerService beerService; // <1>
+    BeerService beerService; //1
 
     @GET
     public Publisher<Beer> hello() {
-        return beerService.beers() // <2>
-                .filter(b -> b.getAbv() > 7.0); // <3>
-                // <4>
+        return beerService.beers() //2
+                .filter(b -> b.getAbv() > 7.0); //3
+                //4
     }
 }
 ----
 copyToClipboard::qext-quarkusrpb-beer-resource[]
 
-<1> Injects `BeerService`
-<2> Gets the beer stream
-<3> For each beer emitted checks that _abv_ is greater than 7
-<4> Automatically subscribes to the stream and get back the result as `List<Beer>`
+. Injects `BeerService`
+. Gets the beer stream
+. For each beer emitted checks that _abv_ is greater than 7
+. Automatically subscribes to the stream and get back the result as `List<Beer>`
 
 The big change here is that now instead of having to deal with all beers in memory and then apply some operations, you are just loading into memory a _page_ of beers, then filter them and finally return them to the caller.
 
