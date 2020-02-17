@@ -416,19 +416,18 @@ public interface BeerGateway {
     @Path("/beers")
     @Produces(MediaType.APPLICATION_JSON)
     @ClientHeaderParam(name="user-agent", value="curl/7.54.0")
-    List&lt;Beer&gt; getBeers(@QueryParam("page") int page); <i class="conum" data-value="1"></i><b>(1)</b>
+    List&lt;Beer&gt; getBeers(@QueryParam("page") int page); //1
 
 }</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-quarkusrpb-beer-client"><i class="fa fa-clipboard"></i></button><br/>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Retrieves all beers from a specific page.</td>
-</tr>
-</table>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Retrieves all beers from a specific page.</p>
+</li>
+</ol>
 </div>
 <div class="sect4">
 <h5 id="quarkusrpb-configure-props"><a class="anchor" href="#quarkusrpb-configure-props"></a>Edit the application.properties</h5>
@@ -471,47 +470,42 @@ public class BeerService {
     BeerGateway beerGateway;
 
     public Flowable&lt;Beer&gt; beers() {
-        Flowable&lt;List&lt;Beer&gt;&gt; beerStream = Flowable.generate) -&gt; 1, (page, emitter) -&gt; { <i class="conum" data-value="1"></i><b>(1)</b>             final List&lt;Beer&gt; beers = beerGateway.getBeers(page);             if (beers.isEmpty( {
-                emitter.onComplete(); <i class="conum" data-value="2"></i><b>(2)</b>
+        Flowable&lt;List&lt;Beer&gt;&gt; beerStream = Flowable.generate) -&gt; 1, (page, emitter) -&gt; { //1             final List&lt;Beer&gt; beers = beerGateway.getBeers(page);             if (beers.isEmpty( {
+                emitter.onComplete(); //2
             } else {
-                emitter.onNext(beers); <i class="conum" data-value="3"></i><b>(3)</b>
+                emitter.onNext(beers); //3
             }
 
-            return page + 1; <i class="conum" data-value="4"></i><b>(4)</b>
+            return page + 1; //4
         });
 
         return beerStream
                 .subscribeOn(Schedulers.io())
-                .flatMap(Flowable::fromIterable); <i class="conum" data-value="5"></i><b>(5)</b>
+                .flatMap(Flowable::fromIterable); //5
     }
 
 }</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-quarkusrpb-beer-service"><i class="fa fa-clipboard"></i></button><br/>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Gets first batch of beers</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Sends an event that the process is completed</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Emits each beer</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>Gets beers from next page</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>Flatten the list of beers event into event of beers</td>
-</tr>
-</table>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Gets first batch of beers</p>
+</li>
+<li>
+<p>Sends an event that the process is completed</p>
+</li>
+<li>
+<p>Emits each beer</p>
+</li>
+<li>
+<p>Gets beers from next page</p>
+</li>
+<li>
+<p>Flatten the list of beers event into event of beers</p>
+</li>
+</ol>
 </div>
 <div class="paragraph">
 <p>So far nothing really new, but notice that now instead of reading all the beers, put them in memory and then filter out by any parameter, you are just emitting them individually per page.
@@ -548,37 +542,33 @@ import org.reactivestreams.Publisher;
 public class BeerResource {
 
     @Inject
-    BeerService beerService; <i class="conum" data-value="1"></i><b>(1)</b>
+    BeerService beerService; //1
 
     @GET
     public Publisher&lt;Beer&gt; hello() {
-        return beerService.beers() <i class="conum" data-value="2"></i><b>(2)</b>
-                .filter(b -&gt; b.getAbv() &gt; 7.0); <i class="conum" data-value="3"></i><b>(3)</b>
-                <i class="conum" data-value="4"></i><b>(4)</b>
+        return beerService.beers() //2
+                .filter(b -&gt; b.getAbv() &gt; 7.0); //3
+                //4
     }
 }</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-quarkusrpb-beer-resource"><i class="fa fa-clipboard"></i></button><br/>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Injects <code>BeerService</code></td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Gets the beer stream</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>For each beer emitted checks that <em>abv</em> is greater than 7</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>Automatically subscribes to the stream and get back the result as <code>List&lt;Beer&gt;</code></td>
-</tr>
-</table>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Injects <code>BeerService</code></p>
+</li>
+<li>
+<p>Gets the beer stream</p>
+</li>
+<li>
+<p>For each beer emitted checks that <em>abv</em> is greater than 7</p>
+</li>
+<li>
+<p>Automatically subscribes to the stream and get back the result as <code>List&lt;Beer&gt;</code></p>
+</li>
+</ol>
 </div>
 <div class="paragraph">
 <p>The big change here is that now instead of having to deal with all beers in memory and then apply some operations, you are just loading into memory a <em>page</em> of beers, then filter them and finally return them to the caller.</p>
