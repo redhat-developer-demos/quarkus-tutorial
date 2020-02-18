@@ -14,182 +14,7 @@ At the end of this chapter you will be able to :
 
 You'll learn how easy and productive is Quarkus with Hibernate with Panache. For this, we'll developer an application called "Fruits". It's a simple CRUD REST API that handles information about fruits.
 
-We'll use https://mariadb.org/[MariaDB] as our backing database.
-
-[#quarkusp-fruitapp-dev]
-=== Build and Deploy
-
-First, we need a running instance of our database:
-
-[#quarkus-fruit-app-db]
-==== Running MariaDB
-
-[tabs]
-====
-////
-ifndef::workshop[]
-kubectl::
-+
---
-[#quarkusp-deploy-db]
-[source,bash,subs="+macros,+attributes"]
-----
-kubectl apply -n {tutorial-namespace} -f pass:[$TUTORIAL_HOME]/kubernetes-app/mariadb.yaml
-----
-copyToClipboard::quarkusp-deploy-db[]
-
-A successful MariaDB deployment will have the following pods and services in the `{tutorial-namespace}` if it is running in a Kubernetes/OpenShift cluster.
-
-.pods
-[source,bash]
-----
-NAME                          READY   STATUS    RESTARTS   AGE
-db-adminer-678857cdb9-hw2km   1/1     Running   0          2m3s
-mariadb-58fb5df86c-wfbsj      1/1     Running   0          2m3s
-----
-
-.services
-[source,bash]
-----
-NAME         TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
-db-adminer   NodePort   10.101.171.237   <none>        9090:30397/TCP   2m21s
-mariadb      NodePort   10.105.40.135    <none>        3306:30125/TCP   2m21s
-----
-
-NOTE: The actual pod name and NodePort will be different on your environment
---
-oc::
-+
---
-
-[#quarkusp-oc-deploy-db]
-[source,bash,subs="+macros,+attributes"]
-----
-oc apply -n {tutorial-namespace} -f pass:[$TUTORIAL_HOME]/kubernetes-app/mariadb.yaml
-----
-copyToClipboard::quarkusp-oc-deploy-db[]
-
-A successful MariaDB deployment will have the following pods and services in the `{tutorial-namespace}` if it is running in a Kubernetes/OpenShift cluster.
-
-.pods
-[source,bash]
-----
-NAME                          READY   STATUS    RESTARTS   AGE
-db-adminer-678857cdb9-hw2km   1/1     Running   0          2m3s
-mariadb-58fb5df86c-wfbsj      1/1     Running   0          2m3s
-----
-
-.services
-[source,bash]
-----
-NAME         TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
-db-adminer   NodePort   10.101.171.237   <none>        9090:30397/TCP   2m21s
-mariadb      NodePort   10.105.40.135    <none>        3306:30125/TCP   2m21s
-----
-
-NOTE: The actual pod name and NodePort will be different on your environment
---
-endif::workshop[]
-////
-docker::
-+
---
-[#quarkusp-docker-deploy-db]
-[source,bash,subs="+macros,+attributes"]
-----
-docker run -ti --rm --name mariadb -e MYSQL_ROOT_PASSWORD=superS3cret! -e MYSQL_USER=demo -e MYSQL_DATABASE=demodb -e MYSQL_PASSWORD=password -p 3306:3306  mariadb:10.4.4
-----
-copyToClipboard::quarkusp-docker-deploy-db[]
-Open a new terminal window:
-
-[#quarkusp-docker-deploy-adminer]
-[source,bash,subs="+macros,+attributes"]
-----
-docker run  --link mariadb -p 8082:8080 adminer:4.7.3-standalone
-----
-copyToClipboard::quarkusp-docker-deploy-adminer[]
---
-====
-
-To access the DB adminer page:
-
-[tabs]
-====
-////
-ifndef::workshop[]
-minikube::
-+
---
-[#quarkusp-open-db-adminer]
-[source,bash,subs="+macros,+attributes"]
-----
-minikube service db-adminer -n {tutorial-namespace}
-----
-copyToClipboard::quarkusp-open-db-adminer[]
---
-minishift::
-+
---
-[#quarkusp-minishift-open-db-adminer]
-[source,bash,subs="+macros,+attributes"]
-----
-minishift openshift service db-adminer -n {tutorial-namespace}
-----
-copyToClipboard::quarkusp-minishift-open-db-adminer[]
---
-endif::workshop[]
-////
-docker::
-+
---
-Open in a browser the next page: http://localhost:8082[http://localhost:8082,window=_blank]
---
-====
-
-Use `mariadb` as host and `demodb` as database. 
-Any of the credentials below can be used to connect to the database:
-
-.DB access details
-[cols="<,^,>",options="header"]
-|===
-| user | password | databases
-
-| root | superS3cret! | *
-| demo | password | demodb
-
-|===
-
-////
-[#quarkusp-access-db]
-===== Accessing Database 
-To be able to access MariaDB database locally (`localhost` if you are not using the Docker approach), you need to `port-forward` the remote port to local port.
-
-ifndef::workshop[]
-
-Open a new terminal window and run the following command (blocking):
-
-[tabs]
-====
-kubectl::
-+
-[#quarkuspdb-port-forward]
-[source,bash,subs="+macros,+attributes"]
-----
-kubectl -n {tutorial-namespace} port-forward svc/mariadb 3306:3306
-----
-copyToClipboard::quarkuspdb-port-forward[]
-oc::
-+
-[#quarkuspdb-oc-port-forward]
-[source,bash,subs="+macros,+attributes"]
-----
-oc -n {tutorial-namespace} port-forward svc/mariadb 3306:3306
-----
-copyToClipboard::quarkuspdb-oc-port-forward[]
-====
-
-endif::workshop[]
-////
+We'll use http://www.h2database.com[H2] as our backing database, but it's very easy to use other database engines with Quarkus. As an exercise for later, we suggest you to try your favorite database engine with the documentation found https://quarkus.io/guides/datasource[here].
 
 ==== Build Fruit Resource
 
@@ -203,24 +28,9 @@ NOTE: For the easier reference, we shall call the `fruits-app` project folder as
 [#qext-mvn-add-persistence-extensions]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-jdbc-mariadb, quarkus-hibernate-orm-panache, quarkus-smallrye-openapi"
+./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-jdbc-h2, quarkus-hibernate-orm-panache, quarkus-smallrye-openapi"
 ----
 copyToClipboard::qext-mvn-add-persistence-extensions[]
-
-[NOTE]
-====
-If you use `tutorial-tools`, start MariaDB from the same Docker engine.
-Stop the `tutorial-tools` container and restart it with a link to mariadb
-
-[source,bash,subs="+macros,+attributes"]
-----
-docker run -ti -p 8080:8080 \
-  -v `pwd`/work:/work \
-  -v `mvn help:evaluate -Dexpression=settings.localRepository | grep -v '\[INFO\]'`:/opt/developer/.m2/repository \
-  --link mariadb:mariadb \
-  --rm quay.io/rhdevelopers/tutorial-tools:0.0.3 bash
-----
-====
 
 [#quarkusp-configure-props]
 ===== Edit the application.properties
@@ -230,31 +40,15 @@ Add the following properties to `pass:[$PROJECT_HOME]/src/main/resources/applica
 [#quarkuspdb-update-props]
 [source,config,subs="+macros,+attributes"]
 ----
-# configure your datasource
-# <1>
-quarkus.datasource.url = jdbc:mariadb://mariadb:3306/demodb 
-# <2>
-%dev.quarkus.datasource.url = jdbc:mariadb://127.0.0.1:3306/demodb 
-# <3>
-%fromtools.quarkus.datasource.url = jdbc:mariadb://mariadb:3306/demodb
-%test.quarkus.datasource.url=jdbc:mariadb://127.0.0.1:3306/demodb
-quarkus.datasource.driver = org.mariadb.jdbc.MariaDbDataSource
-quarkus.hibernate-orm.dialect = org.hibernate.dialect.MariaDB103Dialect 
-quarkus.datasource.username = demo
-quarkus.datasource.password = password
-
-# drop and create the database at startup (use `update` to only update the schema)
-quarkus.hibernate-orm.database.generation = drop-and-create
-# show sql statements in log 
-quarkus.hibernate-orm.log.sql = true
+quarkus.datasource.url=jdbc:h2:tcp://localhost/mem:default
+quarkus.datasource.driver=org.h2.Driver
+quarkus.datasource.username=username-default
+quarkus.datasource.min-size=3
+quarkus.datasource.max-size=13
+quarkus.hibernate-orm.database.generation=drop-and-create
+quarkus.hibernate-orm.log.sql=true
 ----
 copyToClipboard::quarkuspdb-update-props[]
-
-<1> URL used when app is running in production (native or JAR)
-<2> URL used when app is running in development mode
-<2> URL used when app is running in development mode via tutorial-tools
-
-NOTE: In tutorial-tools, we use the mariadb DNS name using the profile `fromtools`. Start Quarkus dev with this command `./mvnw compile quarkus:dev -Dquarkus.profile=fromtools`.
 
 ===== Test Database connection
 
@@ -271,11 +65,10 @@ If all went well then you should be seeing something like the following in the l
 [source,bash]
 ----
 Listening for transport dt_socket at address: 5005
-2019-05-26 12:27:56,510 INFO  [io.qua.dep.QuarkusAugmentor] (main) Beginning quarkus augmentation
-2019-05-26 12:27:58,821 INFO  [io.qua.dep.QuarkusAugmentor] (main) Quarkus augmentation completed in 2311ms
-2019-05-26 12:27:58,935 INFO  [io.qua.swa.run.SwaggerUiServletExtension] (main) Swagger UI available at /swagger-ui
-2019-05-26 12:27:59,391 INFO  [io.quarkus] (main) Quarkus 0.15.0 started in 3.166s. Listening on: http://[::]:8080
-2019-05-26 12:27:59,392 INFO  [io.quarkus] (main) Installed features: [agroal, cdi, hibernate-orm, jdbc-mariadb, narayana-jta, resteasy, resteasy-jsonb, smallrye-health, smallrye-openapi, swagger-ui]
+2020-02-18 09:57:23,827 WARN  [io.qua.agr.dep.AgroalProcessor] (build-23) Agroal dependency is present but no driver has been defined for the default datasource
+2020-02-18 09:57:25,322 INFO  [io.quarkus] (main) devnexus 1.0-SNAPSHOT (running on Quarkus 1.2.0.Final) started in 2.287s. Listening on: http://0.0.0.0:8080
+2020-02-18 09:57:25,324 INFO  [io.quarkus] (main) Profile dev activated. Live Coding activated.
+2020-02-18 09:57:25,324 INFO  [io.quarkus] (main) Installed features: [agroal, cdi, hibernate-orm, hibernate-orm-panache, jdbc-h2, narayana-jta, resteasy, resteasy-jsonb, smallrye-openapi, swagger-ui]
 ----
 
 As you would have noticed there is no database logs. That's because we dont have any database related code yet:
@@ -296,6 +89,7 @@ import javax.persistence.Entity;
 public class Fruit {
 
     public String name;
+
     public String season;
 
 }
@@ -459,15 +253,15 @@ Create the following `import.sql` file in `$PROJECT_HOME/src/main/resources`:
 [#quarkusp-add-fruits]
 [source,sql,subs="+macros,+attributes"]
 ----
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Mango","Spring");
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Strawberry","Spring");
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Orange","Winter");
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"GrapeFruit","Winter");
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Blueberry","Summer");
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Banana","Summer");
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Plum","Summer");
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Apple","Fall");
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Grapes","Fall");
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Mango','Spring');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Strawberry','Spring');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Orange','Winter');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'GrapeFruit','Winter');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Blueberry','Summer');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Banana','Summer');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Plum','Summer');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Apple','Fall');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Grapes','Fall');
 ----
 copyToClipboard::quarkusp-add-fruits[]
 
