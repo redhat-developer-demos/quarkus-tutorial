@@ -155,6 +155,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 public class Fruit extends PanacheEntity {
 
     public String name;
+
     public String season;
 
 }
@@ -224,7 +225,7 @@ Try adding a fruit via the Swagger UI Post and try listing the available fruits.
 }
 ----
 
-NOTE: The response may vary based on what fruit you added.
+NOTE: The response may vary based on which fruits you added.
 
 [#quarkusp-fruits-finder]
 ===== Finders 
@@ -249,7 +250,7 @@ INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Grapes'
 ----
 copyToClipboard::quarkusp-add-fruits[]
 
-Update the `Fruit` entity with a finder method like 
+Update `Fruit` entity to add a finder method like: 
 
 [#quarkusp-find-fruits]
 [source,java,subs="+macros,+attributes"]
@@ -264,6 +265,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 public class Fruit extends PanacheEntity {
 
     public String name;
+
     public String season;
 
     public static List<Fruit> getAllFruitsForSeason(String season) {
@@ -275,7 +277,7 @@ public class Fruit extends PanacheEntity {
 copyToClipboard::quarkusp-find-fruits[]
 
 
-Update `FruitResource` with a REST method to get fruits by season: 
+Update `FruitResource` by adding a REST endpoint to get fruits by season: 
 
 [#quarkusp-get-find-fruits]
 [source,java,subs="+macros,+attributes"]
