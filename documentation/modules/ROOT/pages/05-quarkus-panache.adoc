@@ -52,7 +52,7 @@ copyToClipboard::quarkuspdb-update-props[]
 
 ===== Test Database connection
 
-Lets start Quarkus in `development` mode to verify the database connection works:
+Let's start Quarkus in `development` mode to verify the database connection works:
 
 [#quarkuspdb-test-dbconn]
 [source,config,subs="+macros,+attributes"]
@@ -107,21 +107,21 @@ Edit the Java file `$PROJECT_HOME/src/main/java/com/example/FruitResource.java`,
 package com.example;
 
 import java.util.List;
-import javax.ws.rs.Consumes;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Path("/fruit")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
 public class FruitResource {
 
     @GET
-    public List<Fruit> allFruits() {
-        return Fruit.listAll(); #<1>
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Fruit> fruits() {
+        return Fruit.listAll();
     }
+
 }
 ----
 copyToClipboard::quarkusp-fruit-entity1[]
@@ -163,7 +163,7 @@ copyToClipboard::quarkusp-fruit-entity2[]
 
 Making the `Fruit` entity as a `Panache Entity` will make it both Entity and DAO and ofcourse the error in the `FruitResource.java` disappears.
 
-Lets now access the Fruits API http://localhost:8080/fruit. If all goes well you will see some Hibernate SQL statements in the log that will create the new table `Fruit` with columns from `Fruit.java` entity class.
+Let's now access the Fruits API http://localhost:8080/fruit. If all goes well you will see some Hibernate SQL statements in the log that will create the new table `Fruit` with columns from `Fruit.java` entity class.
 
 [TIP]
 ====
@@ -181,14 +181,13 @@ And then access the swagger UI using the url http://localhost:8080/swagger-ui.
 
 Since we don't have any fruits in the DB you would have got an empty response back. 
 
-Lets add a REST method to the `FruitResource.java` to save a 'Fruit':
+Let's add a REST method to the `FruitResource.java` to save a 'Fruit':
 
 [#quarkusp-fruit-add-persist]
 [source,java,subs="+macros,+attributes"]
 ----
 package com.example;
 
-import java.net.URI;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -196,37 +195,36 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.Response.Status;
 
 @Path("/fruit")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
 public class FruitResource {
 
     @GET
-    public List<Fruit> allFruits() {
-        return Fruit.listAll(); 
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Fruit> fruits() {
+        return Fruit.listAll();
     }
 
     @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response saveFruit(Fruit fruit) {
-        // since the FruitEntity is a panache entity 
-        // persist is available by default
+    public Response newFruit(Fruit fruit) {
+        fruit.id = null;
         fruit.persist();
-        final URI createdUri = UriBuilder.fromResource(FruitResource.class)
-                        .path(Long.toString(fruit.id))
-                        .build();
-        return Response.created(createdUri).build();
+        return Response.status(Status.CREATED).entity(fruit).build();
     }
+
 }
 ----
 copyToClipboard::quarkusp-fruit-add-persist[]
 
-You can insert a new fruit by using the next `curl` command: `curl -vvv -d '{"name": "banana", "season": "summer"}' -H "Content-Type: application/json" POST http://localhost:8080/fruit`
+You can insert a new fruit by using the next `curl` command: `curl -vvv -d '{"name": "Banana", "season": "Summer"}' -H "Content-Type: application/json" POST http://localhost:8080/fruit`
 
 Or if you have the Swagger UI http://localhost:8080/swagger-ui enabled you can do it form there as well.
 
@@ -235,8 +233,8 @@ Try adding a fruit via the Swagger UI Post and try listing the available fruits.
 [source,json]
 ----
 {
-    "name": "banana",
-    "season": "summer"
+    "name": "Banana",
+    "season": "Summer"
 }
 ----
 
@@ -246,7 +244,7 @@ NOTE: The response may vary based on what fruit you added.
 ===== Finders 
 Cool! So far we did with some primitive methods lets explore some cool things that Panache offers. 
 
-Lets try to find all fruits by a season. To make the query return some data let us add some fruits to the DB.
+Let's try to find all fruits by a season. To make the query return some data let us add some fruits to the DB.
 
 Create the following `import.sql` file in `$PROJECT_HOME/src/main/resources`:
 
@@ -291,7 +289,7 @@ public class Fruit extends PanacheEntity {
 copyToClipboard::quarkusp-find-fruits[]
 
 
-Update the `Fruit` resource with a REST method to get fruits by season: 
+Update `FruitResource` with a REST method to get fruits by season: 
 
 [#quarkusp-get-find-fruits]
 [source,java,subs="+macros,+attributes"]
@@ -299,6 +297,7 @@ Update the `Fruit` resource with a REST method to get fruits by season:
 package com.example;
 
 import java.util.List;
+
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -308,42 +307,41 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 @Path("/fruit")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
 public class FruitResource {
 
     @GET
-    public List<Fruit> allFruits() {
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Fruit> fruits() {
         return Fruit.listAll();
     }
 
     @GET
-    @Path("pass:[{season}]")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{season}")
     public List<Fruit> fruitsBySeason(@PathParam("season") String season) {
         return Fruit.getAllFruitsForSeason(season);
     }
 
     @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response saveFruit(Fruit fruit) {
-        // just allow it to be generated
+    public Response newFruit(Fruit fruit) {
         fruit.id = null;
-        // since the FruitEntity is a panache entity persist is available by default
         fruit.persist();
-        return Response.ok(201).entity(fruit).build();
+        return Response.status(Status.CREATED).entity(fruit).build();
     }
-}
 
+}
 ----
 copyToClipboard::quarkusp-get-find-fruits[]
 
-IMPORTANT: Remember to remove the `getFruitInfoByName` method created in previous section.
-
 To test finder use the Swagger UI http://localhost:8080/swagger-ui. 
 
-A finder for fruits for __summer__ season should return a response like :
+A finder for fruits for the __Summer__ season should return a response like :
 
 [source,json]
 ----
@@ -377,7 +375,7 @@ Let's write a test to validate that inserting and finding methods works as expec
 To validate simple output messages RestAssured assertions mechanism is enough but in our experience, when start dealing with more complex assertions then things might become a bit more complex. 
 For this reason, we encourage you to start using https://assertj.github.io/doc/[AssertJ].
 
-Open `$PROJECT_HOME/pom.xml` and add the next dependency in `dependencies` section:
+Open `$PROJECT_HOME/pom.xml` and add the following dependencies in the `dependencies` section:
 
 [#quarkusp-register-assertj]
 [source,xml,subs="+macros,+attributes"]
@@ -386,6 +384,12 @@ Open `$PROJECT_HOME/pom.xml` and add the next dependency in `dependencies` secti
     <groupId>org.assertj</groupId>
     <artifactId>assertj-core</artifactId>
     <version>3.13.2</version>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-test-h2</artifactId>
+    <version>1.2.0.Final</version>
     <scope>test</scope>
 </dependency>
 ----
@@ -401,29 +405,31 @@ Open the next class `$PROJECT_HOME/src/test/java/com/example/FruitResourceTest.j
 ----
 package com.example;
 
-import io.quarkus.test.junit.QuarkusTest;
-
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-
-import java.util.List;
-
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.h2.H2DatabaseTestResource;
+import io.quarkus.test.junit.QuarkusTest;
+
 @QuarkusTest
 @TestMethodOrder(OrderAnnotation.class)
+@QuarkusTestResource(H2DatabaseTestResource.class)
 public class FruitResourceTest {
 
     @Test
     @Order(1)
     public void testInsertFruit() {
-
         Fruit fruit = new Fruit();
         fruit.name = "Watermelon";
-        fruit.season = "summer";
+        fruit.season = "Summer";
 
         given()
           .contentType("application/json")
@@ -440,7 +446,7 @@ public class FruitResourceTest {
     public void testFindFruitsBySeason() {
         final List<Fruit> fruits = given()
           .when()
-          .get("/fruit/{season}", "summer")
+          .get("/fruit/{season}", "Summer")
           .then()
           .assertThat()
           .statusCode(200)
@@ -448,7 +454,7 @@ public class FruitResourceTest {
           .body()
           .jsonPath()
           .getList(".", Fruit.class);
-          
+
         assertThat(fruits)
             .extracting("name")
             .containsExactlyInAnyOrder("Banana", "Watermelon", "Plum", "Blueberry");
