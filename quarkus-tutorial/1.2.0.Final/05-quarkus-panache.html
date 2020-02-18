@@ -510,29 +510,6 @@ public class Fruit extends PanacheEntity {
 <div class="paragraph">
 <p>Let&#8217;s now access the Fruits API <a href="http://localhost:8080/fruit" class="bare">http://localhost:8080/fruit</a>. If all goes well you will see some Hibernate SQL statements in the log that will create the new table <code>Fruit</code> with columns from <code>Fruit.java</code> entity class.</p>
 </div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>You have accessed the application using <a href="http://localhost:8080/fruit" class="bare">http://localhost:8080/fruit</a>. If you want you can enable <code>Swagger</code> by adding the extension:</p>
-</div>
-<div id="qext-mvn-add-swagger-ui-extensions" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="openapi"</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-mvn-add-swagger-ui-extensions"><i class="fa fa-clipboard"></i></button><br/>
-<div class="paragraph">
-<p>And then access the swagger UI using the url <a href="http://localhost:8080/swagger-ui" class="bare">http://localhost:8080/swagger-ui</a>.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
 <div class="paragraph">
 <p>Since we don&#8217;t have any fruits in the DB you would have got an empty response back.</p>
 </div>
@@ -583,10 +560,10 @@ public class FruitResource {
 <p>You can insert a new fruit by using the next <code>curl</code> command: <code>curl -vvv -d '{"name": "Banana", "season": "Summer"}' -H "Content-Type: application/json" POST <a href="http://localhost:8080/fruit" class="bare">http://localhost:8080/fruit</a></code></p>
 </div>
 <div class="paragraph">
-<p>Or if you have the Swagger UI <a href="http://localhost:8080/swagger-ui" class="bare">http://localhost:8080/swagger-ui</a> enabled you can do it form there as well.</p>
+<p>Or use the Swagger UI at <a href="http://localhost:8080/swagger-ui" class="bare">http://localhost:8080/swagger-ui</a> to try your REST endpoints.</p>
 </div>
 <div class="paragraph">
-<p>Try adding a fruit via the Swagger UI Post and try listing the available fruits. A good day scenario will return a JSON like:</p>
+<p>Try adding a fruit via the Swagger UI Post and try listing the available fruits. You will see a JSON response like this one:</p>
 </div>
 <div class="listingblock">
 <div class="content">
