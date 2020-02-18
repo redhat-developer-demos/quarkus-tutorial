@@ -335,93 +335,7 @@
 <p>You&#8217;ll learn how easy and productive is Quarkus with Hibernate with Panache. For this, we&#8217;ll developer an application called "Fruits". It&#8217;s a simple CRUD REST API that handles information about fruits.</p>
 </div>
 <div class="paragraph">
-<p>We&#8217;ll use <a href="https://mariadb.org/">MariaDB</a> as our backing database.</p>
-</div>
-<div class="sect2">
-<h3 id="quarkusp-fruitapp-dev"><a class="anchor" href="#quarkusp-fruitapp-dev"></a>Build and Deploy</h3>
-<div class="paragraph">
-<p>First, we need a running instance of our database:</p>
-</div>
-<div class="sect3">
-<h4 id="quarkus-fruit-app-db"><a class="anchor" href="#quarkus-fruit-app-db"></a>Running MariaDB</h4>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset1_docker"></a>docker</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset1_docker">
-<div id="quarkusp-docker-deploy-db" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -ti --rm --name mariadb -e MYSQL_ROOT_PASSWORD=superS3cret! -e MYSQL_USER=demo -e MYSQL_DATABASE=demodb -e MYSQL_PASSWORD=password -p 3306:3306  mariadb:10.4.4</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-docker-deploy-db"><i class="fa fa-clipboard"></i></button><br/>
-<div class="paragraph">
-<p>Open a new terminal window:</p>
-</div>
-<div id="quarkusp-docker-deploy-adminer" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run  --link mariadb -p 8082:8080 adminer:4.7.3-standalone</code></pre>
-</div>
-</div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-docker-deploy-adminer"><i class="fa fa-clipboard"></i></button><br/>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p>To access the DB adminer page:</p>
-</div>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset2_docker"></a>docker</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset2_docker">
-<div class="paragraph">
-<p>Open in a browser the next page: <a href="http://localhost:8082" target="_blank" rel="noopener">http://localhost:8082</a></p>
-</div>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p>Use <code>mariadb</code> as host and <code>demodb</code> as database.
-Any of the credentials below can be used to connect to the database:</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. DB access details</caption>
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">user</th>
-<th class="tableblock halign-center valign-top">password</th>
-<th class="tableblock halign-right valign-top">databases</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">root</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">superS3cret!</p></td>
-<td class="tableblock halign-right valign-top"><p class="tableblock">*</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">demo</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">password</p></td>
-<td class="tableblock halign-right valign-top"><p class="tableblock">demodb</p></td>
-</tr>
-</tbody>
-</table>
+<p>We&#8217;ll use <a href="http://www.h2database.com">H2</a> as our backing database, but it&#8217;s very easy to use other database engines with Quarkus. As an exercise for later, we suggest you to try your favorite database engine with the documentation found <a href="https://quarkus.io/guides/datasource">here</a>.</p>
 </div>
 <div class="sect3">
 <h4 id="_build_fruit_resource"><a class="anchor" href="#_build_fruit_resource"></a>Build Fruit Resource</h4>
@@ -444,34 +358,10 @@ For the easier reference, we shall call the <code>fruits-app</code> project fold
 <h5 id="quarkusp-add-persistence-extensions"><a class="anchor" href="#quarkusp-add-persistence-extensions"></a>Add Extensions</h5>
 <div id="qext-mvn-add-persistence-extensions" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-jdbc-mariadb, quarkus-hibernate-orm-panache, quarkus-smallrye-openapi"</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-jdbc-h2, quarkus-hibernate-orm-panache, quarkus-smallrye-openapi"</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-mvn-add-persistence-extensions"><i class="fa fa-clipboard"></i></button><br/>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>If you use <code>tutorial-tools</code>, start MariaDB from the same Docker engine.
-Stop the <code>tutorial-tools</code> container and restart it with a link to mariadb</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -ti -p 8080:8080 \
-  -v `pwd`/work:/work \
-  -v `mvn help:evaluate -Dexpression=settings.localRepository | grep -v '\[INFO\]'`:/opt/developer/.m2/repository \
-  --link mariadb:mariadb \
-  --rm quay.io/rhdevelopers/tutorial-tools:0.0.3 bash</code></pre>
-</div>
-</div>
-</td>
-</tr>
-</table>
-</div>
 </div>
 <div class="sect4">
 <h5 id="quarkusp-configure-props"><a class="anchor" href="#quarkusp-configure-props"></a>Edit the application.properties</h5>
@@ -480,54 +370,16 @@ Stop the <code>tutorial-tools</code> container and restart it with a link to mar
 </div>
 <div id="quarkuspdb-update-props" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config"># configure your datasource
-<i class="conum" data-value="1"></i><b>(1)</b>
-quarkus.datasource.url = jdbc:mariadb://mariadb:3306/demodb
-<i class="conum" data-value="2"></i><b>(2)</b>
-%dev.quarkus.datasource.url = jdbc:mariadb://127.0.0.1:3306/demodb
-<i class="conum" data-value="3"></i><b>(3)</b>
-%fromtools.quarkus.datasource.url = jdbc:mariadb://mariadb:3306/demodb
-%test.quarkus.datasource.url=jdbc:mariadb://127.0.0.1:3306/demodb
-quarkus.datasource.driver = org.mariadb.jdbc.MariaDbDataSource
-quarkus.hibernate-orm.dialect = org.hibernate.dialect.MariaDB103Dialect
-quarkus.datasource.username = demo
-quarkus.datasource.password = password
-
-# drop and create the database at startup (use `update` to only update the schema)
-quarkus.hibernate-orm.database.generation = drop-and-create
-# show sql statements in log
-quarkus.hibernate-orm.log.sql = true</code></pre>
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.datasource.url=jdbc:h2:tcp://localhost/mem:default
+quarkus.datasource.driver=org.h2.Driver
+quarkus.datasource.username=username-default
+quarkus.datasource.min-size=3
+quarkus.datasource.max-size=13
+quarkus.hibernate-orm.database.generation=drop-and-create
+quarkus.hibernate-orm.log.sql=true</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkuspdb-update-props"><i class="fa fa-clipboard"></i></button><br/>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>URL used when app is running in production (native or JAR)</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>URL used when app is running in development mode</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>URL used when app is running in development mode via tutorial-tools</td>
-</tr>
-</table>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-In tutorial-tools, we use the mariadb DNS name using the profile <code>fromtools</code>. Start Quarkus dev with this command <code>./mvnw compile quarkus:dev -Dquarkus.profile=fromtools</code>.
-</td>
-</tr>
-</table>
-</div>
 </div>
 <div class="sect4">
 <h5 id="_test_database_connection"><a class="anchor" href="#_test_database_connection"></a>Test Database connection</h5>
@@ -546,11 +398,10 @@ In tutorial-tools, we use the mariadb DNS name using the profile <code>fromtools
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Listening for transport dt_socket at address: 5005
-2019-05-26 12:27:56,510 INFO  [io.qua.dep.QuarkusAugmentor] (main) Beginning quarkus augmentation
-2019-05-26 12:27:58,821 INFO  [io.qua.dep.QuarkusAugmentor] (main) Quarkus augmentation completed in 2311ms
-2019-05-26 12:27:58,935 INFO  [io.qua.swa.run.SwaggerUiServletExtension] (main) Swagger UI available at /swagger-ui
-2019-05-26 12:27:59,391 INFO  [io.quarkus] (main) Quarkus 0.15.0 started in 3.166s. Listening on: http://[::]:8080
-2019-05-26 12:27:59,392 INFO  [io.quarkus] (main) Installed features: [agroal, cdi, hibernate-orm, jdbc-mariadb, narayana-jta, resteasy, resteasy-jsonb, smallrye-health, smallrye-openapi, swagger-ui]</code></pre>
+2020-02-18 09:57:23,827 WARN  [io.qua.agr.dep.AgroalProcessor] (build-23) Agroal dependency is present but no driver has been defined for the default datasource
+2020-02-18 09:57:25,322 INFO  [io.quarkus] (main) devnexus 1.0-SNAPSHOT (running on Quarkus 1.2.0.Final) started in 2.287s. Listening on: http://0.0.0.0:8080
+2020-02-18 09:57:25,324 INFO  [io.quarkus] (main) Profile dev activated. Live Coding activated.
+2020-02-18 09:57:25,324 INFO  [io.quarkus] (main) Installed features: [agroal, cdi, hibernate-orm, hibernate-orm-panache, jdbc-h2, narayana-jta, resteasy, resteasy-jsonb, smallrye-openapi, swagger-ui]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -572,6 +423,7 @@ import javax.persistence.Entity;
 public class Fruit {
 
     public String name;
+
     public String season;
 
 }</code></pre>
@@ -772,15 +624,15 @@ The response may vary based on what fruit you added.
 </div>
 <div id="quarkusp-add-fruits" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Mango","Spring");
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Strawberry","Spring");
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Orange","Winter");
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"GrapeFruit","Winter");
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Blueberry","Summer");
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Banana","Summer");
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Plum","Summer");
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Apple","Fall");
-INSERT INTO Fruit(id,name,season) VALUES (nextval(hibernate_sequence),"Grapes","Fall");</code></pre>
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Mango','Spring');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Strawberry','Spring');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Orange','Winter');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'GrapeFruit','Winter');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Blueberry','Summer');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Banana','Summer');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Plum','Summer');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Apple','Fall');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Grapes','Fall');</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-add-fruits"><i class="fa fa-clipboard"></i></button><br/>
@@ -1002,7 +854,6 @@ Although it is not mandatory, by default <a href="http://rest-assured.io/">RestA
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-run-tests"><i class="fa fa-clipboard"></i></button><br/>
-</div>
 </div>
 </div>
 </div>
