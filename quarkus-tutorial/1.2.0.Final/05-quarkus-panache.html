@@ -384,7 +384,7 @@ quarkus.hibernate-orm.log.sql=true</code></pre>
 <div class="sect4">
 <h5 id="_test_database_connection"><a class="anchor" href="#_test_database_connection"></a>Test Database connection</h5>
 <div class="paragraph">
-<p>Lets start Quarkus in <code>development</code> mode to verify the database connection works:</p>
+<p>Let&#8217;s start Quarkus in <code>development</code> mode to verify the database connection works:</p>
 </div>
 <div id="quarkuspdb-test-dbconn" class="listingblock">
 <div class="content">
@@ -441,21 +441,21 @@ public class Fruit {
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
 
 import java.util.List;
-import javax.ws.rs.Consumes;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Path("/fruit")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
 public class FruitResource {
 
     @GET
-    public List&lt;Fruit&gt; allFruits() {
-        return Fruit.listAll(); <i class="conum" data-value="1"></i><b>(1)</b>
+    @Produces(MediaType.APPLICATION_JSON)
+    public List&lt;Fruit&gt; fruits() {
+        return Fruit.listAll();
     }
+
 }</code></pre>
 </div>
 </div>
@@ -508,7 +508,7 @@ public class Fruit extends PanacheEntity {
 <p>Making the <code>Fruit</code> entity as a <code>Panache Entity</code> will make it both Entity and DAO and ofcourse the error in the <code>FruitResource.java</code> disappears.</p>
 </div>
 <div class="paragraph">
-<p>Lets now access the Fruits API <a href="http://localhost:8080/fruit" class="bare">http://localhost:8080/fruit</a>. If all goes well you will see some Hibernate SQL statements in the log that will create the new table <code>Fruit</code> with columns from <code>Fruit.java</code> entity class.</p>
+<p>Let&#8217;s now access the Fruits API <a href="http://localhost:8080/fruit" class="bare">http://localhost:8080/fruit</a>. If all goes well you will see some Hibernate SQL statements in the log that will create the new table <code>Fruit</code> with columns from <code>Fruit.java</code> entity class.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -537,13 +537,12 @@ public class Fruit extends PanacheEntity {
 <p>Since we don&#8217;t have any fruits in the DB you would have got an empty response back.</p>
 </div>
 <div class="paragraph">
-<p>Lets add a REST method to the <code>FruitResource.java</code> to save a 'Fruit':</p>
+<p>Let&#8217;s add a REST method to the <code>FruitResource.java</code> to save a 'Fruit':</p>
 </div>
 <div id="quarkusp-fruit-add-persist" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
 
-import java.net.URI;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -551,38 +550,37 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.Response.Status;
 
 @Path("/fruit")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
 public class FruitResource {
 
     @GET
-    public List&lt;Fruit&gt; allFruits() {
+    @Produces(MediaType.APPLICATION_JSON)
+    public List&lt;Fruit&gt; fruits() {
         return Fruit.listAll();
     }
 
     @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response saveFruit(Fruit fruit) {
-        // since the FruitEntity is a panache entity
-        // persist is available by default
+    public Response newFruit(Fruit fruit) {
+        fruit.id = null;
         fruit.persist();
-        final URI createdUri = UriBuilder.fromResource(FruitResource.class)
-                        .path(Long.toString(fruit.id))
-                        .build();
-        return Response.created(createdUri).build();
+        return Response.status(Status.CREATED).entity(fruit).build();
     }
+
 }</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-fruit-add-persist"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
-<p>You can insert a new fruit by using the next <code>curl</code> command: <code>curl -vvv -d '{"name": "banana", "season": "summer"}' -H "Content-Type: application/json" POST <a href="http://localhost:8080/fruit" class="bare">http://localhost:8080/fruit</a></code></p>
+<p>You can insert a new fruit by using the next <code>curl</code> command: <code>curl -vvv -d '{"name": "Banana", "season": "Summer"}' -H "Content-Type: application/json" POST <a href="http://localhost:8080/fruit" class="bare">http://localhost:8080/fruit</a></code></p>
 </div>
 <div class="paragraph">
 <p>Or if you have the Swagger UI <a href="http://localhost:8080/swagger-ui" class="bare">http://localhost:8080/swagger-ui</a> enabled you can do it form there as well.</p>
@@ -593,8 +591,8 @@ public class FruitResource {
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
-    "name": "banana",
-    "season": "summer"
+    "name": "Banana",
+    "season": "Summer"
 }</code></pre>
 </div>
 </div>
@@ -617,7 +615,7 @@ The response may vary based on what fruit you added.
 <p>Cool! So far we did with some primitive methods lets explore some cool things that Panache offers.</p>
 </div>
 <div class="paragraph">
-<p>Lets try to find all fruits by a season. To make the query return some data let us add some fruits to the DB.</p>
+<p>Let&#8217;s try to find all fruits by a season. To make the query return some data let us add some fruits to the DB.</p>
 </div>
 <div class="paragraph">
 <p>Create the following <code>import.sql</code> file in <code>$PROJECT_HOME/src/main/resources</code>:</p>
@@ -662,13 +660,14 @@ public class Fruit extends PanacheEntity {
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-find-fruits"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
-<p>Update the <code>Fruit</code> resource with a REST method to get fruits by season:</p>
+<p>Update <code>FruitResource</code> with a REST method to get fruits by season:</p>
 </div>
 <div id="quarkusp-get-find-fruits" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
 
 import java.util.List;
+
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -678,53 +677,43 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 @Path("/fruit")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
 public class FruitResource {
 
     @GET
-    public List&lt;Fruit&gt; allFruits() {
+    @Produces(MediaType.APPLICATION_JSON)
+    public List&lt;Fruit&gt; fruits() {
         return Fruit.listAll();
     }
 
     @GET
-    @Path("{season}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{season}")
     public List&lt;Fruit&gt; fruitsBySeason(@PathParam("season") String season) {
         return Fruit.getAllFruitsForSeason(season);
     }
 
     @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response saveFruit(Fruit fruit) {
-        // just allow it to be generated
+    public Response newFruit(Fruit fruit) {
         fruit.id = null;
-        // since the FruitEntity is a panache entity persist is available by default
         fruit.persist();
-        return Response.ok(201).entity(fruit).build();
+        return Response.status(Status.CREATED).entity(fruit).build();
     }
+
 }</code></pre>
 </div>
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-get-find-fruits"><i class="fa fa-clipboard"></i></button><br/>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-Remember to remove the <code>getFruitInfoByName</code> method created in previous section.
-</td>
-</tr>
-</table>
-</div>
 <div class="paragraph">
 <p>To test finder use the Swagger UI <a href="http://localhost:8080/swagger-ui" class="bare">http://localhost:8080/swagger-ui</a>.</p>
 </div>
 <div class="paragraph">
-<p>A finder for fruits for <em>summer</em> season should return a response like :</p>
+<p>A finder for fruits for the <em>Summer</em> season should return a response like :</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -761,7 +750,7 @@ Remember to remove the <code>getFruitInfoByName</code> method created in previou
 For this reason, we encourage you to start using <a href="https://assertj.github.io/doc/">AssertJ</a>.</p>
 </div>
 <div class="paragraph">
-<p>Open <code>$PROJECT_HOME/pom.xml</code> and add the next dependency in <code>dependencies</code> section:</p>
+<p>Open <code>$PROJECT_HOME/pom.xml</code> and add the following dependencies in the <code>dependencies</code> section:</p>
 </div>
 <div id="quarkusp-register-assertj" class="listingblock">
 <div class="content">
@@ -769,6 +758,12 @@ For this reason, we encourage you to start using <a href="https://assertj.github
     &lt;groupId&gt;org.assertj&lt;/groupId&gt;
     &lt;artifactId&gt;assertj-core&lt;/artifactId&gt;
     &lt;version&gt;3.13.2&lt;/version&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-test-h2&lt;/artifactId&gt;
+    &lt;version&gt;1.2.0.Final&lt;/version&gt;
     &lt;scope&gt;test&lt;/scope&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
@@ -784,29 +779,31 @@ For this reason, we encourage you to start using <a href="https://assertj.github
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
 
-import io.quarkus.test.junit.QuarkusTest;
-
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-
-import java.util.List;
-
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.h2.H2DatabaseTestResource;
+import io.quarkus.test.junit.QuarkusTest;
+
 @QuarkusTest
 @TestMethodOrder(OrderAnnotation.class)
+@QuarkusTestResource(H2DatabaseTestResource.class)
 public class FruitResourceTest {
 
     @Test
     @Order(1)
     public void testInsertFruit() {
-
         Fruit fruit = new Fruit();
         fruit.name = "Watermelon";
-        fruit.season = "summer";
+        fruit.season = "Summer";
 
         given()
           .contentType("application/json")
@@ -823,7 +820,7 @@ public class FruitResourceTest {
     public void testFindFruitsBySeason() {
         final List&lt;Fruit&gt; fruits = given()
           .when()
-          .get("/fruit/{season}", "summer")
+          .get("/fruit/{season}", "Summer")
           .then()
           .assertThat()
           .statusCode(200)
