@@ -498,6 +498,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 public class Fruit extends PanacheEntity {
 
     public String name;
+
     public String season;
 
 }</code></pre>
@@ -580,7 +581,7 @@ public class FruitResource {
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-The response may vary based on what fruit you added.
+The response may vary based on which fruits you added.
 </td>
 </tr>
 </table>
@@ -612,7 +613,7 @@ INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Grapes'
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-add-fruits"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
-<p>Update the <code>Fruit</code> entity with a finder method like</p>
+<p>Update <code>Fruit</code> entity to add a finder method like:</p>
 </div>
 <div id="quarkusp-find-fruits" class="listingblock">
 <div class="content">
@@ -626,6 +627,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 public class Fruit extends PanacheEntity {
 
     public String name;
+
     public String season;
 
     public static List&lt;Fruit&gt; getAllFruitsForSeason(String season) {
@@ -637,7 +639,7 @@ public class Fruit extends PanacheEntity {
 </div>
 <button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-find-fruits"><i class="fa fa-clipboard"></i></button><br/>
 <div class="paragraph">
-<p>Update <code>FruitResource</code> with a REST method to get fruits by season:</p>
+<p>Update <code>FruitResource</code> by adding a REST endpoint to get fruits by season:</p>
 </div>
 <div id="quarkusp-get-find-fruits" class="listingblock">
 <div class="content">
