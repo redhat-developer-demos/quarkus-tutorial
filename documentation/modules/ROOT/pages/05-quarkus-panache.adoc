@@ -165,20 +165,6 @@ Making the `Fruit` entity as a `Panache Entity` will make it both Entity and DAO
 
 Let's now access the Fruits API http://localhost:8080/fruit. If all goes well you will see some Hibernate SQL statements in the log that will create the new table `Fruit` with columns from `Fruit.java` entity class.
 
-[TIP]
-====
-You have accessed the application using http://localhost:8080/fruit. If you want you can enable `Swagger` by adding the extension:
-
-[#qext-mvn-add-swagger-ui-extensions]
-[source,bash,subs="+macros,+attributes"]
-----
-./mvnw quarkus:add-extension -Dextension="openapi"
-----
-copyToClipboard::qext-mvn-add-swagger-ui-extensions[]
-
-And then access the swagger UI using the url http://localhost:8080/swagger-ui.
-====
-
 Since we don't have any fruits in the DB you would have got an empty response back. 
 
 Let's add a REST method to the `FruitResource.java` to save a 'Fruit':
@@ -226,9 +212,9 @@ copyToClipboard::quarkusp-fruit-add-persist[]
 
 You can insert a new fruit by using the next `curl` command: `curl -vvv -d '{"name": "Banana", "season": "Summer"}' -H "Content-Type: application/json" POST http://localhost:8080/fruit`
 
-Or if you have the Swagger UI http://localhost:8080/swagger-ui enabled you can do it form there as well.
+Or use the Swagger UI at http://localhost:8080/swagger-ui to try your REST endpoints. 
 
-Try adding a fruit via the Swagger UI Post and try listing the available fruits. A good day scenario will return a JSON like:
+Try adding a fruit via the Swagger UI Post and try listing the available fruits. You will see a JSON response like this one:
 
 [source,json]
 ----
