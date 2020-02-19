@@ -40,7 +40,7 @@ Add the following properties to `pass:[$PROJECT_HOME]/src/main/resources/applica
 [#quarkuspdb-update-props]
 [source,config,subs="+macros,+attributes"]
 ----
-quarkus.datasource.url=jdbc:h2:tcp://localhost/mem:default
+quarkus.datasource.url=jdbc:h2:mem:default
 quarkus.datasource.driver=org.h2.Driver
 quarkus.datasource.username=username-default
 quarkus.datasource.min-size=3
