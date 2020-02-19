@@ -114,7 +114,7 @@ Let's create the service that uses `BeerGateway` to retrieve beer information by
 Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `BeerService` with the following contents:
 
 [#qext-quarkusrpb-beer-service]
-[source,java,subs="+macros,+attributes"]
+[source,subs="+macros,+attributes"]
 ----
 package com.example;
 
