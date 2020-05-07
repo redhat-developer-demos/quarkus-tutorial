@@ -2,44 +2,56 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Quarkus Extensions :: Quarkus Tutorial</title>
     <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/1.2.0.Final/04-quarkus-extensions.html">
-    <meta name="generator" content="Antora 2.0.1">
+    <meta name="generator" content="Antora 2.3.1">
     <link rel="stylesheet" href="../../_/css/site.css">
-<link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="https://unpkg.com/clipboard@2/dist/clipboard.min.js"></script>
   </head>
   <body class="article">
-<header class="header" role="banner">
+<header class="header">
   <nav class="navbar">
     <div class="navbar-brand">
-      <div class="navbar-item">
-        <a href="https://redhat-developer-demos.github.io/quarkus-tutorial">Quarkus Tutorial</a>
-      </div>
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://redhat-developer-demos.github.io/quarkus-tutorial">Quarkus Tutorial</a>
       <button class="navbar-burger" data-target="topbar-nav">
         <span></span>
         <span></span>
         <span></span>
       </button>
     </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </nav>
 </header>
-<div class="main-wrapper">
-<div class="navigation-container"  data-component="quarkus-tutorial"
-  data-version="1.2.0.Final" >
-  <aside class="navigation">
+<div class="body">
+<div class="nav-container" data-component="quarkus-tutorial" data-version="1.2.0.Final">
+  <aside class="nav">
     <div class="panels">
-      <div class="navigation-menu is-active" data-panel="menu">
+<div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="index.html">Quarkus Tutorial</a></h3>
+    <h3 class="title"><a href="index.html"></a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <button class="nav-toggle"></button>
-    <a class="nav-link" href="01-setup.html">1. Setup</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="01-setup.html">Setup</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="01-setup.html#requirements">Required Tools</a>
@@ -47,8 +59,8 @@
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <button class="nav-toggle"></button>
-    <a class="nav-link" href="02-basics-fundas.html">2.Basics and Fundamentals</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="02-basics-fundas.html">Basics and Fundamentals</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="02-basics-fundas.html#basics-create-quarkus-app">Create Quarkus Application</a>
@@ -69,7 +81,7 @@
     <a class="nav-link" href="02-basics-fundas.html#basics-testing">Testing</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <button class="nav-toggle"></button>
+    <button class="nav-item-toggle"></button>
     <a class="nav-link" href="02-basics-fundas.html#basics-logging">Configuring Logging</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
@@ -78,7 +90,7 @@
 </ul>
   </li>
   <li class="nav-item" data-depth="2">
-    <button class="nav-toggle"></button>
+    <button class="nav-item-toggle"></button>
     <a class="nav-link" href="02-basics-fundas.html#basics-configuration">Configuration</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
@@ -94,19 +106,15 @@
   </li>
 </ul>
   </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
-<ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <button class="nav-toggle"></button>
-    <a class="nav-link" href="05-quarkus-panache.html">3. Hibernate with Quarkus</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="05-quarkus-panache.html">Hibernate with Quarkus</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="05-quarkus-panache.html#quarkusp-demo-overview">Demo Overview</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <button class="nav-toggle"></button>
+    <button class="nav-item-toggle"></button>
     <a class="nav-link" href="05-quarkus-panache.html#quarkusp-fruitapp-dev">Build and Deploy</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
@@ -131,13 +139,9 @@
   </li>
 </ul>
   </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
-<ul class="nav-list">
   <li class="nav-item is-current-page" data-depth="1">
-    <button class="nav-toggle"></button>
-    <a class="nav-link" href="04-quarkus-extensions.html">4. Quarkus Extensions</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-quarkus-extensions.html">Quarkus Extensions</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="#qext-intro">What are Extensions ?</a>
@@ -146,7 +150,7 @@
     <a class="nav-link" href="#qext-list-extensions">List Extensions</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <button class="nav-toggle"></button>
+    <button class="nav-item-toggle"></button>
     <a class="nav-link" href="#qext-rest-client">Rest Client</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
@@ -173,7 +177,7 @@
 </ul>
   </li>
   <li class="nav-item" data-depth="2">
-    <button class="nav-toggle"></button>
+    <button class="nav-item-toggle"></button>
     <a class="nav-link" href="#qext-fault-tolerance">Fault Tolerance</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
@@ -212,7 +216,7 @@
 </ul>
   </li>
   <li class="nav-item" data-depth="2">
-    <button class="nav-toggle"></button>
+    <button class="nav-item-toggle"></button>
     <a class="nav-link" href="#qext-health-checks">Health Checks</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
@@ -239,7 +243,7 @@
 </ul>
   </li>
   <li class="nav-item" data-depth="2">
-    <button class="nav-toggle"></button>
+    <button class="nav-item-toggle"></button>
     <a class="nav-link" href="#qext-jwt">Securing endpoints with JWT</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
@@ -268,11 +272,11 @@
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <button class="nav-toggle"></button>
-    <a class="nav-link" href="06-quarkus-reactive.html">5. Reactive Programming with Quarkus</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="06-quarkus-reactive.html">Reactive Programming with Quarkus</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <button class="nav-toggle"></button>
+    <button class="nav-item-toggle"></button>
     <a class="nav-link" href="06-quarkus-reactive.html#quarkusrpb-demo-overview">Beer Demo Overview</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
@@ -292,25 +296,22 @@
 </div>
     </div>
   </aside>
-  <div class="navigation-explore" data-panel="explore">
-  <div class="context">
-    <!-- Just a place holder to fill in  explorer for each context -->
-  </div>
 </div>
-</div>
-  <main class="main">
+<main class="article">
 <div class="toolbar" role="navigation">
-  <button class="navigation-toggle"></button>
+<button class="nav-toggle"></button>
   <a href="index.html" class="home-link"></a>
-  <nav class="crumbs" aria-label="breadcrumbs">
+<nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
-    <li class="crumb"><a href="index.html">Quarkus Tutorial</a></li>
-    <li class="crumb"><a href="04-quarkus-extensions.html">4. Quarkus Extensions</a></li>
+    <li><a href="index.html">Quarkus Tutorial</a></li>
+    <li><a href="04-quarkus-extensions.html">Quarkus Extensions</a></li>
   </ul>
 </nav>
-</div>
+  <div class="edit-this-page"><a href="https://github.com/redhat-developer-demos/quarkus-tutorial/edit/master/documentation/modules/ROOT/pages/04-quarkus-extensions.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
 <article class="doc">
-<h1>Quarkus Extensions</h1>
+<h1 class="page">Quarkus Extensions</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -362,7 +363,9 @@
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-nav-to-work-folder"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::qext-nav-to-work-folder[]</p>
+</div>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -384,7 +387,9 @@ The instructions of this section assumes your project name to be <code>fruits-ap
 ./mvnw quarkus:list-extensions</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-mvn-list-extensions"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::qext-mvn-list-extensions[]</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -459,7 +464,9 @@ Two endpoints are the important ones for this workshop:</p>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-rest-client, quarkus-resteasy-jsonb"</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-mvn-add-rest-client-extension"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::qext-mvn-add-rest-client-extension[]</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="qext-create-fruity-vice-pojo"><a class="anchor" href="#qext-create-fruity-vice-pojo"></a>Creating FruityVice POJO</h3>
@@ -520,7 +527,9 @@ public class FruityVice {
 }</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusrc-fruity-vice-pojo"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::quarkusrc-fruity-vice-pojo[]</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="qext-create-fruity-vice-service"><a class="anchor" href="#qext-create-fruity-vice-service"></a>Creating FruityVice Service</h3>
@@ -561,7 +570,9 @@ public interface FruityViceService {
 }</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusrc-fruity-vice-service"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::quarkusrc-fruity-vice-service[]</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="qext-create-fruity-vice-service-config"><a class="anchor" href="#qext-create-fruity-vice-service-config"></a>Configuring FruityVice Service</h3>
@@ -573,7 +584,9 @@ public interface FruityViceService {
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">com.example.FruityViceService/mp-rest/url=http://www.fruityvice.com</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusrc-config-fruity-update-props"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::quarkusrc-config-fruity-update-props[]</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="qext-create-fruity-vice-service-resclient"><a class="anchor" href="#qext-create-fruity-vice-service-resclient"></a>Using the RestClient</h3>
@@ -593,7 +606,9 @@ public FruityVice getFruitInfoByName(@PathParam("name") String name) {
 }</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusrc-fruity-vice-service-inject"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::quarkusrc-fruity-vice-service-inject[]</p>
+</div>
 </div>
 </div>
 </div>
@@ -608,7 +623,9 @@ public FruityVice getFruitInfoByName(@PathParam("name") String name) {
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#rest-client-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::rest-client-build-run-dev-mode[]</p>
+</div>
 <div class="sect2">
 <h3 id="qext-call-fruity-rest-client"><a class="anchor" href="#qext-call-fruity-rest-client"></a>Invoke Service</h3>
 <div class="paragraph">
@@ -619,7 +636,9 @@ public FruityVice getFruitInfoByName(@PathParam("name") String name) {
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#rest-client-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::rest-client-k8s-svc-call[]</p>
+</div>
 <div class="paragraph">
 <p>The REST call should return an response like:</p>
 </div>
@@ -654,7 +673,9 @@ Quarkus integrates with <a href="https://github.com/eclipse/microprofile-fault-t
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-smallrye-fault-tolerance"</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-mvn-add-fault-tolernace-extension"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::qext-mvn-add-fault-tolernace-extension[]</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="qext-retry-fruity-vice-service"><a class="anchor" href="#qext-retry-fruity-vice-service"></a>Add Retry to Fruity Vice Service</h3>
@@ -673,7 +694,9 @@ Quarkus integrates with <a href="https://github.com/eclipse/microprofile-fault-t
 public FruityVice getFruitByName(@PathParam("name") String name);</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusft-retry-fruit-vice-service"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::quarkusft-retry-fruit-vice-service[]</p>
+</div>
 <div class="paragraph">
 <p>Now in case of any error, 3 retries are done automatically, waiting for 2 seconds between retries.</p>
 </div>
@@ -688,7 +711,9 @@ public FruityVice getFruitByName(@PathParam("name") String name);</code></pre>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::fault-tolerance-build-run-dev-mode[]</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="qext-call-fruity-fault-tolerance-retry"><a class="anchor" href="#qext-call-fruity-fault-tolerance-retry"></a>Invoke Service</h3>
@@ -700,7 +725,9 @@ public FruityVice getFruitByName(@PathParam("name") String name);</code></pre>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-retry-cli-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::fault-tolerance-retry-cli-svc-call[]</p>
+</div>
 <div class="paragraph">
 <p>The REST call should return an response like:</p>
 </div>
@@ -724,7 +751,9 @@ And make again a request to <a href="http://localhost:8080/fruit/banana" class="
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-retry-no-network-cli-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::fault-tolerance-retry-no-network-cli-svc-call[]</p>
+</div>
 <div class="paragraph">
 <p>Now after waiting 6 seconds (3 retries x 2 seconds), the next exception is thrown <code>java.net.UnknownHostException: www.fruityvice.com</code>.</p>
 </div>
@@ -756,7 +785,9 @@ public static class FruityViceRecovery implements FallbackHandler&lt;FruityVice&
 }</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusft-fallback-fruit-vice-service"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::quarkusft-fallback-fruit-vice-service[]</p>
+</div>
 <div class="paragraph">
 <p>Now in case of any error, 3 retries are done automatically, waiting for 2 seconds between retries.
 If the error persits, then the fallback method is executed.</p>
@@ -772,7 +803,9 @@ If the error persits, then the fallback method is executed.</p>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-fallback-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::fault-tolerance-fallback-build-run-dev-mode[]</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="qext-call-fruity-fault-tolerance-fallback"><a class="anchor" href="#qext-call-fruity-fault-tolerance-fallback"></a>Invoke Service</h3>
@@ -784,7 +817,9 @@ If the error persits, then the fallback method is executed.</p>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-fallback-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::fault-tolerance-fallback-k8s-svc-call[]</p>
+</div>
 <div class="paragraph">
 <p>Now after waiting for 6 seconds (3 retries x 2 seconds), an empty object is sent instead of an exception.</p>
 </div>
@@ -820,7 +855,9 @@ public static class FruityViceRecovery implements FallbackHandler&lt;FruityVice&
 }</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusft-circuit-breaker-fruit-vice-service"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::quarkusft-circuit-breaker-fruit-vice-service[]</p>
+</div>
 <div class="paragraph">
 <p>Now, if 3 (4 x 0.75) failures occur among the rolling window of 4 consecutive invocations then the circuit is opened for 5000 ms and then be back to half open.
 If the invocation succeeds then the circuit is back to closed again.</p>
@@ -836,7 +873,9 @@ If the invocation succeeds then the circuit is back to closed again.</p>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-circuit-breaker-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::fault-tolerance-circuit-breaker-build-run-dev-mode[]</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="qext-call-fruity-fault-tolerance-circuit-breaker"><a class="anchor" href="#qext-call-fruity-fault-tolerance-circuit-breaker"></a>Invoke Service</h3>
@@ -848,7 +887,9 @@ If the invocation succeeds then the circuit is back to closed again.</p>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#fault-tolerance-cb-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::fault-tolerance-cb-k8s-svc-call[]</p>
+</div>
 <div class="paragraph">
 <p>The output changes form <code>java.net.UnknownHostException: www.fruityvice.com</code> (or any other network exception) in the first calls to <code>org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getFruitByName</code> when circuit is opened.</p>
 </div>
@@ -898,7 +939,9 @@ You can use <code>@Retry</code> and <code>@Fallback</code> annotations together 
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-smallrye-health"</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-mvn-add-extension"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::qext-mvn-add-extension[]</p>
+</div>
 <div class="paragraph">
 <p>After successful execution of the above command, you will have the following dependency added to the <code>fruits-app</code> project&#8217;s pom.xml:</p>
 </div>
@@ -924,7 +967,9 @@ You can use <code>@Retry</code> and <code>@Fallback</code> annotations together 
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#health-check-default-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::health-check-default-build-run-dev-mode[]</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="qext-call-health-ep"><a class="anchor" href="#qext-call-health-ep"></a>Invoke Service</h3>
@@ -936,7 +981,9 @@ You can use <code>@Retry</code> and <code>@Fallback</code> annotations together 
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/health</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#basics-health-check-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::basics-health-check-k8s-svc-call[]</p>
+</div>
 <div class="paragraph">
 <p>The REST call about should return an response like:</p>
 </div>
@@ -1010,7 +1057,9 @@ public class FruitHealthCheck {
 }</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusp-fruit-checks"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::quarkusp-fruit-checks[]</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="qext-health-check-custom-run-quarkus-app-dev-mode"><a class="anchor" href="#qext-health-check-custom-run-quarkus-app-dev-mode"></a>Run Quarkus Application in Development mode</h3>
@@ -1022,7 +1071,9 @@ public class FruitHealthCheck {
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#health-check-custom-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::health-check-custom-build-run-dev-mode[]</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="qext-call-health-custom"><a class="anchor" href="#qext-call-health-custom"></a>Invoke Service</h3>
@@ -1034,7 +1085,9 @@ public class FruitHealthCheck {
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/health</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#custom-health-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::custom-health-k8s-svc-call[]</p>
+</div>
 <div class="paragraph">
 <p>The REST call about should return an response like:</p>
 </div>
@@ -1063,7 +1116,9 @@ public class FruitHealthCheck {
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/health/live</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#custom-health-live-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::custom-health-live-k8s-svc-call[]</p>
+</div>
 <div class="paragraph">
 <p>The REST call about should return an response like:</p>
 </div>
@@ -1085,7 +1140,9 @@ public class FruitHealthCheck {
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/health/ready</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#custom-health-ready-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::custom-health-ready-k8s-svc-call[]</p>
+</div>
 <div class="paragraph">
 <p>The REST call about should return an response like:</p>
 </div>
@@ -1126,7 +1183,9 @@ public class FruitHealthCheck {
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextensions="quarkus-kubernetes"</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-mvn-add-kubernetes-extension"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::qext-mvn-add-kubernetes-extension[]</p>
+</div>
 <div class="paragraph">
 <p>You need to configure group and name of the Docker container used to deploy into Kubernetes.</p>
 </div>
@@ -1139,7 +1198,9 @@ public class FruitHealthCheck {
 quarkus.application.name=fruits-app</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusk8s-update-props"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::quarkusk8s-update-props[]</p>
+</div>
 </td>
 </tr>
 </table>
@@ -1152,7 +1213,9 @@ quarkus.application.name=fruits-app</code></pre>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw package -DskipTests</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkusk8s-generate-kubernetes"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::quarkusk8s-generate-kubernetes[]</p>
+</div>
 <div class="paragraph">
 <p>You can inspect the generated file by accessing next file:</p>
 </div>
@@ -1161,7 +1224,9 @@ quarkus.application.name=fruits-app</code></pre>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat target/kubernetes/kubernetes.yml</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quakrusk8s-generated-kubernetes-resource"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::quakrusk8s-generated-kubernetes-resource[]</p>
+</div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
 <ul>
@@ -1180,7 +1245,9 @@ quarkus.application.name=fruits-app</code></pre>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl delete all --all</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#health-checkk8s-delete-k8s-app"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::{section-k8s}k8s-delete-k8s-app[]</p>
+</div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_oc">
 <div id="health-checkk8s-delete-oc-app" class="listingblock">
@@ -1188,7 +1255,9 @@ quarkus.application.name=fruits-app</code></pre>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc delete all --all</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#health-checkk8s-delete-oc-app"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::{section-k8s}k8s-delete-oc-app[]</p>
+</div>
 </div>
 </div>
 </div>
@@ -1215,7 +1284,9 @@ Quarkus provides an integration to the <a href="https://github.com/eclipse/micro
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-smallrye-jwt"</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#qext-mvn-add-jwt-extension"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::qext-mvn-add-jwt-extension[]</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="qext-configure-jwt-parameters"><a class="anchor" href="#qext-configure-jwt-parameters"></a>Configuring JWT parameters</h3>
@@ -1230,18 +1301,10 @@ mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac
 <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkussec-config-jwt"><i class="fa fa-clipboard"></i></button><br/>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Sets the location of public key to verify the token</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Issuer of the token</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>copyToClipboard::quarkussec-config-jwt[]
+&lt;1&gt; Sets the location of public key to verify the token
+&lt;2&gt; Issuer of the token</p>
 </div>
 <div class="paragraph">
 <p>We are also providing a valid token that can be verified by the configured public key:</p>
@@ -1310,7 +1373,9 @@ public String getClaim() {
 }</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkussec-jwt-claim-username"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::quarkussec-jwt-claim-username[]</p>
+</div>
 <div class="paragraph">
 <p>Rename the <code>@Path</code> used in <code>FruityVice getFruitInfoByName</code> to <code>@Path("name-{name})"</code> to avoid conflict with the path <code>/fruit/claim</code>.</p>
 </div>
@@ -1328,7 +1393,9 @@ public String getClaim() {
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#jwt-claim-dev-build-run-dev-mode"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::jwt-claim-dev-build-run-dev-mode[]</p>
+</div>
 <div class="sect2">
 <h3 id="qext-call-jwt-claim"><a class="anchor" href="#qext-call-jwt-claim"></a>Invoke Service</h3>
 <div class="paragraph">
@@ -1340,7 +1407,9 @@ public String getClaim() {
 curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#jwt-claim-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::jwt-claim-k8s-svc-call[]</p>
+</div>
 <div class="paragraph">
 <p>And you&#8217;ll see the <code>preferred_username</code> field for the given token (<code>jdoe</code>).</p>
 </div>
@@ -1357,7 +1426,9 @@ These validations include for example that the token has not been modified, has 
 curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#jwt-claim-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::jwt-claim-k8s-svc-call[]</p>
+</div>
 <div class="paragraph">
 <p>And now the invocation returns and HTTP code <code>401 Unauthorized</code> because the token is invalid.</p>
 </div>
@@ -1381,7 +1452,9 @@ public String getClaim() {
 }</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkussec-jwt-rbac"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::quarkussec-jwt-rbac[]</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="qext-call-jwt-rbac"><a class="anchor" href="#qext-call-jwt-rbac"></a>Invoke Service</h3>
@@ -1394,7 +1467,9 @@ public String getClaim() {
 curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#rjwt-rbac-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::rjwt-rbac-k8s-svc-call[]</p>
+</div>
 <div class="paragraph">
 <p>And you&#8217;ll see the <code>preferred_username</code> field for given token (<code>jdoe</code>).</p>
 </div>
@@ -1414,7 +1489,9 @@ public String getClaim() {
 }</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#quarkussec-jwt-rbac-invalid"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::quarkussec-jwt-rbac-invalid[]</p>
+</div>
 <div class="paragraph">
 <p>And then do the request again:</p>
 </div>
@@ -1427,7 +1504,9 @@ public String getClaim() {
 curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
 </div>
 </div>
-<button class="copybtn float-right" title="Copy to clipboard" data-clipboard-target="#rjwt-rbac-k8s-svc-call"><i class="fa fa-clipboard"></i></button><br/>
+<div class="paragraph">
+<p>copyToClipboard::rjwt-rbac-k8s-svc-call[]</p>
+</div>
 <div class="paragraph">
 <p>And the output now is different: <code>Forbidden</code>.</p>
 </div>
@@ -1438,92 +1517,17 @@ curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
 </div>
 </div>
 </article>
-  </main>
-</div>
-<footer role="contentinfo">
-  <div class="region region-rhd-footer">
-    <div id="block-rhdfooter" class="rhd-footer">
-      <nav class="rhd-footer-nav" aria-label="Secondary Navigation" role="navigation">
-        <ul class="rhd-menu">
-          <li class="menu-item menu-item--expanded">
-            <h3 class="section-toggle">GitHub</h3>
-            <ul class="rhd-menu">
-              <li class="menu-item">
-                <a href="https://github.com/redhat-developer-demos/quarkus-tutorial" title="Quarkus Tutorial">Quarkus
-                  Tutorial</a>
-              </li>
-              <li class="menu-item">
-                <a href="https://github.com/redhat-developer-demos/quarkus-tutorial/issues" title="Issue Tracker">Issue
-                  Tracker</a>
-              </li>
-              <li class="menu-item">
-                <a href="https://quarkus.io" title="Quarkus">Quarkus</a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </nav>
-      <div class="rhd-footer-sidebar">
-        <p class="rhd-footer-sidebar-title">Red Hat Developer</p>
-        <p class="rhd-footer-sidebar-subtitle">Build here. Go anywhere.</p>
-        <p class="rhd-footer-sidebar-content">
-          We serve the builders. The problem solvers who create careers with
-          code.<br /><br /><a href="https://developer.redhat.com/register">Join us</a>
-          if you’re a developer, software engineer, web designer, front-end
-          designer, UX designer, computer scientist, architect, tester,
-          product manager, project manager or team lead.
-        </p>
-        <ul class="rhd-footer-sidebar-social">
-          <li>
-            <a href="https://www.youtube.com/channel/UC7noUdfWp-ukXUlAsJnSm-Q" target="_blank"
-              rel="noopener noreferrer"><svg class="svg-inline--fa fa-youtube fa-w-18" aria-hidden="true"
-                data-prefix="fab" data-icon="youtube" role="img" xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 576 512" data-fa-i2svg="">
-                <path fill="currentColor"
-                  d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z">
-                </path>
-              </svg><!-- <i class="fab fa-youtube"></i> --></a>
-          </li>
-          <li>
-            <a href="https://www.facebook.com/RedHatDeveloperProgram" target="_blank" rel="noopener noreferrer"><svg
-                class="svg-inline--fa fa-facebook fa-w-14" aria-hidden="true" data-prefix="fab" data-icon="facebook"
-                role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">
-                <path fill="currentColor"
-                  d="M448 56.7v398.5c0 13.7-11.1 24.7-24.7 24.7H309.1V306.5h58.2l8.7-67.6h-67v-43.2c0-19.6 5.4-32.9 33.5-32.9h35.8v-60.5c-6.2-.8-27.4-2.7-52.2-2.7-51.6 0-87 31.5-87 89.4v49.9h-58.4v67.6h58.4V480H24.7C11.1 480 0 468.9 0 455.3V56.7C0 43.1 11.1 32 24.7 32h398.5c13.7 0 24.8 11.1 24.8 24.7z">
-                </path>
-              </svg><!-- <i class="fab fa-facebook"> </i> --></a>
-          </li>
-          <li>
-            <a href="https://twitter.com/rhdevelopers" target="_blank" rel="noopener noreferrer"><svg
-                class="svg-inline--fa fa-twitter fa-w-16" aria-hidden="true" data-prefix="fab" data-icon="twitter"
-                role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
-                <path fill="currentColor"
-                  d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z">
-                </path>
-              </svg><!-- <i class="fab fa-twitter"> </i> --></a>
-          </li>
-          <li>
-            <a href="https://github.com/redhat-developer" target="_blank" rel="noopener noreferrer"><svg
-                class="svg-inline--fa fa-github fa-w-16" aria-hidden="true" data-prefix="fab" data-icon="github"
-                role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" data-fa-i2svg="">
-                <path fill="currentColor"
-                  d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z">
-                </path>
-              </svg><!-- <i class="fab fa-github"> </i> --></a>
-          </li>
-        </ul>
-        <a class="rhd-footer-sidebar-signup" href="https://developers.redhat.com/register">Sign me up ▸</a>
-      </div>
-    </div>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
   </div>
-</footer><script src="../../_/js/site.js"></script>
-<script src="../../_/js/vendor/highlight.js"></script>
-<script>hljs.initHighlighting()</script>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-  integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-  integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-  integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../../_/js/vendor/clipboard.js"></script>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
   </body>
 </html>

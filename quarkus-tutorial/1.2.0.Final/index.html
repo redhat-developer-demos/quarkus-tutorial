@@ -1,36 +1,318 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome to Quarkus Tutorial :: Quarkus Tutorial</title>
-  <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/1.2.0.Final/index.html">
-  <link rel="stylesheet" href="../../_/css/site.css">
-  <link rel="icon" href="../../_/img/favicon.ico" type="image/x-icon">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="https://unpkg.com/clipboard@2/dist/clipboard.min.js"></script>
-</head>
-
-<body class="home">
-  <header class="header" role="banner">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Welcome to Quarkus Tutorial :: Quarkus Tutorial</title>
+    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/1.2.0.Final/index.html">
+    <meta name="generator" content="Antora 2.3.1">
+    <link rel="stylesheet" href="../../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
   <nav class="navbar">
     <div class="navbar-brand">
-      <div class="navbar-item">
-        <a href="https://redhat-developer-demos.github.io/quarkus-tutorial">Quarkus Tutorial</a>
-      </div>
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://redhat-developer-demos.github.io/quarkus-tutorial">Quarkus Tutorial</a>
       <button class="navbar-burger" data-target="topbar-nav">
         <span></span>
         <span></span>
         <span></span>
       </button>
     </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </nav>
 </header>
-  <div class="body container">
-  <main class="home">
-    <h1 class="page">Welcome to Quarkus Tutorial</h1>
-    <div class="sect1 text-center strong">
+<div class="body">
+<div class="nav-container" data-component="quarkus-tutorial" data-version="1.2.0.Final">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="01-setup.html">Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#requirements">Required Tools</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="02-basics-fundas.html">Basics and Fundamentals</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-basics-fundas.html#basics-create-quarkus-app">Create Quarkus Application</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-basics-fundas.html#basics-ide-quarkus-project">Open Application in IDE</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-basics-fundas.html#basics-build-run-quarkus-app">Build and Run Application</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-basics-fundas.html#basics-update-code">Update Code</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-basics-fundas.html#basics-call-svc">Invoke Service</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-basics-fundas.html#basics-testing">Testing</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="02-basics-fundas.html#basics-logging">Configuring Logging</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="02-basics-fundas.html#basics-call-svc-logging">Invoke Service</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="02-basics-fundas.html#basics-configuration">Configuration</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="02-basics-fundas.html#basics-configuration-new-property">Add New Property</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="02-basics-fundas.html#basics-configuration-get-value">Get Configuration Value</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="02-basics-fundas.html#basics-call-configuration">Invoke Service</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="05-quarkus-panache.html">Hibernate with Quarkus</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="05-quarkus-panache.html#quarkusp-demo-overview">Demo Overview</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="05-quarkus-panache.html#quarkusp-fruitapp-dev">Build and Deploy</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="05-quarkus-panache.html#quarkus-fruit-app-db">Deploy Mariadb</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="05-quarkus-panache.html#quarkusp-access-db">Access Database </a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="05-quarkus-panache.html#quarkuspdb-update-props">Configure Application properties</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="05-quarkus-panache.html#quarkusp-create-fruit-entity">Create Fruit Entity</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="05-quarkus-panache.html#quarkusp-edit-fruit-resource">Update Fruit Resource</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="05-quarkus-panache.html#quarkusp-fruits-finder">Finders</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-quarkus-extensions.html">Quarkus Extensions</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-intro">What are Extensions ?</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-list-extensions">List Extensions</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-rest-client">Rest Client</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-add-rest-client-extensions">Adding Rest Client extension</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-create-fruity-vice-pojo">Creating FruityVice POJO</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-create-fruity-vice-service">Creating FruityVice Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-create-fruity-vice-service-config">Configuring FruityVice Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-create-fruity-vice-service-resclient">Using the RestClient</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-rest-client-run-quarkus-app-dev-mode">Run Quarkus Application in Development mode</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-call-fruity-rest-client">Invoke Service</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-fault-tolerance">Fault Tolerance</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-add-fault-tolerance-extensions">Adding Fault Tolerance extension</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-retry-fruity-vice-service">Add Retry to Fruity Vice Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-fault-tolerance-run-quarkus-app-dev-mode">Run Quarkus Application in Development mode</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-call-fruity-fault-tolerance-retry">Invoke Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-fallback-fruity-vice-service">Add Fallback to Fruity Vice Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-fault-tolerance-fallback-run-quarkus-app-dev-mode">Run Quarkus Application in Development mode</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-call-fruity-fault-tolerance-fallback">Invoke Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-circuit-breaker-fruity-vice-service">Add Ciruict Breaker to Fruity Vice Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-circuit-breaker-run-quarkus-app-dev-mode">Run Quarkus Application in Development mode</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-call-fruity-fault-tolerance-circuit-breaker">Invoke Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-turn-on-network">Turn Network On</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-health-checks">Health Checks</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-add-extensions">Add Extension</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-health-check-default-run-quarkus-app-dev-mode">Run Quarkus Application in Development mode</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-call-health-ep">Invoke Health Endpoint</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-custom-health-check">Customizing Health Checks</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-health-check-custom-run-quarkus-app-dev-mode">Run Quarkus Application in Development mode</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-call-health-custom">Invoke Health Endpoint</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-health-checks-kubernetes">Add Health Probes to Kubernetes Application</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-jwt">Securing endpoints with JWT</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-add-jwt-extensions">Add Extension</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-configure-jwt-parameters">Configuring JWT parameters</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-jwt-inject-claim">Injecting Claims</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-jwt-claim-quarkus-app-dev-mode">Run Quarkus Application in Development mode</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-call-jwt-claim">Invoke Endpoint</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-jwt-inject-rbac">Add RBAC</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-quarkus-extensions.html#qext-call-jwt-rbac">Invoke Endpoint</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="06-quarkus-reactive.html">Reactive Programming with Quarkus</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="06-quarkus-reactive.html#quarkusrpb-demo-overview">Beer Demo Overview</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="06-quarkus-reactive.html#quarkusrpb-buld-beer-reactive">Build Beer Service</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="06-quarkus-reactive.html#qext-reactive-beer-run-quarkus-app-dev-mode">Run Quarkus Application with Beer Service</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link is-current"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Quarkus Tutorial</a></li>
+    <li><a href="index.html">Welcome to Quarkus Tutorial</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/redhat-developer-demos/quarkus-tutorial/edit/master/documentation/modules/ROOT/pages/index.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Welcome to Quarkus Tutorial</h1>
+<div class="sect1 text-center strong">
 <h2>Supersonic Subatomic Java</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -46,159 +328,277 @@
 <div class="sect1 tiles browse">
 <h2>Browse modules</h2>
 <div class="sectionbody">
-<div class="ulist tile">
-<div class="title"><a href="01-setup.html" class="page">Get Started</a></div>
+<div class="ulist">
 <ul>
 <li>
-<p><a href="01-setup.html#requirements" class="page">Requirements</a></p>
+<p><a href="01-setup.html" class="page">Setup</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="01-setup.html#requirements" class="page">Required Tools</a></p>
 </li>
 </ul>
 </div>
-<div class="ulist tile">
-<div class="title"><a href="02-basics-fundas.html" class="page">Basics and Fundamentals</a></div>
+</li>
+<li>
+<p><a href="02-basics-fundas.html" class="page">Basics and Fundamentals</a></p>
+<div class="ulist">
 <ul>
 <li>
-<p><a href="02-basics-fundas.html#basics-create-quarkus-app" class="page">Create my first Quarkus application</a></p>
+<p><a href="02-basics-fundas.html#basics-create-quarkus-app" class="page">Create Quarkus Application</a></p>
 </li>
 <li>
-<p><a href="02-basics-fundas.html#basics-build-run-quarkus-app" class="page">Build and Run Application locally</a></p>
+<p><a href="02-basics-fundas.html#basics-ide-quarkus-project" class="page">Open Application in IDE</a></p>
 </li>
 <li>
-<p><a href="02-basics-fundas.html#basics-logging" class="page">Logging</a></p>
+<p><a href="02-basics-fundas.html#basics-build-run-quarkus-app" class="page">Build and Run Application</a></p>
 </li>
 <li>
-<p><a href="02-basics-fundas.html#basics-configuration" class="page">Custom Configuration</a></p>
+<p><a href="02-basics-fundas.html#basics-update-code" class="page">Update Code</a></p>
+</li>
+<li>
+<p><a href="02-basics-fundas.html#basics-call-svc" class="page">Invoke Service</a></p>
+</li>
+<li>
+<p><a href="02-basics-fundas.html#basics-testing" class="page">Testing</a></p>
+</li>
+<li>
+<p><a href="02-basics-fundas.html#basics-logging" class="page">Configuring Logging</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="02-basics-fundas.html#basics-call-svc-logging" class="page">Invoke Service</a></p>
 </li>
 </ul>
 </div>
-<div class="ulist tile">
-<div class="title"><a href="05-quarkus-panache.html" class="page">Database Interactive Applications</a></div>
-<ul>
-<li>
-<p><a href="05-quarkus-panache.html#quarkusp-fruitapp-dev" class="page">Build a Quarkus Hibernate Application</a></p>
 </li>
 <li>
-<p><a href="05-quarkus-panache.html#quarkusp-what-is-panache" class="page">Enhance Hibernate ORM with Panache</a></p>
+<p><a href="02-basics-fundas.html#basics-configuration" class="page">Configuration</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="02-basics-fundas.html#basics-configuration-new-property" class="page">Add New Property</a></p>
+</li>
+<li>
+<p><a href="02-basics-fundas.html#basics-configuration-get-value" class="page">Get Configuration Value</a></p>
+</li>
+<li>
+<p><a href="02-basics-fundas.html#basics-call-configuration" class="page">Invoke Service</a></p>
 </li>
 </ul>
 </div>
-<div class="ulist tile">
-<div class="title"><a href="04-quarkus-extensions.html" class="page">Quarkus Extensions</a></div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><a href="05-quarkus-panache.html" class="page">Hibernate with Quarkus</a></p>
+<div class="ulist">
 <ul>
+<li>
+<p><a href="05-quarkus-panache.html#quarkusp-demo-overview" class="page">Demo Overview</a></p>
+</li>
+<li>
+<p><a href="05-quarkus-panache.html#quarkusp-fruitapp-dev" class="page">Build and Deploy</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="05-quarkus-panache.html#quarkus-fruit-app-db" class="page">Deploy Mariadb</a></p>
+</li>
+<li>
+<p><a href="05-quarkus-panache.html#quarkusp-access-db" class="page">Access Database </a></p>
+</li>
+<li>
+<p><a href="05-quarkus-panache.html#quarkuspdb-update-props" class="page">Configure Application properties</a></p>
+</li>
+<li>
+<p><a href="05-quarkus-panache.html#quarkusp-create-fruit-entity" class="page">Create Fruit Entity</a></p>
+</li>
+<li>
+<p><a href="05-quarkus-panache.html#quarkusp-edit-fruit-resource" class="page">Update Fruit Resource</a></p>
+</li>
+<li>
+<p><a href="05-quarkus-panache.html#quarkusp-fruits-finder" class="page">Finders</a></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html" class="page">Quarkus Extensions</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-intro" class="page">What are Extensions ?</a></p>
+</li>
 <li>
 <p><a href="04-quarkus-extensions.html#qext-list-extensions" class="page">List Extensions</a></p>
 </li>
 <li>
 <p><a href="04-quarkus-extensions.html#qext-rest-client" class="page">Rest Client</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-add-rest-client-extensions" class="page">Adding Rest Client extension</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-create-fruity-vice-pojo" class="page">Creating FruityVice POJO</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-create-fruity-vice-service" class="page">Creating FruityVice Service</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-create-fruity-vice-service-config" class="page">Configuring FruityVice Service</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-create-fruity-vice-service-resclient" class="page">Using the RestClient</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-rest-client-run-quarkus-app-dev-mode" class="page">Run Quarkus Application in Development mode</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-call-fruity-rest-client" class="page">Invoke Service</a></p>
+</li>
+</ul>
+</div>
 </li>
 <li>
 <p><a href="04-quarkus-extensions.html#qext-fault-tolerance" class="page">Fault Tolerance</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-add-fault-tolerance-extensions" class="page">Adding Fault Tolerance extension</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-retry-fruity-vice-service" class="page">Add Retry to Fruity Vice Service</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-fault-tolerance-run-quarkus-app-dev-mode" class="page">Run Quarkus Application in Development mode</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-call-fruity-fault-tolerance-retry" class="page">Invoke Service</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-fallback-fruity-vice-service" class="page">Add Fallback to Fruity Vice Service</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-fault-tolerance-fallback-run-quarkus-app-dev-mode" class="page">Run Quarkus Application in Development mode</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-call-fruity-fault-tolerance-fallback" class="page">Invoke Service</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-circuit-breaker-fruity-vice-service" class="page">Add Ciruict Breaker to Fruity Vice Service</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-circuit-breaker-run-quarkus-app-dev-mode" class="page">Run Quarkus Application in Development mode</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-call-fruity-fault-tolerance-circuit-breaker" class="page">Invoke Service</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-turn-on-network" class="page">Turn Network On</a></p>
+</li>
+</ul>
+</div>
 </li>
 <li>
 <p><a href="04-quarkus-extensions.html#qext-health-checks" class="page">Health Checks</a></p>
-</li>
-<li>
-<p><a href="04-quarkus-extensions.html#qext-jwt" class="page">JWT RBAC</a></p>
-</li>
-</ul>
-</div>
-<div class="ulist tile">
-<div class="title"><a href="06-quarkus-reactive.html" class="page">Reactive Programming in Quarkus</a></div>
+<div class="ulist">
 <ul>
 <li>
-<p><a href="06-quarkus-reactive.html#quarkusrpb-demo-overview" class="page">Reactive Programming REST API calls</a></p>
+<p><a href="04-quarkus-extensions.html#qext-add-extensions" class="page">Add Extension</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-health-check-default-run-quarkus-app-dev-mode" class="page">Run Quarkus Application in Development mode</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-call-health-ep" class="page">Invoke Health Endpoint</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-custom-health-check" class="page">Customizing Health Checks</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-health-check-custom-run-quarkus-app-dev-mode" class="page">Run Quarkus Application in Development mode</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-call-health-custom" class="page">Invoke Health Endpoint</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-health-checks-kubernetes" class="page">Add Health Probes to Kubernetes Application</a></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-jwt" class="page">Securing endpoints with JWT</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-add-jwt-extensions" class="page">Add Extension</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-configure-jwt-parameters" class="page">Configuring JWT parameters</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-jwt-inject-claim" class="page">Injecting Claims</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-jwt-claim-quarkus-app-dev-mode" class="page">Run Quarkus Application in Development mode</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-call-jwt-claim" class="page">Invoke Endpoint</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-jwt-inject-rbac" class="page">Add RBAC</a></p>
+</li>
+<li>
+<p><a href="04-quarkus-extensions.html#qext-call-jwt-rbac" class="page">Invoke Endpoint</a></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><a href="06-quarkus-reactive.html" class="page">Reactive Programming with Quarkus</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="06-quarkus-reactive.html#quarkusrpb-demo-overview" class="page">Beer Demo Overview</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="06-quarkus-reactive.html#quarkusrpb-buld-beer-reactive" class="page">Build Beer Service</a></p>
+</li>
+<li>
+<p><a href="06-quarkus-reactive.html#qext-reactive-beer-run-quarkus-app-dev-mode" class="page">Run Quarkus Application with Beer Service</a></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
 </div>
 </div>
-  </main>
-</div>
-  <footer role="contentinfo">
-  <div class="region region-rhd-footer">
-    <div id="block-rhdfooter" class="rhd-footer">
-      <nav class="rhd-footer-nav" aria-label="Secondary Navigation" role="navigation">
-        <ul class="rhd-menu">
-          <li class="menu-item menu-item--expanded">
-            <h3 class="section-toggle">GitHub</h3>
-            <ul class="rhd-menu">
-              <li class="menu-item">
-                <a href="https://github.com/redhat-developer-demos/quarkus-tutorial" title="Quarkus Tutorial">Quarkus
-                  Tutorial</a>
-              </li>
-              <li class="menu-item">
-                <a href="https://github.com/redhat-developer-demos/quarkus-tutorial/issues" title="Issue Tracker">Issue
-                  Tracker</a>
-              </li>
-              <li class="menu-item">
-                <a href="https://quarkus.io" title="Quarkus">Quarkus</a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </nav>
-      <div class="rhd-footer-sidebar">
-        <p class="rhd-footer-sidebar-title">Red Hat Developer</p>
-        <p class="rhd-footer-sidebar-subtitle">Build here. Go anywhere.</p>
-        <p class="rhd-footer-sidebar-content">
-          We serve the builders. The problem solvers who create careers with
-          code.<br /><br /><a href="https://developer.redhat.com/register">Join us</a>
-          if you’re a developer, software engineer, web designer, front-end
-          designer, UX designer, computer scientist, architect, tester,
-          product manager, project manager or team lead.
-        </p>
-        <ul class="rhd-footer-sidebar-social">
-          <li>
-            <a href="https://www.youtube.com/channel/UC7noUdfWp-ukXUlAsJnSm-Q" target="_blank"
-              rel="noopener noreferrer"><svg class="svg-inline--fa fa-youtube fa-w-18" aria-hidden="true"
-                data-prefix="fab" data-icon="youtube" role="img" xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 576 512" data-fa-i2svg="">
-                <path fill="currentColor"
-                  d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z">
-                </path>
-              </svg><!-- <i class="fab fa-youtube"></i> --></a>
-          </li>
-          <li>
-            <a href="https://www.facebook.com/RedHatDeveloperProgram" target="_blank" rel="noopener noreferrer"><svg
-                class="svg-inline--fa fa-facebook fa-w-14" aria-hidden="true" data-prefix="fab" data-icon="facebook"
-                role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">
-                <path fill="currentColor"
-                  d="M448 56.7v398.5c0 13.7-11.1 24.7-24.7 24.7H309.1V306.5h58.2l8.7-67.6h-67v-43.2c0-19.6 5.4-32.9 33.5-32.9h35.8v-60.5c-6.2-.8-27.4-2.7-52.2-2.7-51.6 0-87 31.5-87 89.4v49.9h-58.4v67.6h58.4V480H24.7C11.1 480 0 468.9 0 455.3V56.7C0 43.1 11.1 32 24.7 32h398.5c13.7 0 24.8 11.1 24.8 24.7z">
-                </path>
-              </svg><!-- <i class="fab fa-facebook"> </i> --></a>
-          </li>
-          <li>
-            <a href="https://twitter.com/rhdevelopers" target="_blank" rel="noopener noreferrer"><svg
-                class="svg-inline--fa fa-twitter fa-w-16" aria-hidden="true" data-prefix="fab" data-icon="twitter"
-                role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
-                <path fill="currentColor"
-                  d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z">
-                </path>
-              </svg><!-- <i class="fab fa-twitter"> </i> --></a>
-          </li>
-          <li>
-            <a href="https://github.com/redhat-developer" target="_blank" rel="noopener noreferrer"><svg
-                class="svg-inline--fa fa-github fa-w-16" aria-hidden="true" data-prefix="fab" data-icon="github"
-                role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" data-fa-i2svg="">
-                <path fill="currentColor"
-                  d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z">
-                </path>
-              </svg><!-- <i class="fab fa-github"> </i> --></a>
-          </li>
-        </ul>
-        <a class="rhd-footer-sidebar-signup" href="https://developers.redhat.com/register">Sign me up ▸</a>
-      </div>
-    </div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
   </div>
-</footer><script src="../../_/js/site.js"></script>
-<script src="../../_/js/vendor/highlight.js"></script>
-<script>hljs.initHighlighting()</script>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-  integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-  integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-  integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-</body>
-
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../../_/js/vendor/clipboard.js"></script>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
 </html>
