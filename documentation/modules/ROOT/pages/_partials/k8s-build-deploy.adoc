@@ -11,7 +11,6 @@ If you have not deployed the application previously, you need to add Quarkus Kub
 ----
 ./mvnw quarkus:add-extension -Dextensions="quarkus-kubernetes"
 ----
-copyToClipboard::qext-mvn-add-kubernetes-extension[]
 
 You need to configure group and name of the Docker container used to deploy into Kubernetes.
 
@@ -23,7 +22,6 @@ Add the following properties (if you haven't already done it before) to pass:[$P
 kubernetes.group=example
 quarkus.application.name={quarkus-project-name}
 ----
-copyToClipboard::quarkusk8s-update-props[]
 
 ====
 
@@ -34,7 +32,6 @@ Now you need to run Maven goal to generate Kubernetes resource.
 ----
 ./mvnw package -DskipTests
 ----
-copyToClipboard::quarkusk8s-generate-kubernetes[]
 
 You can inspect the generated file by accessing next file:
 
@@ -43,7 +40,6 @@ You can inspect the generated file by accessing next file:
 ----
 cat target/kubernetes/kubernetes.yml
 ----
-copyToClipboard::quakrusk8s-generated-kubernetes-resource[]
 
 #end::k8s-prep[]
 
@@ -60,7 +56,6 @@ kubectl::
 ----
 kubectl apply -f pass:[$TUTORIAL_HOME]/target/kubernetes/kubernetes.yml
 ----
-copyToClipboard::conk8s-run-deploy-k8s-app[]
 --
 oc::
 +
@@ -72,7 +67,6 @@ endif::[]
 ----
 oc apply -f pass:[$TUTORIAL_HOME]/target/kubernetes/kubernetes.yml
 ----
-copyToClipboard::conk8s-oc-run-deploy-k8s-app[]
 ifndef::workshop[]
 --
 ====
@@ -98,14 +92,12 @@ As generated resources creates a `ClusterIP` service, you need to patch it:
 ----
 kubectl patch svc {quarkus-project-name} --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"}]'
 ----
-copyToClipboard::conk8s-k8s-run-expose-svc-nodeport[]
 
 [#{doc-sec}-run-deploy-k8s-service]
 [source,bash,subs="+macros,+attributes"]
 ----
 SVC_URL=$(minikube service -n quarkustutorial {quarkus-project-name} --url)
 ----
-copyToClipboard::conk8s-run-deploy-k8s-service[]
 
 --
 oc::
@@ -119,7 +111,6 @@ With OpenShift we can create a route to make Quarkus application publicly access
 ----
 oc expose service {quarkus-project-name}
 ----
-copyToClipboard::conk8s-oc-run-expose-svc-route[]
 
 Once the service is exposed we can use the following command to get the public url:
 
@@ -128,7 +119,6 @@ Once the service is exposed we can use the following command to get the public u
 ----
 SVC_URL=$(oc get routes {quarkus-project-name} -o jsonpath='{.spec.host}')
 ----
-copyToClipboard::conk8s-oc-run-get-route[]
 ifndef::workshop[]
 --
 ====
@@ -141,7 +131,6 @@ Now you can use the `SVC_URL` to call the service from the browser or via cli li
 ----
 curl $SVC_URL/{svc-path}
 ----
-copyToClipboard::conk8s-call-k8s-svc[]
 
 #end::k8s-invoke-svc[]
 
@@ -158,7 +147,6 @@ kubectl::
 ----
 kubectl delete all --all
 ----
-copyToClipboard::{section-k8s}k8s-delete-k8s-app[]
 --
 oc::
 +
@@ -170,7 +158,6 @@ endif::[]
 ----
 oc delete all --all
 ----
-copyToClipboard::{section-k8s}k8s-delete-oc-app[]
 ifndef::workshop[]
 --
 ====

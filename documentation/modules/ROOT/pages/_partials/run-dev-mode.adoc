@@ -7,4 +7,3 @@ If you are not in dev mode, run the following command to start Quarkus applicati
 ----
 ./mvnw compile quarkus:dev 
 ----
-copyToClipboard::{section-build-run}-build-run-dev-mode[]

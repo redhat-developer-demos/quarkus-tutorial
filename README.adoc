@@ -13,7 +13,3 @@ image::./documentation/modules/ROOT/assets/images/Developer_Joy.png[Developer Jo
 == Tutorial documentation
 
 * HTML: https://redhat-developer-demos.github.io/quarkus-tutorial/
-
-== Contributing
-
-Please refer to the link:./CONTRIBUTING.adoc[how to contribute?] on how you can contribute to the tutorial

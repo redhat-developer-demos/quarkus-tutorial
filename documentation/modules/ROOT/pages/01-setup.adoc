@@ -92,7 +92,6 @@ docker run -ti -p 8080:8080 -v `pwd`/work:/work \
 # -v `pwd`... will map the host work subdirectory to the container /work directory, this is where you will create your application
 # -v `mvn ...` will map your ~/.m2/repository of your host to the container repository to save downloading again between image runs
 -----
-copyToClipboard::docker-pull-tutorials-cli[]
 --
 ====
 
@@ -112,7 +111,6 @@ Before we start setting up the environment, let's clone the tutorial sources and
 ----
 git clone https://github.com/redhat-developer-demos/quarkus-tutorial 
 ----
-copyToClipboard::cloneRepo[]
 
 The `work` folder in `$TUTORIAL_HOME` can be used to download the demo application resources and refer to them during the exercises. The `work` folder has a README with instructions on the source code repo and git commands to clone the sources.
 
@@ -147,7 +145,6 @@ minikube -p quarkus-tutorial start --memory=8192 --cpus=4 --disk-size=50g && \
 kubectl create namespace {tutorial-namespace}
 kubectl config set-context --current --namespace={tutorial-namespace}
 ----
-copyToClipboard::quarkus-start-minikube[]
 --
 Minishift::
 +
@@ -161,7 +158,6 @@ minishift addon enable admin-user && \
 minishift addon enable anyuid && \
 oc new-project {tutorial-namespace}
 ----
-copyToClipboard::quarkus-start-minishift[]
 --
 ====
 
@@ -179,7 +175,6 @@ cd quarkus-tutorial
 export TUTORIAL_HOME=pass:[`pwd`]
 export GRAALVM_HOME='PUT THE LOCATION  WHERE YOU HAVE EXTRACTED GRAAL VM'
 ----
-copyToClipboard::quarkus-tutorial-shell-env[]
 
 Prepare your shell environment:
 
@@ -194,7 +189,6 @@ If you installed GraalVM, make sure to also install `native-image`
 ----
 gu install native-image
 ----
-copyToClipboard::quarkus-tutorial-graalvm-native[]
 
 
 [#quarkus-tutorial-shell-env]
@@ -206,7 +200,6 @@ export WORKSHOP_USER='PUT YOUR USERNAME HERE'
 export GRAALVM_HOME='PUT THE LOCATION  WHERE YOU HAVE EXTRACTED GRAAL VM'
 export WORKSHOP_OPENSHIFT_SERVER='PUT THE OPENSHIFT SEVER URL HERE'
 ----
-copyToClipboard::quarkus-tutorial-shell-env[]
 
 Login into OpenShift 
 [#quarkus-tutorial-oc-login]
@@ -214,7 +207,6 @@ Login into OpenShift
 ----
 oc login --username pass:[$WORKSHOP_USER] --server pass:[$WORKSHOP_OPENSHIFT_SERVER] --insecure-skip-tls-verify=false
 ----
-copyToClipboard::quarkus-tutorial-oc-login[]
 
 ifdef::openshift-console-url[]
 You can also access the Openshift Console via url {openshift-console-url}

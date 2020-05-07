@@ -32,7 +32,6 @@ NOTE: For the easier reference, we shall call the `fruits-app` project folder as
 ----
 ./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-rest-client, quarkus-smallrye-reactive-streams-operators"
 ----
-copyToClipboard::qext-mvn-add-reactive-extensions[]
 
 [#quarkusrpb-create-pojo]
 ==== Create Beer POJO
@@ -55,7 +54,6 @@ public class Beer {
 
     // generate getters/setters
 ----
-copyToClipboard::qext-quarkusrpb-beer-pojo[]
 
 [#quarkusrpb-create-beer-client]
 ==== Create Rest Client to Punk Beer API
@@ -90,7 +88,6 @@ public interface BeerGateway {
     
 }
 ----
-copyToClipboard::qext-quarkusrpb-beer-client[]
 
 . Retrieves all beers from a specific page.
 
@@ -104,7 +101,6 @@ Add the following properties to pass:[$PROJECT_HOME]/src/main/resources/applicat
 ----
 com.example.BeerGateway/mp-rest/url=https://api.punkapi.com
 ----
-copyToClipboard::qext-quarkusrpb-update-props[]
 
 [#quarkusrpb-beer-reactive-service]
 ==== Create Beer Punk API Reactive Service
@@ -152,7 +148,6 @@ public class BeerService {
 
 }
 ----
-copyToClipboard::qext-quarkusrpb-beer-service[]
 
 . Gets first batch of beers
 . Sends an event that the process is completed
@@ -202,7 +197,6 @@ public class BeerResource {
     }
 }
 ----
-copyToClipboard::qext-quarkusrpb-beer-resource[]
 
 . Injects `BeerService`
 . Gets the beer stream

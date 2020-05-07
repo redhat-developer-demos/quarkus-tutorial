@@ -30,7 +30,6 @@ Navigate to the tutorial's `work` folder or the root folder where you created th
 ----
 cd pass:[$TUTORIAL_HOME]/work
 ----
-copyToClipboard::qext-nav-to-work-folder[]
 
 NOTE: The instructions of this section assumes your project name to be `{quarkus-project-name}`
 
@@ -42,7 +41,6 @@ To list the available extensions, run the following command from your project di
 cd {quarkus-project-name} && \
 ./mvnw quarkus:list-extensions
 ----
-copyToClipboard::qext-mvn-list-extensions[]
 
 [#qext-rest-client]
 == Rest Client
@@ -106,7 +104,6 @@ To add Rest Client and JSON-B extensions (`{quarkus-rest-client-ext-name}`) to t
 ----
 ./mvnw quarkus:add-extension -Dextension="{quarkus-rest-client-ext-name}"
 ----
-copyToClipboard::qext-mvn-add-rest-client-extension[]
 
 [#qext-create-fruity-vice-pojo]
 === Creating FruityVice POJO
@@ -166,7 +163,6 @@ public class FruityVice {
     }
 }
 ----
-copyToClipboard::quarkusrc-fruity-vice-pojo[]
 
 [#qext-create-fruity-vice-service]
 === Creating FruityVice Service
@@ -206,7 +202,6 @@ public interface FruityViceService {
 
 }
 ----
-copyToClipboard::quarkusrc-fruity-vice-service[]
 
 [#qext-create-fruity-vice-service-config]
 === Configuring FruityVice Service
@@ -218,7 +213,6 @@ Add the following properties to `pass:[$PROJECT_HOME]/src/main/resources/applica
 ----
 com.example.FruityViceService/mp-rest/url=http://www.fruityvice.com
 ----
-copyToClipboard::quarkusrc-config-fruity-update-props[]
 
 [#qext-create-fruity-vice-service-resclient]
 === Using the RestClient
@@ -238,7 +232,6 @@ public FruityVice getFruitInfoByName(@PathParam("name") String name) {
     return fruityViceService.getFruitByName(name);
 }
 ----
-copyToClipboard::quarkusrc-fruity-vice-service-inject[]
 
 [#qext-rest-client-run-quarkus-app-dev-mode]
 == Run Quarkus Application in Development mode
@@ -291,7 +284,6 @@ To add Fault Tolernace extension (`{quarkus-fault-tolerance-ext-name}`) to the Q
 ----
 ./mvnw quarkus:add-extension -Dextension="{quarkus-fault-tolerance-ext-name}"
 ----
-copyToClipboard::qext-mvn-add-fault-tolernace-extension[]
 
 [#qext-retry-fruity-vice-service]
 === Add Retry to Fruity Vice Service
@@ -309,7 +301,6 @@ Add the `org.eclipse.microprofile.faulttolerance.Retry` annotation to `pass:[$PR
 @Retry(maxRetries = 3, delay = 2000)
 public FruityVice getFruitByName(@PathParam("name") String name);
 ----
-copyToClipboard::quarkusft-retry-fruit-vice-service[]
 
 Now in case of any error, 3 retries are done automatically, waiting for 2 seconds between retries.
 
@@ -380,7 +371,6 @@ public static class FruityViceRecovery implements FallbackHandler<FruityVice> {
 
 }
 ----
-copyToClipboard::quarkusft-fallback-fruit-vice-service[]
 
 Now in case of any error, 3 retries are done automatically, waiting for 2 seconds between retries. 
 If the error persits, then the fallback method is executed.
@@ -437,7 +427,6 @@ public static class FruityViceRecovery implements FallbackHandler<FruityVice> {
 
 }
 ----
-copyToClipboard::quarkusft-circuit-breaker-fruit-vice-service[]
 
 Now, if 3 (4 x 0.75) failures occur among the rolling window of 4 consecutive invocations then the circuit is opened for 5000 ms and then be back to half open. 
 If the invocation succeeds then the circuit is back to closed again.
@@ -494,7 +483,6 @@ To add `{quarkus-health-ext-name}` to the Quarkus application, run the following
 ----
 ./mvnw quarkus:add-extension -Dextension="{quarkus-health-ext-name}"
 ----
-copyToClipboard::qext-mvn-add-extension[]
 
 After successful execution of the above command, you will have the following dependency added to the `{quarkus-project-name}` project's pom.xml:
 
@@ -589,7 +577,6 @@ public class FruitHealthCheck {
     }
 }
 ----
-copyToClipboard::quarkusp-fruit-checks[]
 
 [#qext-health-check-custom-run-quarkus-app-dev-mode]
 === Run Quarkus Application in Development mode
@@ -706,7 +693,6 @@ To add JWT RBAC extension (`{quarkus-jwt-ext-name}`) to the Quarkus application,
 ----
 ./mvnw quarkus:add-extension -Dextension="{quarkus-jwt-ext-name}"
 ----
-copyToClipboard::qext-mvn-add-jwt-extension[]
 
 [#qext-configure-jwt-parameters]
 === Configuring JWT parameters
@@ -721,7 +707,6 @@ mp.jwt.verify.publickey.location=https://gist.githubusercontent.com/lordofthejar
 mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac
 # <2>
 ----
-copyToClipboard::quarkussec-config-jwt[]
 <1> Sets the location of public key to verify the token
 <2> Issuer of the token
 
@@ -779,7 +764,6 @@ public String getClaim() {
     return username;
 }
 ----
-copyToClipboard::quarkussec-jwt-claim-username[]
 
 Rename the `@Path` used in `FruityVice getFruitInfoByName` to `@Path("name-{name})"` to avoid conflict with the path `/fruit/claim`.
 
@@ -836,7 +820,6 @@ public String getClaim() {
     return username;
 }
 ----
-copyToClipboard::quarkussec-jwt-rbac[]
 
 [#qext-call-jwt-rbac]
 === Invoke Service
@@ -869,7 +852,6 @@ public String getClaim() {
     return username;
 }
 ----
-copyToClipboard::quarkussec-jwt-rbac-invalid[]
 
 And then do the request again:
 

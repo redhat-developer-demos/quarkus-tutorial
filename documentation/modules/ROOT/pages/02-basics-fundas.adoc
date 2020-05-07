@@ -31,7 +31,6 @@ Create an empty folder called `quarkus-tutorial`. We'll call it our `$TUTORIAL_H
 mkdir quarkus-tutorial && cd quarkus-tutorial
 export TUTORIAL_HOME=`pwd`
 ----
-copyToClipboard::create-tutorial-folder[]
 
 Create the `fruits-app` folder and navigate to the folder:
 
@@ -42,7 +41,6 @@ mkdir -p $TUTORIAL_HOME/work && cd $TUTORIAL_HOME/work
 # set the Quarkus release environment variable 
 export QUARKUS_VERSION={page-component-version}
 ----
-copyToClipboard::quarkusp-nav-to-work-folder[]
 
 [#quarkusp-mv-create-fruits-app]
 [source,bash,subs="+macros,+attributes"]
@@ -55,7 +53,6 @@ mvn "io.quarkus:quarkus-maven-plugin:pass:[${QUARKUS_VERSION}]:create" \
   -Dpath="fruit"
 cd fruits-app
 ----
-copyToClipboard::quarkusp-mv-create-fruits-app[]
 
 [#basics-ide-quarkus-app]
 == Open the Project in IDE
@@ -69,7 +66,6 @@ If you are using **vscode** you can open the project by:
 ----
 code .
 ----
-copyToClipboard::basics-ide-quarkus-project[]
 
 NOTE: All further sections of this tutorial assumes the application name to be `fruits-app`.
 
@@ -133,7 +129,6 @@ You can configure Quarkus logging by setting the following parameters to `$PROJE
 ----
 quarkus.log.console.level=INFO
 ----
-copyToClipboard::basics-update-logging-props[]
 
 Also you can configure your application logger level.
 Let's add a logger and configure it.
@@ -165,7 +160,6 @@ public class FruitResource {
     }
 }
 ----
-copyToClipboard::basics-custom-log-manager[]
 
 And configure `INFO` mode for the service to `$PROJECT_HOME/src/main/resources/application.properties`: 
 
@@ -174,7 +168,6 @@ And configure `INFO` mode for the service to `$PROJECT_HOME/src/main/resources/a
 ----
 quarkus.log.category."com.example".level=INFO
 ----
-copyToClipboard::basics-update-custom-logging-props[]
 
 [#basics-call-svc-logging]
 === Invoke Service
@@ -208,7 +201,6 @@ Add the following property to `$PROJECT_HOME/src/main/resources/application.prop
 ----
 greetings.message = Hello y'all!
 ----
-copyToClipboard::basics-configuration-add-new-property[]
 
 [#basics-configuration-get-value]
 === Get Configuration Value
@@ -239,7 +231,6 @@ public class FruitResource {
     }
 }
 ----
-copyToClipboard::basics-configuration-get-value-code[]
 
 [#basics-call-configuration]
 === Invoke Service

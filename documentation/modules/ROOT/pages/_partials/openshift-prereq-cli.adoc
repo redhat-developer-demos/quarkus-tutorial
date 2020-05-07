@@ -5,7 +5,6 @@
 ----
 oc version 
 ----
-copyToClipboard::oc-version[]
 
 * Make sure to be on `{tutorial-namespace}` OpenShift project
 
@@ -14,7 +13,6 @@ copyToClipboard::oc-version[]
 ----
 oc project -q 
 ----
-copyToClipboard::right-openshift-project[]
 
 If you are not on `{tutorial-namespace}` project, then run following command to change to `{tutorial-namespace}` project:
 
@@ -23,4 +21,3 @@ If you are not on `{tutorial-namespace}` project, then run following command to 
 ----
 oc project {tutorial-namespace}
 ----
-copyToClipboard::change-to-openshift-project[]

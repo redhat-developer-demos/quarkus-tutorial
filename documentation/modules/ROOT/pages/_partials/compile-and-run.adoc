@@ -9,7 +9,6 @@ JVM mode::
 cd pass:[$TUTORIAL_HOME]/work/{project-dir} && \
 ./mvnw -DskipTests clean package
 ----
-copyToClipboard::basics-build-quarkus-jvm-app[]
 
 To run the application in jvm mode
 
@@ -18,7 +17,6 @@ To run the application in jvm mode
 ----
 java -jar target/{project-dir}-1.0-SNAPSHOT-runner.jar
 ----
-copyToClipboard::basics-build-run-jvm-app[]
 
 --
 Native mode::
@@ -30,7 +28,6 @@ Native mode::
 cd pass:[$TUTORIAL_HOME]/work/{project-dir} && \
 ./mvnw -DskipTests clean package -Pnative
 ----
-copyToClipboard::basics-build-quarkus-native-app[]
 
 NOTE: Native compilation will take few minutes to complete.
 
@@ -41,7 +38,6 @@ To run the application in native mode
 ----
 ./target/{project-dir}-1.0-SNAPSHOT-runner
 ----
-copyToClipboard::basics-build-run-native-app[]
 
 [IMPORTANT]
 =====
@@ -58,7 +54,6 @@ Native container-build mode::
 cd pass:[$TUTORIAL_HOME]/work/{project-dir} && \
 ./mvnw package -DskipTests -Pnative -Dquarkus.native.container-build=true
 ----
-copyToClipboard::basics-build-quarkus-native-docker-app[]
 
 NOTE: Native compilation will take few minutes to complete.
 
@@ -70,7 +65,6 @@ To run the application in native mode you need to build a Docker image using the
 docker build -f src/main/docker/Dockerfile.native -t example/{quarkus-project-name}:1.0-SNAPSHOT . && \
 docker run -it --rm -p 8080:8080 example/{quarkus-project-name}:1.0-SNAPSHOT
 ----
-copyToClipboard::basics-build-run-native-docker-app[]
 
 --
 ====

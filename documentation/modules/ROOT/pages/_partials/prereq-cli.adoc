@@ -26,7 +26,6 @@ Minikube::
 ----
 eval $(minikube docker-env)
 ----
-copyToClipboard::minikube-set-env[]
 
 * Kubernetes should be v1.12+
 
@@ -35,7 +34,6 @@ copyToClipboard::minikube-set-env[]
 ----
 kubectl version
 ----
-copyToClipboard::kubectl-version[]
 --
 Minishift::
 +
@@ -47,7 +45,6 @@ Minishift::
 ----
 eval $(minishift docker-env)
 ----
-copyToClipboard::minishift-set-env[]
 
 include::ROOT:partial$openshift-prereq-cli.adoc[]
 
