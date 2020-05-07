@@ -1,7 +1,5 @@
 name: quarkus-tutorial
-title: Quarkus Tutorial
-version: 1.2.0.Final
+version: master
 nav:
   - modules/ROOT/nav.adoc
-
 start_page: ROOT:index.adoc
