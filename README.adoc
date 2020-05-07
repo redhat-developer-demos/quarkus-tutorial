@@ -1,6 +1,6 @@
 = Learn to build Cloud Native Java Applications using Quarkus
 
-image:https://circleci.com/gh/redhat-developer-demos/quarkus-tutorial.svg?style=svg["CircleCI", link="https://circleci.com/gh/redhat-developer-demos/quarkus-tutorial"]
+image:https://github.com/redhat-developer-demos/quarkus-tutorial/workflows/docs/badge.svg[]
 
 Historically Java was able to handle the biggest enterprise problem(s) with its "Write once, run anywhere" (WORA) paradigm. With Cloud Native Applications grown to popularity, things like running applications as linux containers, serverless taking centere stage -- Java was pushed back by languages like golang, node.js as the forerunner to build Cloud Native Applications as they are smaller, quicker and argulably more nimble.
 
