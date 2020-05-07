@@ -363,9 +363,6 @@ For the easier reference, we shall call the <code>fruits-app</code> project fold
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-rest-client, quarkus-smallrye-reactive-streams-operators"</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::qext-mvn-add-reactive-extensions[]</p>
-</div>
 </div>
 <div class="sect3">
 <h4 id="quarkusrpb-create-pojo"><a class="anchor" href="#quarkusrpb-create-pojo"></a>Create Beer POJO</h4>
@@ -388,9 +385,6 @@ public class Beer {
 
     // generate getters/setters</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::qext-quarkusrpb-beer-pojo[]</p>
 </div>
 </div>
 <div class="sect3">
@@ -426,9 +420,6 @@ public interface BeerGateway {
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::qext-quarkusrpb-beer-client[]</p>
-</div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -445,9 +436,6 @@ public interface BeerGateway {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">com.example.BeerGateway/mp-rest/url=https://api.punkapi.com</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::qext-quarkusrpb-update-props[]</p>
 </div>
 </div>
 </div>
@@ -495,9 +483,6 @@ public class BeerService {
 
 }</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::qext-quarkusrpb-beer-service[]</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -564,9 +549,6 @@ public class BeerResource {
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::qext-quarkusrpb-beer-resource[]</p>
-</div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -605,9 +587,6 @@ If the operation is canceled/aborted before completion, then you also save IO by
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::beer-reactive-build-run-dev-mode[]</p>
-</div>
 <div class="sect3">
 <h4 id="qext-call-beer-reactive-service"><a class="anchor" href="#qext-call-beer-reactive-service"></a>Invoke Service</h4>
 <div class="paragraph">
@@ -617,9 +596,6 @@ If the operation is canceled/aborted before completion, then you also save IO by
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/beer</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::beer-reactive-k8s-svc-call[]</p>
 </div>
 <div class="paragraph">
 <p>The REST call about should return an response like:</p>

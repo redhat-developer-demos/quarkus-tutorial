@@ -363,9 +363,6 @@
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::qext-nav-to-work-folder[]</p>
-</div>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -386,9 +383,6 @@ The instructions of this section assumes your project name to be <code>fruits-ap
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd fruits-app &amp;&amp; \
 ./mvnw quarkus:list-extensions</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::qext-mvn-list-extensions[]</p>
 </div>
 </div>
 </div>
@@ -464,9 +458,6 @@ Two endpoints are the important ones for this workshop:</p>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-rest-client, quarkus-resteasy-jsonb"</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::qext-mvn-add-rest-client-extension[]</p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="qext-create-fruity-vice-pojo"><a class="anchor" href="#qext-create-fruity-vice-pojo"></a>Creating FruityVice POJO</h3>
@@ -527,9 +518,6 @@ public class FruityVice {
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::quarkusrc-fruity-vice-pojo[]</p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="qext-create-fruity-vice-service"><a class="anchor" href="#qext-create-fruity-vice-service"></a>Creating FruityVice Service</h3>
@@ -570,9 +558,6 @@ public interface FruityViceService {
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::quarkusrc-fruity-vice-service[]</p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="qext-create-fruity-vice-service-config"><a class="anchor" href="#qext-create-fruity-vice-service-config"></a>Configuring FruityVice Service</h3>
@@ -583,9 +568,6 @@ public interface FruityViceService {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">com.example.FruityViceService/mp-rest/url=http://www.fruityvice.com</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::quarkusrc-config-fruity-update-props[]</p>
 </div>
 </div>
 <div class="sect2">
@@ -606,9 +588,6 @@ public FruityVice getFruitInfoByName(@PathParam("name") String name) {
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::quarkusrc-fruity-vice-service-inject[]</p>
-</div>
 </div>
 </div>
 </div>
@@ -623,9 +602,6 @@ public FruityVice getFruitInfoByName(@PathParam("name") String name) {
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::rest-client-build-run-dev-mode[]</p>
-</div>
 <div class="sect2">
 <h3 id="qext-call-fruity-rest-client"><a class="anchor" href="#qext-call-fruity-rest-client"></a>Invoke Service</h3>
 <div class="paragraph">
@@ -635,9 +611,6 @@ public FruityVice getFruitInfoByName(@PathParam("name") String name) {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::rest-client-k8s-svc-call[]</p>
 </div>
 <div class="paragraph">
 <p>The REST call should return an response like:</p>
@@ -673,9 +646,6 @@ Quarkus integrates with <a href="https://github.com/eclipse/microprofile-fault-t
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-smallrye-fault-tolerance"</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::qext-mvn-add-fault-tolernace-extension[]</p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="qext-retry-fruity-vice-service"><a class="anchor" href="#qext-retry-fruity-vice-service"></a>Add Retry to Fruity Vice Service</h3>
@@ -695,9 +665,6 @@ public FruityVice getFruitByName(@PathParam("name") String name);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>copyToClipboard::quarkusft-retry-fruit-vice-service[]</p>
-</div>
-<div class="paragraph">
 <p>Now in case of any error, 3 retries are done automatically, waiting for 2 seconds between retries.</p>
 </div>
 </div>
@@ -711,9 +678,6 @@ public FruityVice getFruitByName(@PathParam("name") String name);</code></pre>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::fault-tolerance-build-run-dev-mode[]</p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="qext-call-fruity-fault-tolerance-retry"><a class="anchor" href="#qext-call-fruity-fault-tolerance-retry"></a>Invoke Service</h3>
@@ -724,9 +688,6 @@ public FruityVice getFruitByName(@PathParam("name") String name);</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::fault-tolerance-retry-cli-svc-call[]</p>
 </div>
 <div class="paragraph">
 <p>The REST call should return an response like:</p>
@@ -750,9 +711,6 @@ And make again a request to <a href="http://localhost:8080/fruit/banana" class="
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::fault-tolerance-retry-no-network-cli-svc-call[]</p>
 </div>
 <div class="paragraph">
 <p>Now after waiting 6 seconds (3 retries x 2 seconds), the next exception is thrown <code>java.net.UnknownHostException: www.fruityvice.com</code>.</p>
@@ -786,9 +744,6 @@ public static class FruityViceRecovery implements FallbackHandler&lt;FruityVice&
 </div>
 </div>
 <div class="paragraph">
-<p>copyToClipboard::quarkusft-fallback-fruit-vice-service[]</p>
-</div>
-<div class="paragraph">
 <p>Now in case of any error, 3 retries are done automatically, waiting for 2 seconds between retries.
 If the error persits, then the fallback method is executed.</p>
 </div>
@@ -803,9 +758,6 @@ If the error persits, then the fallback method is executed.</p>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::fault-tolerance-fallback-build-run-dev-mode[]</p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="qext-call-fruity-fault-tolerance-fallback"><a class="anchor" href="#qext-call-fruity-fault-tolerance-fallback"></a>Invoke Service</h3>
@@ -816,9 +768,6 @@ If the error persits, then the fallback method is executed.</p>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::fault-tolerance-fallback-k8s-svc-call[]</p>
 </div>
 <div class="paragraph">
 <p>Now after waiting for 6 seconds (3 retries x 2 seconds), an empty object is sent instead of an exception.</p>
@@ -856,9 +805,6 @@ public static class FruityViceRecovery implements FallbackHandler&lt;FruityVice&
 </div>
 </div>
 <div class="paragraph">
-<p>copyToClipboard::quarkusft-circuit-breaker-fruit-vice-service[]</p>
-</div>
-<div class="paragraph">
 <p>Now, if 3 (4 x 0.75) failures occur among the rolling window of 4 consecutive invocations then the circuit is opened for 5000 ms and then be back to half open.
 If the invocation succeeds then the circuit is back to closed again.</p>
 </div>
@@ -873,9 +819,6 @@ If the invocation succeeds then the circuit is back to closed again.</p>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::fault-tolerance-circuit-breaker-build-run-dev-mode[]</p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="qext-call-fruity-fault-tolerance-circuit-breaker"><a class="anchor" href="#qext-call-fruity-fault-tolerance-circuit-breaker"></a>Invoke Service</h3>
@@ -886,9 +829,6 @@ If the invocation succeeds then the circuit is back to closed again.</p>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::fault-tolerance-cb-k8s-svc-call[]</p>
 </div>
 <div class="paragraph">
 <p>The output changes form <code>java.net.UnknownHostException: www.fruityvice.com</code> (or any other network exception) in the first calls to <code>org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getFruitByName</code> when circuit is opened.</p>
@@ -940,9 +880,6 @@ You can use <code>@Retry</code> and <code>@Fallback</code> annotations together 
 </div>
 </div>
 <div class="paragraph">
-<p>copyToClipboard::qext-mvn-add-extension[]</p>
-</div>
-<div class="paragraph">
 <p>After successful execution of the above command, you will have the following dependency added to the <code>fruits-app</code> project&#8217;s pom.xml:</p>
 </div>
 <div class="listingblock">
@@ -967,9 +904,6 @@ You can use <code>@Retry</code> and <code>@Fallback</code> annotations together 
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::health-check-default-build-run-dev-mode[]</p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="qext-call-health-ep"><a class="anchor" href="#qext-call-health-ep"></a>Invoke Service</h3>
@@ -980,9 +914,6 @@ You can use <code>@Retry</code> and <code>@Fallback</code> annotations together 
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/health</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::basics-health-check-k8s-svc-call[]</p>
 </div>
 <div class="paragraph">
 <p>The REST call about should return an response like:</p>
@@ -1057,9 +988,6 @@ public class FruitHealthCheck {
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::quarkusp-fruit-checks[]</p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="qext-health-check-custom-run-quarkus-app-dev-mode"><a class="anchor" href="#qext-health-check-custom-run-quarkus-app-dev-mode"></a>Run Quarkus Application in Development mode</h3>
@@ -1071,9 +999,6 @@ public class FruitHealthCheck {
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::health-check-custom-build-run-dev-mode[]</p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="qext-call-health-custom"><a class="anchor" href="#qext-call-health-custom"></a>Invoke Service</h3>
@@ -1084,9 +1009,6 @@ public class FruitHealthCheck {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/health</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::custom-health-k8s-svc-call[]</p>
 </div>
 <div class="paragraph">
 <p>The REST call about should return an response like:</p>
@@ -1117,9 +1039,6 @@ public class FruitHealthCheck {
 </div>
 </div>
 <div class="paragraph">
-<p>copyToClipboard::custom-health-live-k8s-svc-call[]</p>
-</div>
-<div class="paragraph">
 <p>The REST call about should return an response like:</p>
 </div>
 <div class="listingblock">
@@ -1139,9 +1058,6 @@ public class FruitHealthCheck {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/health/ready</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::custom-health-ready-k8s-svc-call[]</p>
 </div>
 <div class="paragraph">
 <p>The REST call about should return an response like:</p>
@@ -1184,9 +1100,6 @@ public class FruitHealthCheck {
 </div>
 </div>
 <div class="paragraph">
-<p>copyToClipboard::qext-mvn-add-kubernetes-extension[]</p>
-</div>
-<div class="paragraph">
 <p>You need to configure group and name of the Docker container used to deploy into Kubernetes.</p>
 </div>
 <div class="paragraph">
@@ -1197,9 +1110,6 @@ public class FruitHealthCheck {
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">kubernetes.group=example
 quarkus.application.name=fruits-app</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::quarkusk8s-update-props[]</p>
 </div>
 </td>
 </tr>
@@ -1214,18 +1124,12 @@ quarkus.application.name=fruits-app</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>copyToClipboard::quarkusk8s-generate-kubernetes[]</p>
-</div>
-<div class="paragraph">
 <p>You can inspect the generated file by accessing next file:</p>
 </div>
 <div id="quakrusk8s-generated-kubernetes-resource" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat target/kubernetes/kubernetes.yml</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::quakrusk8s-generated-kubernetes-resource[]</p>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -1245,18 +1149,12 @@ quarkus.application.name=fruits-app</code></pre>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl delete all --all</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::{section-k8s}k8s-delete-k8s-app[]</p>
-</div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_oc">
 <div id="health-checkk8s-delete-oc-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc delete all --all</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::{section-k8s}k8s-delete-oc-app[]</p>
 </div>
 </div>
 </div>
@@ -1284,9 +1182,6 @@ Quarkus provides an integration to the <a href="https://github.com/eclipse/micro
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-smallrye-jwt"</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::qext-mvn-add-jwt-extension[]</p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="qext-configure-jwt-parameters"><a class="anchor" href="#qext-configure-jwt-parameters"></a>Configuring JWT parameters</h3>
@@ -1301,10 +1196,17 @@ mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac
 <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::quarkussec-config-jwt[]
-&lt;1&gt; Sets the location of public key to verify the token
-&lt;2&gt; Issuer of the token</p>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Sets the location of public key to verify the token</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Issuer of the token</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>We are also providing a valid token that can be verified by the configured public key:</p>
@@ -1374,9 +1276,6 @@ public String getClaim() {
 </div>
 </div>
 <div class="paragraph">
-<p>copyToClipboard::quarkussec-jwt-claim-username[]</p>
-</div>
-<div class="paragraph">
 <p>Rename the <code>@Path</code> used in <code>FruityVice getFruitInfoByName</code> to <code>@Path("name-{name})"</code> to avoid conflict with the path <code>/fruit/claim</code>.</p>
 </div>
 </div>
@@ -1393,9 +1292,6 @@ public String getClaim() {
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::jwt-claim-dev-build-run-dev-mode[]</p>
-</div>
 <div class="sect2">
 <h3 id="qext-call-jwt-claim"><a class="anchor" href="#qext-call-jwt-claim"></a>Invoke Service</h3>
 <div class="paragraph">
@@ -1406,9 +1302,6 @@ public String getClaim() {
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/5f8c5b7a9c11ed455f4910ed2032d79612b5e6f6/quarkus.jwt.token -s)
 curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::jwt-claim-k8s-svc-call[]</p>
 </div>
 <div class="paragraph">
 <p>And you&#8217;ll see the <code>preferred_username</code> field for the given token (<code>jdoe</code>).</p>
@@ -1425,9 +1318,6 @@ These validations include for example that the token has not been modified, has 
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=XXXX
 curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::jwt-claim-k8s-svc-call[]</p>
 </div>
 <div class="paragraph">
 <p>And now the invocation returns and HTTP code <code>401 Unauthorized</code> because the token is invalid.</p>
@@ -1452,9 +1342,6 @@ public String getClaim() {
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::quarkussec-jwt-rbac[]</p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="qext-call-jwt-rbac"><a class="anchor" href="#qext-call-jwt-rbac"></a>Invoke Service</h3>
@@ -1466,9 +1353,6 @@ public String getClaim() {
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/5f8c5b7a9c11ed455f4910ed2032d79612b5e6f6/quarkus.jwt.token -s)
 curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::rjwt-rbac-k8s-svc-call[]</p>
 </div>
 <div class="paragraph">
 <p>And you&#8217;ll see the <code>preferred_username</code> field for given token (<code>jdoe</code>).</p>
@@ -1490,9 +1374,6 @@ public String getClaim() {
 </div>
 </div>
 <div class="paragraph">
-<p>copyToClipboard::quarkussec-jwt-rbac-invalid[]</p>
-</div>
-<div class="paragraph">
 <p>And then do the request again:</p>
 </div>
 <div class="paragraph">
@@ -1503,9 +1384,6 @@ public String getClaim() {
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/5f8c5b7a9c11ed455f4910ed2032d79612b5e6f6/quarkus.jwt.token -s)
 curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::rjwt-rbac-k8s-svc-call[]</p>
 </div>
 <div class="paragraph">
 <p>And the output now is different: <code>Forbidden</code>.</p>

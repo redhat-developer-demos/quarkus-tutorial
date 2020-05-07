@@ -348,9 +348,6 @@ export TUTORIAL_HOME=`pwd`</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>copyToClipboard::create-tutorial-folder[]</p>
-</div>
-<div class="paragraph">
 <p>Create the <code>fruits-app</code> folder and navigate to the folder:</p>
 </div>
 <div id="quarkusp-nav-to-work-folder" class="listingblock">
@@ -359,9 +356,6 @@ export TUTORIAL_HOME=`pwd`</code></pre>
 # set the Quarkus release environment variable
 export QUARKUS_VERSION=1.2.0.Final</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::quarkusp-nav-to-work-folder[]</p>
 </div>
 <div id="quarkusp-mv-create-fruits-app" class="listingblock">
 <div class="content">
@@ -373,9 +367,6 @@ export QUARKUS_VERSION=1.2.0.Final</code></pre>
   -Dpath="fruit"
 cd fruits-app</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::quarkusp-mv-create-fruits-app[]</p>
 </div>
 </div>
 </div>
@@ -392,9 +383,6 @@ cd fruits-app</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">code .</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::basics-ide-quarkus-project[]</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -439,18 +427,12 @@ All further sections of this tutorial assumes the application name to be <code>f
 </div>
 </div>
 <div class="paragraph">
-<p>copyToClipboard::basics-build-quarkus-jvm-app[]</p>
-</div>
-<div class="paragraph">
 <p>To run the application in jvm mode</p>
 </div>
 <div id="basics-build-run-jvm-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">java -jar target/fruits-app-1.0-SNAPSHOT-runner.jar</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::basics-build-run-jvm-app[]</p>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_native-mode">
@@ -459,9 +441,6 @@ All further sections of this tutorial assumes the application name to be <code>f
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work/fruits-app &amp;&amp; \
 ./mvnw -DskipTests clean package -Pnative</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::basics-build-quarkus-native-app[]</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -482,9 +461,6 @@ Native compilation will take few minutes to complete.
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./target/fruits-app-1.0-SNAPSHOT-runner</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::basics-build-run-native-app[]</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -508,9 +484,6 @@ Native compilation will take few minutes to complete.
 ./mvnw package -DskipTests -Pnative -Dquarkus.native.container-build=true</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::basics-build-quarkus-native-docker-app[]</p>
-</div>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -531,9 +504,6 @@ Native compilation will take few minutes to complete.
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/fruits-app:1.0-SNAPSHOT . &amp;&amp; \
 docker run -it --rm -p 8080:8080 example/fruits-app:1.0-SNAPSHOT</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::basics-build-run-native-docker-app[]</p>
 </div>
 </div>
 </div>
@@ -564,9 +534,6 @@ Although it is not mandatory, by default <a href="http://rest-assured.io/">RestA
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw clean compile test</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::basics-run-tests[]</p>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -585,9 +552,6 @@ Although it is not mandatory, by default <a href="http://rest-assured.io/">RestA
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::basics-build-run-dev-mode[]</p>
 </div>
 </div>
 </div>
@@ -622,9 +586,6 @@ Only if running in Development mode
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::basics-k8s-svc-call[]</p>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -637,9 +598,6 @@ Only if running in Development mode
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.log.console.level=INFO</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::basics-update-logging-props[]</p>
 </div>
 <div class="paragraph">
 <p>Also you can configure your application logger level.
@@ -674,18 +632,12 @@ public class FruitResource {
 </div>
 </div>
 <div class="paragraph">
-<p>copyToClipboard::basics-custom-log-manager[]</p>
-</div>
-<div class="paragraph">
 <p>And configure <code>INFO</code> mode for the service to <code>$PROJECT_HOME/src/main/resources/application.properties</code>:</p>
 </div>
 <div id="basics-update-custom-logging-props" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.log.category."com.example".level=INFO</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::basics-update-custom-logging-props[]</p>
 </div>
 <div class="sect2">
 <h3 id="basics-call-svc-logging"><a class="anchor" href="#basics-call-svc-logging"></a>Invoke Service</h3>
@@ -696,9 +648,6 @@ public class FruitResource {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::basics-log-k8s-svc-call[]</p>
 </div>
 <div class="paragraph">
 <p>And if you inspect the console output, you see the logging message:</p>
@@ -725,9 +674,6 @@ Quarkus relies on MicroProfile Config specification and the main configuration i
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">greetings.message = Hello y'all!</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::basics-configuration-add-new-property[]</p>
 </div>
 </div>
 <div class="sect2">
@@ -759,9 +705,6 @@ public class FruitResource {
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::basics-configuration-get-value-code[]</p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="basics-call-configuration"><a class="anchor" href="#basics-call-configuration"></a>Invoke Service</h3>
@@ -772,9 +715,6 @@ public class FruitResource {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::basics-conf-k8s-svc-call[]</p>
 </div>
 </div>
 </div>

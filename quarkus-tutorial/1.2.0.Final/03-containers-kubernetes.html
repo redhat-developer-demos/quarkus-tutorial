@@ -367,9 +367,6 @@
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">eval $(minikube docker-env)</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::minikube-set-env[]</p>
-</div>
 <div class="ulist">
 <ul>
 <li>
@@ -381,9 +378,6 @@
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl version</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::kubectl-version[]</p>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_minishift">
@@ -399,9 +393,6 @@
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">eval $(minishift docker-env)</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::minishift-set-env[]</p>
-</div>
 <div class="ulist">
 <ul>
 <li>
@@ -413,9 +404,6 @@
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc version</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::oc-version[]</p>
 </div>
 <div class="ulist">
 <ul>
@@ -430,18 +418,12 @@
 </div>
 </div>
 <div class="paragraph">
-<p>copyToClipboard::right-openshift-project[]</p>
-</div>
-<div class="paragraph">
 <p>If you are not on <code>quarkus-tutorial</code> project, then run following command to change to <code>quarkus-tutorial</code> project:</p>
 </div>
 <div id="change-to-openshift-project" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc project quarkus-tutorial</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::change-to-openshift-project[]</p>
 </div>
 </div>
 </div>
@@ -470,18 +452,12 @@
 </div>
 </div>
 <div class="paragraph">
-<p>copyToClipboard::{section-k8s}-build-quarkus-jvm-app[]</p>
-</div>
-<div class="paragraph">
 <p>After successful maven build, run the following command to build the container - choose the terminal of the target environment you wish to use (docker, minishift or minokube) as you want to build and publish the image in the right registry:</p>
 </div>
 <div id="basics-build-quarkus-jvm-app-container" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.jvm -t example/fruits-app:1.0-SNAPSHOT .</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::{section-k8s}-build-quarkus-jvm-app-container[]</p>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset2_native-mode">
@@ -490,9 +466,13 @@
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package -Pnative -Dnative-image.docker-build=true <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::{section-k8s}-build-quarkus-native-app[]
-&lt;1&gt; Using the <code>-Dnative-image.docker-build=true</code> is very important as need a linux native binary what will be containerized.</p>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Using the <code>-Dnative-image.docker-build=true</code> is very important as need a linux native binary what will be containerized.</td>
+</tr>
+</table>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -513,9 +493,6 @@ Native compilation will take few minutes to complete.
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/fruits-app:1.0-SNAPSHOT .</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::{section-k8s}-build-quarkus-native-app-container[]</p>
 </div>
 </div>
 </div>
@@ -541,9 +518,6 @@ For sake of simplicity the container name in both native and jvm mode are named 
 </div>
 </div>
 <div class="paragraph">
-<p>copyToClipboard::build-run-jvm-app[]</p>
-</div>
-<div class="paragraph">
 <p>You can <a href="#conk8s-call-svc">Invoke Service</a> to see a response like <code>hello</code>.</p>
 </div>
 <div class="sect2">
@@ -555,9 +529,6 @@ For sake of simplicity the container name in both native and jvm mode are named 
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl $(minikube ip):8080/fruit</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::basics-k8s-svc-call[]</p>
 </div>
 <div class="paragraph">
 <p>Then you can stop the container by typing <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>.</p>
@@ -584,9 +555,6 @@ For sake of simplicity the container name in both native and jvm mode are named 
 </div>
 </div>
 <div class="paragraph">
-<p>copyToClipboard::qext-mvn-add-kubernetes-extension[]</p>
-</div>
-<div class="paragraph">
 <p>You need to configure group and name of the Docker container used to deploy into Kubernetes.</p>
 </div>
 <div class="paragraph">
@@ -597,9 +565,6 @@ For sake of simplicity the container name in both native and jvm mode are named 
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">kubernetes.group=example
 quarkus.application.name=fruits-app</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::quarkusk8s-update-props[]</p>
 </div>
 </td>
 </tr>
@@ -614,18 +579,12 @@ quarkus.application.name=fruits-app</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>copyToClipboard::quarkusk8s-generate-kubernetes[]</p>
-</div>
-<div class="paragraph">
 <p>You can inspect the generated file by accessing next file:</p>
 </div>
 <div id="quakrusk8s-generated-kubernetes-resource" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat target/kubernetes/kubernetes.yml</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::quakrusk8s-generated-kubernetes-resource[]</p>
 </div>
 <div class="sect2">
 <h3 id="conk8s-k8s-apply-resources"><a class="anchor" href="#conk8s-k8s-apply-resources"></a>Apply Kubernetes Resources</h3>
@@ -647,18 +606,12 @@ quarkus.application.name=fruits-app</code></pre>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f $TUTORIAL_HOME/target/kubernetes/kubernetes.yml</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::conk8s-run-deploy-k8s-app[]</p>
-</div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset3_oc">
 <div id="basics-oc-run-deploy-k8s-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f $TUTORIAL_HOME/target/kubernetes/kubernetes.yml</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::conk8s-oc-run-deploy-k8s-app[]</p>
 </div>
 </div>
 </div>
@@ -708,16 +661,10 @@ As generated resources creates a <code>ClusterIP</code> service, you need to pat
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl patch svc fruits-app --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"}]'</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::conk8s-k8s-run-expose-svc-nodeport[]</p>
-</div>
 <div id="container-run-deploy-k8s-service" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(minikube service -n quarkustutorial fruits-app --url)</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::conk8s-run-deploy-k8s-service[]</p>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset4_oc">
@@ -730,18 +677,12 @@ As generated resources creates a <code>ClusterIP</code> service, you need to pat
 </div>
 </div>
 <div class="paragraph">
-<p>copyToClipboard::conk8s-oc-run-expose-svc-route[]</p>
-</div>
-<div class="paragraph">
 <p>Once the service is exposed we can use the following command to get the public url:</p>
 </div>
 <div id="container-oc-run-get-route" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(oc get routes fruits-app -o jsonpath='{.spec.host}')</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::conk8s-oc-run-get-route[]</p>
 </div>
 </div>
 </div>
@@ -753,9 +694,6 @@ As generated resources creates a <code>ClusterIP</code> service, you need to pat
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl $SVC_URL/fruit</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::conk8s-call-k8s-svc[]</p>
 </div>
 </div>
 <div class="sect2">
@@ -778,18 +716,12 @@ As generated resources creates a <code>ClusterIP</code> service, you need to pat
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl delete all --all</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>copyToClipboard::{section-k8s}k8s-delete-k8s-app[]</p>
-</div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset5_oc">
 <div id="delete-basicsk8s-delete-oc-app" class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc delete all --all</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>copyToClipboard::{section-k8s}k8s-delete-oc-app[]</p>
 </div>
 </div>
 </div>
