@@ -1,7 +1,7 @@
-* xref:01-setup.adoc[1. Setup]
+* xref:01-setup.adoc[Setup]
 ** xref:01-setup.adoc#requirements[Required Tools]
 
-* xref:02-basics-fundas.adoc[2.Basics and Fundamentals]
+* xref:02-basics-fundas.adoc[Basics and Fundamentals]
 ** xref:02-basics-fundas.adoc#basics-create-quarkus-app[Create Quarkus Application]
 ** xref:02-basics-fundas.adoc#basics-ide-quarkus-project[Open Application in IDE]
 ** xref:02-basics-fundas.adoc#basics-build-run-quarkus-app[Build and Run Application]
@@ -15,21 +15,7 @@
 *** xref:02-basics-fundas.adoc#basics-configuration-get-value[Get Configuration Value]
 *** xref:02-basics-fundas.adoc#basics-call-configuration[Invoke Service]
 
-////
-ifndef::workshop[]
-* xref:03-containers-kubernetes.adoc[3. Cloud Native Deployment]
-** xref:03-containers-kubernetes.adoc#conk8s-prerequisite[Prerequisites]
-** xref:03-containers-kubernetes.adoc#conk8s-build-container-app[Containerize Quarkus Application]
-** xref:03-containers-kubernetes.adoc#conk8s-call-svc[Invoke Service]
-** xref:03-containers-kubernetes.adoc#conk8s-deploy-k8s-app[Deploy on Kubernetes]
-*** xref:03-containers-kubernetes.adoc#conk8s-deploy-k8s-app[Tag Container Images]
-*** xref:03-containers-kubernetes.adoc#conk8s-k8s-apply-resources[Apply Kubernetes Resources]
-*** xref:03-containers-kubernetes.adoc#conk8s-invoke-k8s-svc[Invoke Kubernetes Service]
-*** xref:03-containers-kubernetes.adoc#conk8s-delete-k8s-app[Delete Kubernetes Resources]
-endif::workshop[]
-////
-
-* xref:05-quarkus-panache.adoc[3. Hibernate with Quarkus]
+* xref:05-quarkus-panache.adoc[Hibernate with Quarkus]
 ** xref:05-quarkus-panache.adoc#quarkusp-demo-overview[Demo Overview]
 ** xref:05-quarkus-panache.adoc#quarkusp-fruitapp-dev[Build and Deploy]
 *** xref:05-quarkus-panache.adoc#quarkus-fruit-app-db[Deploy Mariadb]
@@ -39,19 +25,7 @@ endif::workshop[]
 *** xref:05-quarkus-panache.adoc#quarkusp-edit-fruit-resource[Update Fruit Resource]
 *** xref:05-quarkus-panache.adoc#quarkusp-fruits-finder[Finders]
 
-////
-** xref:05-quarkus-panache.adoc#quarkusp-testing[Testing]
-ifndef::workshop[]
-** xref:05-quarkus-panache.adoc#quarkusp-cloud-dev[Deploy on Kubernetes]
-*** xref:05-quarkus-panache.adoc#quarkusp-cloud-dev-build-container[Build Containers]
-*** xref:05-quarkus-panache.adoc#quarkusp-cloud-dev-prepare-app[Prepare Kubernetes Application]
-*** xref:05-quarkus-panache.adoc#quarkusp-cloud-dev-apply-resources[Apply Resources]
-*** xref:05-quarkus-panache.adoc#quarkusp-invoke-k8s-svc[Invoke Service]
-*** xref:05-quarkus-panache.adoc#quarkusp-persistence-k8s-delete-resources[Delete Kubernetes Resource]
-endif::workshop[]
-////
-
-* xref:04-quarkus-extensions.adoc[4. Quarkus Extensions]
+* xref:04-quarkus-extensions.adoc[Quarkus Extensions]
 ** xref:04-quarkus-extensions.adoc#qext-intro[What are Extensions ?]
 ** xref:04-quarkus-extensions.adoc#qext-list-extensions[List Extensions]
 ** xref:04-quarkus-extensions.adoc#qext-rest-client[Rest Client]
@@ -93,7 +67,7 @@ endif::workshop[]
 *** xref:04-quarkus-extensions.adoc#qext-jwt-inject-rbac[Add RBAC]
 *** xref:04-quarkus-extensions.adoc#qext-call-jwt-rbac[Invoke Endpoint]
 
-* xref:06-quarkus-reactive.adoc[5. Reactive Programming with Quarkus]
+* xref:06-quarkus-reactive.adoc[Reactive Programming with Quarkus]
 ** xref:06-quarkus-reactive.adoc#quarkusrpb-demo-overview[Beer Demo Overview]
 *** xref:06-quarkus-reactive.adoc#quarkusrpb-buld-beer-reactive[Build Beer Service]
 *** xref:06-quarkus-reactive.adoc#qext-reactive-beer-run-quarkus-app-dev-mode[Run Quarkus Application with Beer Service]

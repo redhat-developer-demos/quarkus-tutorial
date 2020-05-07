@@ -1,0 +1,32 @@
+runtime:
+  cache_dir: ./.cache/antora
+
+site:
+  title: Quarkus Tutorial
+  url: https://redhat-developer-demos.github.io/quarkus-tutorial
+  start_page: quarkus-tutorial::index.adoc
+
+content:
+  sources:
+    - url: ./
+      start_path: documentation
+
+asciidoc:
+  attributes:
+    tutorial-namespace: quarkus-tutorial
+    quarkus-version: 1.4.2.Final
+    graalvm-version: 20.0.0
+  extensions:
+    - ./lib/tab-block.js
+    - ./lib/remote-include-processor.js
+ui:
+  bundle:
+    url: https://github.com/redhat-developer-demos/rhd-tutorial-ui/releases/download/v0.1.9/ui-bundle.zip
+  supplemental_files: 
+    - path: ./supplemental-ui
+    - path: .nojekyll
+    - path: ui.yml
+      contents: "static_files: [ .nojekyll ]"
+ 
+output:
+  dir: ./gh-pages

@@ -13,47 +13,4 @@ image::Developer_Joy.png[Developer Joy,400,400,align="center"]
 [.tiles.browse]
 == Browse modules
 
-[.tile]
-.xref:01-setup.adoc[Get Started]
-* xref:01-setup.adoc#requirements[Requirements]
-////
-ifndef::workshop[]
-* xref:01-setup.adoc#kubernetes-cluster[Setup Kubernetes Cluster]
-endif::workshop[]
-////
-
-[.tile]
-.xref:02-basics-fundas.adoc[Basics and Fundamentals]
-* xref:02-basics-fundas.adoc#basics-create-quarkus-app[Create my first Quarkus application]
-* xref:02-basics-fundas.adoc#basics-build-run-quarkus-app[Build and Run Application locally]
-* xref:02-basics-fundas.adoc#basics-logging[Logging]
-* xref:02-basics-fundas.adoc#basics-configuration[Custom Configuration]
-////
-ifndef::workshop[]
-* xref:03-containers-kubernetes.adoc#conk8s-build-container-app[Containerize Quarkus Application]
-* xref:03-containers-kubernetes.adoc#conk8s-call-svc[Deploy on Kubernetes]
-endif::workshop[]
-////
-
-[.tile]
-.xref:05-quarkus-panache.adoc[Database Interactive Applications]
-* xref:05-quarkus-panache.adoc#quarkusp-fruitapp-dev[Build a Quarkus Hibernate Application]
-* xref:05-quarkus-panache.adoc#quarkusp-what-is-panache[Enhance Hibernate ORM with Panache]
-
-[.tile]
-.xref:04-quarkus-extensions.adoc[Quarkus Extensions]
-* xref:04-quarkus-extensions.adoc#qext-list-extensions[List Extensions]
-* xref:04-quarkus-extensions.adoc#qext-rest-client[Rest Client]
-* xref:04-quarkus-extensions.adoc#qext-fault-tolerance[Fault Tolerance]
-* xref:04-quarkus-extensions.adoc#qext-health-checks[Health Checks]
-* xref:04-quarkus-extensions.adoc#qext-jwt[JWT RBAC]
-
-////
-ifndef::workshop[]
-* xref:05-quarkus-panache.adoc#quarkusp-cloud-dev[Deploy on Kubernetes]
-endif::workshop[]
-////
-
-[.tile]
-.xref:06-quarkus-reactive.adoc[Reactive Programming in Quarkus]
-* xref:06-quarkus-reactive.adoc#quarkusrpb-demo-overview[Reactive Programming REST API calls]
+include::../nav.adoc[]
