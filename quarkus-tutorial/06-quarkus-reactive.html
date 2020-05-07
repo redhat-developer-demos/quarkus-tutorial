@@ -358,7 +358,7 @@ For the easier reference, we shall call the <code>fruits-app</code> project fold
 </div>
 <div class="sect3">
 <h4 id="quarkusrpb-add-reactive"><a class="anchor" href="#quarkusrpb-add-reactive"></a>Add Extensions</h4>
-<div id="qext-mvn-add-reactive-extensions" class="listingblock">
+<div id="qext-mvn-add-reactive-extensions" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-rest-client, quarkus-smallrye-reactive-streams-operators"</code></pre>
 </div>
@@ -372,7 +372,7 @@ For the easier reference, we shall call the <code>fruits-app</code> project fold
 <div class="paragraph">
 <p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>Beer</code> with the following contents:</p>
 </div>
-<div id="qext-quarkusrpb-beer-pojo" class="listingblock">
+<div id="qext-quarkusrpb-beer-pojo" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
 
@@ -392,7 +392,7 @@ public class Beer {
 <div class="paragraph">
 <p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>BeerGateway</code> with the following contents:</p>
 </div>
-<div id="qext-quarkusrpb-beer-client" class="listingblock">
+<div id="qext-quarkusrpb-beer-client" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
 
@@ -432,7 +432,7 @@ public interface BeerGateway {
 <div class="paragraph">
 <p>Add the following properties to $PROJECT_HOME/src/main/resources/application.properties:</p>
 </div>
-<div id="qext-quarkusrpb-update-props" class="listingblock">
+<div id="qext-quarkusrpb-update-props" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">com.example.BeerGateway/mp-rest/url=https://api.punkapi.com</code></pre>
 </div>
@@ -447,7 +447,7 @@ public interface BeerGateway {
 <div class="paragraph">
 <p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>BeerService</code> with the following contents:</p>
 </div>
-<div id="qext-quarkusrpb-beer-service" class="listingblock">
+<div id="qext-quarkusrpb-beer-service" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code>package com.example;
 
@@ -519,7 +519,7 @@ The caller is responsible to manipulate this information as it starts receiving 
 <div class="paragraph">
 <p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>BeerResource</code> with the following contents:</p>
 </div>
-<div id="qext-quarkusrpb-beer-resource" class="listingblock">
+<div id="qext-quarkusrpb-beer-resource" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
 
@@ -582,7 +582,7 @@ If the operation is canceled/aborted before completion, then you also save IO by
 <div class="paragraph">
 <p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
 </div>
-<div id="beer-reactive-build-run-dev" class="listingblock">
+<div id="beer-reactive-build-run-dev" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
@@ -592,7 +592,7 @@ If the operation is canceled/aborted before completion, then you also save IO by
 <div class="paragraph">
 <p>The simple <code>beer</code> REST URI can be called via browser using <a href="http://localhost:8080/beer" class="bare">http://localhost:8080/beer</a> or using CLI like:</p>
 </div>
-<div id="beer-reactive-k8s-svc-call" class="listingblock">
+<div id="beer-reactive-k8s-svc-call" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/beer</code></pre>
 </div>
@@ -600,7 +600,7 @@ If the operation is canceled/aborted before completion, then you also save IO by
 <div class="paragraph">
 <p>The REST call about should return an response like:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">[
    {

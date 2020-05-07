@@ -341,7 +341,7 @@
 <div class="paragraph">
 <p>Create an empty folder called <code>quarkus-tutorial</code>. We&#8217;ll call it our <code>$TUTORIAL_HOME</code>.</p>
 </div>
-<div id="create-tutorial-folder" class="listingblock">
+<div id="create-tutorial-folder" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir quarkus-tutorial &amp;&amp; cd quarkus-tutorial
 export TUTORIAL_HOME=`pwd`</code></pre>
@@ -350,14 +350,14 @@ export TUTORIAL_HOME=`pwd`</code></pre>
 <div class="paragraph">
 <p>Create the <code>fruits-app</code> folder and navigate to the folder:</p>
 </div>
-<div id="quarkusp-nav-to-work-folder" class="listingblock">
+<div id="quarkusp-nav-to-work-folder" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir -p $TUTORIAL_HOME/work &amp;&amp; cd $TUTORIAL_HOME/work
 # set the Quarkus release environment variable
 export QUARKUS_VERSION=master</code></pre>
 </div>
 </div>
-<div id="quarkusp-mv-create-fruits-app" class="listingblock">
+<div id="quarkusp-mv-create-fruits-app" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn "io.quarkus:quarkus-maven-plugin:${QUARKUS_VERSION}:create" \
   -DprojectGroupId="com.example" \
@@ -379,7 +379,7 @@ cd fruits-app</code></pre>
 <div class="paragraph">
 <p>If you are using <strong>vscode</strong> you can open the project by:</p>
 </div>
-<div id="basics-ide-quarkus-project" class="listingblock">
+<div id="basics-ide-quarkus-project" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">code .</code></pre>
 </div>
@@ -420,7 +420,7 @@ All further sections of this tutorial assumes the application name to be <code>f
 </div>
 <div class="content">
 <div class="tab-pane" aria-labelledby="tabset1_jvm-mode">
-<div id="basics-build-quarkus-jvm-app" class="listingblock">
+<div id="basics-build-quarkus-jvm-app" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work/fruits-app &amp;&amp; \
 ./mvnw -DskipTests clean package</code></pre>
@@ -429,14 +429,14 @@ All further sections of this tutorial assumes the application name to be <code>f
 <div class="paragraph">
 <p>To run the application in jvm mode</p>
 </div>
-<div id="basics-build-run-jvm-app" class="listingblock">
+<div id="basics-build-run-jvm-app" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">java -jar target/fruits-app-1.0-SNAPSHOT-runner.jar</code></pre>
 </div>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_native-mode">
-<div id="basics-build-quarkus-native-app" class="listingblock">
+<div id="basics-build-quarkus-native-app" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work/fruits-app &amp;&amp; \
 ./mvnw -DskipTests clean package -Pnative</code></pre>
@@ -457,7 +457,7 @@ Native compilation will take few minutes to complete.
 <div class="paragraph">
 <p>To run the application in native mode</p>
 </div>
-<div id="basics-build-run-native-app" class="listingblock">
+<div id="basics-build-run-native-app" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./target/fruits-app-1.0-SNAPSHOT-runner</code></pre>
 </div>
@@ -478,7 +478,7 @@ Native compilation will take few minutes to complete.
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_native-container-build-mode">
-<div id="basics-build-quarkus-native-docker-app" class="listingblock">
+<div id="basics-build-quarkus-native-docker-app" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work/fruits-app &amp;&amp; \
 ./mvnw package -DskipTests -Pnative -Dquarkus.native.container-build=true</code></pre>
@@ -499,7 +499,7 @@ Native compilation will take few minutes to complete.
 <div class="paragraph">
 <p>To run the application in native mode you need to build a Docker image using the native file generated in previous step:</p>
 </div>
-<div id="basics-build-run-native-docker-app" class="listingblock">
+<div id="basics-build-run-native-docker-app" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/fruits-app:1.0-SNAPSHOT . &amp;&amp; \
 docker run -it --rm -p 8080:8080 example/fruits-app:1.0-SNAPSHOT</code></pre>
@@ -529,7 +529,7 @@ Although it is not mandatory, by default <a href="http://rest-assured.io/">RestA
 <div class="paragraph">
 <p>You can run the test either in IDE or by running Maven:</p>
 </div>
-<div id="basics-run-tests" class="listingblock">
+<div id="basics-run-tests" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw clean compile test</code></pre>
 </div>
@@ -548,7 +548,7 @@ Although it is not mandatory, by default <a href="http://rest-assured.io/">RestA
 <div class="paragraph">
 <p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
 </div>
-<div id="basics-build-run-dev" class="listingblock">
+<div id="basics-build-run-dev" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
@@ -581,7 +581,7 @@ Only if running in Development mode
 <div class="paragraph">
 <p>The simple <code>hello</code> REST URI can be called from the browser using <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a> or using cli in a new terminal window like:</p>
 </div>
-<div id="basics-k8s-svc-call" class="listingblock">
+<div id="basics-k8s-svc-call" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit</code></pre>
 </div>
@@ -594,7 +594,7 @@ Only if running in Development mode
 <div class="paragraph">
 <p>You can configure Quarkus logging by setting the following parameters to <code>$PROJECT_HOME/src/main/resources/application.properties</code>:</p>
 </div>
-<div id="basics-update-logging-props" class="listingblock">
+<div id="basics-update-logging-props" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.log.console.level=INFO</code></pre>
 </div>
@@ -606,7 +606,7 @@ Let&#8217;s add a logger and configure it.</p>
 <div class="paragraph">
 <p>Open the following Java class <code>$PROJECT_HOME/src/main/java/com/example/FruitResource.java</code> and copy the next content in its body:</p>
 </div>
-<div id="basics-custom-log-manager" class="listingblock">
+<div id="basics-custom-log-manager" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
 
@@ -634,7 +634,7 @@ public class FruitResource {
 <div class="paragraph">
 <p>And configure <code>INFO</code> mode for the service to <code>$PROJECT_HOME/src/main/resources/application.properties</code>:</p>
 </div>
-<div id="basics-update-custom-logging-props" class="listingblock">
+<div id="basics-update-custom-logging-props" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.log.category."com.example".level=INFO</code></pre>
 </div>
@@ -644,7 +644,7 @@ public class FruitResource {
 <div class="paragraph">
 <p>The simple <code>hello</code> REST URI can be called from the browser using <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a> or using cli like:</p>
 </div>
-<div id="basics-log-k8s-svc-call" class="listingblock">
+<div id="basics-log-k8s-svc-call" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit</code></pre>
 </div>
@@ -652,8 +652,10 @@ public class FruitResource {
 <div class="paragraph">
 <p>And if you inspect the console output, you see the logging message:</p>
 </div>
-<div class="paragraph">
-<p><code>2019-12-11 14:00:56,219 INFO  [com.exa.FruitResource] (vert.x-worker-thread-2) Hello method is called.</code></p>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">`2019-12-11 14:00:56,219 INFO  [com.exa.FruitResource] (vert.x-worker-thread-2) Hello method is called.`</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -670,7 +672,7 @@ Quarkus relies on MicroProfile Config specification and the main configuration i
 <div class="paragraph">
 <p>Add the following property to <code>$PROJECT_HOME/src/main/resources/application.properties</code>:</p>
 </div>
-<div id="basics-configuration-add-new-property" class="listingblock">
+<div id="basics-configuration-add-new-property" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">greetings.message = Hello y'all!</code></pre>
 </div>
@@ -681,7 +683,7 @@ Quarkus relies on MicroProfile Config specification and the main configuration i
 <div class="paragraph">
 <p>Open the following Java class <code>$PROJECT_HOME/src/main/java/com/example/FruitResource.java</code> and copy the next content in its body:</p>
 </div>
-<div id="basics-configuration-get-value-code" class="listingblock">
+<div id="basics-configuration-get-value-code" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
 
@@ -711,7 +713,7 @@ public class FruitResource {
 <div class="paragraph">
 <p>The simple <code>hello</code> REST URI can be called from the browser using <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a> or using cli like:</p>
 </div>
-<div id="basics-conf-k8s-svc-call" class="listingblock">
+<div id="basics-conf-k8s-svc-call" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit</code></pre>
 </div>

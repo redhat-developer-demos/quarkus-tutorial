@@ -320,7 +320,7 @@
 <div class="ulist checklist">
 <ul class="checklist">
 <li>
-<p><i class="fa fa-check-square-o"></i> What is Quarkus Extensions ?</p>
+<p><i class="fa fa-check-square-o"></i> What are Quarkus Extensions ?</p>
 </li>
 <li>
 <p><i class="fa fa-check-square-o"></i> How to add them to your Quarkus project?</p>
@@ -358,7 +358,7 @@
 <div class="paragraph">
 <p>Navigate to the tutorial&#8217;s <code>work</code> folder or the root folder where you created the project:</p>
 </div>
-<div id="qext-nav-to-work-folder" class="listingblock">
+<div id="qext-nav-to-work-folder" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work</code></pre>
 </div>
@@ -378,7 +378,7 @@ The instructions of this section assumes your project name to be <code>fruits-ap
 <div class="paragraph">
 <p>To list the available extensions, run the following command from your project directory.</p>
 </div>
-<div id="qext-mvn-list-extensions" class="listingblock">
+<div id="qext-mvn-list-extensions" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd fruits-app &amp;&amp; \
 ./mvnw quarkus:list-extensions</code></pre>
@@ -404,7 +404,7 @@ Two endpoints are the important ones for this workshop:</p>
 </li>
 </ul>
 </div>
-<div class="listingblock">
+<div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">[{
     "genus": "Malus",
@@ -430,7 +430,7 @@ Two endpoints are the important ones for this workshop:</p>
 </li>
 </ul>
 </div>
-<div class="listingblock">
+<div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
     "genus": "Musa",
@@ -453,7 +453,7 @@ Two endpoints are the important ones for this workshop:</p>
 <div class="paragraph">
 <p>To add Rest Client and JSON-B extensions (<code>quarkus-rest-client, quarkus-resteasy-jsonb</code>) to the Quarkus application, run the following command from <code>fruits-app</code> project directory:</p>
 </div>
-<div id="qext-mvn-add-rest-client-extension" class="listingblock">
+<div id="qext-mvn-add-rest-client-extension" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-rest-client, quarkus-resteasy-jsonb"</code></pre>
 </div>
@@ -467,7 +467,7 @@ Two endpoints are the important ones for this workshop:</p>
 <div class="paragraph">
 <p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>FruityVice.java</code> with the following contents:</p>
 </div>
-<div id="quarkusrc-fruity-vice-pojo" class="listingblock">
+<div id="quarkusrc-fruity-vice-pojo" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
 
@@ -527,7 +527,7 @@ public class FruityVice {
 <div class="paragraph">
 <p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>FruityViceService.java</code> with the following contents:</p>
 </div>
-<div id="quarkusrc-fruity-vice-service" class="listingblock">
+<div id="quarkusrc-fruity-vice-service" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
 
@@ -564,7 +564,7 @@ public interface FruityViceService {
 <div class="paragraph">
 <p>Add the following properties to <code>$PROJECT_HOME/src/main/resources/application.properties</code>:</p>
 </div>
-<div id="quarkusrc-config-fruity-update-props" class="listingblock">
+<div id="quarkusrc-config-fruity-update-props" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">com.example.FruityViceService/mp-rest/url=http://www.fruityvice.com</code></pre>
 </div>
@@ -575,7 +575,7 @@ public interface FruityViceService {
 <div class="paragraph">
 <p>Open the following Java class <code>$PROJECT_HOME/src/main/java/com/example/FruitResource.java</code> and copy the next content in its body:</p>
 </div>
-<div id="quarkusrc-fruity-vice-service-inject" class="listingblock">
+<div id="quarkusrc-fruity-vice-service-inject" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@RestClient
 FruityViceService fruityViceService;
@@ -597,7 +597,7 @@ public FruityVice getFruitInfoByName(@PathParam("name") String name) {
 <div class="paragraph">
 <p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
 </div>
-<div id="rest-client-build-run-dev" class="listingblock">
+<div id="rest-client-build-run-dev" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
@@ -607,7 +607,7 @@ public FruityVice getFruitInfoByName(@PathParam("name") String name) {
 <div class="paragraph">
 <p>The simple <code>fruit/banana</code> REST URI can be called via browser using <a href="http://localhost:8080/fruit/banana" class="bare">http://localhost:8080/fruit/banana</a> or using CLI like:</p>
 </div>
-<div id="rest-client-k8s-svc-call" class="listingblock">
+<div id="rest-client-k8s-svc-call" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
 </div>
@@ -615,7 +615,7 @@ public FruityVice getFruitInfoByName(@PathParam("name") String name) {
 <div class="paragraph">
 <p>The REST call should return an response like:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
     "name":"Banana",
@@ -641,7 +641,7 @@ Quarkus integrates with <a href="https://github.com/eclipse/microprofile-fault-t
 <div class="paragraph">
 <p>To add Fault Tolernace extension (<code>quarkus-smallrye-fault-tolerance</code>) to the Quarkus application, run the following command from <code>fruits-app</code> project directory:</p>
 </div>
-<div id="qext-mvn-add-fault-tolernace-extension" class="listingblock">
+<div id="qext-mvn-add-fault-tolernace-extension" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-smallrye-fault-tolerance"</code></pre>
 </div>
@@ -655,7 +655,7 @@ Quarkus integrates with <a href="https://github.com/eclipse/microprofile-fault-t
 <div class="paragraph">
 <p>Add the <code>org.eclipse.microprofile.faulttolerance.Retry</code> annotation to <code>$PROJECT_HOME/src/main/java/java/com/example/FruityViceService.java</code>:</p>
 </div>
-<div id="quarkusft-retry-fruit-vice-service" class="listingblock">
+<div id="quarkusft-retry-fruit-vice-service" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">@GET
 @Path("/fruit/{name}")
@@ -673,7 +673,7 @@ public FruityVice getFruitByName(@PathParam("name") String name);</code></pre>
 <div class="paragraph">
 <p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
 </div>
-<div id="fault-tolerance-build-run-dev" class="listingblock">
+<div id="fault-tolerance-build-run-dev" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
@@ -684,7 +684,7 @@ public FruityVice getFruitByName(@PathParam("name") String name);</code></pre>
 <div class="paragraph">
 <p>The simple <code>fruit/banana</code> REST URI can be called via browser using <a href="http://localhost:8080/fruit/banana" class="bare">http://localhost:8080/fruit/banana</a> or using CLI like:</p>
 </div>
-<div id="fault-tolerance-retry-cli-svc-call" class="listingblock">
+<div id="fault-tolerance-retry-cli-svc-call" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
 </div>
@@ -692,7 +692,7 @@ public FruityVice getFruitByName(@PathParam("name") String name);</code></pre>
 <div class="paragraph">
 <p>The REST call should return an response like:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
     "name":"Banana",
@@ -707,7 +707,7 @@ public FruityVice getFruitByName(@PathParam("name") String name);</code></pre>
 <p>No change from calls done previously, but now switch off your network so you do not have access to <a href="http://www.fruityvice.com" class="bare">http://www.fruityvice.com</a>.
 And make again a request to <a href="http://localhost:8080/fruit/banana" class="bare">http://localhost:8080/fruit/banana</a>.</p>
 </div>
-<div id="fault-tolerance-retry-no-network-cli-svc-call" class="listingblock">
+<div id="fault-tolerance-retry-no-network-cli-svc-call" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
 </div>
@@ -724,7 +724,7 @@ And make again a request to <a href="http://localhost:8080/fruit/banana" class="
 <div class="paragraph">
 <p>Add the <code>org.eclipse.microprofile.faulttolerance.Fallback</code> annotation to <code>$PROJECT_HOME/src/main/java/java/com/example/FruityViceService.java</code>:</p>
 </div>
-<div id="quarkusft-fallback-fruit-vice-service" class="listingblock">
+<div id="quarkusft-fallback-fruit-vice-service" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">@GET
 @Path("/fruit/{name}")
@@ -753,7 +753,7 @@ If the error persits, then the fallback method is executed.</p>
 <div class="paragraph">
 <p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
 </div>
-<div id="fault-tolerance-fallback-build-run-dev" class="listingblock">
+<div id="fault-tolerance-fallback-build-run-dev" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
@@ -764,7 +764,7 @@ If the error persits, then the fallback method is executed.</p>
 <div class="paragraph">
 <p>The simple <code>fruit/banana</code> REST URI can be called via browser using <a href="http://localhost:8080/fruit/banana" class="bare">http://localhost:8080/fruit/banana</a> or using CLI like:</p>
 </div>
-<div id="fault-tolerance-fallback-k8s-svc-call" class="listingblock">
+<div id="fault-tolerance-fallback-k8s-svc-call" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
 </div>
@@ -786,7 +786,7 @@ If the error persits, then the fallback method is executed.</p>
 <div class="paragraph">
 <p>Remove previous annotations of fallback and retry policies and add the following annotation to <code>$PROJECT_HOME/src/main/java/java/com/example/FruityViceService.java</code>:</p>
 </div>
-<div id="quarkusft-circuit-breaker-fruit-vice-service" class="listingblock">
+<div id="quarkusft-circuit-breaker-fruit-vice-service" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">@GET
 @Path("/fruit/{name}")
@@ -814,7 +814,7 @@ If the invocation succeeds then the circuit is back to closed again.</p>
 <div class="paragraph">
 <p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
 </div>
-<div id="fault-tolerance-circuit-breaker-build-run-dev" class="listingblock">
+<div id="fault-tolerance-circuit-breaker-build-run-dev" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
@@ -825,7 +825,7 @@ If the invocation succeeds then the circuit is back to closed again.</p>
 <div class="paragraph">
 <p>Do 5 consecutive calls to the service, <code>fruit/banana</code> REST URI can be called via browser using <a href="http://localhost:8080/fruit/banana" class="bare">http://localhost:8080/fruit/banana</a> or using CLI like:</p>
 </div>
-<div id="fault-tolerance-cb-k8s-svc-call" class="listingblock">
+<div id="fault-tolerance-cb-k8s-svc-call" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit/banana</code></pre>
 </div>
@@ -874,7 +874,7 @@ You can use <code>@Retry</code> and <code>@Fallback</code> annotations together 
 <div class="paragraph">
 <p>To add <code>quarkus-smallrye-health</code> to the Quarkus application, run the following command from <code>fruits-app</code> project directory:</p>
 </div>
-<div id="qext-mvn-add-extension" class="listingblock">
+<div id="qext-mvn-add-extension" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-smallrye-health"</code></pre>
 </div>
@@ -882,15 +882,13 @@ You can use <code>@Retry</code> and <code>@Fallback</code> annotations together 
 <div class="paragraph">
 <p>After successful execution of the above command, you will have the following dependency added to the <code>fruits-app</code> project&#8217;s pom.xml:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="title">pom.xml</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">...
-    &lt;dependency&gt;
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">    &lt;dependency&gt;
       &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
       &lt;artifactId&gt;quarkus-smallrye-health&lt;/artifactId&gt;
-    &lt;/dependency&gt;
-...</code></pre>
+    &lt;/dependency&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -899,7 +897,7 @@ You can use <code>@Retry</code> and <code>@Fallback</code> annotations together 
 <div class="paragraph">
 <p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
 </div>
-<div id="health-check-default-build-run-dev" class="listingblock">
+<div id="health-check-default-build-run-dev" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
@@ -910,7 +908,7 @@ You can use <code>@Retry</code> and <code>@Fallback</code> annotations together 
 <div class="paragraph">
 <p>The simple <code>health</code> REST URI can be called via browser using <code><a href="http://localhost:8080/health" class="bare">http://localhost:8080/health</a></code> or using CLI like:</p>
 </div>
-<div id="basics-health-check-k8s-svc-call" class="listingblock">
+<div id="basics-health-check-k8s-svc-call" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/health</code></pre>
 </div>
@@ -918,7 +916,7 @@ You can use <code>@Retry</code> and <code>@Fallback</code> annotations together 
 <div class="paragraph">
 <p>The REST call about should return an response like:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
     "checks": [],
@@ -952,7 +950,7 @@ Moreover, Kubernetes provides the concept of liveness and readiness probe to reg
 <p>Let&#8217;s create a custom check for both liveness and readiness checks.
 Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>FruitHealthCheck</code> with the following contents:</p>
 </div>
-<div id="quarkusp-fruit-checks" class="listingblock">
+<div id="quarkusp-fruit-checks" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
 
@@ -994,7 +992,7 @@ public class FruitHealthCheck {
 <div class="paragraph">
 <p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
 </div>
-<div id="health-check-custom-build-run-dev" class="listingblock">
+<div id="health-check-custom-build-run-dev" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
@@ -1005,7 +1003,7 @@ public class FruitHealthCheck {
 <div class="paragraph">
 <p>The simple <code>health</code> REST URI can be called via browser using <code><a href="http://localhost:8080/health" class="bare">http://localhost:8080/health</a></code> or using CLI like:</p>
 </div>
-<div id="custom-health-k8s-svc-call" class="listingblock">
+<div id="custom-health-k8s-svc-call" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/health</code></pre>
 </div>
@@ -1013,7 +1011,7 @@ public class FruitHealthCheck {
 <div class="paragraph">
 <p>The REST call about should return an response like:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
     "status": "UP",
@@ -1033,7 +1031,7 @@ public class FruitHealthCheck {
 <div class="paragraph">
 <p>But also you can invoke them individually by calling <code>/health/live</code> and <code>/health/ready</code>.</p>
 </div>
-<div id="custom-health-live-k8s-svc-call" class="listingblock">
+<div id="custom-health-live-k8s-svc-call" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/health/live</code></pre>
 </div>
@@ -1041,7 +1039,7 @@ public class FruitHealthCheck {
 <div class="paragraph">
 <p>The REST call about should return an response like:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
     "status": "UP",
@@ -1054,7 +1052,7 @@ public class FruitHealthCheck {
 }</code></pre>
 </div>
 </div>
-<div id="custom-health-ready-k8s-svc-call" class="listingblock">
+<div id="custom-health-ready-k8s-svc-call" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/health/ready</code></pre>
 </div>
@@ -1062,7 +1060,7 @@ public class FruitHealthCheck {
 <div class="paragraph">
 <p>The REST call about should return an response like:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
     "status": "UP",
@@ -1094,7 +1092,7 @@ public class FruitHealthCheck {
 <div class="paragraph">
 <p>If you have not deployed the application previously, you need to add Quarkus Kubernetes extension. This extension uses <a href="https://github.com/dekorateio/dekorate">Dekorate</a> to generate a default Kubernetes resource template.</p>
 </div>
-<div id="qext-mvn-add-kubernetes-extension" class="listingblock">
+<div id="qext-mvn-add-kubernetes-extension" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextensions="quarkus-kubernetes"</code></pre>
 </div>
@@ -1105,7 +1103,7 @@ public class FruitHealthCheck {
 <div class="paragraph">
 <p>Add the following properties (if you haven&#8217;t already done it before) to $PROJECT_HOME/src/main/resources/application.properties:</p>
 </div>
-<div id="quarkusk8s-update-props" class="listingblock">
+<div id="quarkusk8s-update-props" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">kubernetes.group=example
 quarkus.application.name=fruits-app</code></pre>
@@ -1118,7 +1116,7 @@ quarkus.application.name=fruits-app</code></pre>
 <div class="paragraph">
 <p>Now you need to run Maven goal to generate Kubernetes resource.</p>
 </div>
-<div id="quarkusk8s-generate-kubernetes" class="listingblock">
+<div id="quarkusk8s-generate-kubernetes" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw package -DskipTests</code></pre>
 </div>
@@ -1126,7 +1124,7 @@ quarkus.application.name=fruits-app</code></pre>
 <div class="paragraph">
 <p>You can inspect the generated file by accessing next file:</p>
 </div>
-<div id="quakrusk8s-generated-kubernetes-resource" class="listingblock">
+<div id="quakrusk8s-generated-kubernetes-resource" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat target/kubernetes/kubernetes.yml</code></pre>
 </div>
@@ -1144,14 +1142,14 @@ quarkus.application.name=fruits-app</code></pre>
 </div>
 <div class="content">
 <div class="tab-pane" aria-labelledby="tabset1_kubectl">
-<div id="health-checkk8s-delete-k8s-app" class="listingblock">
+<div id="health-checkk8s-delete-k8s-app" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl delete all --all</code></pre>
 </div>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_oc">
-<div id="health-checkk8s-delete-oc-app" class="listingblock">
+<div id="health-checkk8s-delete-oc-app" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc delete all --all</code></pre>
 </div>
@@ -1177,7 +1175,7 @@ Quarkus provides an integration to the <a href="https://github.com/eclipse/micro
 <div class="paragraph">
 <p>To add JWT RBAC extension (<code>quarkus-smallrye-jwt</code>) to the Quarkus application, run the following command from <code>fruits-app</code> project directory:</p>
 </div>
-<div id="qext-mvn-add-jwt-extension" class="listingblock">
+<div id="qext-mvn-add-jwt-extension" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-smallrye-jwt"</code></pre>
 </div>
@@ -1188,7 +1186,7 @@ Quarkus provides an integration to the <a href="https://github.com/eclipse/micro
 <div class="paragraph">
 <p>Add the following properties to <code>$PROJECT_HOME/src/main/resources/application.properties</code>:</p>
 </div>
-<div id="quarkussec-config-jwt" class="listingblock">
+<div id="quarkussec-config-jwt" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">mp.jwt.verify.publickey.location=https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/0c6d1ed65d38e4dd48992f7410a29aa4e5a35131/quarkus.jwt.pub.jwk.json
 <i class="conum" data-value="1"></i><b>(1)</b>
@@ -1211,7 +1209,7 @@ mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac
 <div class="paragraph">
 <p>We are also providing a valid token that can be verified by the configured public key:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">{
   "kid": "/privateKey.pem",
@@ -1263,7 +1261,7 @@ mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac
 <div class="paragraph">
 <p>Open <code>$PROJECT_HOME/src/main/java/java/com/example/FruitResource.java</code> and inject username claim:</p>
 </div>
-<div id="quarkussec-jwt-claim-username" class="listingblock">
+<div id="quarkussec-jwt-claim-username" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">@Inject @Claim(standard = Claims.preferred_username)
 String username;
@@ -1287,7 +1285,7 @@ public String getClaim() {
 <div class="paragraph">
 <p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
 </div>
-<div id="jwt-claim-dev-build-run-dev" class="listingblock">
+<div id="jwt-claim-dev-build-run-dev" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
 </div>
@@ -1297,7 +1295,7 @@ public String getClaim() {
 <div class="paragraph">
 <p>The simple <code>fruit/claim</code> REST URI can be called via browser using <a href="http://localhost:8080/fruit/claim" class="bare">http://localhost:8080/fruit/claim</a> or using CLI like:</p>
 </div>
-<div id="jwt-claim-k8s-svc-call" class="listingblock">
+<div id="jwt-claim-k8s-svc-call" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/5f8c5b7a9c11ed455f4910ed2032d79612b5e6f6/quarkus.jwt.token -s)
 curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
@@ -1313,7 +1311,7 @@ These validations include for example that the token has not been modified, has 
 <div class="paragraph">
 <p>To validate this just invoke again the service but changing the token:</p>
 </div>
-<div id="jwt-claim-k8s-svc-call" class="listingblock">
+<div id="jwt-claim-k8s-svc-call" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=XXXX
 curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
@@ -1332,7 +1330,7 @@ For this case you need to use a role that is defined in JWT token into <code>gro
 <div class="paragraph">
 <p>Open <code>$PROJECT_HOME/src/main/java/java/com/example/FruitResource.java</code> and annotate the method with <code>javax.annotation.security.RolesAllowed</code>:</p>
 </div>
-<div id="quarkussec-jwt-rbac" class="listingblock">
+<div id="quarkussec-jwt-rbac" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">@GET
 @Path("/claim")
@@ -1348,7 +1346,7 @@ public String getClaim() {
 <div class="paragraph">
 <p>The simple <code>fruit/claim</code> REST URI can be called via browser using <a href="http://localhost:8080/fruit/claim" class="bare">http://localhost:8080/fruit/claim</a> or using CLI like:</p>
 </div>
-<div id="rjwt-rbac-k8s-svc-call" class="listingblock">
+<div id="rjwt-rbac-k8s-svc-call" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/5f8c5b7a9c11ed455f4910ed2032d79612b5e6f6/quarkus.jwt.token -s)
 curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
@@ -1363,7 +1361,7 @@ curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
 <div class="paragraph">
 <p>Open <code>$PROJECT_HOME/src/main/java/java/com/example/FruitResource.java</code> and change the  <code>RolesAllowed</code> value to <code>Subscriber2</code>:</p>
 </div>
-<div id="quarkussec-jwt-rbac-invalid" class="listingblock">
+<div id="quarkussec-jwt-rbac-invalid" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">@GET
 @Path("/claim")
@@ -1379,7 +1377,7 @@ public String getClaim() {
 <div class="paragraph">
 <p>The simple <code>fruit/claim</code> REST URI can be called via browser using <a href="http://localhost:8080/fruit/claim" class="bare">http://localhost:8080/fruit/claim</a> or using CLI like:</p>
 </div>
-<div id="rjwt-rbac-k8s-svc-call" class="listingblock">
+<div id="rjwt-rbac-k8s-svc-call" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/5f8c5b7a9c11ed455f4910ed2032d79612b5e6f6/quarkus.jwt.token -s)
 curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
