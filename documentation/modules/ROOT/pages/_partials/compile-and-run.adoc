@@ -4,6 +4,7 @@ JVM mode::
 +
 --
 [#basics-build-quarkus-jvm-app]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 cd pass:[$TUTORIAL_HOME]/work/{project-dir} && \
@@ -13,6 +14,7 @@ cd pass:[$TUTORIAL_HOME]/work/{project-dir} && \
 To run the application in jvm mode
 
 [#basics-build-run-jvm-app]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 java -jar target/{project-dir}-1.0-SNAPSHOT-runner.jar
@@ -23,6 +25,7 @@ Native mode::
 +
 --
 [#basics-build-quarkus-native-app]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 cd pass:[$TUTORIAL_HOME]/work/{project-dir} && \
@@ -34,6 +37,7 @@ NOTE: Native compilation will take few minutes to complete.
 To run the application in native mode
 
 [#basics-build-run-native-app]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 ./target/{project-dir}-1.0-SNAPSHOT-runner
@@ -49,6 +53,7 @@ Native container-build mode::
 +
 --
 [#basics-build-quarkus-native-docker-app]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 cd pass:[$TUTORIAL_HOME]/work/{project-dir} && \
@@ -60,6 +65,7 @@ NOTE: Native compilation will take few minutes to complete.
 To run the application in native mode you need to build a Docker image using the native file generated in previous step:
 
 [#basics-build-run-native-docker-app]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 docker build -f src/main/docker/Dockerfile.native -t example/{quarkus-project-name}:1.0-SNAPSHOT . && \

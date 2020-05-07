@@ -28,6 +28,7 @@ NOTE: For the easier reference, we shall call the `fruits-app` project folder as
 ==== Add Extensions
 
 [#qext-mvn-add-reactive-extensions]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 ./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-rest-client, quarkus-smallrye-reactive-streams-operators"
@@ -41,6 +42,7 @@ Let's create the `Beer` pojo.
 Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `Beer` with the following contents:
 
 [#qext-quarkusrpb-beer-pojo]
+[.console-input]
 [source,java,subs="+macros,+attributes"]
 ----
 package com.example;
@@ -61,6 +63,7 @@ public class Beer {
 Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `BeerGateway` with the following contents:
 
 [#qext-quarkusrpb-beer-client]
+[.console-input]
 [source,java,subs="+macros,+attributes"]
 ----
 package com.example;
@@ -97,6 +100,7 @@ public interface BeerGateway {
 Add the following properties to pass:[$PROJECT_HOME]/src/main/resources/application.properties:
 
 [#qext-quarkusrpb-update-props]
+[.console-input]
 [source,config,subs="+macros,+attributes"]
 ----
 com.example.BeerGateway/mp-rest/url=https://api.punkapi.com
@@ -110,6 +114,7 @@ Let's create the service that uses `BeerGateway` to retrieve beer information by
 Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `BeerService` with the following contents:
 
 [#qext-quarkusrpb-beer-service]
+[.console-input]
 [source,subs="+macros,+attributes"]
 ----
 package com.example;
@@ -168,6 +173,7 @@ The last step is to manipulate the beer _stream_ created in the previous section
 Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `BeerResource` with the following contents:
 
 [#qext-quarkusrpb-beer-resource]
+[.console-input]
 [source,java,subs="+macros,+attributes"]
 ----
 package com.example;
@@ -232,6 +238,7 @@ include::ROOT:partial$invoke-service.adoc[tag=call]
 
 The REST call about should return an response like:
 
+[.console-output]
 [source,json]
 ----
 [ 

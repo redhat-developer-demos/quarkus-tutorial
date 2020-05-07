@@ -16,27 +16,29 @@ You'll learn how easy and productive is Quarkus with Hibernate with Panache. For
 
 We'll use http://www.h2database.com[H2] as our backing database, but it's very easy to use other database engines with Quarkus. As an exercise for later, we suggest you to try your favorite database engine with the documentation found https://quarkus.io/guides/datasource[here].
 
-==== Build Fruit Resource
+=== Build Fruit Resource
 
 The skeleton project to get started is the same you created at xref:02-basics-fundas.adoc[Basics and Fundamentals].
 
 NOTE: For the easier reference, we shall call the `fruits-app` project folder as pass:[$PROJECT_HOME]
 
 [#quarkusp-add-persistence-extensions]
-===== Add Extensions
+==== Add Extensions
 
 [#qext-mvn-add-persistence-extensions]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 ./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-jdbc-h2, quarkus-hibernate-orm-panache, quarkus-smallrye-openapi"
 ----
 
 [#quarkusp-configure-props]
-===== Edit the application.properties
+==== Edit the application.properties
 
 Add the following properties to `pass:[$PROJECT_HOME]/src/main/resources/application.properties`:
 
 [#quarkuspdb-update-props]
+[.console-input]
 [source,config,subs="+macros,+attributes"]
 ----
 quarkus.datasource.url=jdbc:h2:mem:default
@@ -48,17 +50,20 @@ quarkus.hibernate-orm.database.generation=drop-and-create
 quarkus.hibernate-orm.log.sql=true
 ----
 
-===== Test Database connection
+==== Test Database connection
 
 Let's start Quarkus in `development` mode to verify the database connection works:
 
 [#quarkuspdb-test-dbconn]
+[.console-input]
 [source,config,subs="+macros,+attributes"]
 ----
 ./mvnw compile quarkus:dev
 ----
 
 If all went well then you should be seeing something like the following in the log:
+
+[.console-output]
 [source,bash]
 ----
 Listening for transport dt_socket at address: 5005
@@ -71,11 +76,12 @@ Listening for transport dt_socket at address: 5005
 As you would have noticed there is no database logs. That's because we dont have any database related code yet:
 
 [#quarkusp-create-fruit-entity]
-===== Create Fruit Entity
+==== Create Fruit Entity
 
 Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `Fruit` with the following contents:
 
 [#quarkusp-fruit-entity]
+[.console-input]
 [source,java,subs="+macros,+attributes"]
 ----
 package com.example;
@@ -93,11 +99,12 @@ public class Fruit {
 ----
 
 [#quarkusp-edit-fruit-resource]
-===== Update Fruit Resource
+==== Update Fruit Resource
 
 Edit the Java file `$PROJECT_HOME/src/main/java/com/example/FruitResource.java`, remove `hello()` method and add a new REST method to get all the available fruits:
 
 [#quarkusp-fruit-entity1]
+[.console-input]
 [source,java,subs="+macros,+attributes"]
 ----
 package com.example;
@@ -115,7 +122,7 @@ public class FruitResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Fruit> fruits() {
-        return Fruit.listAll();
+        return Fruit.listAll(); <1>
     }
 
 }
@@ -126,7 +133,7 @@ public class FruitResource {
 Do I need to add it ? The simple answer is **NO**.
 
 [#quarkusp-what-is-panache]
-===== Make Fruit Entity a Panache Entity 
+==== Make Fruit Entity a Panache Entity 
 
 ****
 
@@ -139,6 +146,7 @@ More info https://quarkus.io/guides/hibernate-orm-panache-guide[Panache Guide]
 ****
 
 [#quarkusp-fruit-entity2]
+[.console-input]
 [source,java,subs="+macros,+attributes"]
 ----
 package com.example;
@@ -165,6 +173,7 @@ Since we don't have any fruits in the DB you would have got an empty response ba
 Let's add a REST method to the `FruitResource.java` to save a 'Fruit':
 
 [#quarkusp-fruit-add-persist]
+[.console-input]
 [source,java,subs="+macros,+attributes"]
 ----
 package com.example;
@@ -210,6 +219,7 @@ Or use the Swagger UI at http://localhost:8080/swagger-ui to try your REST endpo
 
 Try adding a fruit via the Swagger UI Post and try listing the available fruits. You will see a JSON response like this one:
 
+[.console-output]
 [source,json]
 ----
 {
@@ -221,7 +231,7 @@ Try adding a fruit via the Swagger UI Post and try listing the available fruits.
 NOTE: The response may vary based on which fruits you added.
 
 [#quarkusp-fruits-finder]
-===== Finders 
+==== Finders 
 Cool! So far we did with some primitive methods lets explore some cool things that Panache offers. 
 
 Let's try to find all fruits by a season. To make the query return some data let us add some fruits to the DB.
@@ -229,6 +239,7 @@ Let's try to find all fruits by a season. To make the query return some data let
 Create the following `import.sql` file in `$PROJECT_HOME/src/main/resources`:
 
 [#quarkusp-add-fruits]
+[.console-input]
 [source,sql,subs="+macros,+attributes"]
 ----
 INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Mango','Spring');
@@ -245,6 +256,7 @@ INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Grapes'
 Update `Fruit` entity to add a finder method like: 
 
 [#quarkusp-find-fruits]
+[.console-input]
 [source,java,subs="+macros,+attributes"]
 ----
 package com.example;
@@ -271,6 +283,7 @@ public class Fruit extends PanacheEntity {
 Update `FruitResource` by adding a REST endpoint to get fruits by season: 
 
 [#quarkusp-get-find-fruits]
+[.console-input]
 [source,java,subs="+macros,+attributes"]
 ----
 package com.example;
@@ -321,6 +334,7 @@ To test finder use the Swagger UI http://localhost:8080/swagger-ui.
 
 A finder for fruits for the __Summer__ season should return a response like :
 
+[.console-output]
 [source,json]
 ----
 [
@@ -343,12 +357,12 @@ A finder for fruits for the __Summer__ season should return a response like :
 ----
 
 [#quarkusp-testing]
-==== Testing Fruit Resource
+=== Testing Fruit Resource
 
 Let's write a test to validate that inserting and finding methods works as expected.
 
 [#quarkusp-testing-dep]
-===== Adding AssertJ Dependency
+==== Adding AssertJ Dependency
 
 To validate simple output messages RestAssured assertions mechanism is enough but in our experience, when start dealing with more complex assertions then things might become a bit more complex. 
 For this reason, we encourage you to start using https://assertj.github.io/doc/[AssertJ].
@@ -356,6 +370,7 @@ For this reason, we encourage you to start using https://assertj.github.io/doc/[
 Open `$PROJECT_HOME/pom.xml` and add the following dependencies in the `dependencies` section:
 
 [#quarkusp-register-assertj]
+[.console-input]
 [source,xml,subs="+macros,+attributes"]
 ----
 <dependency>
@@ -373,11 +388,12 @@ Open `$PROJECT_HOME/pom.xml` and add the following dependencies in the `dependen
 ----
 
 [#quarkusp-write-persistence-test]
-===== Write Persistence Test 
+==== Write Persistence Test 
 
 Open the next class `$PROJECT_HOME/src/test/java/com/example/FruitResourceTest.java` and copy the next content:
 
 [#quarkusp-test-class]
+[.console-input]
 [source,java,subs="+macros"]
 ----
 package com.example;

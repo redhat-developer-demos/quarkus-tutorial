@@ -10,6 +10,7 @@ endif::[]
 
 ## Process the OpenShift template:
 
+[.console-input]
 [source,bash]
 ----
 oc process openshift//mariadb-persistent \
@@ -23,6 +24,7 @@ oc process openshift//mariadb-persistent \
 
 Print the list of pods and check the mariadb pod that is running:
 
+[.console-input]
 [source,bash]
 ----
 oc get pods
@@ -30,6 +32,7 @@ oc get pods
 
 Open a Remote Shell session to the pod:
 
+[.console-input]
 [source,bash]
 ----
 oc rsh <pod>
@@ -37,6 +40,7 @@ oc rsh <pod>
 
 Run the CLI as root:
 
+[.console-input]
 [source,bash]
 ----
 mysql -u root
@@ -55,6 +59,7 @@ mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -h $HOSTNAME $MYSQL_DATABASE
 
 Running the CLI as the `root` user, execute:
 
+[.console-input]
 [source,sql]
 ----
 CREATE DATABASE sparksjoy;

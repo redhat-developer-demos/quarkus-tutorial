@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 
 At the end of this chapter you will be able to :
 
-* [x] What is Quarkus Extensions ?
+* [x] What are Quarkus Extensions ?
 * [x] How to add them to your Quarkus project?
 * [x] How to make calls to other services with Rest Client
 * [x] How to add fault tolerant behaviour in your service
@@ -26,6 +26,7 @@ The Quarkus maven plugin can list all available supported extensions.
 Navigate to the tutorial's `work` folder or the root folder where you created the project:
 
 [#qext-nav-to-work-folder]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 cd pass:[$TUTORIAL_HOME]/work
@@ -36,6 +37,7 @@ NOTE: The instructions of this section assumes your project name to be `{quarkus
 To list the available extensions, run the following command from your project directory.
 
 [#qext-mvn-list-extensions]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 cd {quarkus-project-name} && \
@@ -53,6 +55,7 @@ Two endpoints are the important ones for this workshop:
 
 * `api/fruit/all` that returns all fruits.
 
+[.console-output]
 [source, json]
 ----
 [{
@@ -74,6 +77,7 @@ Two endpoints are the important ones for this workshop:
 
 * `api/fruit/\{name\}` that returns specific info from given fruit name.
 
+[.console-output]
 [source, json]
 ----
 {
@@ -100,6 +104,7 @@ Two endpoints are the important ones for this workshop:
 To add Rest Client and JSON-B extensions (`{quarkus-rest-client-ext-name}`) to the Quarkus application, run the following command from `{quarkus-project-name}` project directory:
 
 [#qext-mvn-add-rest-client-extension]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 ./mvnw quarkus:add-extension -Dextension="{quarkus-rest-client-ext-name}"
@@ -113,6 +118,7 @@ We need to create a POJO object that is used to unmarshal JSON message from http
 Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `FruityVice.java` with the following contents:
 
 [#quarkusrc-fruity-vice-pojo]
+[.console-input]
 [source,java,subs="+macros,+attributes"]
 ----
 package com.example;
@@ -172,6 +178,7 @@ The next thing is to create a Java interface that acts as a client between code 
 Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `FruityViceService.java` with the following contents:
 
 [#quarkusrc-fruity-vice-service]
+[.console-input]
 [source,java,subs="+macros"]
 ----
 package com.example;
@@ -209,6 +216,7 @@ public interface FruityViceService {
 Add the following properties to `pass:[$PROJECT_HOME]/src/main/resources/application.properties`:
 
 [#quarkusrc-config-fruity-update-props]
+[.console-input]
 [source,config,subs="+macros,+attributes"]
 ----
 com.example.FruityViceService/mp-rest/url=http://www.fruityvice.com
@@ -220,6 +228,7 @@ com.example.FruityViceService/mp-rest/url=http://www.fruityvice.com
 Open the following Java class `pass:[$PROJECT_HOME]/src/main/java/com/example/FruitResource.java` and copy the next content in its body:
 
 [#quarkusrc-fruity-vice-service-inject]
+[.console-input]
 [source,java,subs="+macros"]
 ----
 @RestClient
@@ -255,6 +264,7 @@ include::ROOT:partial$invoke-service.adoc[tag=call]
 
 The REST call should return an response like:
 
+[.console-output]
 [source,json]
 ----
 {
@@ -280,6 +290,7 @@ Quarkus integrates with https://github.com/eclipse/microprofile-fault-tolerance[
 To add Fault Tolernace extension (`{quarkus-fault-tolerance-ext-name}`) to the Quarkus application, run the following command from `{quarkus-project-name}` project directory:
 
 [#qext-mvn-add-fault-tolernace-extension]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 ./mvnw quarkus:add-extension -Dextension="{quarkus-fault-tolerance-ext-name}"
@@ -293,6 +304,7 @@ Let's add the retry policy in `FruityViceService`.
 Add the `org.eclipse.microprofile.faulttolerance.Retry` annotation to `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruityViceService.java`:
 
 [#quarkusft-retry-fruit-vice-service]
+[.console-input]
 [source,config,subs="+macros"]
 ----
 @GET
@@ -326,6 +338,7 @@ include::ROOT:partial$invoke-service.adoc[tag=call]
 
 The REST call should return an response like:
 
+[.console-output]
 [source,json]
 ----
 {
@@ -353,6 +366,7 @@ Let's add a fallback policy in case of an error in `FruityViceService`.
 Add the `org.eclipse.microprofile.faulttolerance.Fallback` annotation to `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruityViceService.java`:
 
 [#quarkusft-fallback-fruit-vice-service]
+[.console-input]
 [source,config,subs="+macros"]
 ----
 @GET
@@ -410,6 +424,7 @@ Let's add the circuit breaker policy in `FruityViceService`.
 Remove previous annotations of fallback and retry policies and add the following annotation to `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruityViceService.java`:
 
 [#quarkusft-circuit-breaker-fruit-vice-service]
+[.console-input]
 [source,config,subs="+macros"]
 ----
 @GET
@@ -479,6 +494,7 @@ We can add `{quarkus-health-ext-name}` extension to allow Quarkus application to
 To add `{quarkus-health-ext-name}` to the Quarkus application, run the following command from `{quarkus-project-name}` project directory:
 
 [#qext-mvn-add-extension]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 ./mvnw quarkus:add-extension -Dextension="{quarkus-health-ext-name}"
@@ -487,14 +503,13 @@ To add `{quarkus-health-ext-name}` to the Quarkus application, run the following
 After successful execution of the above command, you will have the following dependency added to the `{quarkus-project-name}` project's pom.xml:
 
 .pom.xml 
+[.console-input]
 [source,xml]
 ----
-...
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-health</artifactId>
     </dependency>
-...
 ----
 
 [#qext-health-check-default-run-quarkus-app-dev-mode]
@@ -519,6 +534,7 @@ include::ROOT:partial$invoke-service.adoc[tag=call]
 
 The REST call about should return an response like:
 
+[.console-output]
 [source,json]
 ----
 {
@@ -542,6 +558,7 @@ Let's create a custom check for both liveness and readiness checks.
 Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `FruitHealthCheck` with the following contents:
 
 [#quarkusp-fruit-checks]
+[.console-input]
 [source,java,subs="+macros,+attributes"]
 ----
 package com.example;
@@ -600,6 +617,7 @@ include::ROOT:partial$invoke-service.adoc[tag=call]
 
 The REST call about should return an response like:
 
+[.console-output]
 [source,json]
 ----
 {
@@ -625,6 +643,7 @@ include::ROOT:partial$invoke-service.adoc[tag=call]
 
 The REST call about should return an response like:
 
+[.console-output]
 [source, json]
 ----
 {
@@ -644,6 +663,7 @@ include::ROOT:partial$invoke-service.adoc[tag=call]
 
 The REST call about should return an response like:
 
+[.console-output]
 [source, json]
 ----
 {
@@ -689,6 +709,7 @@ So let's see how you can start using JWT for role based access control (RBAC) of
 To add JWT RBAC extension (`{quarkus-jwt-ext-name}`) to the Quarkus application, run the following command from `{quarkus-project-name}` project directory:
 
 [#qext-mvn-add-jwt-extension]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 ./mvnw quarkus:add-extension -Dextension="{quarkus-jwt-ext-name}"
@@ -700,6 +721,7 @@ To add JWT RBAC extension (`{quarkus-jwt-ext-name}`) to the Quarkus application,
 Add the following properties to `pass:[$PROJECT_HOME]/src/main/resources/application.properties`:
 
 [#quarkussec-config-jwt]
+[.console-input]
 [source,config,subs="+macros,+attributes"]
 ----
 mp.jwt.verify.publickey.location=https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/0c6d1ed65d38e4dd48992f7410a29aa4e5a35131/quarkus.jwt.pub.jwk.json
@@ -712,6 +734,7 @@ mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac
 
 We are also providing a valid token that can be verified by the configured public key:
 
+[.console-output]
 [source, javascript]
 ----
 {
@@ -753,6 +776,7 @@ You can inject any defined claim into an object by using `@Claim` annotation:
 Open `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruitResource.java` and inject username claim:
 
 [#quarkussec-jwt-claim-username]
+[.console-input]
 [source,config,subs="+macros"]
 ----
 @Inject @Claim(standard = Claims.preferred_username)
@@ -811,6 +835,7 @@ For this case you need to use a role that is defined in JWT token into `groups` 
 Open `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruitResource.java` and annotate the method with `javax.annotation.security.RolesAllowed`:
 
 [#quarkussec-jwt-rbac]
+[.console-input]
 [source,config,subs="+macros"]
 ----
 @GET
@@ -843,6 +868,7 @@ But the big difference now, and it is that you see the result only because the t
 Open `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruitResource.java` and change the  `RolesAllowed` value to `Subscriber2`:
 
 [#quarkussec-jwt-rbac-invalid]
+[.console-input]
 [source,config,subs="+macros"]
 ----
 @GET

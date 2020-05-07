@@ -15,6 +15,7 @@ IP_ADDRESS="$({k8s-env} ip):$({k8s-cli} get svc istio-ingressgateway --namespace
 #tag::call[]
 
 [#{doc-sec}-{k8s-cli}-svc-call]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 {cli-tool} {address}:8080/{path}
@@ -26,6 +27,7 @@ IP_ADDRESS="$({k8s-env} ip):$({k8s-cli} get svc istio-ingressgateway --namespace
 #tag::callToken[]
 
 [#{doc-sec}-{k8s-cli}-svc-call]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 token={token-value}
@@ -41,6 +43,7 @@ Although it is not mandatory, by default http://rest-assured.io/[RestAssured] pr
 You can run the test either in IDE or by running Maven:
 
 [#basics-run-tests]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 ./mvnw clean compile test

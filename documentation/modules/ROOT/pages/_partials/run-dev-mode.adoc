@@ -3,6 +3,7 @@
 If you are not in dev mode, run the following command to start Quarkus application in development mode:
 
 [#{section-build-run}-build-run-dev]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 ./mvnw compile quarkus:dev 

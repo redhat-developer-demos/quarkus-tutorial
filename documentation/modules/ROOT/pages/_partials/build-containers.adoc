@@ -8,6 +8,7 @@ JVM mode::
 +
 --
 [#{section-k8s}-build-quarkus-jvm-app]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 ./mvnw -DskipTests clean package
@@ -16,6 +17,7 @@ JVM mode::
 After successful maven build, run the following command to build the container - choose the terminal of the target environment you wish to use (docker, minishift or minokube) as you want to build and publish the image in the right registry:
 
 [#{section-k8s}-build-quarkus-jvm-app-container]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 docker build -f src/main/docker/Dockerfile.jvm -t example/{quarkus-project-name}:1.0-SNAPSHOT .
@@ -26,6 +28,7 @@ Native mode::
 +
 --
 [#{section-k8s}-build-quarkus-native-app]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 ./mvnw -DskipTests clean package -Pnative -Dnative-image.docker-build=true <1>
@@ -37,6 +40,7 @@ NOTE: Native compilation will take few minutes to complete.
 After successful maven build, run the following command to build the container - choose the terminal of the target environment you wish to use (docker, minishift or minokube) as you want to build and publish the image in the right registry:
 
 [#{section-k8s}-build-quarkus-native-app-container]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 docker build -f src/main/docker/Dockerfile.native -t example/{quarkus-project-name}:1.0-SNAPSHOT .
@@ -53,6 +57,7 @@ NOTE: For sake of simplicity the container name in both native and jvm mode are 
 #tag::run[]
 
 [#{doc-sec}-run-jvm-app]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 docker run -it --rm -p 8080:8080 example/{quarkus-project-name}:1.0-SNAPSHOT
@@ -63,6 +68,7 @@ docker run -it --rm -p 8080:8080 example/{quarkus-project-name}:1.0-SNAPSHOT
 #tag::tag-push[]
 
 [#{doc-sec}-tag-jvm-app]
+[.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 docker push example/{quarkus-project-name}:1.0-SNAPSHOT
