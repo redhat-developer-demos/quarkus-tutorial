@@ -1,6 +1,10 @@
-= Learn to build Cloud Native Java Applications using Quarkus
+= Quarkus Tutorial
 
 image:https://github.com/redhat-developer-demos/quarkus-tutorial/workflows/docs/badge.svg[]
+
+You can access the HTML version of this tutorial here: https://redhat-developer-demos.github.io/quarkus-tutorial/
+
+== Why Quarkus?
 
 Historically Java was able to handle the biggest enterprise problem(s) with its "Write once, run anywhere" (WORA) paradigm. With Cloud Native Applications grown to popularity, things like running applications as linux containers, serverless taking centere stage -- Java was pushed back by languages like golang, node.js as the forerunner to build Cloud Native Applications as they are smaller, quicker and argulably more nimble.
 
@@ -10,6 +14,41 @@ In this tutorial we will start to explore how to create, build and deploy Cloud 
 
 image::./documentation/modules/ROOT/assets/images/Developer_Joy.png[Developer Joy,400,400,align="center"]
 
-== Tutorial documentation
+## Building the HTML locally
 
-* HTML: https://redhat-developer-demos.github.io/quarkus-tutorial/
+In the root of your git repository, run:
+
+```
+bin/build-site.sh
+```
+
+And then open your `gh-pages/index.html` file:
+
+```
+open gh-pages/index.html
+```
+
+## Iterative local development
+
+You can develop the tutorial docs locally using a rapid iterative cycle.
+
+First, install the `yarn` dependencies:
+
+[source,bash]
+----
+yarn install
+----
+
+And now start `gulp`. It will create the website and open your browser connected with `browser-sync`. Everytime it detects a change, it will automatically refresh your browser page.
+
+[source,bash]
+----
+gulp
+----
+
+You can clean the local cache using:
+
+[source,bash]
+----
+gulp clean
+----
