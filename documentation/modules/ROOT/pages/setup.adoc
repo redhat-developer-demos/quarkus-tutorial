@@ -1,12 +1,10 @@
+[[requirements]]
 = Setup
 include::_attributes.adoc[]
 
-[[requirements]]
-== Required Tools
+== IDE
 
-=== IDE
-
-You can use any Java IDE for this tutorial but if you didn't try it before, we recommend https://code.visualstudio.com/download[VS Code] with the https://code.visualstudio.com/docs/languages/java[Java Extension Pack].
+You can use any Java IDE for this tutorial but if you didn't try it before, we recommend https://code.visualstudio.com/download[VS Code, window="_blank"] with the https://marketplace.visualstudio.com/items?itemName=redhat.java[Language Support for Java(TM) by Red Hat, window="_blank"] and the https://marketplace.visualstudio.com/items?itemName=redhat.vscode-quarkus[Quarkus, window="_blank"] extensions.
 
 [TIP]
 ====
@@ -14,7 +12,7 @@ If you are using vscode then install vscode https://aka.ms/vscode-remote/downloa
 which allows you to run this entire tutorial within a contianer that will have all tools configured.
 ====
 
-=== CLI Tools
+== CLI Tools
 
 The following CLI tools are required for running the exercises in this tutorial.
 
@@ -26,7 +24,7 @@ endif::workshop[]
 
 [WARNING]
 ====
-If you're running locally, your only requirements are Java 11 and Maven 3.6.0+. You can use Java 8, but support for native compilation will be disabled soon.
+If you're running locally, your only requirements are Java 11 and Maven 3.6.2+. You can use Java 8, but support for native compilation will be disabled soon.
 
 GraalVM is only required if you intend to build a native image.
 
@@ -45,9 +43,9 @@ Please have them installed and configured before you get started with any of the
 |**Tool**|**macOS**|**Fedora**|**Windows**
 
 | **Docker**
-| https://www.docker.com/products/docker-desktop[Docker Desktop for Mac]
+| https://www.docker.com/products/docker-desktop[Docker Desktop for Mac, window="_blank"]
 | `dnf install docker`
-| https://www.docker.com/products/docker-desktop[Docker Desktop for Windows]
+| https://www.docker.com/products/docker-desktop[Docker Desktop for Windows, window="_blank"]
 
 | **Java 11**
 | `brew tap AdoptOpenJDK/openjdk && brew cask install adoptopenjdk11`
@@ -59,7 +57,7 @@ Please have them installed and configured before you get started with any of the
 | `dnf install java-1.8.0-openjdk.x86_64`
 | https://adoptopenjdk.net[Windows] (Make sure you set the `JAVA_HOME` environment variable and add `%JAVA_HOME%\bin` to your `PATH`)
 
-| **Apache Maven 3.6.0+**
+| **Apache Maven 3.6.2+**
 | brew install maven
 | dnf install maven
 | https://maven.apache.org/download.cgi[Windows] (Make sure you set the `MAVEN_HOME` environment variable and add `%MAVEN_HOME%\bin` to your `PATH`)

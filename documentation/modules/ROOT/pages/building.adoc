@@ -190,11 +190,7 @@ include::ROOT:partial$invoke-service.adoc[tag=call]
 
 And if you inspect the console output, you see the logging message:
 
-[.console-output]
-[source,bash]
-----
 `2019-12-11 14:00:56,219 INFO  [com.exa.FruitResource] (vert.x-worker-thread-2) Hello method is called.`
-----
 
 [#basics-configuration]
 == Configuration
@@ -208,7 +204,6 @@ Quarkus relies on MicroProfile Config specification and the main configuration i
 Add the following property to `$PROJECT_HOME/src/main/resources/application.properties`:
 
 [#basics-configuration-add-new-property]
-[.console-input]
 [source,config,subs="+macros,+attributes"]
 ----
 greetings.message = Hello y'all!

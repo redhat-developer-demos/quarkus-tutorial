@@ -1,0 +1,253 @@
+= Basics and Fundamentals
+:linkattrs:
+
+include::_attributes.adoc[]
+:project-dir: fruits-app
+:quarkus-project-name: fruits-app
+
+At the end of this chapter you will be able to :
+
+* [x] Create a Quarkus Java Application
+* [x] Build and run the Java application in JVM mode.
+* [x] Build and run the Java application in Native mode.
+* [x] Build and run the Java application in Developer mode
+
+////
+
+[#basics-prerequisite]
+== Prerequisite
+
+include::partial$prereq-cli.adoc[]
+////
+
+[#basics-create-quarkus-app]
+== Create Quarkus Application
+
+Create an empty folder called `quarkus-tutorial`. We'll call it our `$TUTORIAL_HOME`.
+
+[#create-tutorial-folder]
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+mkdir quarkus-tutorial && cd quarkus-tutorial
+export TUTORIAL_HOME=`pwd`
+----
+
+Create the `fruits-app` folder and navigate to the folder:
+
+[#quarkusp-nav-to-work-folder]
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+mkdir -p $TUTORIAL_HOME/work && cd $TUTORIAL_HOME/work
+# set the Quarkus release environment variable 
+export QUARKUS_VERSION={page-component-version}
+----
+
+[#quarkusp-mv-create-fruits-app]
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+mvn "io.quarkus:quarkus-maven-plugin:pass:[${QUARKUS_VERSION}]:create" \
+  -DprojectGroupId="com.example" \
+  -DprojectArtifactId="fruits-app" \
+  -DprojectVersion="1.0-SNAPSHOT" \
+  -DclassName="FruitResource" \
+  -Dpath="fruit"
+cd fruits-app
+----
+
+[#basics-ide-quarkus-app]
+== Open the Project in IDE
+
+Open or import the generated project into your IDE.
+
+If you are using **vscode** you can open the project by:
+
+[#basics-ide-quarkus-project]
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+code .
+----
+
+NOTE: All further sections of this tutorial assumes the application name to be `fruits-app`.
+
+INFO: If you use `tutorial-tools`, your host `quarkus-tutorial/work` contains the application code ; point your IDE to this directory.
+
+[#basics-build-run-quarkus-app]
+== Build and Run the Quarkus Application
+
+
+include::ROOT:partial$compile-and-run.adoc[]
+
+You can <<basics-call-svc>> to see a response like `hello`.
+
+[#basics-testing]
+== Testing Fruit Resource
+
+The scaffolding process also creates a test case for the `fruit` endpoint.
+
+Open the next class `$PROJECT_HOME/src/test/java/com/example/FruitResourceTest.java` to see how a test looks like.
+
+include::ROOT:partial$invoke-service.adoc[tag=test]
+
+[#basics-run-quarkus-app-dev-mode]
+== Run Quarkus Application in Development mode
+
+Stop the Quarkus application that might be running in `jvm` or `native` mode.
+
+_Development_ mode enables hot deployment with background compilation, which means that when you modify your Java files and/or your resource files and refresh your browser, these changes will automatically take effect.
+
+:section-build-run: basics
+
+include::ROOT:partial$run-dev-mode.adoc[]
+
+[#basics-update]
+== Updating the code
+
+NOTE: Only if running in Development mode
+
+You can edit the Java source(s) in your IDE. When you save and hit refresh in your browser, you will notice browser showing the new changes.
+
+[#basics-call-svc]
+== Invoke Service
+The simple `hello` REST URI can be called from the browser using http://localhost:8080[http://localhost:8080,window=_blank] or using cli in a new terminal window like: 
+
+:doc-sec: basics
+:k8s-cli: k8s
+:path: fruit
+:k8s-env: minikube
+:cli-tool: curl
+:address: localhost
+include::ROOT:partial$invoke-service.adoc[tag=call]
+
+
+[#basics-logging]
+== Configuring Logging
+
+You can configure Quarkus logging by setting the following parameters to `$PROJECT_HOME/src/main/resources/application.properties`: 
+
+[#basics-update-logging-props]
+[.console-input]
+[source,config,subs="+macros,+attributes"]
+----
+quarkus.log.console.level=INFO
+----
+
+Also you can configure your application logger level.
+Let's add a logger and configure it.
+
+Open the following Java class `$PROJECT_HOME/src/main/java/com/example/FruitResource.java` and copy the next content in its body:
+
+[#basics-custom-log-manager]
+[.console-input]
+[source,java,subs="+macros"]
+----
+package com.example;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.jboss.logging.Logger;
+
+@Path("/fruit")
+public class FruitResource {
+
+    Logger logger = Logger.getLogger(FruitResource.class);
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello() {
+        logger.info("Hello method is called.");
+        return "hello";
+    }
+}
+----
+
+And configure `INFO` mode for the service to `$PROJECT_HOME/src/main/resources/application.properties`: 
+
+[#basics-update-custom-logging-props]
+[.console-input]
+[source,config,subs="+macros,+attributes"]
+----
+quarkus.log.category."com.example".level=INFO
+----
+
+[#basics-call-svc-logging]
+=== Invoke Service
+The simple `hello` REST URI can be called from the browser using http://localhost:8080[http://localhost:8080,window=_blank] or using cli like: 
+
+:doc-sec: basics-log
+:k8s-cli: k8s
+:path: fruit
+:k8s-env: minikube
+:cli-tool: curl
+:address: localhost
+include::ROOT:partial$invoke-service.adoc[tag=call]
+
+And if you inspect the console output, you see the logging message:
+
+`2019-12-11 14:00:56,219 INFO  [com.exa.FruitResource] (vert.x-worker-thread-2) Hello method is called.`
+
+[#basics-configuration]
+== Configuration
+
+Hardcoded values in your code is a no go, let's see how to add configuration to your application. 
+Quarkus relies on MicroProfile Config specification and the main configuration is  `application.properties`.
+
+[#basics-configuration-new-property]
+=== Add a new property
+
+Add the following property to `$PROJECT_HOME/src/main/resources/application.properties`:
+
+[#basics-configuration-add-new-property]
+[source,config,subs="+macros,+attributes"]
+----
+greetings.message = Hello y'all!
+----
+
+[#basics-configuration-get-value]
+=== Get Configuration Value
+
+Open the following Java class `$PROJECT_HOME/src/main/java/com/example/FruitResource.java` and copy the next content in its body:
+
+[#basics-configuration-get-value-code]
+[.console-input]
+[source,java,subs="+macros"]
+----
+package com.example;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+@Path("/fruit")
+public class FruitResource {
+
+    @ConfigProperty(name = "greetings.message")
+    String message;
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello() {
+        return message;
+    }
+}
+----
+
+[#basics-call-configuration]
+=== Invoke Service
+The simple `hello` REST URI can be called from the browser using http://localhost:8080[http://localhost:8080,window=_blank] or using cli like: 
+
+:doc-sec: basics-conf
+:k8s-cli: k8s
+:path: fruit
+:k8s-env: minikube
+:cli-tool: curl
+:address: localhost
+include::ROOT:partial$invoke-service.adoc[tag=call]
