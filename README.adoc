@@ -2,7 +2,7 @@
 
 image:https://github.com/redhat-developer-demos/quarkus-tutorial/workflows/docs/badge.svg[]
 
-You can access the HTML version of this tutorial here: https://redhat-developer-demos.github.io/quarkus-tutorial/
+You can access the HTML version of this tutorial here: https://redhat-developer-demos.github.io/quarkus-tutorial/[window="_blank"]
 
 == Why Quarkus?
 
