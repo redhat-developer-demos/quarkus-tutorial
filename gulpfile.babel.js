@@ -7,7 +7,7 @@ import {load as yamlLoad} from "yaml-js";
 import generator from "@antora/site-generator-default";
 import browserSync from "browser-sync";
 
-const filename = "dev-site.yml";
+const filename = "github-pages.yml";
 const server = browserSync.create();
 const args = ["--playbook", filename];
 
@@ -16,11 +16,11 @@ function watchGlobs() {
   let json_content = readFileSync(`${__dirname}/${filename}`, "UTF-8");
   let yaml_content = yamlLoad(json_content);
   let dirs = yaml_content.content.sources.map(source => [
-    `${source.url}/**/**.yml`,
-    `${source.url}/**/**.adoc`,
-    `${source.url}/**/**.hbs`
+    `**/*.yml`,
+    `**/*.adoc`,
+    `**/*.hbs`
   ]); 
-  dirs.push(["dev-site.yml"]);
+  dirs.push(["${filename}"]);
   dirs = [].concat(...dirs);
   //console.log(dirs);
   return dirs;
