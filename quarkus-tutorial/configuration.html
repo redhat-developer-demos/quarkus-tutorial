@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Welcome to Quarkus Tutorial :: Quarkus Tutorial</title>
-    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/index.html">
+    <title>Configuration :: Quarkus Tutorial</title>
+    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/configuration.html">
     <meta name="generator" content="Antora 2.3.1">
     <link rel="stylesheet" href="../_/css/site.css">
   </head>
@@ -65,7 +65,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="basics.html">Basics and Fundamentals</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="configuration.html">Configuration</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -126,107 +126,87 @@
 <main class="article">
 <div class="toolbar" role="navigation">
 <button class="nav-toggle"></button>
-  <a href="index.html" class="home-link is-current"></a>
+  <a href="index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">quarkus-tutorial</a></li>
-    <li><a href="index.html">Welcome to Quarkus Tutorial</a></li>
+    <li>Basics</li>
+    <li><a href="configuration.html">Configuration</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/redhat-developer-demos/quarkus-tutorial/edit/master/documentation/modules/ROOT/pages/index.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/redhat-developer-demos/quarkus-tutorial/edit/master/documentation/modules/ROOT/pages/configuration.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Welcome to Quarkus Tutorial</h1>
-<div class="sect1 text-center strong">
-<h2>Supersonic Subatomic Java</h2>
+<h1 class="page">Configuration</h1>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>A Kubernetes Native Java stack tailored for GraalVM &amp; OpenJDK HotSpot, crafted from the best of breed Java libraries and standards.</p>
+<p>Unresolved include directive in modules/ROOT/pages/configuration.adoc - include::_attributes.adoc[]
+:project-dir: fruits-app
+:quarkus-project-name: fruits-app</p>
 </div>
-<div class="imageblock text-center mt-4 center">
-<div class="content">
-<img src="_images/Developer_Joy.png" alt="Developer Joy" width="400" height="400">
+<div class="paragraph">
+<p>Hardcoded values in your code is a no go, let&#8217;s see how to add configuration to your application.
+Quarkus relies on MicroProfile Config specification and the main configuration is  <code>application.properties</code>.</p>
 </div>
 </div>
 </div>
-</div>
-<div class="sect1 tiles browse">
-<h2>Browse modules</h2>
+<div class="sect1">
+<h2 id="basics-configuration-new-property"><a class="anchor" href="#basics-configuration-new-property"></a>Add a new property</h2>
 <div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Requirements</p>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="setup.html" class="page">Setup</a></p>
-</li>
-</ul>
+<div class="paragraph">
+<p>Add the following property to <code>$PROJECT_HOME/src/main/resources/application.properties</code>:</p>
 </div>
-</li>
-<li>
-<p>Basics</p>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="basics.html" class="page">Basics and Fundamentals</a></p>
-</li>
-<li>
-<p><a href="configuration.html" class="page">Configuration</a></p>
-</li>
-<li>
-<p><a href="extensions.html" class="page">Quarkus Extensions</a></p>
-</li>
-<li>
-<p><a href="panache.html" class="page">Hibernate with Panache</a></p>
-</li>
-<li>
-<p><a href="spring.html" class="page">Spring Compatibility</a></p>
-</li>
-</ul>
+<div id="basics-configuration-add-new-property" class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">greetings.message = Hello y'all!</code></pre>
 </div>
-</li>
-<li>
-<p>Cloud Native</p>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="reactive.html" class="page">Reactive with Mutiny</a></p>
-</li>
-<li>
-<p><a href="kafka-and-streams.html" class="page">Apache Kafka with Reactive Streams</a></p>
-</li>
-<li>
-<p><a href="rest-client.html" class="page">REST Client</a></p>
-</li>
-<li>
-<p><a href="fault-tolerance.html" class="page">Fault Tolerance</a></p>
-</li>
-<li>
-<p><a href="kubernetes.html" class="page">Kubernetes Deployment</a></p>
-</li>
-<li>
-<p><a href="health.html" class="page">Health Check</a></p>
-</li>
-<li>
-<p><a href="metrics.html" class="page">Metrics</a></p>
-</li>
-</ul>
 </div>
-</li>
-<li>
-<p>Advanced</p>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="security.html" class="page">Security with JWT RBAC</a></p>
-</li>
-</ul>
 </div>
-</li>
-</ul>
+</div>
+<div class="sect1">
+<h2 id="basics-configuration-get-value"><a class="anchor" href="#basics-configuration-get-value"></a>Get Configuration Value</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Open the following Java class <code>$PROJECT_HOME/src/main/java/com/example/FruitResource.java</code> and copy the next content in its body:</p>
+</div>
+<div id="basics-configuration-get-value-code" class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+@Path("/fruit")
+public class FruitResource {
+
+    @ConfigProperty(name = "greetings.message")
+    String message;
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello() {
+        return message;
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="basics-call-configuration"><a class="anchor" href="#basics-call-configuration"></a>Invoke Service</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The simple <code>hello</code> REST URI can be called from the browser using <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a> or using cli like:</p>
+</div>
+<div id="basics-conf-k8s-svc-call" class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit</code></pre>
+</div>
 </div>
 </div>
 </div>
