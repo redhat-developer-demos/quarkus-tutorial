@@ -2,8 +2,8 @@
 ** xref:setup.adoc[Setup]
 
 * Basics
-** xref:building.adoc[Create Quarkus Application]
-** xref:config.adoc[Custom Configuration]
+** xref:basics.adoc[Basics and Fundamentals]
+** xref:configuration.adoc[Configuration]
 ** xref:extensions.adoc[Quarkus Extensions]
 ** xref:panache.adoc[Hibernate with Panache]
 ** xref:spring.adoc[Spring Compatibility]

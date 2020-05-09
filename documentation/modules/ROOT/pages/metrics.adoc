@@ -1,4 +1,4 @@
-= Quarkus Extensions
+= Metrics
 
 include::_attributes.adoc[]
 :quarkus-project-name: fruits-app

@@ -1,0 +1,63 @@
+= Configuration
+:linkattrs:
+
+include::_attributes.adoc[]
+:project-dir: fruits-app
+:quarkus-project-name: fruits-app
+
+Hardcoded values in your code is a no go, let's see how to add configuration to your application. 
+Quarkus relies on MicroProfile Config specification and the main configuration is  `application.properties`.
+
+[#basics-configuration-new-property]
+== Add a new property
+
+Add the following property to `$PROJECT_HOME/src/main/resources/application.properties`:
+
+[#basics-configuration-add-new-property]
+[source,config,subs="+macros,+attributes"]
+----
+greetings.message = Hello y'all!
+----
+
+[#basics-configuration-get-value]
+== Get Configuration Value
+
+Open the following Java class `$PROJECT_HOME/src/main/java/com/example/FruitResource.java` and copy the next content in its body:
+
+[#basics-configuration-get-value-code]
+[.console-input]
+[source,java,subs="+macros"]
+----
+package com.example;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+@Path("/fruit")
+public class FruitResource {
+
+    @ConfigProperty(name = "greetings.message")
+    String message;
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello() {
+        return message;
+    }
+}
+----
+
+[#basics-call-configuration]
+== Invoke Service
+The simple `hello` REST URI can be called from the browser using http://localhost:8080[http://localhost:8080,window=_blank] or using cli like: 
+
+:doc-sec: basics-conf
+:k8s-cli: k8s
+:path: fruit
+:k8s-env: minikube
+:cli-tool: curl
+:address: localhost
+include::ROOT:partial$invoke-service.adoc[tag=call]
