@@ -11,7 +11,12 @@ components:
   - id: redhat/vscode-xml/latest
     type: chePlugin
   - type: chePlugin
-    id: redhat/quarkus-java8/latest
+    id: redhat/java11/latest
+    preferences:
+      maven.userSettings: /usr/share/maven/conf/settings.xml
+  # Java 11 Quarkus is not yet in registry,
+  # - type: chePlugin
+  #   id: redhat/quarkus-java8/latest
   - alias: tutorial-tools
     type: kubernetes
     mountSources: true
