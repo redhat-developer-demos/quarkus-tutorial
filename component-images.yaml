@@ -19,7 +19,7 @@ items:
           resources:
             limits:
               cpu: 4
-              memory: 4Gi
+              memory: 6Gi
   - apiVersion: v1
     kind: Pod
     metadata:
