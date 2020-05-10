@@ -1,28 +1,42 @@
+---
 apiVersion: 1.0.0
 metadata:
-  name: quarkus-workshop
-projects:
-  - name: quarkus-tutorial
-    source:
-      type: git
-      location: 'https://github.com/redhat-developer-demos/quarkus-tutorial.git'
+  generateName: quarkus-tutorial-
+attributes:
+  persistVolumes: "false"
+projects: []
 components:
   - id: redhat/vscode-yaml/latest
     type: chePlugin
   - id: redhat/vscode-xml/latest
     type: chePlugin
-  - id: redhat/java8/latest
-    type: chePlugin
-  # Tool that allows to build java application including Quarkus
-  - alias: tools
+  - type: chePlugin
+    id: redhat/quarkus-java8/latest
+  - alias: tutorial-tools
     type: kubernetes
     mountSources: true
-    reference: https://raw.githubusercontent.com/redhat-developer-demos/guru-night/master/component-images.yaml
+    reference: https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/component-images.yaml
     selector:
       app: tutorial-tools
-  # - alias: container-tools
-  #   type: kubernetes
-  #   reference: https://raw.githubusercontent.com/redhat-developer-demos/guru-night/master/component-images.yaml
-  #   selector:
-  #     app: container-tools
-
+  - alias: db
+    type: kubernetes
+    reference: https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/component-images.yaml
+    selector:
+      app: database
+commands:
+  - name: Attach remote debugger
+    actions:
+      - type: vscode-launch
+        referenceContent: |
+          {
+            "version": "0.2.0",
+            "configurations": [
+              {
+                "type": "java",
+                "request": "attach",
+                "name": "Attach to Remote Quarkus App",
+                "hostName": "localhost",
+                "port": 5005
+              }
+            ]
+          }
