@@ -4,16 +4,15 @@
 * Basics
 ** xref:basics.adoc[Basics and Fundamentals]
 ** xref:configuration.adoc[Configuration]
-** xref:extensions.adoc[Quarkus Extensions]
 ** xref:panache.adoc[Hibernate with Panache]
 ** xref:spring.adoc[Spring Compatibility]
+** xref:kubernetes.adoc[Deploy to Kubernetes]
 
 * Cloud Native
 ** xref:reactive.adoc[Reactive with Mutiny]
 ** xref:kafka-and-streams.adoc[Apache Kafka with Reactive Streams]
 ** xref:rest-client.adoc[REST Client]
 ** xref:fault-tolerance.adoc[Fault Tolerance]
-** xref:kubernetes.adoc[Kubernetes Deployment]
 ** xref:health.adoc[Health Check]
 ** xref:metrics.adoc[Metrics]
 

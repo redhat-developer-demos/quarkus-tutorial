@@ -1,63 +1,90 @@
 = Configuration
-:linkattrs:
 
-include::_attributes.adoc[]
-:project-dir: fruits-app
-:quarkus-project-name: fruits-app
+:project-name: fruits-app
 
-Hardcoded values in your code is a no go, let's see how to add configuration to your application. 
-Quarkus relies on MicroProfile Config specification and the main configuration is  `application.properties`.
+Hardcoded values in your code is a no go, so let's see how to add configuration to your application. 
+Quarkus relies on the MicroProfile Config specification and the main configuration file is  `application.properties`.
 
-[#basics-configuration-new-property]
-== Add a new property
+== Using a config property in your code
 
-Add the following property to `$PROJECT_HOME/src/main/resources/application.properties`:
+Let's change our `HelloResource` class to use a configuration property. Change its content to:
 
-[#basics-configuration-add-new-property]
-[source,config,subs="+macros,+attributes"]
-----
-greetings.message = Hello y'all!
-----
-
-[#basics-configuration-get-value]
-== Get Configuration Value
-
-Open the following Java class `$PROJECT_HOME/src/main/java/com/example/FruitResource.java` and copy the next content in its body:
-
-[#basics-configuration-get-value-code]
 [.console-input]
-[source,java,subs="+macros"]
+[source,java]
 ----
-package com.example;
+package com.redhat.developers;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-@Path("/fruit")
-public class FruitResource {
+@Path("/hello")
+public class HelloResource {
 
-    @ConfigProperty(name = "greetings.message")
-    String message;
+    @ConfigProperty(name = "greeting")
+    String greeting;
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        return message;
+        return greeting;
     }
 }
 ----
 
-[#basics-call-configuration]
-== Invoke Service
-The simple `hello` REST URI can be called from the browser using http://localhost:8080[http://localhost:8080,window=_blank] or using cli like: 
+If you refresh your browser pointing to http://localhost:8080/hello[window="_blank"], you should see an error with a stacktrace like this:
 
-:doc-sec: basics-conf
-:k8s-cli: k8s
-:path: fruit
-:k8s-env: minikube
-:cli-tool: curl
-:address: localhost
-include::ROOT:partial$invoke-service.adoc[tag=call]
+[.console-output]
+[source,text]
+----
+javax.enterprise.inject.spi.DeploymentException: No config value of type [java.lang.String] exists for: greeting
+	at io.quarkus.arc.runtime.ConfigRecorder.validateConfigProperties(ConfigRecorder.java:37)
+	at io.quarkus.deployment.steps.ConfigBuildStep$validateConfigProperties61.deploy_0(ConfigBuildStep$validateConfigProperties61.zig:120)
+	at io.quarkus.deployment.steps.ConfigBuildStep$validateConfigProperties61.deploy(ConfigBuildStep$validateConfigProperties61.zig:36)
+	at io.quarkus.runner.ApplicationImpl.doStart(ApplicationImpl.zig:166)
+	at io.quarkus.runtime.Application.start(Application.java:89)
+	at io.quarkus.runtime.ApplicationLifecycleManager.run(ApplicationLifecycleManager.java:90)
+	at io.quarkus.runtime.Quarkus.run(Quarkus.java:61)
+	at io.quarkus.runtime.Quarkus.run(Quarkus.java:38)
+	at io.quarkus.runtime.Quarkus.run(Quarkus.java:106)
+	at io.quarkus.runner.GeneratedMain.main(GeneratedMain.zig:29)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at io.quarkus.runner.bootstrap.StartupActionImpl$1.run(StartupActionImpl.java:99)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+----
+
+Which is expected, since we didn't provide the `greeting` property neither at the `application.properties` file nor with some runtime configuration.
+
+== Adding a config property to `application.properties`
+
+Since we requested a `greeting` property in our code, let's provide a value to it in our `application.properties` file available in `src/main/resources`:
+
+[.console-input]
+[source,properties]
+----
+# Configuration file
+# key = value
+greeting=Hello y'all!
+----
+
+Refresh your browser pointing to http://localhost:8080/hello[window="_blank"]. You should see the `Hello y'all!` string.
+
+You can also use `curl` to check the same result:
+
+[.console-input]
+[source,bash]
+----
+curl localhost:8080/hello
+----
+
+[.console-output]
+[source,text]
+----
+Hello y'all!
+----

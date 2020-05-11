@@ -1,188 +1,126 @@
 = Basics and Fundamentals
 
-At the end of this chapter you will be able to :
+:project-name: fruits-app
 
-* [x] Create a Quarkus Java Application
-* [x] Build and run the Java application in JVM mode.
-* [x] Build and run the Java application in Native mode.
-* [x] Build and run the Java application in Developer mode
+== Creating a Quarkus Application
 
-////
-
-[#basics-prerequisite]
-== Prerequisite
-
-include::partial$prereq-cli.adoc[]
-////
-
-[#basics-create-quarkus-app]
-== Create Quarkus Application
-
-Create an empty folder called `quarkus-tutorial`. We'll call it our `$TUTORIAL_HOME`.
-
-[#create-tutorial-folder]
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mkdir quarkus-tutorial && cd quarkus-tutorial
-export TUTORIAL_HOME=`pwd`
-----
-
-Create the `fruits-app` folder and navigate to the folder:
-
-[#quarkusp-nav-to-work-folder]
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-mkdir -p $TUTORIAL_HOME/work && cd $TUTORIAL_HOME/work
-# set the Quarkus release environment variable 
-export QUARKUS_VERSION={quarkus-version}
-----
-
-[#quarkusp-mv-create-fruits-app]
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-mvn "io.quarkus:quarkus-maven-plugin:pass:[${QUARKUS_VERSION}]:create" \
-  -DprojectGroupId="com.example" \
-  -DprojectArtifactId="fruits-app" \
+mvn "io.quarkus:quarkus-maven-plugin:{quarkus-version}:create" \
+  -DprojectGroupId="com.redhat.developers" \
+  -DprojectArtifactId="{project-name}" \
   -DprojectVersion="1.0-SNAPSHOT" \
-  -DclassName="FruitResource" \
-  -Dpath="fruit"
-cd fruits-app
+  -DclassName="HelloResource" \
+  -Dpath="hello"
+cd {project-name}
 ----
 
-[#basics-ide-quarkus-app]
-== Open the Project in IDE
+IMPORTANT: All the remaining parts of this tutorial assume that you'll be working inside the project folder that was just created. In this case, `{project-name}`.
+
+== Build and Run the Quarkus Application
+
+include::ROOT:partial$compile-and-run.adoc[]
+
+Notice how *fast* Quarkus was ready to serve your requests. In this particular example Quarkus only required *0.016s* to start.
+
+You can open your browser with the url `http://localhost:8080/hello[window="_blank"]` and you should see a response like `hello`.
+
+Or else if you're a CLI person, you can run a `curl` command like:
+
+[.console-input]
+[source,bash]
+----
+curl localhost:8080/hello
+----
+
+[.console-output]
+[source,bash]
+----
+hello
+----
+
+== Stopping the application
+
+You can stop your running application by issuing a `CTRL+C` in your terminal.
+
+[.console-output]
+[source,bash]
+----
+^C2020-05-10 23:11:03,419 INFO  [io.quarkus] (main) fruits-app stopped in 0.007s
+----
+
+Quarkus was able to stop in just *0.007s*. Fast to start, fast to stop. Fast always!
+
+== Testing your application
+
+The scaffolding process also creates a test case for the example endpoint.
+
+Check the file `FruitResourceTest.java` in the folder `src/test/java` to see how a Quarkus integration test looks like.
+
+When running this test, the application is started once, then all tests are executed, and finally, the application is stopped. Although it is not mandatory, by default RestAssured project is used to test Rest endpoints but it is up to you to change that.
+
+You can run the test in your IDE or by running Maven:
+
+[.console-input]
+[source,bash]
+----
+./mvnw clean test
+----
+
+[.console-output]
+[source,bash]
+----
+[INFO] --- maven-surefire-plugin:2.22.1:test (default-test) @ fruits-app ---
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.redhat.developers.FruitResourceTest
+2020-05-10 19:12:12,533 INFO  [io.quarkus] (main) Quarkus 1.4.2.Final started in 1.069s. Listening on: http://0.0.0.0:8081
+2020-05-10 19:12:12,535 INFO  [io.quarkus] (main) Profile test activated.
+2020-05-10 19:12:12,535 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.384 s - in com.redhat.developers.FruitResourceTest
+2020-05-10 19:12:13,714 INFO  [io.quarkus] (main) Quarkus stopped in 0.057s
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  8.098 s
+[INFO] Finished at: 2020-05-10T19:12:14-04:00
+[INFO] ------------------------------------------------------------------------
+----
+
+== Open the Project in your IDE
 
 Open or import the generated project into your IDE.
 
-If you are using **vscode** you can open the project by:
+If you are using **vscode** you can open the project with:
 
-[#basics-ide-quarkus-project]
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 code .
 ----
 
-NOTE: All further sections of this tutorial assumes the application name to be `fruits-app`.
+NOTE: If you use `tutorial-tools`, your host `quarkus-tutorial/work` contains the application code; point your IDE to this directory.
 
-INFO: If you use `tutorial-tools`, your host `quarkus-tutorial/work` contains the application code ; point your IDE to this directory.
-
-[#basics-build-run-quarkus-app]
-== Build and Run the Quarkus Application
-
-
-include::ROOT:partial$compile-and-run.adoc[]
-
-You can <<basics-call-svc>> to see a response like `hello`.
-
-[#basics-testing]
-== Testing Fruit Resource
-
-The scaffolding process also creates a test case for the `fruit` endpoint.
-
-Open the next class `$PROJECT_HOME/src/test/java/com/example/FruitResourceTest.java` to see how a test looks like.
-
-include::ROOT:partial$invoke-service.adoc[tag=test]
-
-[#basics-run-quarkus-app-dev-mode]
-== Run Quarkus Application in Development mode
+== Live Coding (Development mode)
 
 Stop the Quarkus application that might be running in `jvm` or `native` mode.
 
-_Development_ mode enables hot deployment with background compilation, which means that when you modify your Java files and/or your resource files and refresh your browser, these changes will automatically take effect.
+_Live Coding_ or _Development mode_ enables hot deployment with background compilation, which means that when you modify your Java files and/or your resource files and refresh your browser, these changes will automatically take effect.
 
-:section-build-run: basics
+This is probably one of the best features of Quarkus: enabling a very fast and productive iterative feedback loop.
 
-include::ROOT:partial$run-dev-mode.adoc[]
+Let's start the _Live Coding_ mode by invoking `mvn`. You probably won't need to stop/start Quarkus again during this tutorial:
 
-[#basics-update]
-== Updating the code
-
-NOTE: Only if running in Development mode
-
-You can edit the Java source(s) in your IDE. When you save and hit refresh in your browser, you will notice browser showing the new changes.
-
-[#basics-call-svc]
-== Invoke Service
-The simple `hello` REST URI can be called from the browser using http://localhost:8080[http://localhost:8080,window=_blank] or using cli in a new terminal window like: 
-
-:doc-sec: basics
-:k8s-cli: k8s
-:path: fruit
-:k8s-env: minikube
-:cli-tool: curl
-:address: localhost
-include::ROOT:partial$invoke-service.adoc[tag=call]
-
-
-[#basics-logging]
-== Configuring Logging
-
-You can configure Quarkus logging by setting the following parameters to `$PROJECT_HOME/src/main/resources/application.properties`: 
-
-[#basics-update-logging-props]
 [.console-input]
-[source,config,subs="+macros,+attributes"]
+[source,bash]
 ----
-quarkus.log.console.level=INFO
+./mvnw quarkus:dev
 ----
-
-Also you can configure your application logger level.
-Let's add a logger and configure it.
-
-Open the following Java class `$PROJECT_HOME/src/main/java/com/example/FruitResource.java` and copy the next content in its body:
-
-[#basics-custom-log-manager]
-[.console-input]
-[source,java,subs="+macros"]
-----
-package com.example;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import org.jboss.logging.Logger;
-
-@Path("/fruit")
-public class FruitResource {
-
-    Logger logger = Logger.getLogger(FruitResource.class);
-
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
-        logger.info("Hello method is called.");
-        return "hello";
-    }
-}
-----
-
-And configure `INFO` mode for the service to `$PROJECT_HOME/src/main/resources/application.properties`: 
-
-[#basics-update-custom-logging-props]
-[.console-input]
-[source,config,subs="+macros,+attributes"]
-----
-quarkus.log.category."com.example".level=INFO
-----
-
-[#basics-call-svc-logging]
-=== Invoke Service
-The simple `hello` REST URI can be called from the browser using http://localhost:8080[http://localhost:8080,window=_blank] or using cli like: 
-
-:doc-sec: basics-log
-:k8s-cli: k8s
-:path: fruit
-:k8s-env: minikube
-:cli-tool: curl
-:address: localhost
-include::ROOT:partial$invoke-service.adoc[tag=call]
-
-And if you inspect the console output, you see the logging message:
-
-`2019-12-11 14:00:56,219 INFO  [com.exa.FruitResource] (vert.x-worker-thread-2) Hello method is called.`

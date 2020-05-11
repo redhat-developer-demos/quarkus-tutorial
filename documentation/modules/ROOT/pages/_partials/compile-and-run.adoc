@@ -7,7 +7,6 @@ JVM mode::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-cd pass:[$TUTORIAL_HOME]/work/{project-dir} && \
 ./mvnw -DskipTests clean package
 ----
 
@@ -17,7 +16,7 @@ To run the application in jvm mode
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-java -jar target/{project-dir}-1.0-SNAPSHOT-runner.jar
+java -jar target/{project-name}-1.0-SNAPSHOT-runner.jar
 ----
 
 --
@@ -28,7 +27,6 @@ Native mode::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-cd pass:[$TUTORIAL_HOME]/work/{project-dir} && \
 ./mvnw -DskipTests clean package -Pnative
 ----
 
@@ -40,13 +38,8 @@ To run the application in native mode
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./target/{project-dir}-1.0-SNAPSHOT-runner
+./target/{project-name}-1.0-SNAPSHOT-runner
 ----
-
-[IMPORTANT]
-=====
-Tests will fail on Windows as there is no graalvm support for windows, you can workaround it using `-DskipTests` option.
-=====
 
 --
 Native container-build mode::
@@ -56,7 +49,6 @@ Native container-build mode::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-cd pass:[$TUTORIAL_HOME]/work/{project-dir} && \
 ./mvnw package -DskipTests -Pnative -Dquarkus.native.container-build=true
 ----
 
@@ -68,9 +60,23 @@ To run the application in native mode you need to build a Docker image using the
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-docker build -f src/main/docker/Dockerfile.native -t example/{quarkus-project-name}:1.0-SNAPSHOT . && \
-docker run -it --rm -p 8080:8080 example/{quarkus-project-name}:1.0-SNAPSHOT
+docker build -f src/main/docker/Dockerfile.native -t example/{project-name}:1.0-SNAPSHOT .
+docker run -it --rm -p 8080:8080 example/{project-name}:1.0-SNAPSHOT
 ----
 
 --
 ====
+
+You'll see an output like this one:
+
+[.console-output]
+[source,text]
+----
+__  ____  __  _____   ___  __ ____  ______
+ --/ __ \/ / / / _ | / _ \/ //_/ / / / __/
+ -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \
+--\___\_\____/_/ |_/_/|_/_/|_|\____/___/
+2020-05-10 22:37:10,161 INFO  [io.quarkus] (main) fruits-app 1.0-SNAPSHOT (powered by Quarkus 1.4.2.Final) started in 0.016s. Listening on: http://0.0.0.0:8080
+2020-05-10 22:37:10,162 INFO  [io.quarkus] (main) Profile prod activated.
+2020-05-10 22:37:10,162 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy]
+----

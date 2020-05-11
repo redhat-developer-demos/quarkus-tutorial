@@ -1,113 +1,111 @@
 = Hibernate with Panache
 
-include::_attributes.adoc[]
-:quarkus-project-name: fruits-app
-:svc-path: fruit
-
-At the end of this chapter you will be able to :
-
-* [x] What is Panache ?
-* [x] How to build a Hibernate application using Panache?
+:project-name: fruits-app
 
 [#quarkusp-demo-overview]
 == Demo Overview 
 
-You'll learn how easy and productive is Quarkus with Hibernate with Panache. For this, we'll developer an application called "Fruits". It's a simple CRUD REST API that handles information about fruits.
+You'll learn how easy and productive is Quarkus with Hibernate with Panache. For this, we'll develop a simple CRUD REST API that handles information about fruits.
 
-We'll use http://www.h2database.com[H2] as our backing database, but it's very easy to use other database engines with Quarkus. As an exercise for later, we suggest you to try your favorite database engine with the documentation found https://quarkus.io/guides/datasource[here].
+We'll use http://www.h2database.com[H2,window="_blank"] as our backing database, but it's very easy to use other database engines with Quarkus. As an exercise for later, we suggest you to try your favorite database engine with the documentation found https://quarkus.io/guides/datasource[here,window="_blank"].
 
-== Build Fruit Resource
+== Adding Extensions
 
-The skeleton project to get started is the same you created at xref:02-basics-fundas.adoc[Basics and Fundamentals].
+Quarkus provides a lot of optimized dependencies to its ecosystem through *extensions*. For this particular chapter, we'll need to add extensions that enables us to work with H2, Hibernate ORM, Panache (a novel persistence API), and JSON.
 
-NOTE: For the easier reference, we shall call the `fruits-app` project folder as pass:[$PROJECT_HOME]
+You probably still have `mvn quarkus:dev` running in your terminal. And that's perfectly fine!
 
-[#quarkusp-add-persistence-extensions]
-==== Add Extensions
+Just open a new terminal window, and make sure you're at the root of your `{project-name}` project, then run:
 
-[#qext-mvn-add-persistence-extensions]
 [.console-input]
-[source,bash,subs="+macros,+attributes"]
+[source,bash]
 ----
 ./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-jdbc-h2, quarkus-hibernate-orm-panache, quarkus-smallrye-openapi"
 ----
 
-[#quarkusp-configure-props]
-=== Edit the application.properties
+[.console-output]
+[source,text]
+----
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------< com.redhat.developers:fruits-app >------------------
+[INFO] Building fruits-app 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ fruits-app ---
+✅ Adding extension io.quarkus:quarkus-resteasy-jsonb
+✅ Adding extension io.quarkus:quarkus-smallrye-openapi
+✅ Adding extension io.quarkus:quarkus-hibernate-orm-panache
+✅ Adding extension io.quarkus:quarkus-jdbc-h2
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.131 s
+[INFO] Finished at: 2020-05-10T22:05:46-04:00
+[INFO] ------------------------------------------------------------------------
+----
 
-Add the following properties to `pass:[$PROJECT_HOME]/src/main/resources/application.properties`:
+You'll notice that by running this command the Quarkus maven plugin added some dependencies to your `pom.xml` file. And best of all: Quarkus will autodetect and apply the changes, and you don't even need to restart Quarkus!
+
+== Adding database properties to your configuration
+
+Add the following database properties to your `application.properties` so that it looks like:
 
 [#quarkuspdb-update-props]
 [.console-input]
 [source,config,subs="+macros,+attributes"]
 ----
+# Configuration file
+# key = value
+greeting=Hello y'all!
 quarkus.datasource.url=jdbc:h2:mem:default
 quarkus.datasource.driver=org.h2.Driver
-quarkus.datasource.username=username-default
-quarkus.datasource.min-size=3
-quarkus.datasource.max-size=13
 quarkus.hibernate-orm.database.generation=drop-and-create
-quarkus.hibernate-orm.log.sql=true
 ----
 
-=== Test Database connection
-
-Let's start Quarkus in `development` mode to verify the database connection works:
-
-[#quarkuspdb-test-dbconn]
-[.console-input]
-[source,config,subs="+macros,+attributes"]
-----
-./mvnw compile quarkus:dev
-----
-
-If all went well then you should be seeing something like the following in the log:
-
-[.console-output]
-[source,bash]
-----
-Listening for transport dt_socket at address: 5005
-2020-02-18 09:57:23,827 WARN  [io.qua.agr.dep.AgroalProcessor] (build-23) Agroal dependency is present but no driver has been defined for the default datasource
-2020-02-18 09:57:25,322 INFO  [io.quarkus] (main) devnexus 1.0-SNAPSHOT (running on Quarkus 1.2.0.Final) started in 2.287s. Listening on: http://0.0.0.0:8080
-2020-02-18 09:57:25,324 INFO  [io.quarkus] (main) Profile dev activated. Live Coding activated.
-2020-02-18 09:57:25,324 INFO  [io.quarkus] (main) Installed features: [agroal, cdi, hibernate-orm, hibernate-orm-panache, jdbc-h2, narayana-jta, resteasy, resteasy-jsonb, smallrye-openapi, swagger-ui]
-----
-
-As you would have noticed there is no database logs. That's because we dont have any database related code yet:
-
-[#quarkusp-create-fruit-entity]
 == Create Fruit Entity
 
-Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `Fruit` with the following contents:
+Create a new `Fruit` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
-[#quarkusp-fruit-entity]
 [.console-input]
-[source,java,subs="+macros,+attributes"]
+[source,java]
 ----
-package com.example;
+package com.redhat.developers;
 
 import javax.persistence.Entity;
 
-@Entity
-public class Fruit {
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
+@Entity
+public class Fruit extends PanacheEntity {
+    
     public String name;
 
     public String season;
-
+    
 }
 ----
 
-[#quarkusp-edit-fruit-resource]
-== Update Fruit Resource
+Notice that we're not providing an `@Id`, nor we're creating the getters and setters. Don't worry. It's a *Panache* feature. By extending `PanacheEntity`, we're using the _Active Record_ persistence pattern instead of a _DAO_. This means that all persistence methods are blended with our own `Entity`.
 
-Edit the Java file `$PROJECT_HOME/src/main/java/com/example/FruitResource.java`, remove `hello()` method and add a new REST method to get all the available fruits:
+****
 
-[#quarkusp-fruit-entity1]
+**What is Panache ?**
+
+Hibernate ORM is the de facto JPA implementation and offers you the full breadth of an Object Relational Mapper. It makes complex mappings possible, but it does not make simple and common mappings trivial. Hibernate ORM with Panache focuses on making your entities trivial and fun to write in Quarkus.
+
+Fore more information please refer to the https://quarkus.io/guides/hibernate-orm-panache-guide[Panache Guide, window="_blank"]
+
+****
+
+== Create Fruit Resource
+
+Create a new `FruitResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
 [.console-input]
-[source,java,subs="+macros,+attributes"]
+[source,java]
 ----
-package com.example;
+package com.redhat.developers;
 
 import java.util.List;
 
@@ -118,65 +116,40 @@ import javax.ws.rs.core.MediaType;
 
 @Path("/fruit")
 public class FruitResource {
-
+    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Fruit> fruits() {
-        return Fruit.listAll(); <1>
+        return Fruit.listAll();
     }
 
 }
 ----
 
-<1> Your IDE will show an errors in `FruitResource.java` as it does not have a method `listAll()` in `Fruit` entity class.
+Now we should everything in place to query our *GET* REST endpoint:
 
-Do I need to add it ? The simple answer is **NO**.
-
-[#quarkusp-what-is-panache]
-==== Make Fruit Entity a Panache Entity 
-
-****
-
-**What is Panache ?**
-
-Hibernate ORM is the de facto JPA implementation and offers you the full breadth of an Object Relational Mapper. It makes complex mappings possible, but it does not make simple and common mappings trivial. Hibernate ORM with Panache focuses on making your entities trivial and fun to write in Quarkus.
-
-More info https://quarkus.io/guides/hibernate-orm-panache-guide[Panache Guide, window="_blank"]
-
-****
-
-[#quarkusp-fruit-entity2]
 [.console-input]
-[source,java,subs="+macros,+attributes"]
+[source,bash]
 ----
-package com.example;
-
-import javax.persistence.Entity;
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
-
-@Entity
-public class Fruit extends PanacheEntity {
-
-    public String name;
-
-    public String season;
-
-}
+curl localhost:8080/fruit
 ----
 
-Making the `Fruit` entity as a `Panache Entity` will make it both Entity and DAO and ofcourse the error in the `FruitResource.java` disappears.
+[.console-output]
+[source,text]
+----
+[]
+----
 
-Let's now access the Fruits API http://localhost:8080/fruit. If all goes well you will see some Hibernate SQL statements in the log that will create the new table `Fruit` with columns from `Fruit.java` entity class.
+We have an empty JSON array as the response, which is expected, since our database is currently empty.
 
-Since we don't have any fruits in the DB you would have got an empty response back. 
+=== Adding a POST endpoint
 
-Let's add a REST method to the `FruitResource.java` to save a 'Fruit':
+Let's change our `FruitResource` class to also contain a *POST* REST endpoint:
 
-[#quarkusp-fruit-add-persist]
 [.console-input]
-[source,java,subs="+macros,+attributes"]
+[source,java]
 ----
-package com.example;
+package com.redhat.developers;
 
 import java.util.List;
 
@@ -185,7 +158,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -193,17 +165,17 @@ import javax.ws.rs.core.Response.Status;
 
 @Path("/fruit")
 public class FruitResource {
-
+    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Fruit> fruits() {
         return Fruit.listAll();
     }
 
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response newFruit(Fruit fruit) {
         fruit.id = null;
         fruit.persist();
@@ -213,40 +185,44 @@ public class FruitResource {
 }
 ----
 
-You can insert a new fruit by using the  command: 
+Now you can insert a new fruit by using `curl`: 
 
 [.console-input]
 [source,bash]
 ----
-curl -vvv -d '{"name": "Banana", "season": "Summer"}' -H "Content-Type: application/json" POST http://localhost:8080/fruit`
+curl -d '{"name": "Banana", "season": "Summer"}' -H "Content-Type: application/json" http://localhost:8080/fruit
 ----
 
-Or use the Swagger UI at http://localhost:8080/swagger-ui[window="_blank"] to try your REST endpoints. 
+[.console-output]
+[source,text]
+----
+{"id":1,"name":"Banana","season":"Summer"}
+----
 
-Try adding a fruit via the Swagger UI Post and try listing the available fruits. You will see a JSON response like this one:
+Now if you refresh your browser pointing to http://localhost:8080/fruit[window=_blank], you should see a response like:
 
 [.console-output]
 [source,json]
 ----
-{
+[
+  {
+    "id": 1,
     "name": "Banana",
     "season": "Summer"
-}
+  }
+]
 ----
 
-NOTE: The response may vary based on which fruits you added.
+== Creating custom finders
 
-[#quarkusp-fruits-finder]
-== Finders 
-Cool! So far we did with some primitive methods lets explore some cool things that Panache offers. 
+We're using H2, which is an in-memory database. This means that every time Quarkus restarts, we'll lose all the information we have provided.
 
-Let's try to find all fruits by a season. To make the query return some data let us add some fruits to the DB.
+To provide some meaninful results for our custom finder, let's create some initial data to be populated to our database.
 
-Create the following `import.sql` file in `$PROJECT_HOME/src/main/resources`:
+Create the file `import.sql` in the folder `src/main/resources` with the following content:
 
-[#quarkusp-add-fruits]
 [.console-input]
-[source,sql,subs="+macros,+attributes"]
+[source,sql]
 ----
 INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Mango','Spring');
 INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Strawberry','Spring');
@@ -259,39 +235,98 @@ INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Apple',
 INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Grapes','Fall');
 ----
 
-Update `Fruit` entity to add a finder method like: 
+Now if you refresh your browser pointing to http://localhost:8080/fruit[window=_blank], you should see a response like:
+
+[.console-output]
+[source,json]
+----
+[
+  {
+    "id": 1,
+    "name": "Mango",
+    "season": "Spring"
+  },
+  {
+    "id": 2,
+    "name": "Strawberry",
+    "season": "Spring"
+  },
+  {
+    "id": 3,
+    "name": "Orange",
+    "season": "Winter"
+  },
+  {
+    "id": 4,
+    "name": "GrapeFruit",
+    "season": "Winter"
+  },
+  {
+    "id": 5,
+    "name": "Blueberry",
+    "season": "Summer"
+  },
+  {
+    "id": 6,
+    "name": "Banana",
+    "season": "Summer"
+  },
+  {
+    "id": 7,
+    "name": "Plum",
+    "season": "Summer"
+  },
+  {
+    "id": 8,
+    "name": "Apple",
+    "season": "Fall"
+  },
+  {
+    "id": 9,
+    "name": "Grapes",
+    "season": "Fall"
+  }
+]
+----
+
+== Adding a custom finder to the `Fruit` Entity
+
+Update the `Fruit` class to contain a finder method `findBySeason` like: 
 
 [#quarkusp-find-fruits]
 [.console-input]
-[source,java,subs="+macros,+attributes"]
+[source,java]
 ----
-package com.example;
+package com.redhat.developers;
 
 import java.util.List;
+
 import javax.persistence.Entity;
+
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 @Entity
 public class Fruit extends PanacheEntity {
-
+    
     public String name;
 
     public String season;
 
-    public static List<Fruit> getAllFruitsForSeason(String season) {
+    public static List<Fruit> findBySeason(String season) {
         return find("season", season).list();
     }
-
+    
 }
 ----
 
-Update `FruitResource` by adding a REST endpoint to get fruits by season: 
+== Update the GET REST endpoint to use a QueryParam
 
-[#quarkusp-get-find-fruits]
+Update the `FruitResource` class by changing the `fruits` method to use a `@QueryParam`:
+
 [.console-input]
-[source,java,subs="+macros,+attributes"]
+[source,java]
 ----
-package com.example;
+package com.redhat.developers;
 
 import java.util.List;
 
@@ -300,32 +335,28 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 @Path("/fruit")
 public class FruitResource {
-
+    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Fruit> fruits() {
+    public List<Fruit> fruits(@QueryParam("season") String season) {
+        if (season != null) {
+            return Fruit.findBySeason(season);
+        }
         return Fruit.listAll();
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{season}")
-    public List<Fruit> fruitsBySeason(@PathParam("season") String season) {
-        return Fruit.getAllFruitsForSeason(season);
-    }
-
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response newFruit(Fruit fruit) {
         fruit.id = null;
         fruit.persist();
@@ -335,9 +366,13 @@ public class FruitResource {
 }
 ----
 
-To test finder use the Swagger UI http://localhost:8080/swagger-ui. 
+Let's try to filter only the fruits with the *Summer* season:
 
-A finder for fruits for the __Summer__ season should return a response like :
+[.console-input]
+[source,bash]
+----
+curl localhost:8080/fruit?season=Summer
+----
 
 [.console-output]
 [source,json]
@@ -361,162 +396,109 @@ A finder for fruits for the __Summer__ season should return a response like :
 ]
 ----
 
-[#quarkusp-testing]
-=== Testing Fruit Resource
+== Using Repository instead of ActiveRecord pattern
 
-Let's write a test to validate that inserting and finding methods works as expected.
+Is `PanacheEntity` too opinionated for you? Maybe you prefer the traditional *Repository* pattern? Don't worry: we got you covered.
 
-[#quarkusp-testing-dep]
-== Adding AssertJ Dependency
+Panache also helps you to create Repositories.
 
-To validate simple output messages RestAssured assertions mechanism is enough but in our experience, when start dealing with more complex assertions then things might become a bit more complex. 
-For this reason, we encourage you to start using https://assertj.github.io/doc/[AssertJ].
+Create the `FruitRepository` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
-Open `$PROJECT_HOME/pom.xml` and add the following dependencies in the `dependencies` section:
-
-[#quarkusp-register-assertj]
 [.console-input]
-[source,xml,subs="+macros,+attributes"]
+[source,java]
 ----
-<dependency>
-    <groupId>org.assertj</groupId>
-    <artifactId>assertj-core</artifactId>
-    <version>3.13.2</version>
-    <scope>test</scope>
-</dependency>
-<dependency>
-    <groupId>io.quarkus</groupId>
-    <artifactId>quarkus-test-h2</artifactId>
-    <version>1.2.0.Final</version>
-    <scope>test</scope>
-</dependency>
-----
-
-[#quarkusp-write-persistence-test]
-== Write Persistence Test 
-
-Open the next class `$PROJECT_HOME/src/test/java/com/example/FruitResourceTest.java` and copy the next content:
-
-[#quarkusp-test-class]
-[.console-input]
-[source,java,subs="+macros"]
-----
-package com.example;
-
-import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
+package com.redhat.developers;
 
 import java.util.List;
 
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import javax.enterprise.context.ApplicationScoped;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.h2.H2DatabaseTestResource;
-import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.hibernate.orm.panache.PanacheRepository;
 
-@QuarkusTest
-@TestMethodOrder(OrderAnnotation.class)
-@QuarkusTestResource(H2DatabaseTestResource.class)
-public class FruitResourceTest {
+@ApplicationScoped
+public class FruitRepository implements PanacheRepository<Fruit> {
+    
+    public List<Fruit> findBySeason(String season) {
+        return find("season", season).list();
+    }
+    
+}
+----
 
-    @Test
-    @Order(1)
-    public void testInsertFruit() {
-        Fruit fruit = new Fruit();
-        fruit.name = "Watermelon";
-        fruit.season = "Summer";
+== Update FruitResource to use FruitRepository
 
-        given()
-          .contentType("application/json")
-          .body(fruit)
-          .when()
-          .post("/fruit")
-          .then()
-          .assertThat()
-          .statusCode(201);
+Now let's update our `FruitResource` class to use the `FruitRepository` we just created:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import java.util.List;
+
+import javax.transaction.Transactional;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
+@Path("/fruit")
+public class FruitResource {
+   
+    FruitRepository fruitRepository;
+
+    public FruitResource(FruitRepository fruitRepository) {
+        this.fruitRepository = fruitRepository;
     }
 
-    @Test
-    @Order(2)
-    public void testFindFruitsBySeason() {
-        final List<Fruit> fruits = given()
-          .when()
-          .get("/fruit/{season}", "Summer")
-          .then()
-          .assertThat()
-          .statusCode(200)
-          .extract()
-          .body()
-          .jsonPath()
-          .getList(".", Fruit.class);
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Fruit> fruits(@QueryParam("season") String season) {
+        if (season != null) {
+            return fruitRepository.findBySeason(season);
+        }
+        return Fruit.listAll();
+    }
 
-        assertThat(fruits)
-            .extracting("name")
-            .containsExactlyInAnyOrder("Banana", "Watermelon", "Plum", "Blueberry");
+    @Transactional
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response newFruit(Fruit fruit) {
+        fruit.id = null;
+        fruit.persist();
+        return Response.status(Status.CREATED).entity(fruit).build();
     }
 
 }
 ----
 
-include::ROOT:partial$invoke-service.adoc[tag=test]
+Let's try again to filter only the fruits with the *Spring* season:
 
-ifndef::workshop[]
+[.console-input]
+[source,bash]
+----
+curl localhost:8080/fruit?season=Summer
+----
 
-////
-[#quarkusp-cloud-dev]
-=== Deploy on Kubernetes
-
-If you are using Kubernetes/OpenShift instead of Docker you can deploy the application to Kubernetes/OpenShift following the next steps:
-
-We need to build the `{quarkus-project-name}` application and container before deploying them on kubernetes.
-
-NOTE: You can stop the `port-forward` and Quarkus application running in development mode 
-
-[#quarkusp-cloud-dev-build-container]
-==== Build the application container
-
-:quarkus-project-name: fruit-app
-:section-k8s: persistence
-include::ROOT:partial$build-containers.adoc[tag=build]
-
-[#quarkusp-cloud-dev-prepare-app]
-==== Prepare the Kubernetes Deployment
-
-include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-prep]
-
-==== Tag and Push the application container
-
-As we have already built the container images, we might need to build and push it to remote container registry. The remote images from the container registry will be used in kubernetes deployments:
-
-With example variable settings as above, run the following commands to tag the images:
-
-:doc-sec: tag-push-panache
-include::ROOT:partial$build-containers.adoc[tag=tag-push]
-
-[#quarkusp-cloud-dev-apply-resources]
-==== Apply Resources
-
-Once the images has been pushed to container registry, run the following command to deploy the application to kubernetes:
-
-:doc-sec: k8s-deploy-panache
-include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-deploy]
-
-[#quarkusp-invoke-k8s-svc]
-==== Invoke Kubernetes Service
-
-:doc-sec: k8s-invoke-panache
-include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-invoke-svc]
-
-NOTE: `swagger-ui` is available only for `dev` and `test`, you can use REST API tools to access API.
-
-[#quarkusp-persistence-k8s-delete-resources]
-=== Delete Kubernetes Resources
-
-:section-k8s: persistence
-include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-delete]
-
-endif::workshop[]
-////
+[.console-output]
+[source,json]
+----
+[
+  {
+    "id": 1,
+    "name": "Mango",
+    "season": "Spring"
+  },
+  {
+    "id": 2,
+    "name": "Strawberry",
+    "season": "Spring"
+  }
+]
+----
