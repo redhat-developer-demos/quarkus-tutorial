@@ -61,6 +61,7 @@ greeting=Hello y'all!
 quarkus.datasource.url=jdbc:h2:mem:default
 quarkus.datasource.driver=org.h2.Driver
 quarkus.hibernate-orm.database.generation=drop-and-create
+quarkus.hibernate-orm.sql-load-script=import.sql
 ----
 
 == Create Fruit Entity
@@ -483,7 +484,7 @@ Let's try again to filter only the fruits with the *Spring* season:
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/fruit?season=Summer
+curl localhost:8080/fruit?season=Spring
 ----
 
 [.console-output]

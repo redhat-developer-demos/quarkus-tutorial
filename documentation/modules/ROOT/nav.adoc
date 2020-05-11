@@ -9,12 +9,12 @@
 ** xref:kubernetes.adoc[Deploy to Kubernetes]
 
 * Cloud Native
-** xref:reactive.adoc[Reactive with Mutiny]
-** xref:kafka-and-streams.adoc[Apache Kafka with Reactive Streams]
 ** xref:rest-client.adoc[REST Client]
 ** xref:fault-tolerance.adoc[Fault Tolerance]
 ** xref:health.adoc[Health Check]
 ** xref:metrics.adoc[Metrics]
+** xref:reactive.adoc[Reactive with Mutiny]
+** xref:kafka-and-streams.adoc[Apache Kafka with Reactive Streams]
 
 * Advanced
 ** xref:security.adoc[Security with JWT RBAC]
