@@ -69,13 +69,13 @@
     <a class="nav-link" href="configuration.html">Configuration</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="extensions.html">Quarkus Extensions</a>
-  </li>
-  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="panache.html">Hibernate with Panache</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="spring.html">Spring Compatibility</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kubernetes.html">Deploy to Kubernetes</a>
   </li>
 </ul>
   </li>
@@ -94,9 +94,6 @@
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="fault-tolerance.html">Fault Tolerance</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="kubernetes.html">Kubernetes Deployment</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="health.html">Health Check</a>
@@ -139,97 +136,36 @@
   <div class="content">
 <article class="doc">
 <h1 class="page">Basics and Fundamentals</h1>
-<div id="preamble">
-<div class="sectionbody">
-<div class="paragraph">
-<p>At the end of this chapter you will be able to :</p>
-</div>
-<div class="ulist checklist">
-<ul class="checklist">
-<li>
-<p><i class="fa fa-check-square-o"></i> Create a Quarkus Java Application</p>
-</li>
-<li>
-<p><i class="fa fa-check-square-o"></i> Build and run the Java application in JVM mode.</p>
-</li>
-<li>
-<p><i class="fa fa-check-square-o"></i> Build and run the Java application in Native mode.</p>
-</li>
-<li>
-<p><i class="fa fa-check-square-o"></i> Build and run the Java application in Developer mode</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
 <div class="sect1">
-<h2 id="basics-create-quarkus-app"><a class="anchor" href="#basics-create-quarkus-app"></a>Create Quarkus Application</h2>
+<h2 id="_creating_a_quarkus_application"><a class="anchor" href="#_creating_a_quarkus_application"></a>Creating a Quarkus Application</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Create an empty folder called <code>quarkus-tutorial</code>. We&#8217;ll call it our <code>$TUTORIAL_HOME</code>.</p>
-</div>
-<div id="create-tutorial-folder" class="listingblock console-input">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir quarkus-tutorial &amp;&amp; cd quarkus-tutorial
-export TUTORIAL_HOME=`pwd`</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Create the <code>fruits-app</code> folder and navigate to the folder:</p>
-</div>
-<div id="quarkusp-nav-to-work-folder" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir -p $TUTORIAL_HOME/work &amp;&amp; cd $TUTORIAL_HOME/work
-# set the Quarkus release environment variable
-export QUARKUS_VERSION=1.4.2.Final</code></pre>
-</div>
-</div>
-<div id="quarkusp-mv-create-fruits-app" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn "io.quarkus:quarkus-maven-plugin:${QUARKUS_VERSION}:create" \
-  -DprojectGroupId="com.example" \
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn "io.quarkus:quarkus-maven-plugin:1.4.2.Final:create" \
+  -DprojectGroupId="com.redhat.developers" \
   -DprojectArtifactId="fruits-app" \
   -DprojectVersion="1.0-SNAPSHOT" \
-  -DclassName="FruitResource" \
-  -Dpath="fruit"
+  -DclassName="HelloResource" \
+  -Dpath="hello"
 cd fruits-app</code></pre>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="basics-ide-quarkus-app"><a class="anchor" href="#basics-ide-quarkus-app"></a>Open the Project in IDE</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Open or import the generated project into your IDE.</p>
-</div>
-<div class="paragraph">
-<p>If you are using <strong>vscode</strong> you can open the project by:</p>
-</div>
-<div id="basics-ide-quarkus-project" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">code .</code></pre>
-</div>
-</div>
-<div class="admonitionblock note">
+<div class="admonitionblock important">
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-note" title="Note"></i>
+<i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-All further sections of this tutorial assumes the application name to be <code>fruits-app</code>.
+All the remaining parts of this tutorial assume that you&#8217;ll be working inside the project folder that was just created. In this case, <code>fruits-app</code>.
 </td>
 </tr>
 </table>
 </div>
-<div class="paragraph">
-<p>INFO: If you use <code>tutorial-tools</code>, your host <code>quarkus-tutorial/work</code> contains the application code ; point your IDE to this directory.</p>
-</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="basics-build-run-quarkus-app"><a class="anchor" href="#basics-build-run-quarkus-app"></a>Build and Run the Quarkus Application</h2>
+<h2 id="_build_and_run_the_quarkus_application"><a class="anchor" href="#_build_and_run_the_quarkus_application"></a>Build and Run the Quarkus Application</h2>
 <div class="sectionbody">
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -249,8 +185,7 @@ All further sections of this tutorial assumes the application name to be <code>f
 <div class="tab-pane" aria-labelledby="tabset1_jvm-mode">
 <div id="basics-build-quarkus-jvm-app" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work/{project-dir} &amp;&amp; \
-./mvnw -DskipTests clean package</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -258,15 +193,14 @@ All further sections of this tutorial assumes the application name to be <code>f
 </div>
 <div id="basics-build-run-jvm-app" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">java -jar target/{project-dir}-1.0-SNAPSHOT-runner.jar</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">java -jar target/fruits-app-1.0-SNAPSHOT-runner.jar</code></pre>
 </div>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_native-mode">
 <div id="basics-build-quarkus-native-app" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work/{project-dir} &amp;&amp; \
-./mvnw -DskipTests clean package -Pnative</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package -Pnative</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -286,29 +220,14 @@ Native compilation will take few minutes to complete.
 </div>
 <div id="basics-build-run-native-app" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./target/{project-dir}-1.0-SNAPSHOT-runner</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./target/fruits-app-1.0-SNAPSHOT-runner</code></pre>
 </div>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Tests will fail on Windows as there is no graalvm support for windows, you can workaround it using <code>-DskipTests</code> option.</p>
-</div>
-</td>
-</tr>
-</table>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_native-container-build-mode">
 <div id="basics-build-quarkus-native-docker-app" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME/work/{project-dir} &amp;&amp; \
-./mvnw package -DskipTests -Pnative -Dquarkus.native.container-build=true</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw package -DskipTests -Pnative -Dquarkus.native.container-build=true</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -328,63 +247,126 @@ Native compilation will take few minutes to complete.
 </div>
 <div id="basics-build-run-native-docker-app" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/{quarkus-project-name}:1.0-SNAPSHOT . &amp;&amp; \
-docker run -it --rm -p 8080:8080 example/{quarkus-project-name}:1.0-SNAPSHOT</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/fruits-app:1.0-SNAPSHOT .
+docker run -it --rm -p 8080:8080 example/fruits-app:1.0-SNAPSHOT</code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="paragraph">
-<p>You can <a href="#basics-call-svc">Invoke Service</a> to see a response like <code>hello</code>.</p>
+<p>You&#8217;ll see an output like this one:</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="basics-testing"><a class="anchor" href="#basics-testing"></a>Testing Fruit Resource</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The scaffolding process also creates a test case for the <code>fruit</code> endpoint.</p>
-</div>
-<div class="paragraph">
-<p>Open the next class <code>$PROJECT_HOME/src/test/java/com/example/FruitResourceTest.java</code> to see how a test looks like.</p>
-</div>
-<div class="paragraph">
-<p>When running this test, the application is started once, then all tests are executed, and finally, the application is stopped.
-Although it is not mandatory, by default <a href="http://rest-assured.io/">RestAssured</a> project is used to test Rest endpoints but it is up to you to change that.</p>
-</div>
-<div class="paragraph">
-<p>You can run the test either in IDE or by running Maven:</p>
-</div>
-<div id="basics-run-tests" class="listingblock console-input">
+<div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw clean compile test</code></pre>
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">__  ____  __  _____   ___  __ ____  ______
+ --/ __ \/ / / / _ | / _ \/ //_/ / / / __/
+ -/ /_/ / /_/ / __ |/ , _/ ,&lt; / /_/ /\ \
+--\___\_\____/_/ |_/_/|_/_/|_|\____/___/
+2020-05-10 22:37:10,161 INFO  [io.quarkus] (main) fruits-app 1.0-SNAPSHOT (powered by Quarkus 1.4.2.Final) started in 0.016s. Listening on: http://0.0.0.0:8080
+2020-05-10 22:37:10,162 INFO  [io.quarkus] (main) Profile prod activated.
+2020-05-10 22:37:10,162 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy]</code></pre>
 </div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="basics-run-quarkus-app-dev-mode"><a class="anchor" href="#basics-run-quarkus-app-dev-mode"></a>Run Quarkus Application in Development mode</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Stop the Quarkus application that might be running in <code>jvm</code> or <code>native</code> mode.</p>
 </div>
 <div class="paragraph">
-<p><em>Development</em> mode enables hot deployment with background compilation, which means that when you modify your Java files and/or your resource files and refresh your browser, these changes will automatically take effect.</p>
+<p>Notice how <strong>fast</strong> Quarkus was ready to serve your requests. In this particular example Quarkus only required <strong>0.016s</strong> to start.</p>
 </div>
 <div class="paragraph">
-<p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
+<p>You can open your browser with the url <code><a href="http://localhost:8080/hello" class="bare" target="_blank" rel="noopener">http://localhost:8080/hello</a></code> and you should see a response like <code>hello</code>.</p>
 </div>
-<div id="basics-build-run-dev" class="listingblock console-input">
+<div class="paragraph">
+<p>Or else if you&#8217;re a CLI person, you can run a <code>curl</code> command like:</p>
+</div>
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/hello</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">hello</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="basics-update"><a class="anchor" href="#basics-update"></a>Updating the code</h2>
+<h2 id="_stopping_the_application"><a class="anchor" href="#_stopping_the_application"></a>Stopping the application</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>You can stop your running application by issuing a <code>CTRL+C</code> in your terminal.</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">^C2020-05-10 23:11:03,419 INFO  [io.quarkus] (main) fruits-app stopped in 0.007s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Quarkus was able to stop in just <strong>0.007s</strong>. Fast to start, fast to stop. Fast always!</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_testing_your_application"><a class="anchor" href="#_testing_your_application"></a>Testing your application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The scaffolding process also creates a test case for the example endpoint.</p>
+</div>
+<div class="paragraph">
+<p>Check the file <code>FruitResourceTest.java</code> in the folder <code>src/test/java</code> to see how a Quarkus integration test looks like.</p>
+</div>
+<div class="paragraph">
+<p>When running this test, the application is started once, then all tests are executed, and finally, the application is stopped. Although it is not mandatory, by default RestAssured project is used to test Rest endpoints but it is up to you to change that.</p>
+</div>
+<div class="paragraph">
+<p>You can run the test in your IDE or by running Maven:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw clean test</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[INFO] --- maven-surefire-plugin:2.22.1:test (default-test) @ fruits-app ---
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.redhat.developers.FruitResourceTest
+2020-05-10 19:12:12,533 INFO  [io.quarkus] (main) Quarkus 1.4.2.Final started in 1.069s. Listening on: http://0.0.0.0:8081
+2020-05-10 19:12:12,535 INFO  [io.quarkus] (main) Profile test activated.
+2020-05-10 19:12:12,535 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.384 s - in com.redhat.developers.FruitResourceTest
+2020-05-10 19:12:13,714 INFO  [io.quarkus] (main) Quarkus stopped in 0.057s
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  8.098 s
+[INFO] Finished at: 2020-05-10T19:12:14-04:00
+[INFO] ------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_open_the_project_in_your_ide"><a class="anchor" href="#_open_the_project_in_your_ide"></a>Open the Project in your IDE</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Open or import the generated project into your IDE.</p>
+</div>
+<div class="paragraph">
+<p>If you are using <strong>vscode</strong> you can open the project with:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">code .</code></pre>
+</div>
+</div>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -392,95 +374,31 @@ Although it is not mandatory, by default <a href="http://rest-assured.io/">RestA
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Only if running in Development mode
+If you use <code>tutorial-tools</code>, your host <code>quarkus-tutorial/work</code> contains the application code; point your IDE to this directory.
 </td>
 </tr>
 </table>
 </div>
-<div class="paragraph">
-<p>You can edit the Java source(s) in your IDE. When you save and hit refresh in your browser, you will notice browser showing the new changes.</p>
-</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="basics-call-svc"><a class="anchor" href="#basics-call-svc"></a>Invoke Service</h2>
+<h2 id="_live_coding_development_mode"><a class="anchor" href="#_live_coding_development_mode"></a>Live Coding (Development mode)</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The simple <code>hello</code> REST URI can be called from the browser using <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a> or using cli in a new terminal window like:</p>
+<p>Stop the Quarkus application that might be running in <code>jvm</code> or <code>native</code> mode.</p>
 </div>
-<div id="basics-k8s-svc-call" class="listingblock console-input">
+<div class="paragraph">
+<p><em>Live Coding</em> or <em>Development mode</em> enables hot deployment with background compilation, which means that when you modify your Java files and/or your resource files and refresh your browser, these changes will automatically take effect.</p>
+</div>
+<div class="paragraph">
+<p>This is probably one of the best features of Quarkus: enabling a very fast and productive iterative feedback loop.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s start the <em>Live Coding</em> mode by invoking <code>mvn</code>. You probably won&#8217;t need to stop/start Quarkus again during this tutorial:</p>
+</div>
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="basics-logging"><a class="anchor" href="#basics-logging"></a>Configuring Logging</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>You can configure Quarkus logging by setting the following parameters to <code>$PROJECT_HOME/src/main/resources/application.properties</code>:</p>
-</div>
-<div id="basics-update-logging-props" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.log.console.level=INFO</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Also you can configure your application logger level.
-Let&#8217;s add a logger and configure it.</p>
-</div>
-<div class="paragraph">
-<p>Open the following Java class <code>$PROJECT_HOME/src/main/java/com/example/FruitResource.java</code> and copy the next content in its body:</p>
-</div>
-<div id="basics-custom-log-manager" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import org.jboss.logging.Logger;
-
-@Path("/fruit")
-public class FruitResource {
-
-    Logger logger = Logger.getLogger(FruitResource.class);
-
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
-        logger.info("Hello method is called.");
-        return "hello";
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>And configure <code>INFO</code> mode for the service to <code>$PROJECT_HOME/src/main/resources/application.properties</code>:</p>
-</div>
-<div id="basics-update-custom-logging-props" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.log.category."com.example".level=INFO</code></pre>
-</div>
-</div>
-<div class="sect2">
-<h3 id="basics-call-svc-logging"><a class="anchor" href="#basics-call-svc-logging"></a>Invoke Service</h3>
-<div class="paragraph">
-<p>The simple <code>hello</code> REST URI can be called from the browser using <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a> or using cli like:</p>
-</div>
-<div id="basics-log-k8s-svc-call" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>And if you inspect the console output, you see the logging message:</p>
-</div>
-<div class="paragraph">
-<p><code>2019-12-11 14:00:56,219 INFO  [com.exa.FruitResource] (vert.x-worker-thread-2) Hello method is called.</code></p>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:dev</code></pre>
 </div>
 </div>
 </div>

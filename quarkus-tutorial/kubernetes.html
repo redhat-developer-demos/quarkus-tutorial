@@ -69,13 +69,13 @@
     <a class="nav-link" href="configuration.html">Configuration</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="extensions.html">Quarkus Extensions</a>
-  </li>
-  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="panache.html">Hibernate with Panache</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="spring.html">Spring Compatibility</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="kubernetes.html">Deploy to Kubernetes</a>
   </li>
 </ul>
   </li>
@@ -94,9 +94,6 @@
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="fault-tolerance.html">Fault Tolerance</a>
-  </li>
-  <li class="nav-item is-current-page" data-depth="2">
-    <a class="nav-link" href="kubernetes.html">Kubernetes Deployment</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="health.html">Health Check</a>
@@ -130,8 +127,8 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">quarkus-tutorial</a></li>
-    <li>Cloud Native</li>
-    <li><a href="kubernetes.html">Kubernetes Deployment</a></li>
+    <li>Basics</li>
+    <li><a href="kubernetes.html">Deploy to Kubernetes</a></li>
   </ul>
 </nav>
   <div class="edit-this-page"><a href="https://github.com/redhat-developer-demos/quarkus-tutorial/edit/master/documentation/modules/ROOT/pages/kubernetes.adoc">Edit this Page</a></div>
@@ -141,35 +138,145 @@
 <h1 class="page">Deploying to Kubernetes</h1>
 <div id="preamble">
 <div class="sectionbody">
-<div class="paragraph">
-<p>Unresolved include directive in modules/ROOT/pages/kubernetes.adoc - include::_attributes.adoc[]
-:quarkus-project-name: fruits-app
-:svc-path: fruit
-:experimental:</p>
-</div>
-<div class="paragraph">
-<p>At the end of this chapter you will be able to :</p>
-</div>
-<div class="ulist checklist">
-<ul class="checklist">
-<li>
-<p><i class="fa fa-check-square-o"></i> Containerize the Quarkus Application</p>
-</li>
-<li>
-<p><i class="fa fa-check-square-o"></i> Build and run the Quarkus Application in Kubernetes</p>
-</li>
-</ul>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+You will need a public container registry to store your image. If you don&#8217;t have an account, we recommend you to create a free account at <a href="http://quay.io" class="bare" target="_blank" rel="noopener">http://quay.io</a>. Our examples will be using the <code>quay.io</code> container registry and the <code>myrepo</code> organization, but you should change it to match your configuration.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="conk8s-prerequisite"><a class="anchor" href="#conk8s-prerequisite"></a>Prerequisite</h2>
+<h2 id="_adding_the_kubernetes_and_jib_extensions"><a class="anchor" href="#_adding_the_kubernetes_and_jib_extensions"></a>Adding the Kubernetes and Jib extensions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The following checks ensure that each chapter exercises are done with the right environment settings.</p>
+<p>You need a container registry that is accessible to your Kubernetes cluster so you can deploy your application in it.</p>
 </div>
 <div class="paragraph">
-<p>INFO: Make sure to use separate terminal windows or tabs between commands you run to target Docker for Mac/Windows and commands for Minikube/minishift as both will point to different docker engines.</p>
+<p>In this chapter we&#8217;ll be using the Quarkus Kubernetes extension to create our Kubernetes files, and we&#8217;ll be using the Quarkus Jib extension to create and push the container image to our container registry without the need for a local docker daemon.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s add the required extensions:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextensions=quarkus-kubernetes,quarkus-container-image-jib</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------&lt; com.redhat.developers:fruits-app &gt;------------------
+[INFO] Building fruits-app 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ fruits-app ---
+✅ Adding extension io.quarkus:quarkus-kubernetes
+✅ Adding extension io.quarkus:quarkus-container-image-jib
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.071 s
+[INFO] Finished at: 2020-05-10T23:35:05-04:00
+[INFO] ------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_adding_the_kubernetes_extension_properties"><a class="anchor" href="#_adding_the_kubernetes_extension_properties"></a>Adding the Kubernetes extension properties</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Add the following Kubernetes properties to your <code>application.properties</code> so that it looks like:</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Change <code>quay.io</code> to your container registry and <code>myrepo</code> to your organization. If you don&#8217;t, your push <strong>will</strong> fail.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties"># Configuration file
+# key = value
+greeting=Hello y'all!
+quarkus.datasource.url=jdbc:h2:mem:default
+quarkus.datasource.driver=org.h2.Driver
+quarkus.hibernate-orm.database.generation=drop-and-create
+quarkus.container-image.registry=quay.io
+quarkus.container-image.group=myrepo
+quarkus.container-image.name=fruits-app
+quarkus.container-image.tag=1.0-SNAPSHOTd</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authenticating_and_pushing_the_image_to_your_container_registry"><a class="anchor" href="#_authenticating_and_pushing_the_image_to_your_container_registry"></a>Authenticating and pushing the image to your container registry</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In order to push the container image that will be created by the <code>quarkus-container-image-jib</code> extension, you&#8217;ll need to authenticate to your container registry:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker login quay.io</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now create and push your container image using jib:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw clean package -DskipTests -Dquarkus.container-image.push=true</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">[INFO] [io.quarkus.container.image.jib.deployment.JibProcessor] Using base image with digest: sha256:b459cc59d6c7ddc9fd52f981fc4c187f44a401f2433a1b4110810d2dd9e98a07
+[INFO] [io.quarkus.container.image.jib.deployment.JibProcessor] Container entrypoint set to [java, -Dquarkus.http.host=0.0.0.0, -Djava.util.logging.manager=org.jboss.logmanager.LogManager, -cp, /app/resources:/app/classes:/app/libs/*, io.quarkus.runner.GeneratedMain]
+[INFO] [io.quarkus.container.image.jib.deployment.JibProcessor] Pushed container image quay.io/yanaga/fruits-app:1.0-SNAPSHOTd (sha256:6651a2f85f8f53ef951b3398d00f1c7da73bd0e8b21f87584d5a1c0e99aae12c)
+
+[INFO] [io.quarkus.deployment.QuarkusAugmentor] Quarkus augmentation completed in 14804ms
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  20.431 s
+[INFO] Finished at: 2020-05-11T00:05:25-04:00
+[INFO] ------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_deploy_your_application_to_your_kubernetes_cluster"><a class="anchor" href="#_deploy_your_application_to_your_kubernetes_cluster"></a>Deploy your application to your Kubernetes cluster</h2>
+<div class="sectionbody">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f target/kubernetes/kubernetes.yml</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">serviceaccount/fruits-app created
+service/fruits-app created
+deployment.apps/fruits-app created</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You might need to wait for some seconds until your application is up and running.</p>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -178,382 +285,57 @@
 <p><a id="tabset1_minikube"></a>Minikube</p>
 </li>
 <li>
-<p><a id="tabset1_minishift"></a>Minishift</p>
+<p><a id="tabset1_hosted"></a>Hosted</p>
+</li>
+<li>
+<p><a id="tabset1_hosted-on-aws"></a>Hosted on AWS</p>
 </li>
 </ul>
 </div>
 <div class="content">
 <div class="tab-pane" aria-labelledby="tabset1_minikube">
-<div class="ulist">
-<ul>
-<li>
-<p>Set your local docker to use minikube docker daemon</p>
-</li>
-</ul>
-</div>
-<div id="minikube-set-env" class="listingblock">
+<div id="{section-k8s}-ip-port-minikube" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">eval $(minikube docker-env)</code></pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Kubernetes should be v1.12+</p>
-</li>
-</ul>
-</div>
-<div id="kubectl-version" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl version</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">IP=$(minikube ip)
+PORT=$(kubectl get service/fruits-app -o jsonpath="{.spec.ports[*].nodePort}")</code></pre>
 </div>
 </div>
 </div>
-<div class="tab-pane" aria-labelledby="tabset1_minishift">
-<div class="ulist">
-<ul>
-<li>
-<p>Set your local docker to use minishift docker daemon</p>
-</li>
-</ul>
-</div>
-<div id="minishift-set-env" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">eval $(minishift docker-env)</code></pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>OpenShift CLI should be {openshift-version}</p>
-</li>
-</ul>
-</div>
-<div id="oc-version" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc version</code></pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Make sure to be on <code>quarkus-tutorial</code> OpenShift project</p>
-</li>
-</ul>
-</div>
-<div id="right-openshift-project" class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc project -q</code></pre>
-</div>
-</div>
+<div class="tab-pane" aria-labelledby="tabset1_hosted">
 <div class="paragraph">
-<p>If you are not on <code>quarkus-tutorial</code> project, then run following command to change to <code>quarkus-tutorial</code> project:</p>
+<p>If using a hosted Kubernetes cluster like OpenShift then use curl and the EXTERNAL-IP address with port <code>8080</code> or get it using <code>kubectl</code>:</p>
 </div>
-<div id="change-to-openshift-project" class="listingblock">
+<div id="{section-k8s}-ip-port-openshift" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc project quarkus-tutorial</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">IP=$(kubectl get service fruits-app -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
+PORT=$(kubectl get service fruits-app -o jsonpath="{.spec.ports[*].port}")</code></pre>
 </div>
 </div>
 </div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="conk8s-build-container-app"><a class="anchor" href="#conk8s-build-container-app"></a>Containerize Quarkus Application</h2>
-<div class="sectionbody">
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset2_jvm-mode"></a>JVM mode</p>
-</li>
-<li>
-<p><a id="tabset2_native-mode"></a>Native mode</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset2_jvm-mode">
-<div id="basics-build-quarkus-jvm-app" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package</code></pre>
-</div>
-</div>
+<div class="tab-pane" aria-labelledby="tabset1_hosted-on-aws">
 <div class="paragraph">
-<p>After successful maven build, run the following command to build the container - choose the terminal of the target environment you wish to use (docker, minishift or minokube) as you want to build and publish the image in the right registry:</p>
+<p>If using a hosted Kubernetes cluster like OpenShift then use curl and the EXTERNAL-IP address with port <code>8080</code> or get it using <code>kubectl</code>:</p>
 </div>
-<div id="basics-build-quarkus-jvm-app-container" class="listingblock console-input">
+<div id="{section-k8s}-ip-port-openshift" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.jvm -t example/{quarkus-project-name}:1.0-SNAPSHOT .</code></pre>
-</div>
-</div>
-</div>
-<div class="tab-pane" aria-labelledby="tabset2_native-mode">
-<div id="basics-build-quarkus-native-app" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package -Pnative -Dnative-image.docker-build=true <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Using the <code>-Dnative-image.docker-build=true</code> is very important as need a linux native binary what will be containerized.</td>
-</tr>
-</table>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Native compilation will take few minutes to complete.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>After successful maven build, run the following command to build the container - choose the terminal of the target environment you wish to use (docker, minishift or minokube) as you want to build and publish the image in the right registry:</p>
-</div>
-<div id="basics-build-quarkus-native-app-container" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/{quarkus-project-name}:1.0-SNAPSHOT .</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-For sake of simplicity the container name in both native and jvm mode are named identically. In real cases where you might need both containers, you&#8217;d like to name them differently to know exactly the package they are containing.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>After containerizing the application, we can verify the container by running the following commands:</p>
-</div>
-<div id="container-run-jvm-app" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -it --rm -p 8080:8080 example/{quarkus-project-name}:1.0-SNAPSHOT</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You can <a href="#conk8s-call-svc">Invoke Service</a> to see a response like <code>hello</code>.</p>
-</div>
-<div class="sect2">
-<h3 id="conk8s-call-svc"><a class="anchor" href="#conk8s-call-svc"></a>Invoke Service</h3>
-<div class="paragraph">
-<p>The simple <code>hello</code> REST URI can be called via browser using <code><a href="http://$(minikube" class="bare">http://$(minikube</a> ip)/fruit</code> or using CLI like:</p>
-</div>
-<div id="basics-k8s-svc-call" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl $(minikube ip):8080/fruit</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Then you can stop the container by typing kbd:[Ctrl+C].</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="conk8s-deploy-k8s-app"><a class="anchor" href="#conk8s-deploy-k8s-app"></a>Deploy Quarkus Application in Kubernetes</h2>
-<div class="sectionbody">
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>If you have not deployed the application previously, you need to add Quarkus Kubernetes extension. This extension uses <a href="https://github.com/dekorateio/dekorate">Dekorate</a> to generate a default Kubernetes resource template.</p>
-</div>
-<div id="qext-mvn-add-kubernetes-extension" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextensions="quarkus-kubernetes"</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You need to configure group and name of the Docker container used to deploy into Kubernetes.</p>
-</div>
-<div class="paragraph">
-<p>Add the following properties (if you haven&#8217;t already done it before) to $PROJECT_HOME/src/main/resources/application.properties:</p>
-</div>
-<div id="quarkusk8s-update-props" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">kubernetes.group=example
-quarkus.application.name={quarkus-project-name}</code></pre>
-</div>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Now you need to run Maven goal to generate Kubernetes resource.</p>
-</div>
-<div id="quarkusk8s-generate-kubernetes" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw package -DskipTests</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You can inspect the generated file by accessing next file:</p>
-</div>
-<div id="quakrusk8s-generated-kubernetes-resource" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat target/kubernetes/kubernetes.yml</code></pre>
-</div>
-</div>
-<div class="sect2">
-<h3 id="conk8s-k8s-apply-resources"><a class="anchor" href="#conk8s-k8s-apply-resources"></a>Apply Kubernetes Resources</h3>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset3_kubectl"></a>kubectl</p>
-</li>
-<li>
-<p><a id="tabset3_oc"></a>oc</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset3_kubectl">
-<div id="basics-run-deploy-k8s-app" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f $TUTORIAL_HOME/target/kubernetes/kubernetes.yml</code></pre>
-</div>
-</div>
-</div>
-<div class="tab-pane" aria-labelledby="tabset3_oc">
-<div id="basics-oc-run-deploy-k8s-app" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f $TUTORIAL_HOME/target/kubernetes/kubernetes.yml</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>A bug in the Dekorate library prevents Quarkus 0.27.0 to set the proper image name (see <a href="https://github.com/quarkusio/quarkus/issues/5135">bug report</a>).
-You can check the failure by running <code>kubectl get pods</code> and check that the fruit one is 0/1 and fails due to an image error.</p>
-</div>
-<div class="paragraph">
-<p>Edit the kubernetes resource to update the image via <code>kubectl edit deployment fruits-app</code> and search for the <code>image</code> property.
-Change the prefix from your username (or <code>developer</code>) to <code>example</code> which is the correct group under which we published our image earlier.
-Save and exit and the deployment should succeed.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="conk8s-invoke-k8s-svc"><a class="anchor" href="#conk8s-invoke-k8s-svc"></a>Invoke Kubernetes Service</h3>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset4_kubectl"></a>kubectl</p>
-</li>
-<li>
-<p><a id="tabset4_oc"></a>oc</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset4_kubectl">
-<div class="paragraph">
-<p>You need to create a <code>NodePort</code> to expose the application if you are in minikube.
-As generated resources creates a <code>ClusterIP</code> service, you need to patch it:</p>
-</div>
-<div id="container-k8s-run-expose-svc-nodeport" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl patch svc {quarkus-project-name} --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"}]'</code></pre>
-</div>
-</div>
-<div id="container-run-deploy-k8s-service" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(minikube service -n quarkustutorial {quarkus-project-name} --url)</code></pre>
-</div>
-</div>
-</div>
-<div class="tab-pane" aria-labelledby="tabset4_oc">
-<div class="paragraph">
-<p>With OpenShift we can create a route to make Quarkus application publicly accessible:</p>
-</div>
-<div id="container-oc-run-expose-svc-route" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc expose service {quarkus-project-name}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Once the service is exposed we can use the following command to get the public url:</p>
-</div>
-<div id="container-oc-run-get-route" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">SVC_URL=$(oc get routes {quarkus-project-name} -o jsonpath='{.spec.host}')</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">IP=$(kubectl get service fruits-app -o jsonpath="{.status.loadBalancer.ingress[0].hostname}")
+PORT=$(kubectl get service fruits-app -o jsonpath="{.spec.ports[*].port}")</code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="paragraph">
-<p>Now you can use the <code>SVC_URL</code> to call the service from the browser or via cli like:</p>
+<p>Curl the Service:</p>
 </div>
-<div id="container-call-k8s-svc" class="listingblock console-input">
+<div id="{section-k8s}-curl-the-service" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl $SVC_URL/{svc-path}</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl $IP:$PORT/hello</code></pre>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="conk8s-delete-k8s-app"><a class="anchor" href="#conk8s-delete-k8s-app"></a>Delete Kubernetes Resources</h3>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset5_kubectl"></a>kubectl</p>
-</li>
-<li>
-<p><a id="tabset5_oc"></a>oc</p>
-</li>
-</ul>
-</div>
+<div class="listingblock console-output">
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset5_kubectl">
-<div id="delete-basicsk8s-delete-k8s-app" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl delete all --all</code></pre>
-</div>
-</div>
-</div>
-<div class="tab-pane" aria-labelledby="tabset5_oc">
-<div id="delete-basicsk8s-delete-oc-app" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc delete all --all</code></pre>
-</div>
-</div>
-</div>
-</div>
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">Hello y'all!</code></pre>
 </div>
 </div>
 </div>

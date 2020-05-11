@@ -69,13 +69,13 @@
     <a class="nav-link" href="configuration.html">Configuration</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="extensions.html">Quarkus Extensions</a>
-  </li>
-  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="panache.html">Hibernate with Panache</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="spring.html">Spring Compatibility</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kubernetes.html">Deploy to Kubernetes</a>
   </li>
 </ul>
   </li>
@@ -94,9 +94,6 @@
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="fault-tolerance.html">Fault Tolerance</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="kubernetes.html">Kubernetes Deployment</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="health.html">Health Check</a>
@@ -142,70 +139,98 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Unresolved include directive in modules/ROOT/pages/configuration.adoc - include::_attributes.adoc[]
-:project-dir: fruits-app
-:quarkus-project-name: fruits-app</p>
-</div>
-<div class="paragraph">
-<p>Hardcoded values in your code is a no go, let&#8217;s see how to add configuration to your application.
-Quarkus relies on MicroProfile Config specification and the main configuration is  <code>application.properties</code>.</p>
+<p>Hardcoded values in your code is a no go, so let&#8217;s see how to add configuration to your application.
+Quarkus relies on the MicroProfile Config specification and the main configuration file is  <code>application.properties</code>.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="basics-configuration-new-property"><a class="anchor" href="#basics-configuration-new-property"></a>Add a new property</h2>
+<h2 id="_using_a_config_property_in_your_code"><a class="anchor" href="#_using_a_config_property_in_your_code"></a>Using a config property in your code</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Add the following property to <code>$PROJECT_HOME/src/main/resources/application.properties</code>:</p>
+<p>Let&#8217;s change our <code>HelloResource</code> class to use a configuration property. Change its content to:</p>
 </div>
-<div id="basics-configuration-add-new-property" class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">greetings.message = Hello y'all!</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="basics-configuration-get-value"><a class="anchor" href="#basics-configuration-get-value"></a>Get Configuration Value</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Open the following Java class <code>$PROJECT_HOME/src/main/java/com/example/FruitResource.java</code> and copy the next content in its body:</p>
-</div>
-<div id="basics-configuration-get-value-code" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-@Path("/fruit")
-public class FruitResource {
+@Path("/hello")
+public class HelloResource {
 
-    @ConfigProperty(name = "greetings.message")
-    String message;
+    @ConfigProperty(name = "greeting")
+    String greeting;
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        return message;
+        return greeting;
     }
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>If you refresh your browser pointing to <a href="http://localhost:8080/hello" class="bare" target="_blank" rel="noopener">http://localhost:8080/hello</a>, you should see an error with a stacktrace like this:</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">javax.enterprise.inject.spi.DeploymentException: No config value of type [java.lang.String] exists for: greeting
+	at io.quarkus.arc.runtime.ConfigRecorder.validateConfigProperties(ConfigRecorder.java:37)
+	at io.quarkus.deployment.steps.ConfigBuildStep$validateConfigProperties61.deploy_0(ConfigBuildStep$validateConfigProperties61.zig:120)
+	at io.quarkus.deployment.steps.ConfigBuildStep$validateConfigProperties61.deploy(ConfigBuildStep$validateConfigProperties61.zig:36)
+	at io.quarkus.runner.ApplicationImpl.doStart(ApplicationImpl.zig:166)
+	at io.quarkus.runtime.Application.start(Application.java:89)
+	at io.quarkus.runtime.ApplicationLifecycleManager.run(ApplicationLifecycleManager.java:90)
+	at io.quarkus.runtime.Quarkus.run(Quarkus.java:61)
+	at io.quarkus.runtime.Quarkus.run(Quarkus.java:38)
+	at io.quarkus.runtime.Quarkus.run(Quarkus.java:106)
+	at io.quarkus.runner.GeneratedMain.main(GeneratedMain.zig:29)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at io.quarkus.runner.bootstrap.StartupActionImpl$1.run(StartupActionImpl.java:99)
+	at java.base/java.lang.Thread.run(Thread.java:834)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Which is expected, since we didn&#8217;t provide the <code>greeting</code> property neither at the <code>application.properties</code> file nor with some runtime configuration.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="basics-call-configuration"><a class="anchor" href="#basics-call-configuration"></a>Invoke Service</h2>
+<h2 id="_adding_a_config_property_to_application_properties"><a class="anchor" href="#_adding_a_config_property_to_application_properties"></a>Adding a config property to <code>application.properties</code></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The simple <code>hello</code> REST URI can be called from the browser using <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a> or using cli like:</p>
+<p>Since we requested a <code>greeting</code> property in our code, let&#8217;s provide a value to it in our <code>application.properties</code> file available in <code>src/main/resources</code>:</p>
 </div>
-<div id="basics-conf-k8s-svc-call" class="listingblock console-input">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit</code></pre>
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties"># Configuration file
+# key = value
+greeting=Hello y'all!</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Refresh your browser pointing to <a href="http://localhost:8080/hello" class="bare" target="_blank" rel="noopener">http://localhost:8080/hello</a>. You should see the <code>Hello y&#8217;all!</code> string.</p>
+</div>
+<div class="paragraph">
+<p>You can also use <code>curl</code> to check the same result:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/hello</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">Hello y'all!</code></pre>
 </div>
 </div>
 </div>
