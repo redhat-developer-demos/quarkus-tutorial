@@ -84,12 +84,6 @@
     <span class="nav-text">Cloud Native</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
-  </li>
-  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="rest-client.html">REST Client</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -100,6 +94,12 @@
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="metrics.html">Metrics</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
   </li>
 </ul>
   </li>
@@ -231,6 +231,92 @@ greeting=Hello y'all!</code></pre>
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">Hello y'all!</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_update_your_integration_test"><a class="anchor" href="#_update_your_integration_test"></a>Update your integration test</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Since we changed the output of our <code>/hello</code> endpoint, our integration test doesn&#8217;t pass anymore.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s update <code>FruitResourceTest</code> to reflect our recent changes:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+
+import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.Test;
+
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.is;
+
+@QuarkusTest
+public class HelloResourceTest {
+
+    @Test
+    public void testHelloEndpoint() {
+        given()
+          .when().get("/hello")
+          .then()
+             .statusCode(200)
+             .body(is("Hello y'all!"));
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Stop your current Live Coding session of Quarkus in the terminal by sending a <code>CTRL+C</code>:</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">^C2020-05-11 08:33:41,865 INFO  [io.quarkus] (Quarkus Main Thread) fruits-app stopped in 0.007s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now run your tests to check if everything is ok:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw clean test</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">[INFO] --- maven-surefire-plugin:2.22.1:test (default-test) @ fruits-app ---
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.redhat.developers.HelloResourceTest
+2020-05-11 08:34:52,825 INFO  [io.quarkus] (main) Quarkus 1.4.2.Final started in 2.825s. Listening on: http://0.0.0.0:8081
+2020-05-11 08:34:52,826 INFO  [io.quarkus] (main) Profile test activated.
+2020-05-11 08:34:52,826 INFO  [io.quarkus] (main) Installed features: [agroal, cdi, hibernate-orm, hibernate-orm-panache, jdbc-h2, kubernetes, narayana-jta, resteasy, resteasy-jackson, resteasy-jsonb, smallrye-openapi, spring-data-jpa, spring-di, spring-web, swagger-ui]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.486 s - in com.redhat.developers.HelloResourceTest
+2020-05-11 08:34:54,017 INFO  [io.quarkus] (main) Quarkus stopped in 0.032s
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  10.533 s
+[INFO] Finished at: 2020-05-11T08:34:54-04:00
+[INFO] ------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>BUILD SUCCESS</code>! You can now go back to the amazing <em>Live Coding</em> mode of Quarkus:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:dev</code></pre>
 </div>
 </div>
 </div>

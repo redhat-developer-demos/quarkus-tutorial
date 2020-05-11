@@ -84,12 +84,6 @@
     <span class="nav-text">Cloud Native</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
-  </li>
-  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="rest-client.html">REST Client</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -100,6 +94,12 @@
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="metrics.html">Metrics</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
   </li>
 </ul>
   </li>
@@ -203,7 +203,8 @@
 greeting=Hello y'all!
 quarkus.datasource.url=jdbc:h2:mem:default
 quarkus.datasource.driver=org.h2.Driver
-quarkus.hibernate-orm.database.generation=drop-and-create</code></pre>
+quarkus.hibernate-orm.database.generation=drop-and-create
+quarkus.hibernate-orm.sql-load-script=import.sql</code></pre>
 </div>
 </div>
 </div>
@@ -653,7 +654,7 @@ public class FruitResource {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit?season=Summer</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit?season=Spring</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">

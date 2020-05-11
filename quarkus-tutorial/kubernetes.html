@@ -84,12 +84,6 @@
     <span class="nav-text">Cloud Native</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
-  </li>
-  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="rest-client.html">REST Client</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -100,6 +94,12 @@
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="metrics.html">Metrics</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
   </li>
 </ul>
   </li>
@@ -159,7 +159,7 @@ You will need a public container registry to store your image. If you don&#8217;
 <p>You need a container registry that is accessible to your Kubernetes cluster so you can deploy your application in it.</p>
 </div>
 <div class="paragraph">
-<p>In this chapter we&#8217;ll be using the Quarkus Kubernetes extension to create our Kubernetes files, and we&#8217;ll be using the Quarkus Jib extension to create and push the container image to our container registry without the need for a local docker daemon.</p>
+<p>In this chapter we&#8217;ll be using the Quarkus Kubernetes extension to create our Kubernetes files, and we&#8217;ll be using the Quarkus Jib extension to create and push the container image to our container registry without the need for a local running docker daemon.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s add the required extensions:</p>
@@ -216,10 +216,12 @@ greeting=Hello y'all!
 quarkus.datasource.url=jdbc:h2:mem:default
 quarkus.datasource.driver=org.h2.Driver
 quarkus.hibernate-orm.database.generation=drop-and-create
+quarkus.hibernate-orm.sql-load-script=import.sql
 quarkus.container-image.registry=quay.io
 quarkus.container-image.group=myrepo
 quarkus.container-image.name=fruits-app
-quarkus.container-image.tag=1.0-SNAPSHOTd</code></pre>
+quarkus.container-image.tag=1.0-SNAPSHOT
+quarkus.kubernetes.service-type=load-balancer</code></pre>
 </div>
 </div>
 </div>
@@ -297,7 +299,8 @@ deployment.apps/fruits-app created</code></pre>
 <div id="{section-k8s}-ip-port-minikube" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">IP=$(minikube ip)
-PORT=$(kubectl get service/fruits-app -o jsonpath="{.spec.ports[*].nodePort}")</code></pre>
+PORT=$(kubectl get service/fruits-app -o jsonpath="{.spec.ports[*].nodePort}")
+echo $IP:$PORT</code></pre>
 </div>
 </div>
 </div>
@@ -308,7 +311,8 @@ PORT=$(kubectl get service/fruits-app -o jsonpath="{.spec.ports[*].nodePort}")</
 <div id="{section-k8s}-ip-port-openshift" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">IP=$(kubectl get service fruits-app -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
-PORT=$(kubectl get service fruits-app -o jsonpath="{.spec.ports[*].port}")</code></pre>
+PORT=$(kubectl get service fruits-app -o jsonpath="{.spec.ports[*].port}")
+echo $IP:$PORT</code></pre>
 </div>
 </div>
 </div>
@@ -319,7 +323,8 @@ PORT=$(kubectl get service fruits-app -o jsonpath="{.spec.ports[*].port}")</code
 <div id="{section-k8s}-ip-port-openshift" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">IP=$(kubectl get service fruits-app -o jsonpath="{.status.loadBalancer.ingress[0].hostname}")
-PORT=$(kubectl get service fruits-app -o jsonpath="{.spec.ports[*].port}")</code></pre>
+PORT=$(kubectl get service fruits-app -o jsonpath="{.spec.ports[*].port}")
+echo $IP:$PORT</code></pre>
 </div>
 </div>
 </div>
