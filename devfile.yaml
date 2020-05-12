@@ -33,6 +33,9 @@ components:
           -Duser.home=/projects/maven
       - name: MAVEN_OPTS
         value: $(JAVA_OPTS)
+    volumes:
+      - name: m2
+        containerPath: /home/theia/.m2
     memoryLimit: 4Gi
     mountSources: true
   - type: dockerimage
