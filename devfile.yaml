@@ -4,7 +4,12 @@ metadata:
   generateName: quarkus-tutorial-
 attributes:
   persistVolumes: "false"
-projects: []
+projects:
+  - name: maven
+    source:
+      type: git
+      location: "https://github.com/redhat-developer-demos/quarkus-tutorial/.git"
+      sparseCheckoutDir: maven
 components:
   - id: redhat/vscode-yaml/latest
     type: chePlugin
@@ -13,16 +18,33 @@ components:
   - type: chePlugin
     id: redhat/java11/latest
     preferences:
-      maven.userSettings: /usr/share/maven/conf/settings.xml
-  # Java 11 Quarkus is not yet in registry,
-  # - type: chePlugin
-  #   id: redhat/quarkus-java8/latest
-  - alias: tutorial-tools
-    type: kubernetes
+      java.jdt.ls.vmargs: >-
+        -noverify -Xmx1G -XX:+UseG1GC -XX:+UseStringDeduplication
+        -Duser.home=/projects/maven
+  - type: dockerimage
+    alias: centos-quarkus-maven
+    image: quay.io/eclipse/che-quarkus:nightly
+    env:
+      - name: JAVA_OPTS
+        value:
+          "-XX:MaxRAMPercentage=50.0 -XX:+UseParallelGC -XX:MinHeapFreeRatio=10
+          -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90
+          -Dsun.zip.disableMemoryMapping=true -Xms20m -Djava.security.egd=file:/dev/./urandom
+          -Duser.home=/projects/maven"
+      - name: MAVEN_OPTS
+        value: $(JAVA_OPTS)
+    memoryLimit: 4Gi
     mountSources: true
-    reference: https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/component-images.yaml
-    selector:
-      app: tutorial-tools
+    volumes:
+      - name: m2
+        containerPath: /projects/maven/.m2
+  - type: dockerimage
+    alias: ubi-quarkus-native-image
+    image: "quay.io/quarkus/ubi-quarkus-native-image:20.0.0-java11"
+    memoryLimit: 32M
+    mountSources: true
+    command: ["tail"]
+    args: ["-f", "/dev/null"]
   - alias: db
     type: kubernetes
     reference: https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/component-images.yaml
