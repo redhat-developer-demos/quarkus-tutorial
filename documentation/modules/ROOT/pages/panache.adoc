@@ -1,6 +1,6 @@
 = Hibernate with Panache
 
-:project-name: fruits-app
+:project-name: tutorial-app
 
 [#quarkusp-demo-overview]
 == Demo Overview 
@@ -28,11 +28,11 @@ Just open a new terminal window, and make sure you're at the root of your `{proj
 ----
 [INFO] Scanning for projects...
 [INFO]
-[INFO] ------------------< com.redhat.developers:fruits-app >------------------
-[INFO] Building fruits-app 1.0-SNAPSHOT
+[INFO] -----------------< com.redhat.developers:tutorial-app >-----------------
+[INFO] Building tutorial-app 1.0-SNAPSHOT
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO]
-[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ fruits-app ---
+[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
 ✅ Adding extension io.quarkus:quarkus-resteasy-jsonb
 ✅ Adding extension io.quarkus:quarkus-smallrye-openapi
 ✅ Adding extension io.quarkus:quarkus-hibernate-orm-panache
@@ -40,8 +40,8 @@ Just open a new terminal window, and make sure you're at the root of your `{proj
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.131 s
-[INFO] Finished at: 2020-05-10T22:05:46-04:00
+[INFO] Total time:  1.969 s
+[INFO] Finished at: 2020-05-11T21:32:14-04:00
 [INFO] ------------------------------------------------------------------------
 ----
 
@@ -227,12 +227,12 @@ Create the file `import.sql` in the folder `src/main/resources` with the followi
 INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Mango','Spring');
 INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Strawberry','Spring');
 INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Orange','Winter');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'GrapeFruit','Winter');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Lemon','Winter');
 INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Blueberry','Summer');
 INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Banana','Summer');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Plum','Summer');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Watermelon','Summer');
 INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Apple','Fall');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Grapes','Fall');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Pear','Fall');
 ----
 
 Now if you refresh your browser pointing to http://localhost:8080/fruit[window=_blank], you should see a response like:
@@ -390,7 +390,7 @@ curl localhost:8080/fruit?season=Summer
   },
   {
     "id": 7,
-    "name": "Plum",
+    "name": "Watermelon",
     "season": "Summer"
   }
 ]

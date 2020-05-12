@@ -21,18 +21,18 @@ Let's add the required extensions:
 ----
 [INFO] Scanning for projects...
 [INFO]
-[INFO] ------------------< com.redhat.developers:fruits-app >------------------
-[INFO] Building fruits-app 1.0-SNAPSHOT
+[INFO] -----------------< com.redhat.developers:tutorial-app >-----------------
+[INFO] Building tutorial-app 1.0-SNAPSHOT
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO]
-[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ fruits-app ---
+[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
 ✅ Adding extension io.quarkus:quarkus-kubernetes
 ✅ Adding extension io.quarkus:quarkus-container-image-jib
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.071 s
-[INFO] Finished at: 2020-05-10T23:35:05-04:00
+[INFO] Total time:  1.744 s
+[INFO] Finished at: 2020-05-11T21:34:00-04:00
 [INFO] ------------------------------------------------------------------------
 ----
 
@@ -54,7 +54,7 @@ quarkus.hibernate-orm.database.generation=drop-and-create
 quarkus.hibernate-orm.sql-load-script=import.sql
 quarkus.container-image.registry=quay.io
 quarkus.container-image.group=myrepo
-quarkus.container-image.name=fruits-app
+quarkus.container-image.name=tutorial-app
 quarkus.container-image.tag=1.0-SNAPSHOT
 quarkus.kubernetes.service-type=load-balancer
 ----
@@ -82,7 +82,7 @@ Now create and push your container image using jib:
 ----
 [INFO] [io.quarkus.container.image.jib.deployment.JibProcessor] Using base image with digest: sha256:b459cc59d6c7ddc9fd52f981fc4c187f44a401f2433a1b4110810d2dd9e98a07
 [INFO] [io.quarkus.container.image.jib.deployment.JibProcessor] Container entrypoint set to [java, -Dquarkus.http.host=0.0.0.0, -Djava.util.logging.manager=org.jboss.logmanager.LogManager, -cp, /app/resources:/app/classes:/app/libs/*, io.quarkus.runner.GeneratedMain]
-[INFO] [io.quarkus.container.image.jib.deployment.JibProcessor] Pushed container image quay.io/yanaga/fruits-app:1.0-SNAPSHOTd (sha256:6651a2f85f8f53ef951b3398d00f1c7da73bd0e8b21f87584d5a1c0e99aae12c)
+[INFO] [io.quarkus.container.image.jib.deployment.JibProcessor] Pushed container image quay.io/myrepo/tutorial-app:1.0-SNAPSHOT (sha256:6651a2f85f8f53ef951b3398d00f1c7da73bd0e8b21f87584d5a1c0e99aae12c)
 
 [INFO] [io.quarkus.deployment.QuarkusAugmentor] Quarkus augmentation completed in 14804ms
 [INFO] ------------------------------------------------------------------------
@@ -104,9 +104,9 @@ kubectl apply -f target/kubernetes/kubernetes.yml
 [.console-output]
 [source,text]
 ----
-serviceaccount/fruits-app created
-service/fruits-app created
-deployment.apps/fruits-app created
+serviceaccount/tutorial-app created
+service/tutorial-app created
+deployment.apps/tutorial-app created
 ----
 
 You might need to wait for some seconds until your application is up and running.
@@ -116,7 +116,7 @@ You might need to wait for some seconds until your application is up and running
 Minikube::
 +
 --
-:tmp-service-exposed: fruits-app
+:tmp-service-exposed: tutorial-app
 
 [#{section-k8s}-ip-port-minikube]
 [.console-input]
@@ -132,7 +132,7 @@ Hosted::
 --
 If using a hosted Kubernetes cluster like OpenShift then use curl and the EXTERNAL-IP address with port `8080` or get it using `kubectl`:
 
-:tmp-service-exposed: fruits-app
+:tmp-service-exposed: tutorial-app
 
 [#{section-k8s}-ip-port-openshift]
 [.console-input]
@@ -148,7 +148,7 @@ Hosted on AWS::
 --
 If using a hosted Kubernetes cluster like OpenShift then use curl and the EXTERNAL-IP address with port `8080` or get it using `kubectl`:
 
-:tmp-service-exposed: fruits-app
+:tmp-service-exposed: tutorial-app
 
 [#{section-k8s}-ip-port-openshift]
 [.console-input]

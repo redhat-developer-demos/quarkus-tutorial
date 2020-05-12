@@ -17,18 +17,18 @@ Quarkus supports many of your favorite Spring Framework projects. In this chapte
 ----
 [INFO] Scanning for projects...
 [INFO]
-[INFO] ------------------< com.redhat.developers:fruits-app >------------------
-[INFO] Building fruits-app 1.0-SNAPSHOT
+[INFO] -----------------< com.redhat.developers:tutorial-app >-----------------
+[INFO] Building tutorial-app 1.0-SNAPSHOT
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO]
-[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ fruits-app ---
+[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
 ✅ Adding extension io.quarkus:quarkus-spring-data-jpa
 ✅ Adding extension io.quarkus:quarkus-spring-web
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.261 s
-[INFO] Finished at: 2020-05-10T23:36:14-04:00
+[INFO] Total time:  2.052 s
+[INFO] Finished at: 2020-05-11T21:33:15-04:00
 [INFO] ------------------------------------------------------------------------
 ----
 

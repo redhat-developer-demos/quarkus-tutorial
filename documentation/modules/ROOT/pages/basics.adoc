@@ -1,6 +1,6 @@
 = Basics and Fundamentals
 
-:project-name: fruits-app
+:project-name: tutorial-app
 
 == Creating a Quarkus Application
 
@@ -47,7 +47,7 @@ You can stop your running application by issuing a `CTRL+C` in your terminal.
 [.console-output]
 [source,bash]
 ----
-^C2020-05-10 23:11:03,419 INFO  [io.quarkus] (main) fruits-app stopped in 0.007s
+^C2020-05-10 23:11:03,419 INFO  [io.quarkus] (main) tutorial-app stopped in 0.007s
 ----
 
 Quarkus was able to stop in just *0.007s*. Fast to start, fast to stop. Fast always!
@@ -71,17 +71,15 @@ You can run the test in your IDE or by running Maven:
 [.console-output]
 [source,bash]
 ----
-[INFO] --- maven-surefire-plugin:2.22.1:test (default-test) @ fruits-app ---
-[INFO]
 [INFO] -------------------------------------------------------
 [INFO]  T E S T S
 [INFO] -------------------------------------------------------
-[INFO] Running com.redhat.developers.FruitResourceTest
-2020-05-10 19:12:12,533 INFO  [io.quarkus] (main) Quarkus 1.4.2.Final started in 1.069s. Listening on: http://0.0.0.0:8081
-2020-05-10 19:12:12,535 INFO  [io.quarkus] (main) Profile test activated.
-2020-05-10 19:12:12,535 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy]
-[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.384 s - in com.redhat.developers.FruitResourceTest
-2020-05-10 19:12:13,714 INFO  [io.quarkus] (main) Quarkus stopped in 0.057s
+[INFO] Running com.redhat.developers.HelloResourceTest
+2020-05-11 21:28:53,566 INFO  [io.quarkus] (main) Quarkus 1.4.2.Final started in 1.636s. Listening on: http://0.0.0.0:8081
+2020-05-11 21:28:53,568 INFO  [io.quarkus] (main) Profile test activated.
+2020-05-11 21:28:53,568 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.525 s - in com.redhat.developers.HelloResourceTest
+2020-05-11 21:28:55,158 INFO  [io.quarkus] (main) Quarkus stopped in 0.040s
 [INFO]
 [INFO] Results:
 [INFO]
@@ -90,8 +88,8 @@ You can run the test in your IDE or by running Maven:
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  8.098 s
-[INFO] Finished at: 2020-05-10T19:12:14-04:00
+[INFO] Total time:  11.942 s
+[INFO] Finished at: 2020-05-11T21:28:55-04:00
 [INFO] ------------------------------------------------------------------------
 ----
 
