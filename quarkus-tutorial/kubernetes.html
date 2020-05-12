@@ -173,18 +173,18 @@ You will need a public container registry to store your image. If you don&#8217;
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">[INFO] Scanning for projects...
 [INFO]
-[INFO] ------------------&lt; com.redhat.developers:fruits-app &gt;------------------
-[INFO] Building fruits-app 1.0-SNAPSHOT
+[INFO] -----------------&lt; com.redhat.developers:tutorial-app &gt;-----------------
+[INFO] Building tutorial-app 1.0-SNAPSHOT
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO]
-[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ fruits-app ---
+[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
 ✅ Adding extension io.quarkus:quarkus-kubernetes
 ✅ Adding extension io.quarkus:quarkus-container-image-jib
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.071 s
-[INFO] Finished at: 2020-05-10T23:35:05-04:00
+[INFO] Total time:  1.744 s
+[INFO] Finished at: 2020-05-11T21:34:00-04:00
 [INFO] ------------------------------------------------------------------------</code></pre>
 </div>
 </div>
@@ -219,7 +219,7 @@ quarkus.hibernate-orm.database.generation=drop-and-create
 quarkus.hibernate-orm.sql-load-script=import.sql
 quarkus.container-image.registry=quay.io
 quarkus.container-image.group=myrepo
-quarkus.container-image.name=fruits-app
+quarkus.container-image.name=tutorial-app
 quarkus.container-image.tag=1.0-SNAPSHOT
 quarkus.kubernetes.service-type=load-balancer</code></pre>
 </div>
@@ -249,7 +249,7 @@ quarkus.kubernetes.service-type=load-balancer</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">[INFO] [io.quarkus.container.image.jib.deployment.JibProcessor] Using base image with digest: sha256:b459cc59d6c7ddc9fd52f981fc4c187f44a401f2433a1b4110810d2dd9e98a07
 [INFO] [io.quarkus.container.image.jib.deployment.JibProcessor] Container entrypoint set to [java, -Dquarkus.http.host=0.0.0.0, -Djava.util.logging.manager=org.jboss.logmanager.LogManager, -cp, /app/resources:/app/classes:/app/libs/*, io.quarkus.runner.GeneratedMain]
-[INFO] [io.quarkus.container.image.jib.deployment.JibProcessor] Pushed container image quay.io/yanaga/fruits-app:1.0-SNAPSHOTd (sha256:6651a2f85f8f53ef951b3398d00f1c7da73bd0e8b21f87584d5a1c0e99aae12c)
+[INFO] [io.quarkus.container.image.jib.deployment.JibProcessor] Pushed container image quay.io/myrepo/tutorial-app:1.0-SNAPSHOT (sha256:6651a2f85f8f53ef951b3398d00f1c7da73bd0e8b21f87584d5a1c0e99aae12c)
 
 [INFO] [io.quarkus.deployment.QuarkusAugmentor] Quarkus augmentation completed in 14804ms
 [INFO] ------------------------------------------------------------------------
@@ -272,9 +272,9 @@ quarkus.kubernetes.service-type=load-balancer</code></pre>
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">serviceaccount/fruits-app created
-service/fruits-app created
-deployment.apps/fruits-app created</code></pre>
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">serviceaccount/tutorial-app created
+service/tutorial-app created
+deployment.apps/tutorial-app created</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -299,7 +299,7 @@ deployment.apps/fruits-app created</code></pre>
 <div id="{section-k8s}-ip-port-minikube" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">IP=$(minikube ip)
-PORT=$(kubectl get service/fruits-app -o jsonpath="{.spec.ports[*].nodePort}")
+PORT=$(kubectl get service/tutorial-app -o jsonpath="{.spec.ports[*].nodePort}")
 echo $IP:$PORT</code></pre>
 </div>
 </div>
@@ -310,8 +310,8 @@ echo $IP:$PORT</code></pre>
 </div>
 <div id="{section-k8s}-ip-port-openshift" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">IP=$(kubectl get service fruits-app -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
-PORT=$(kubectl get service fruits-app -o jsonpath="{.spec.ports[*].port}")
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">IP=$(kubectl get service tutorial-app -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
+PORT=$(kubectl get service tutorial-app -o jsonpath="{.spec.ports[*].port}")
 echo $IP:$PORT</code></pre>
 </div>
 </div>
@@ -322,8 +322,8 @@ echo $IP:$PORT</code></pre>
 </div>
 <div id="{section-k8s}-ip-port-openshift" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">IP=$(kubectl get service fruits-app -o jsonpath="{.status.loadBalancer.ingress[0].hostname}")
-PORT=$(kubectl get service fruits-app -o jsonpath="{.spec.ports[*].port}")
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">IP=$(kubectl get service tutorial-app -o jsonpath="{.status.loadBalancer.ingress[0].hostname}")
+PORT=$(kubectl get service tutorial-app -o jsonpath="{.spec.ports[*].port}")
 echo $IP:$PORT</code></pre>
 </div>
 </div>

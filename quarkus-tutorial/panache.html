@@ -157,7 +157,7 @@
 <p>You probably still have <code>mvn quarkus:dev</code> running in your terminal. And that&#8217;s perfectly fine!</p>
 </div>
 <div class="paragraph">
-<p>Just open a new terminal window, and make sure you&#8217;re at the root of your <code>fruits-app</code> project, then run:</p>
+<p>Just open a new terminal window, and make sure you&#8217;re at the root of your <code>tutorial-app</code> project, then run:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -168,11 +168,11 @@
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">[INFO] Scanning for projects...
 [INFO]
-[INFO] ------------------&lt; com.redhat.developers:fruits-app &gt;------------------
-[INFO] Building fruits-app 1.0-SNAPSHOT
+[INFO] -----------------&lt; com.redhat.developers:tutorial-app &gt;-----------------
+[INFO] Building tutorial-app 1.0-SNAPSHOT
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO]
-[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ fruits-app ---
+[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
 ✅ Adding extension io.quarkus:quarkus-resteasy-jsonb
 ✅ Adding extension io.quarkus:quarkus-smallrye-openapi
 ✅ Adding extension io.quarkus:quarkus-hibernate-orm-panache
@@ -180,8 +180,8 @@
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.131 s
-[INFO] Finished at: 2020-05-10T22:05:46-04:00
+[INFO] Total time:  1.969 s
+[INFO] Finished at: 2020-05-11T21:32:14-04:00
 [INFO] ------------------------------------------------------------------------</code></pre>
 </div>
 </div>
@@ -385,12 +385,12 @@ public class FruitResource {
 <pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Mango','Spring');
 INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Strawberry','Spring');
 INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Orange','Winter');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'GrapeFruit','Winter');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Lemon','Winter');
 INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Blueberry','Summer');
 INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Banana','Summer');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Plum','Summer');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Watermelon','Summer');
 INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Apple','Fall');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Grapes','Fall');</code></pre>
+INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Pear','Fall');</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -552,7 +552,7 @@ public class FruitResource {
   },
   {
     "id": 7,
-    "name": "Plum",
+    "name": "Watermelon",
     "season": "Summer"
   }
 ]</code></pre>

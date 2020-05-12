@@ -143,11 +143,11 @@
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn "io.quarkus:quarkus-maven-plugin:1.4.2.Final:create" \
   -DprojectGroupId="com.redhat.developers" \
-  -DprojectArtifactId="fruits-app" \
+  -DprojectArtifactId="tutorial-app" \
   -DprojectVersion="1.0-SNAPSHOT" \
   -DclassName="HelloResource" \
   -Dpath="hello"
-cd fruits-app</code></pre>
+cd tutorial-app</code></pre>
 </div>
 </div>
 <div class="admonitionblock important">
@@ -157,7 +157,7 @@ cd fruits-app</code></pre>
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-All the remaining parts of this tutorial assume that you&#8217;ll be working inside the project folder that was just created. In this case, <code>fruits-app</code>.
+All the remaining parts of this tutorial assume that you&#8217;ll be working inside the project folder that was just created. In this case, <code>tutorial-app</code>.
 </td>
 </tr>
 </table>
@@ -193,7 +193,7 @@ All the remaining parts of this tutorial assume that you&#8217;ll be working ins
 </div>
 <div id="basics-build-run-jvm-app" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">java -jar target/fruits-app-1.0-SNAPSHOT-runner.jar</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">java -jar target/tutorial-app-1.0-SNAPSHOT-runner.jar</code></pre>
 </div>
 </div>
 </div>
@@ -220,7 +220,7 @@ Native compilation will take few minutes to complete.
 </div>
 <div id="basics-build-run-native-app" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./target/fruits-app-1.0-SNAPSHOT-runner</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./target/tutorial-app-1.0-SNAPSHOT-runner</code></pre>
 </div>
 </div>
 </div>
@@ -247,8 +247,8 @@ Native compilation will take few minutes to complete.
 </div>
 <div id="basics-build-run-native-docker-app" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/fruits-app:1.0-SNAPSHOT .
-docker run -it --rm -p 8080:8080 example/fruits-app:1.0-SNAPSHOT</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/tutorial-app:1.0-SNAPSHOT .
+docker run -it --rm -p 8080:8080 example/tutorial-app:1.0-SNAPSHOT</code></pre>
 </div>
 </div>
 </div>
@@ -263,7 +263,7 @@ docker run -it --rm -p 8080:8080 example/fruits-app:1.0-SNAPSHOT</code></pre>
  --/ __ \/ / / / _ | / _ \/ //_/ / / / __/
  -/ /_/ / /_/ / __ |/ , _/ ,&lt; / /_/ /\ \
 --\___\_\____/_/ |_/_/|_/_/|_|\____/___/
-2020-05-10 22:37:10,161 INFO  [io.quarkus] (main) fruits-app 1.0-SNAPSHOT (powered by Quarkus 1.4.2.Final) started in 0.016s. Listening on: http://0.0.0.0:8080
+2020-05-10 22:37:10,161 INFO  [io.quarkus] (main) tutorial-app 1.0-SNAPSHOT (powered by Quarkus 1.4.2.Final) started in 0.016s. Listening on: http://0.0.0.0:8080
 2020-05-10 22:37:10,162 INFO  [io.quarkus] (main) Profile prod activated.
 2020-05-10 22:37:10,162 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy]</code></pre>
 </div>
@@ -297,7 +297,7 @@ docker run -it --rm -p 8080:8080 example/fruits-app:1.0-SNAPSHOT</code></pre>
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">^C2020-05-10 23:11:03,419 INFO  [io.quarkus] (main) fruits-app stopped in 0.007s</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">^C2020-05-10 23:11:03,419 INFO  [io.quarkus] (main) tutorial-app stopped in 0.007s</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -327,17 +327,15 @@ docker run -it --rm -p 8080:8080 example/fruits-app:1.0-SNAPSHOT</code></pre>
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[INFO] --- maven-surefire-plugin:2.22.1:test (default-test) @ fruits-app ---
-[INFO]
-[INFO] -------------------------------------------------------
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[INFO] -------------------------------------------------------
 [INFO]  T E S T S
 [INFO] -------------------------------------------------------
-[INFO] Running com.redhat.developers.FruitResourceTest
-2020-05-10 19:12:12,533 INFO  [io.quarkus] (main) Quarkus 1.4.2.Final started in 1.069s. Listening on: http://0.0.0.0:8081
-2020-05-10 19:12:12,535 INFO  [io.quarkus] (main) Profile test activated.
-2020-05-10 19:12:12,535 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy]
-[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.384 s - in com.redhat.developers.FruitResourceTest
-2020-05-10 19:12:13,714 INFO  [io.quarkus] (main) Quarkus stopped in 0.057s
+[INFO] Running com.redhat.developers.HelloResourceTest
+2020-05-11 21:28:53,566 INFO  [io.quarkus] (main) Quarkus 1.4.2.Final started in 1.636s. Listening on: http://0.0.0.0:8081
+2020-05-11 21:28:53,568 INFO  [io.quarkus] (main) Profile test activated.
+2020-05-11 21:28:53,568 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.525 s - in com.redhat.developers.HelloResourceTest
+2020-05-11 21:28:55,158 INFO  [io.quarkus] (main) Quarkus stopped in 0.040s
 [INFO]
 [INFO] Results:
 [INFO]
@@ -346,8 +344,8 @@ docker run -it --rm -p 8080:8080 example/fruits-app:1.0-SNAPSHOT</code></pre>
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  8.098 s
-[INFO] Finished at: 2020-05-10T19:12:14-04:00
+[INFO] Total time:  11.942 s
+[INFO] Finished at: 2020-05-11T21:28:55-04:00
 [INFO] ------------------------------------------------------------------------</code></pre>
 </div>
 </div>
