@@ -1,5 +1,13 @@
 = Metrics
 
+When running applications in production we need to send monitoring information to some services like Prometheus.
+
+Quarkus provides JVM and other statistics out-of-box with the Metrics extension, but it's very valuable for our application to produce its own metrics. Let's see how we can achieve it in this chapter.
+
+== Add the Metrics extension
+
+Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
+
 [.console-input]
 [source,bash]
 ----
@@ -25,6 +33,10 @@
 [INFO] ------------------------------------------------------------------------
 ----
 
+== Create the TimeResource
+
+Create a new `TimeResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
 [.console-input]
 [source,java]
 ----
@@ -46,20 +58,27 @@ import org.eclipse.microprofile.metrics.annotation.Gauge;
 @Path("/time")
 public class TimeResource {
     
-    @Counted(name = "time.now")
+    @Counted(name = "time.now") <1>
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public Instant now() {
         return Instant.now();
     }
 
-    @Gauge(name = "offsetFromUTC", unit = "hours")
+    @Gauge(name = "offsetFromUTC", unit = "hours") <2>
     public int offsetFromUTC() {
         return TimeZone.getDefault().getOffset(Calendar.ZONE_OFFSET)/(3600*1000);
     }
 
 }
 ----
+
+<1> The `@Counted` annotation allows the Metrics extension to count the number of invocations to this method.
+<2> The `@Gauge` annotation return a value computed by our application.
+
+== Invoke the endpoing multiple times
+
+We need to send some requests to our endpoint to increment our `@Counted` metrics, so use the following command:
 
 [.console-input]
 [source,bash]
@@ -77,11 +96,18 @@ for i in {1..5}; do curl localhost:8080/time; done
 2020-05-12T22:38:11.832583Z
 ----
 
+== Check the metrics
+
+By default the metrics are exposed in Prometheus format. You can check the output by pointing your browser to http://localhost:8080/metrics/application[window=_blank]
+
+You can also check the metrics in JSON format by running this command:
+
 [.console-input]
 [source,bash]
 ----
 curl -H "Accept: application/json" localhost:8080/metrics/application
 ----
+
 
 [.console-output]
 [source,json]

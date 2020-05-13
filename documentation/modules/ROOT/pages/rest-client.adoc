@@ -282,7 +282,7 @@ public class FruitResource {
 
 You can check the your new implementation using a REST client by pointing your browser to http://localhost:8080/fruit?season=Summer[window=_blank]
 
-You can also use the following command:
+You can also run the following command:
 
 [.console-input]
 [source,bash]
