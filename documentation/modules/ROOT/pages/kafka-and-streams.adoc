@@ -1,5 +1,12 @@
 = Apache Kafka with Reactive Streams
 
+Mutiny is just part of the Reactive story. To complement it, we need Reactive Streams too. And an important service that can serve as the underlying implementation for our stream is http://kafka.apache.org[Apache Kafka,window=_blank].
+
+In this chapter we're going to use Mutiny to create price request for wines to a remote service called `price-generator` using Kafka as the broker for our messages in a Kafka topic called `wine`. The `price-generator` will get the wine from this topic, add a tag price to it, and send the information back in a Kafka topic called `priced-wine`. Finally, we'll read the priced wines from the topic and send it throught our REST endpoint using SSE (Server-Side Events).
+
+== Add the Reactive Messaging Kafka extension
+
+Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
 
 [.console-input]
 [source,bash]
@@ -25,6 +32,10 @@
 [INFO] Finished at: 2020-05-12T21:58:51-04:00
 [INFO] ------------------------------------------------------------------------
 ----
+
+== Create Wine POJO
+
+Create a new `Wine` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
@@ -55,6 +66,10 @@ public class Wine {
     
 }
 ----
+
+== Create PricedWine POJO
+
+Create a new `PricedWine` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
@@ -92,6 +107,10 @@ public class PricedWine {
 }
 ----
 
+== Create WineGenerator
+
+Create a new `WineGenerator` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
 [.console-input]
 [source,java]
 ----
@@ -119,14 +138,22 @@ public class WineGenerator {
 
     @Outgoing("wine")
     Multi<String> wines() {
-        return Multi.createFrom().ticks().every(Duration.ofSeconds(1))
-        .onOverflow().drop()
-        .map(tick -> WINES.get(ThreadLocalRandom.current().nextInt(0, WINES.size())))
-        .map(JsonbBuilder.create()::toJson);
+        return Multi.createFrom().ticks().every(Duration.ofSeconds(1)) <1>
+        .onOverflow().drop() <2>
+        .map(tick -> WINES.get(ThreadLocalRandom.current().nextInt(0, WINES.size()))) <3>
+        .map(JsonbBuilder.create()::toJson); <4>
     }
 
 }
 ----
+<1> We're creating a Multi that generates a new message every `1` second.
+<2> We apply backpressure by dropping the messages if the topic is not ready.
+<3> For each message we choose a random `Wine` from our list.
+<4> We map the `Wine` to JSON format.
+
+== Create WineResource
+
+Create a new `WineResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
@@ -149,18 +176,24 @@ import io.smallrye.mutiny.Multi;
 public class WineResource {
     
     @Inject
-    @Channel("priced-wine")
+    @Channel("priced-wine") <1>
     Multi<String> pricedWines;
 
     @GET
     @Produces(MediaType.SERVER_SENT_EVENTS)
     @SseElementType(MediaType.APPLICATION_JSON)
     public Multi<PricedWine> wines() {
-        return pricedWines.map(s -> JsonbBuilder.create().fromJson(s, PricedWine.class));
+        return pricedWines.map(s -> JsonbBuilder.create().fromJson(s, PricedWine.class)); <2>
     }
 
 }
 ----
+<1> We inject the Multi directly by using the `@Channel` annotation.
+<2> We just map the `PricedWine` to JSON format.
+
+== Add the Reactive Messaging Kafka properties
+
+Add the following properties to your `application.properties` in `src/main/resources`:
 
 [.console-input]
 [source,properties]
@@ -173,6 +206,18 @@ mp.messaging.outgoing.wine.connector=smallrye-kafka
 mp.messaging.outgoing.wine.topic=wine
 mp.messaging.outgoing.wine.value.serializer=org.apache.kafka.common.serialization.StringSerializer
 ----
+
+== Create Docker Compose configuration
+
+The external dependencies required to run this chapter are:
+
+- Kafka
+- Zookeeper (required by Kafka)
+- The `price-generator` service
+
+We're going to use `docker-compose` to bootstrap these external services.
+
+Create a new file called `docker-compose.yml` in the root of your `{project-name}` folder:
 
 [.console-input]
 [source,yaml]
@@ -211,6 +256,9 @@ services:
       - kafka
 ----
 
+== Run docker-compose
+
+Make sure you are in the same folder that you've created the `docker-compose.yml` file (in our case, the root of our `{project-name}` folder).
 [.console-input]
 [source,bash]
 ----
@@ -228,6 +276,10 @@ kafka_1            | [2020-05-13 01:54:53,504] INFO [Log partition=__consumer_of
 kafka_1            | [2020-05-13 01:54:53,531] INFO [ProducerStateManager partition=__consumer_offsets-38] Loading producer state from snapshot file '/tmp/kafka-logs/__consumer_offsets-38/00000000000000000015.snapshot' (kafka.log.ProducerStateManager)
 kafka_1            | [2020-05-13 01:54:53,550] INFO [Log partition=__consumer_offsets-38, dir=/tmp/kafka-logs] Completed load of log with 1 segments, log start offset 0 and log end offset 15 in 125 ms (kafka.log.Log)
 ----
+
+== Invoke the /wine endpoint
+
+Run the following command:
 
 [.console-input]
 [source,bash]
