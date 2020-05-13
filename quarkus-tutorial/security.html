@@ -101,12 +101,6 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
   </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">Advanced</span>
-<ul class="nav-list">
   <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="security.html">Security with JWT RBAC</a>
   </li>
@@ -127,7 +121,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">quarkus-tutorial</a></li>
-    <li>Advanced</li>
+    <li>Cloud Native</li>
     <li><a href="security.html">Security with JWT RBAC</a></li>
   </ul>
 </nav>
@@ -137,43 +131,48 @@
 <article class="doc">
 <h1 class="page">Security with JWT RBAC</h1>
 <div class="sect1">
-<h2 id="_securing_endpoints_with_jwt"><a class="anchor" href="#_securing_endpoints_with_jwt"></a>Securing endpoints with JWT</h2>
+<h2 id="_securing_endpoints_with_jwt_rbac"><a class="anchor" href="#_securing_endpoints_with_jwt_rbac"></a>Securing endpoints with JWT RBAC</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>In a microservices architecture, and generally speaking, any kind of application, might need to be protected so only certain users can access to the defined endpoint.
-Quarkus provides an integration to the <a href="https://github.com/eclipse/microprofile-jwt-auth">MicroProfile JWT RBAC</a> spec.</p>
+Quarkus provides an integration to the <a href="https://github.com/eclipse/microprofile-jwt-auth" target="_blank" rel="noopener">MicroProfile JWT RBAC</a> spec.</p>
 </div>
 <div class="paragraph">
-<p>So let&#8217;s see how you can start using JWT for role based access control (RBAC) of endpoints.</p>
+<p>So let&#8217;s see how you can start using JWT for <em>Role Based Access Control</em> (RBAC) of endpoints.</p>
 </div>
-<div class="sect2">
-<h3 id="qext-add-jwt-extensions"><a class="anchor" href="#qext-add-jwt-extensions"></a>Adding JWT RBAC extension</h3>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_add_the_jwt_extension"><a class="anchor" href="#_add_the_jwt_extension"></a>Add the JWT extension</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>To add JWT RBAC extension (<code>quarkus-smallrye-jwt</code>) to the Quarkus application, run the following command from <code>{quarkus-project-name}</code> project directory:</p>
-</div>
-<div id="qext-mvn-add-jwt-extension" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-smallrye-jwt"</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="qext-configure-jwt-parameters"><a class="anchor" href="#qext-configure-jwt-parameters"></a>Configuring JWT parameters</h3>
-<div class="paragraph">
-<p>Add the following properties to <code>$PROJECT_HOME/src/main/resources/application.properties</code>:</p>
+<p>Just open a new terminal window, and make sure you’re at the root of your <code>tutorial-app</code> project, then run:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">mp.jwt.verify.publickey.location=https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.pub.jwk.json
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension=quarkus-smallrye-jwt</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_add_the_jwt_properties"><a class="anchor" href="#_add_the_jwt_properties"></a>Add the JWT properties</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Add the following properties to your <code>application.properties</code> in <code>src/main/resources</code>:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">mp.jwt.verify.publickey.location=https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.pub
 mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>We are also providing a valid token that can be verified by the configured public key:</p>
+<p>We are providing a valid token that can be verified by the configured public key:</p>
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">{
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
   "kid": "/privateKey.pem",
   "typ": "JWT",
   "alg": "RS256"
@@ -215,133 +214,228 @@ mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac</code></pre>
 </table>
 </div>
 </div>
-<div class="sect2">
-<h3 id="qext-jwt-inject-claim"><a class="anchor" href="#qext-jwt-inject-claim"></a>Inject claims into an Object</h3>
+</div>
+<div class="sect1">
+<h2 id="_create_secureresource"><a class="anchor" href="#_create_secureresource"></a>Create SecureResource</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>You can inject any defined claim into an object by using <code>@Claim</code> annotation:</p>
 </div>
 <div class="paragraph">
-<p>Open <code>$PROJECT_HOME/src/main/java/java/com/example/FruitResource.java</code> and inject username claim:</p>
+<p>Change the <code>SecureResource</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
-<div id="quarkussec-jwt-claim-username" class="listingblock console-input">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">@Inject @Claim(standard = Claims.preferred_username)
-String username;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
-@GET
-@Path("/claim")
-public String getClaim() {
-    return username;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+
+import org.eclipse.microprofile.jwt.Claim;
+import org.eclipse.microprofile.jwt.Claims;
+
+@Path("/secure")
+public class SecureResource {
+
+    @Claim(standard = Claims.preferred_username)
+    String username;
+
+    @GET
+    @Path("/claim")
+    public String getClaim() {
+        return username;
+    }
+
 }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Rename the <code>@Path</code> used in <code>FruityVice getFruitInfoByName</code> to <code>@Path("name-{name})"</code> to avoid conflict with the path <code>/fruit/claim</code>.</p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="qext-jwt-claim-quarkus-app-dev-mode"><a class="anchor" href="#qext-jwt-claim-quarkus-app-dev-mode"></a>Run Quarkus Application in Development mode</h2>
+<h2 id="_invoke_the_secureclaim_endpoint"><a class="anchor" href="#_invoke_the_secureclaim_endpoint"></a>Invoke the /secure/claim endpoint</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
+<p>Run the following command:</p>
 </div>
-<div id="jwt-claim-dev-build-run-dev" class="listingblock console-input">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token -s)
+curl -H "Authorization: Bearer $token" localhost:8080/secure/claim</code></pre>
 </div>
 </div>
-<div class="sect2">
-<h3 id="qext-call-jwt-claim"><a class="anchor" href="#qext-call-jwt-claim"></a>Invoke Service</h3>
 <div class="paragraph">
-<p>The simple <code>fruit/claim</code> REST URI can be called via browser using <a href="http://localhost:8080/fruit/claim" class="bare">http://localhost:8080/fruit/claim</a> or using CLI like:</p>
+<p>And you’ll see the preferred_username field for the given token (jdoe).</p>
 </div>
-<div id="jwt-claim-k8s-svc-call" class="listingblock console-input">
+<div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/5f8c5b7a9c11ed455f4910ed2032d79612b5e6f6/quarkus.jwt.token -s)
-curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">jdoe</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>And you&#8217;ll see the <code>preferred_username</code> field for the given token (<code>jdoe</code>).</p>
-</div>
-<div class="paragraph">
-<p>MircoProfile JWT RBAC spec is providing out-of-the-box the validation of the given token.
-These validations include for example that the token has not been modified, has not expired or the issuer is the expected one.</p>
+<p>MicroProfile JWT RBAC spec is providing out-of-the-box the validation of the given token. These validations include for example that the token has not been modified, has not expired or the issuer is the expected one.</p>
 </div>
 <div class="paragraph">
 <p>To validate this just invoke again the service but changing the token:</p>
 </div>
-<div id="jwt-claim-k8s-svc-call" class="listingblock console-input">
+<div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=XXXX
-curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
+curl -v -H "Authorization: Bearer $token" localhost:8080/secure/claim</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">*   Trying ::1...
+* TCP_NODELAY set
+* Connected to localhost (::1) port 8080 (#0)
+&gt; GET /secure/claim HTTP/1.1
+&gt; Host: localhost:8080
+&gt; User-Agent: curl/7.64.1
+&gt; Accept: */*
+&gt; Authorization: Bearer XXXX
+&gt;
+&lt; HTTP/1.1 401 Unauthorized
+&lt; www-authenticate: Bearer {token}
+&lt; content-length: 0
+&lt;
+* Connection #0 to host localhost left intact
+* Closing connection 0</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>And now the invocation returns and HTTP code <code>401 Unauthorized</code> because the token is invalid.</p>
+<p>You can check the <code>401 Unauthorized</code> response.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="qext-jwt-inject-rbac"><a class="anchor" href="#qext-jwt-inject-rbac"></a>Adds RBAC to the endpoint</h3>
+</div>
+<div class="sect1">
+<h2 id="_add_rbac_to_secureresource"><a class="anchor" href="#_add_rbac_to_secureresource"></a>Add RBAC to SecureResource</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>So far, you&#8217;ve seen how to get claims from the provided JWT token, but anyone could access that endpoint, let&#8217;s protected it with a role.
 For this case you need to use a role that is defined in JWT token into <code>groups</code> claim (ie <code>Subscriber</code>).</p>
 </div>
 <div class="paragraph">
-<p>Open <code>$PROJECT_HOME/src/main/java/java/com/example/FruitResource.java</code> and annotate the method with <code>javax.annotation.security.RolesAllowed</code>:</p>
+<p>Change the <code>SecureResource</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
-<div id="quarkussec-jwt-rbac" class="listingblock console-input">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">@GET
-@Path("/claim")
-@RolesAllowed("Subscriber")
-public String getClaim() {
-    return username;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+
+import javax.annotation.security.RolesAllowed;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+
+import org.eclipse.microprofile.jwt.Claim;
+import org.eclipse.microprofile.jwt.Claims;
+
+@Path("/secure")
+public class SecureResource {
+
+    @Claim(standard = Claims.preferred_username)
+    String username;
+
+    @RolesAllowed("Subscriber")
+    @GET
+    @Path("/claim")
+    public String getClaim() {
+        return username;
+    }
+
 }</code></pre>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="qext-call-jwt-rbac"><a class="anchor" href="#qext-call-jwt-rbac"></a>Invoke Service</h3>
-<div id="jwt-claim-k8s-svc-call" class="listingblock console-input">
+</div>
+<div class="sect1">
+<h2 id="_invoke_the_secureclaim_endpoint_with_rbac"><a class="anchor" href="#_invoke_the_secureclaim_endpoint_with_rbac"></a>Invoke the /secure/claim endpoint with RBAC</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Run the following command:</p>
+</div>
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/5f8c5b7a9c11ed455f4910ed2032d79612b5e6f6/quarkus.jwt.token -s)
-curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token -s)
+curl -H "Authorization: Bearer $token" localhost:8080/secure/claim</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Open <code>$PROJECT_HOME/src/main/java/java/com/example/FruitResource.java</code> and change the  <code>RolesAllowed</code> value to <code>Subscriber2</code>:</p>
+<p>And you’ll see the preferred_username field for the given token (jdoe).</p>
 </div>
-<div id="quarkussec-jwt-rbac-invalid" class="listingblock console-input">
+<div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">@GET
-@Path("/claim")
-@RolesAllowed("Subscriber2")
-public String getClaim() {
-    return username;
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">jdoe</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_add_incorrect_rbac_to_secureresource"><a class="anchor" href="#_add_incorrect_rbac_to_secureresource"></a>Add incorrect RBAC to SecureResource</h2>
+<div class="sectionbody">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+
+import javax.annotation.security.RolesAllowed;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+
+import org.eclipse.microprofile.jwt.Claim;
+import org.eclipse.microprofile.jwt.Claims;
+
+@Path("/secure")
+public class SecureResource {
+
+    @Claim(standard = Claims.preferred_username)
+    String username;
+
+    @RolesAllowed("Not-Subscriber")
+    @GET
+    @Path("/claim")
+    public String getClaim() {
+        return username;
+    }
+
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>And then do the request again:</p>
 </div>
-<div class="paragraph">
-<p>The simple <code>fruit/claim</code> REST URI can be called via browser using <a href="http://localhost:8080/fruit/claim" class="bare">http://localhost:8080/fruit/claim</a> or using CLI like:</p>
 </div>
-<div id="jwt-claim-k8s-svc-call" class="listingblock console-input">
+<div class="sect1">
+<h2 id="_invoke_the_secureclaim_endpoint_with_incorret_rbac"><a class="anchor" href="#_invoke_the_secureclaim_endpoint_with_incorret_rbac"></a>Invoke the /secure/claim endpoint with incorret RBAC</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Run the following command:</p>
+</div>
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/5f8c5b7a9c11ed455f4910ed2032d79612b5e6f6/quarkus.jwt.token -s)
-curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token -s)
+curl -v -H "Authorization: Bearer $token" localhost:8080/secure/claim</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>And the output now is different: <code>Forbidden</code>.</p>
+<p>And you’ll see the preferred_username field for the given token (jdoe).</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">*   Trying ::1...
+* TCP_NODELAY set
+* Connected to localhost (::1) port 8080 (#0)
+&gt; GET /secure/claim HTTP/1.1
+&gt; Host: localhost:8080
+&gt; User-Agent: curl/7.64.1
+&gt; Accept: */*
+&gt; Authorization: Bearer eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJqZG9lLXVzaW5nLWp3dC1yYmFjIiwiYXVkIjoidXNpbmctand0LXJiYWMiLCJ1cG4iOiJqZG9lQHF1YXJrdXMuaW8iLCJiaXJ0aGRhdGUiOiIyMDAxLTA3LTEzIiwiYXV0aF90aW1lIjoxNTcwMDk0MTcxLCJpc3MiOiJodHRwczpcL1wvcXVhcmt1cy5pb1wvdXNpbmctand0LXJiYWMiLCJyb2xlTWFwcGluZ3MiOnsiZ3JvdXAyIjoiR3JvdXAyTWFwcGVkUm9sZSIsImdyb3VwMSI6Ikdyb3VwMU1hcHBlZFJvbGUifSwiZ3JvdXBzIjpbIkVjaG9lciIsIlRlc3RlciIsIlN1YnNjcmliZXIiLCJncm91cDIiXSwicHJlZmVycmVkX3VzZXJuYW1lIjoiamRvZSIsImV4cCI6MjIwMDgxNDE3MSwiaWF0IjoxNTcwMDk0MTcxLCJqdGkiOiJhLTEyMyJ9.Hzr41h3_uewy-g2B-sonOiBObtcpkgzqmF4bT3cO58v45AIOiegl7HIx7QgEZHRO4PdUtR34x9W23VJY7NJ545ucpCuKnEV1uRlspJyQevfI-mSRg1bHlMmdDt661-V3KmQES8WX2B2uqirykO5fCeCp3womboilzCq4VtxbmM2qgf6ag8rUNnTCLuCgEoulGwTn0F5lCrom-7dJOTryW1KI0qUWHMMwl4TX5cLmqJLgBzJapzc5_yEfgQZ9qXzvsT8zeOWSKKPLm7LFVt2YihkXa80lWcjewwt61rfQkpmqSzAHL0QIs7CsM9GfnoYc0j9po83-P3GJiBMMFmn-vg
+&gt;
+&lt; HTTP/1.1 403 Forbidden
+&lt; Content-Length: 9
+&lt; Content-Type: application/octet-stream
+&lt;
+* Connection #0 to host localhost left intact
+Forbidden* Closing connection 0</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>This is the result because the provided token does not contain <code>Subscriber2</code> in the <code>groups</code> claim.</p>
-</div>
+<p>You can check the <code>403 Forbidden</code> response.</p>
 </div>
 </div>
 </div>
