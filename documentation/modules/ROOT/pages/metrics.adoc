@@ -33,7 +33,7 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 [INFO] ------------------------------------------------------------------------
 ----
 
-== Create the TimeResource
+== Create TimeResource
 
 Create a new `TimeResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 

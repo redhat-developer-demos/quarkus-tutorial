@@ -54,7 +54,7 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 [INFO] ------------------------------------------------------------------------
 ----
 
-== Create the FruityVice POJO
+== Create FruityVice POJO
 
 We need to create a POJO object that is used to unmarshal JSON message from http://www.fruityvice.com[window=_blank].
 
@@ -120,9 +120,9 @@ public class FruityVice {
 }
 ----
 
-=== Create the FruityViceService
+=== Create FruityViceService
 
-Now we're going to implemente a Java interface that mimics the remote REST endpoint.
+Now we're going to implement a Java interface that mimics the remote REST endpoint.
 
 Create a new `FruitViceService` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
@@ -151,9 +151,9 @@ public interface FruityViceService {
 }
 ----
 
-== Configure the REST Client properties
+== Configure REST Client properties
 
-Add the following database properties to your `application.properties` in `src/main/resources`:
+Add the following properties to your `application.properties` in `src/main/resources`:
 
 [.console-input]
 [source,properties]
@@ -216,10 +216,9 @@ public class FruitDTO {
 }
 ----
 
-== Change FruitResource to use the FruityViceService
+== Change FruitResource to use FruityViceService
 
 Now that we have all of the required classes, we can change `FruitResource` to use our `FruityViceService` REST client.
-
 
 Change the `FruitResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
