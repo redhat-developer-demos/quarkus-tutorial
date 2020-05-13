@@ -16,6 +16,7 @@ asciidoc:
     tutorial-namespace: quarkus-tutorial
     quarkus-version: 1.4.2.Final
     graalvm-version: 20.0.0
+    project-name: tutorial-app
   extensions:
     - ./lib/tab-block.js
     - ./lib/remote-include-processor.js

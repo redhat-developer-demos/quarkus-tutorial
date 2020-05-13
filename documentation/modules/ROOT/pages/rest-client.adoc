@@ -1,11 +1,10 @@
 = REST Client
 
-In a microservices architecture, and generally speaking, any kind of application, might need to access other RESTful Web Services.
-Quarkus provides a Rest client following the https://github.com/eclipse/microprofile-rest-client[MicroProfile Rest Client] spec.
+A not usual scenario in a Microservices architecture is the remote invocation of remote REST HTTP endpoints. Quarkus provides a typed REST client that follows the  https://github.com/eclipse/microprofile-rest-client[MicroProfile REST Client, window=_blank] specification.
 
-Let's create a Rest client that access to http://www.fruityvice.com to get nutrition facts about fruits.
+Let's create a REST client that access http://www.fruityvice.com[window=_blank] to get nutrition information about our fruits. The endpoint we're interested into is this one:
 
-* `api/fruit/\{name\}` that returns specific info from given fruit name.
+* `api/fruit/\{name\}`, which returns specific info about the given fruit name.
 
 [.console-output]
 [source, json]
@@ -26,15 +25,14 @@ Let's create a Rest client that access to http://www.fruityvice.com to get nutri
 }
 ----
 
-[#qext-add-rest-client-extensions]
-=== Adding Rest Client extension
+== Add the REST Client extension
 
-To add Rest Client and JSON-B extensions (`{quarkus-rest-client-ext-name}`) to the Quarkus application, run the following command from `{quarkus-project-name}` project directory:
+Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
 
 [.console-input]
 [source,bash]
 ----
-./mvnw quarkus:add-extension -Dextension=quarkus-rest-client
+./mvnw quarkus:add-extension -Dextensions="io.quarkus:quarkus-rest-client"
 ----
 
 [.console-output]
@@ -56,12 +54,11 @@ To add Rest Client and JSON-B extensions (`{quarkus-rest-client-ext-name}`) to t
 [INFO] ------------------------------------------------------------------------
 ----
 
-[#qext-create-fruity-vice-pojo]
-=== Creating FruityVice POJO
+== Create the FruityVice POJO
 
-We need to create a POJO object that is used to unmarshal JSON message from http://www.fruityvice.com to Java object.
+We need to create a POJO object that is used to unmarshal JSON message from http://www.fruityvice.com[window=_blank].
 
-Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `FruityVice.java` with the following contents:
+Create a new `FruitVice` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
@@ -123,12 +120,11 @@ public class FruityVice {
 }
 ----
 
-[#qext-create-fruity-vice-service]
-=== Creating FruityVice Service
+=== Create the FruityViceService
 
-The next thing is to create a Java interface that acts as a client between code and external service.
+Now we're going to implemente a Java interface that mimics the remote REST endpoint.
 
-Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `FruityViceService.java` with the following contents:
+Create a new `FruitViceService` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
@@ -155,10 +151,9 @@ public interface FruityViceService {
 }
 ----
 
-[#qext-create-fruity-vice-service-config]
-=== Configuring FruityVice Service
+== Configure the REST Client properties
 
-Add the following properties to `pass:[$PROJECT_HOME]/src/main/resources/application.properties`:
+Add the following database properties to your `application.properties` in `src/main/resources`:
 
 [.console-input]
 [source,properties]
@@ -166,12 +161,12 @@ Add the following properties to `pass:[$PROJECT_HOME]/src/main/resources/applica
 com.redhat.developers.FruityViceService/mp-rest/url=http://www.fruityvice.com
 ----
 
-[#qext-create-fruity-vice-service-resclient]
-== Using the RestClient
+== Create FruitDTO
 
-Open the following Java class `pass:[$PROJECT_HOME]/src/main/java/com/example/FruitResource.java` and copy the next content in its body:
+We're going to enhance our `FruitResource` endpoint by creating a new `FruitDTO` POJO and add the additional information provided by the `FruitViceService`.
 
-=== Create FruitDTO
+Create a new `FruitDTO` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
 [.console-input]
 [source,java]
 ----
@@ -221,7 +216,13 @@ public class FruitDTO {
 }
 ----
 
-== Change FruitResource to use FruityViceService
+== Change FruitResource to use the FruityViceService
+
+Now that we have all of the required classes, we can change `FruitResource` to use our `FruityViceService` REST client.
+
+
+Change the `FruitResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
 [.console-input]
 [source,java]
 ----
@@ -277,7 +278,17 @@ public class FruitResource {
 }
 ----
 
-http://localhost:8080/fruit?season=Summer[window=_blank]
+== Invoke the endpoint
+
+You can check the your new implementation using a REST client by pointing your browser to http://localhost:8080/fruit?season=Summer[window=_blank]
+
+You can also use the following command:
+
+[.console-input]
+[source,bash]
+----
+curl localhost:8080/fruit?season=Summer
+----
 
 [.console-output]
 [source,json]
