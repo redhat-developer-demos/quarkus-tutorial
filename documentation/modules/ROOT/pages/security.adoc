@@ -150,12 +150,8 @@ public String getClaim() {
 [#qext-call-jwt-rbac]
 === Invoke Service
 
-[.console-input]
-[source,bash]
-----
-token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.pub.jwk.json -s)
-curl -H "Authorization: Bearer $token" localhost:8080/beer
-----
+:token-value: $(curl {token-url} -s)
+include::ROOT:partial$invoke-service.adoc[tag=callToken]
 
 Open `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruitResource.java` and change the  `RolesAllowed` value to `Subscriber2`:
 
@@ -175,6 +171,7 @@ And then do the request again:
 
 The simple `{path}` REST URI can be called via browser using http://localhost:8080/{path} or using CLI like: 
 
+:token-value: $(curl {token-url} -s)
 include::ROOT:partial$invoke-service.adoc[tag=callToken]
 
 And the output now is different: `Forbidden`.
