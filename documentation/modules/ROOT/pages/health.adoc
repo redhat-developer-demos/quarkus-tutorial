@@ -53,10 +53,17 @@ curl localhost:8080/health
 [source,json]
 ----
 {
-    "checks": [],
-    "outcome": "UP"
+    "status": "UP",
+    "checks": [
+        {
+            "name": "Database connections health check",
+            "status": "UP"
+        }
+    ]
 }
 ----
+
+Notice that since we're using the Hibernate and database extensions, Quarkus automatically added a readiness probe checking the status of our database connections.
 
 == Add a custom liveness probe
 
