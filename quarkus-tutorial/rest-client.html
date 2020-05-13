@@ -139,16 +139,15 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>In a microservices architecture, and generally speaking, any kind of application, might need to access other RESTful Web Services.
-Quarkus provides a Rest client following the <a href="https://github.com/eclipse/microprofile-rest-client">MicroProfile Rest Client</a> spec.</p>
+<p>A not usual scenario in a Microservices architecture is the remote invocation of remote REST HTTP endpoints. Quarkus provides a typed REST client that follows the  <a href="https://github.com/eclipse/microprofile-rest-client" target="_blank" rel="noopener">MicroProfile REST Client</a> specification.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s create a Rest client that access to <a href="http://www.fruityvice.com" class="bare">http://www.fruityvice.com</a> to get nutrition facts about fruits.</p>
+<p>Let&#8217;s create a REST client that access <a href="http://www.fruityvice.com" class="bare" target="_blank" rel="noopener">http://www.fruityvice.com</a> to get nutrition information about our fruits. The endpoint we&#8217;re interested into is this one:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><code>api/fruit/{name}</code> that returns specific info from given fruit name.</p>
+<p><code>api/fruit/{name}</code>, which returns specific info about the given fruit name.</p>
 </li>
 </ul>
 </div>
@@ -172,14 +171,15 @@ Quarkus provides a Rest client following the <a href="https://github.com/eclipse
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="qext-add-rest-client-extensions"><a class="anchor" href="#qext-add-rest-client-extensions"></a>Adding Rest Client extension</h3>
+<div class="sect1">
+<h2 id="_add_the_rest_client_extension"><a class="anchor" href="#_add_the_rest_client_extension"></a>Add the REST Client extension</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>To add Rest Client and JSON-B extensions (<code>{quarkus-rest-client-ext-name}</code>) to the Quarkus application, run the following command from <code>{quarkus-project-name}</code> project directory:</p>
+<p>Just open a new terminal window, and make sure you’re at the root of your <code>tutorial-app</code> project, then run:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension=quarkus-rest-client</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextensions="io.quarkus:quarkus-rest-client"</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -201,13 +201,15 @@ Quarkus provides a Rest client following the <a href="https://github.com/eclipse
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="qext-create-fruity-vice-pojo"><a class="anchor" href="#qext-create-fruity-vice-pojo"></a>Creating FruityVice POJO</h3>
+</div>
+<div class="sect1">
+<h2 id="_create_the_fruityvice_pojo"><a class="anchor" href="#_create_the_fruityvice_pojo"></a>Create the FruityVice POJO</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>We need to create a POJO object that is used to unmarshal JSON message from <a href="http://www.fruityvice.com" class="bare">http://www.fruityvice.com</a> to Java object.</p>
+<p>We need to create a POJO object that is used to unmarshal JSON message from <a href="http://www.fruityvice.com" class="bare" target="_blank" rel="noopener">http://www.fruityvice.com</a>.</p>
 </div>
 <div class="paragraph">
-<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>FruityVice.java</code> with the following contents:</p>
+<p>Create a new <code>FruitVice</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -268,14 +270,13 @@ public class FruityVice {
 }</code></pre>
 </div>
 </div>
-</div>
 <div class="sect2">
-<h3 id="qext-create-fruity-vice-service"><a class="anchor" href="#qext-create-fruity-vice-service"></a>Creating FruityVice Service</h3>
+<h3 id="_create_the_fruityviceservice"><a class="anchor" href="#_create_the_fruityviceservice"></a>Create the FruityViceService</h3>
 <div class="paragraph">
-<p>The next thing is to create a Java interface that acts as a client between code and external service.</p>
+<p>Now we&#8217;re going to implemente a Java interface that mimics the remote REST endpoint.</p>
 </div>
 <div class="paragraph">
-<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>FruityViceService.java</code> with the following contents:</p>
+<p>Create a new <code>FruitViceService</code> Java interface in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -302,10 +303,13 @@ public interface FruityViceService {
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="qext-create-fruity-vice-service-config"><a class="anchor" href="#qext-create-fruity-vice-service-config"></a>Configuring FruityVice Service</h3>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configure_the_rest_client_properties"><a class="anchor" href="#_configure_the_rest_client_properties"></a>Configure the REST Client properties</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Add the following properties to <code>$PROJECT_HOME/src/main/resources/application.properties</code>:</p>
+<p>Add the following database properties to your <code>application.properties</code> in <code>src/main/resources</code>:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -313,14 +317,16 @@ public interface FruityViceService {
 </div>
 </div>
 </div>
+</div>
 <div class="sect1">
-<h2 id="qext-create-fruity-vice-service-resclient"><a class="anchor" href="#qext-create-fruity-vice-service-resclient"></a>Using the RestClient</h2>
+<h2 id="_create_fruitdto"><a class="anchor" href="#_create_fruitdto"></a>Create FruitDTO</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Open the following Java class <code>$PROJECT_HOME/src/main/java/com/example/FruitResource.java</code> and copy the next content in its body:</p>
+<p>We&#8217;re going to enhance our <code>FruitResource</code> endpoint by creating a new <code>FruitDTO</code> POJO and add the additional information provided by the <code>FruitViceService</code>.</p>
 </div>
-<div class="sect2">
-<h3 id="_create_fruitdto"><a class="anchor" href="#_create_fruitdto"></a>Create FruitDTO</h3>
+<div class="paragraph">
+<p>Create a new <code>FruitDTO</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+</div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
@@ -371,10 +377,15 @@ public class FruitDTO {
 </div>
 </div>
 </div>
-</div>
 <div class="sect1">
-<h2 id="_change_fruitresource_to_use_fruityviceservice"><a class="anchor" href="#_change_fruitresource_to_use_fruityviceservice"></a>Change FruitResource to use FruityViceService</h2>
+<h2 id="_change_fruitresource_to_use_the_fruityviceservice"><a class="anchor" href="#_change_fruitresource_to_use_the_fruityviceservice"></a>Change FruitResource to use the FruityViceService</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>Now that we have all of the required classes, we can change <code>FruitResource</code> to use our <code>FruityViceService</code> REST client.</p>
+</div>
+<div class="paragraph">
+<p>Change the <code>FruitResource</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+</div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
@@ -429,8 +440,21 @@ public class FruitResource {
 }</code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_invoke_the_endpoint"><a class="anchor" href="#_invoke_the_endpoint"></a>Invoke the endpoint</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p><a href="http://localhost:8080/fruit?season=Summer" class="bare" target="_blank" rel="noopener">http://localhost:8080/fruit?season=Summer</a></p>
+<p>You can check the your new implementation using a REST client by pointing your browser to <a href="http://localhost:8080/fruit?season=Summer" class="bare" target="_blank" rel="noopener">http://localhost:8080/fruit?season=Summer</a></p>
+</div>
+<div class="paragraph">
+<p>You can also use the following command:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit?season=Summer</code></pre>
+</div>
 </div>
 <div class="listingblock console-output">
 <div class="content">
