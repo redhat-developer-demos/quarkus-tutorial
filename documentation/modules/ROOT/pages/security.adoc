@@ -1,10 +1,5 @@
 = Security with JWT RBAC
 
-include::_attributes.adoc[]
-:quarkus-project-name: fruits-app
-:svc-path: fruit
-:experimental:
-
 == Securing endpoints with JWT
 
 In a microservices architecture, and generally speaking, any kind of application, might need to be protected so only certain users can access to the defined endpoint.
@@ -31,17 +26,12 @@ To add JWT RBAC extension (`{quarkus-jwt-ext-name}`) to the Quarkus application,
 
 Add the following properties to `pass:[$PROJECT_HOME]/src/main/resources/application.properties`:
 
-[#quarkussec-config-jwt]
 [.console-input]
-[source,config,subs="+macros,+attributes"]
+[source,properties]
 ----
-mp.jwt.verify.publickey.location=https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/0c6d1ed65d38e4dd48992f7410a29aa4e5a35131/quarkus.jwt.pub.jwk.json
-# <1>
+mp.jwt.verify.publickey.location=https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.pub.jwk.json
 mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac
-# <2>
 ----
-<1> Sets the location of public key to verify the token
-<2> Issuer of the token
 
 We are also providing a valid token that can be verified by the configured public key:
 
@@ -159,22 +149,13 @@ public String getClaim() {
 
 [#qext-call-jwt-rbac]
 === Invoke Service
-:doc-sec: rjwt-rbac
-:k8s-cli: k8s
-:path: fruit/claim
-:k8s-env: minikube
-:cli-tool: curl
-:address: localhost
-:token-url: https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/5f8c5b7a9c11ed455f4910ed2032d79612b5e6f6/quarkus.jwt.token
-:token-value: $(curl {token-url} -s)
 
-The simple `{path}` REST URI can be called via browser using http://localhost:8080/{path} or using CLI like: 
-
-include::ROOT:partial$invoke-service.adoc[tag=callToken]
-
-And you'll see the `preferred_username` field for given token (`jdoe`).
-
-But the big difference now, and it is that you see the result only because the token contains in `groups` claim the `Subscriber` role.
+[.console-input]
+[source,bash]
+----
+token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.pub.jwk.json -s)
+curl -H "Authorization: Bearer $token" localhost:8080/beer
+----
 
 Open `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruitResource.java` and change the  `RolesAllowed` value to `Subscriber2`:
 

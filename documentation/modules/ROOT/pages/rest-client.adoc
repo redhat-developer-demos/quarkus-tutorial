@@ -1,60 +1,305 @@
 = REST Client
 
-include::_attributes.adoc[]
-:quarkus-project-name: fruits-app
-:svc-path: fruit
-:experimental:
+In a microservices architecture, and generally speaking, any kind of application, might need to access other RESTful Web Services.
+Quarkus provides a Rest client following the https://github.com/eclipse/microprofile-rest-client[MicroProfile Rest Client] spec.
 
-[#qext-create-fruity-vice-service-resclient]
-=== Using the RestClient
+Let's create a Rest client that access to http://www.fruityvice.com to get nutrition facts about fruits.
 
-Open the following Java class `pass:[$PROJECT_HOME]/src/main/java/com/example/FruitResource.java` and copy the next content in its body:
+* `api/fruit/\{name\}` that returns specific info from given fruit name.
 
-[#quarkusrc-fruity-vice-service-inject]
-[.console-input]
-[source,java,subs="+macros"]
+[.console-output]
+[source, json]
 ----
-@RestClient
-FruityViceService fruityViceService;
-
-@GET
-@Path("{name}")
-@Produces(MediaType.APPLICATION_JSON)
-public FruityVice getFruitInfoByName(@PathParam("name") String name) {
-    return fruityViceService.getFruitByName(name);
+{
+    "genus": "Musa",
+    "name": "Banana",
+    "id": 1,
+    "family": "Musaceae",
+    "order": "Zingiberales",
+    "nutritions": {
+        "carbohydrates": 22,
+        "protein": 1,
+        "fat": 0.2,
+        "calories": 96,
+        "sugar": 17.2
+    }
 }
 ----
 
-[#qext-rest-client-run-quarkus-app-dev-mode]
-== Run Quarkus Application in Development mode
+[#qext-add-rest-client-extensions]
+=== Adding Rest Client extension
 
-:section-build-run: rest-client
+To add Rest Client and JSON-B extensions (`{quarkus-rest-client-ext-name}`) to the Quarkus application, run the following command from `{quarkus-project-name}` project directory:
 
-include::ROOT:partial$run-dev-mode.adoc[]
+[.console-input]
+[source,bash]
+----
+./mvnw quarkus:add-extension -Dextension=quarkus-rest-client
+----
 
-[#qext-call-fruity-rest-client]
-=== Invoke Service
-:doc-sec: rest-client
-:k8s-cli: k8s
-:path: fruit/banana
-:k8s-env: minikube
-:cli-tool: curl
-:address: localhost
+[.console-output]
+[source,text]
+----
+[INFO] Scanning for projects...
+[INFO]
+[INFO] -----------------< com.redhat.developers:tutorial-app >-----------------
+[INFO] Building tutorial-app 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
+✅ Adding extension io.quarkus:quarkus-rest-client
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.773 s
+[INFO] Finished at: 2020-05-11T21:43:38-04:00
+[INFO] ------------------------------------------------------------------------
+----
 
-The simple `{path}` REST URI can be called via browser using http://localhost:8080/{path} or using CLI like: 
+[#qext-create-fruity-vice-pojo]
+=== Creating FruityVice POJO
 
-include::ROOT:partial$invoke-service.adoc[tag=call]
+We need to create a POJO object that is used to unmarshal JSON message from http://www.fruityvice.com to Java object.
 
-The REST call should return an response like:
+Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `FruityVice.java` with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import javax.json.bind.annotation.JsonbCreator;
+
+public class FruityVice {
+
+    private String name;
+
+    private Nutritions nutritions;
+
+    FruityVice(String name, Nutritions nutritions) {
+        this.name = name;
+        this.nutritions = nutritions;
+    }
+
+    @JsonbCreator
+    public static FruityVice of(String name, Nutritions nutritions) {
+        return new FruityVice(name, nutritions);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Nutritions getNutritions() {
+        return nutritions;
+    }
+
+    public static class Nutritions {
+
+        private double carbohydrates;
+
+        private double calories;
+
+        Nutritions(double carbohydrates, double calories) {
+            this.carbohydrates = carbohydrates;
+            this.carbohydrates = calories;
+        }
+
+        @JsonbCreator
+        public static Nutritions of(double carbohydrates, double calories) {
+                return new Nutritions(carbohydrates, calories);
+        }
+
+        public double getCarbohydrates() {
+            return carbohydrates;
+        }
+
+        public double getCalories() {
+            return calories;
+        }
+
+    }
+    
+}
+----
+
+[#qext-create-fruity-vice-service]
+=== Creating FruityVice Service
+
+The next thing is to create a Java interface that acts as a client between code and external service.
+
+Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `FruityViceService.java` with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
+@Path("/api/fruit")
+@RegisterRestClient
+public interface FruityViceService {
+
+    @GET
+    @Path("/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public FruityVice getFruitByName(@PathParam("name") String name);
+    
+}
+----
+
+[#qext-create-fruity-vice-service-config]
+=== Configuring FruityVice Service
+
+Add the following properties to `pass:[$PROJECT_HOME]/src/main/resources/application.properties`:
+
+[.console-input]
+[source,properties]
+----
+com.redhat.developers.FruityViceService/mp-rest/url=http://www.fruityvice.com
+----
+
+[#qext-create-fruity-vice-service-resclient]
+== Using the RestClient
+
+Open the following Java class `pass:[$PROJECT_HOME]/src/main/java/com/example/FruitResource.java` and copy the next content in its body:
+
+=== Create FruitDTO
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+public class FruitDTO {
+
+    private String name;
+
+    private String season;
+
+    private double carbohydrates;
+
+    private double calories;
+
+    private FruitDTO(String name, String season, double carbohydrates, double calories) {
+        this.name = name;
+        this.season = season;
+        this.carbohydrates = carbohydrates;
+        this.calories = calories;
+    }
+
+    public static FruitDTO of(Fruit fruit, FruityVice fruityVice) {
+        return new FruitDTO(
+            fruit.name, 
+            fruit.season, 
+            fruityVice.getNutritions().getCarbohydrates(), 
+            fruityVice.getNutritions().getCalories());
+    }
+    
+    public String getName() {
+        return name;
+    }
+
+    public String getSeason() {
+        return season;
+    }
+
+    public double getCarbohydrates() {
+        return carbohydrates;
+    }
+
+    public double getCalories() {
+        return calories;
+    }
+
+}
+----
+
+== Change FruitResource to use FruityViceService
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+import javax.transaction.Transactional;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+
+@Path("/fruit")
+public class FruitResource {
+
+    @Inject
+    @RestClient
+    FruityViceService fruityViceService;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<FruitDTO> fruits(@QueryParam("season") String season) {
+        if (season != null) {
+            return Fruit.findBySeason(season).stream()
+                .map(fruit -> FruitDTO.of(fruit, fruityViceService.getFruitByName(fruit.name)))
+                .collect(Collectors.toList());
+        }
+        return Fruit.<Fruit>listAll().stream()
+                .map(fruit -> FruitDTO.of(fruit, fruityViceService.getFruitByName(fruit.name)))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response newFruit(Fruit fruit) {
+        fruit.id = null;
+        fruit.persist();
+        return Response.status(Status.CREATED).entity(fruit).build();
+    }
+
+}
+----
+
+http://localhost:8080/fruit?season=Summer[window=_blank]
 
 [.console-output]
 [source,json]
 ----
-{
-    "name":"Banana",
-    "nutritions":{
-        "calories":96,
-        "fat":0.2
-    }
-}
+[
+  {
+    "calories": 0,
+    "carbohydrates": 29,
+    "name": "Blueberry",
+    "season": "Summer"
+  },
+  {
+    "calories": 0,
+    "carbohydrates": 96,
+    "name": "Banana",
+    "season": "Summer"
+  },
+  {
+    "calories": 0,
+    "carbohydrates": 30,
+    "name": "Watermelon",
+    "season": "Summer"
+  }
+]
 ----

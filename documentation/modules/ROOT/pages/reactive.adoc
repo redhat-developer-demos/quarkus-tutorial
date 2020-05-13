@@ -1,5 +1,30 @@
 = Reactive Programming
 
+[.console-input]
+[source,bash]
+----
+./mvnw quarkus:add-extension -Dextensions=io.quarkus:quarkus-resteasy-mutiny
+----
+
+[.console-output]
+[source,text]
+----
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------< com.redhat.developers:tutorial-app >-----------------
+[INFO] Building tutorial-app 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
+✅ Adding dependency io.quarkus:quarkus-resteasy-mutiny:jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.217 s
+[INFO] Finished at: 2020-05-12T09:03:59-04:00
+[INFO] ------------------------------------------------------------------------
+----
+
 include::_attributes.adoc[]
 :quarkus-project-name: fruits-app
 :svc-path: beer
@@ -24,16 +49,6 @@ The skeleton project to get started is the same you created at xref:02-basics-fu
 
 NOTE: For the easier reference, we shall call the `fruits-app` project folder as pass:[$PROJECT_HOME]
 
-[#quarkusrpb-add-reactive]
-==== Add Extensions
-
-[#qext-mvn-add-reactive-extensions]
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-rest-client, quarkus-smallrye-reactive-streams-operators"
-----
-
 [#quarkusrpb-create-pojo]
 ==== Create Beer POJO
 
@@ -41,20 +56,45 @@ Let's create the `Beer` pojo.
 
 Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `Beer` with the following contents:
 
-[#qext-quarkusrpb-beer-pojo]
 [.console-input]
-[source,java,subs="+macros,+attributes"]
+[source,java]
 ----
-package com.example;
+package com.redhat.developers;
+
+import javax.json.bind.annotation.JsonbCreator;
 
 public class Beer {
 
     private String name;
-    private String tagline;
-    private double abv;
-    private String description;
 
-    // generate getters/setters
+    private String tagline;
+
+    private double abv;
+
+	private Beer(String name, String tagline, double abv) {
+		this.name = name;
+		this.tagline = tagline;
+		this.abv = abv;
+	}
+
+    @JsonbCreator
+    public static Beer of(String name, String tagline, double abv) {
+        return new Beer(name, tagline, abv);
+     }
+
+     public String getName() {
+         return name;
+     }
+
+     public String getTagline() {
+         return tagline;
+     }
+
+     public double getAbv() {
+         return abv;
+     }
+
+}
 ----
 
 [#quarkusrpb-create-beer-client]
@@ -62,14 +102,12 @@ public class Beer {
 
 Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `BeerGateway` with the following contents:
 
-[#qext-quarkusrpb-beer-client]
 [.console-input]
-[source,java,subs="+macros,+attributes"]
+[source,java]
 ----
-package com.example;
+package com.redhat.developers;
 
 import java.util.List;
-import java.util.concurrent.CompletionStage;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -81,74 +119,69 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 @Path("/v2")
 @RegisterRestClient
-public interface BeerGateway {
-
+public interface BeerService {
+    
     @GET
     @Path("/beers")
     @Produces(MediaType.APPLICATION_JSON)
-    @ClientHeaderParam(name="user-agent", value="curl/7.54.0")
-    List<Beer> getBeers(@QueryParam("page") int page); //1
-    
+    List<Beer> getBeers(@QueryParam("page") int page);
+
 }
 ----
 
-. Retrieves all beers from a specific page.
-
-[#quarkusrpb-configure-props]
-===== Edit the application.properties
+=== Edit the application.properties
 
 Add the following properties to pass:[$PROJECT_HOME]/src/main/resources/application.properties:
 
-[#qext-quarkusrpb-update-props]
 [.console-input]
-[source,config,subs="+macros,+attributes"]
+[source,properties]
 ----
-com.example.BeerGateway/mp-rest/url=https://api.punkapi.com
+com.redhat.developers.BeerService/mp-rest/url=https://api.punkapi.com
 ----
 
 [#quarkusrpb-beer-reactive-service]
-==== Create Beer Punk API Reactive Service
+=== Create Beer Punk API Reactive Service
 
 Let's create the service that uses `BeerGateway` to retrieve beer information by page and reactively emits each of the beer information.
 
 Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `BeerService` with the following contents:
 
-[#qext-quarkusrpb-beer-service]
 [.console-input]
-[source,subs="+macros,+attributes"]
+[source,java]
 ----
-package com.example;
+package com.redhat.developers;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
-import io.reactivex.Flowable;
-import io.reactivex.schedulers.Schedulers;
+import io.smallrye.mutiny.Multi;
 
-@ApplicationScoped
-public class BeerService {
-
+@Path("/beer")
+public class BeerResource {
+    
+    @Inject
     @RestClient
-    BeerGateway beerGateway;
+    BeerService beerService;
 
-    public Flowable<Beer> beers() {
-        Flowable<List<Beer>> beerStream = Flowable.generate(() -> 1, (page, emitter) -> { //1
-            final List<Beer> beers = beerGateway.getBeers(page);
-            if (beers.isEmpty()) {
-                emitter.onComplete(); //2
-            } else {
-                emitter.onNext(beers); //3
-            }
-
-            return page + 1; //4
-        });
-
-        return beerStream
-                .subscribeOn(Schedulers.io())
-                .flatMap(Flowable::fromIterable); //5
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Multi<Beer> beers() {
+        return Multi.createBy().repeating() //1
+            .supplier(
+                () -> new AtomicInteger(1), //2
+                i -> beerService.getBeers(i.getAndIncrement()) //3
+            )
+            .until(List::isEmpty) //4
+            .onItem().<Beer>disjoint() //5
+            .transform().byFilteringItemsWith(b -> b.getAbv() > 15.0); //6
     }
 
 }
@@ -165,89 +198,69 @@ The caller is responsible to manipulate this information as it starts receiving 
 
 Notice that until a caller subscribes to a stream (`Flowable` in this case), the logic is not executed.
 
-[#quarkusrpb-beer-resource]
-==== Create Beer Resource
-
-The last step is to manipulate the beer _stream_ created in the previous section to filter out by _abv_ and return the result to the caller.
-
-Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `BeerResource` with the following contents:
-
-[#qext-quarkusrpb-beer-resource]
-[.console-input]
-[source,java,subs="+macros,+attributes"]
-----
-package com.example;
-
-import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import org.reactivestreams.Publisher;
-
-@Path("/beer")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
-public class BeerResource {
-
-    @Inject
-    BeerService beerService; //1
-
-    @GET
-    public Publisher<Beer> hello() {
-        return beerService.beers() //2
-                .filter(b -> b.getAbv() > 7.0); //3
-                //4
-    }
-}
-----
-
-. Injects `BeerService`
-. Gets the beer stream
-. For each beer emitted checks that _abv_ is greater than 7
-. Automatically subscribes to the stream and get back the result as `List<Beer>`
-
-The big change here is that now instead of having to deal with all beers in memory and then apply some operations, you are just loading into memory a _page_ of beers, then filter them and finally return them to the caller.
-
-Another big advantage is that now the _beer servcie_ is just called if the consumer requests it. 
-If the operation is canceled/aborted before completion, then you also save IO by not executing the operations.
-
-Notice that one of the big advantages of this approach (apart from the memory usage) is that you can apply any reactive operator without modifying the creation of the stream.
-
-[#qext-reactive-beer-run-quarkus-app-dev-mode]
-=== Run Quarkus Application in Development mode
-
-:section-build-run: beer-reactive
-
-include::ROOT:partial$run-dev-mode.adoc[]
-
-[#qext-call-beer-reactive-service]
-==== Invoke Service
-:doc-sec: beer-reactive
-:k8s-cli: k8s
-:path: beer
-:k8s-env: minikube
-:cli-tool: curl
-:address: localhost
-
-The simple `{path}` REST URI can be called via browser using http://localhost:8080/{path} or using CLI like: 
-
-include::ROOT:partial$invoke-service.adoc[tag=call]
-
-The REST call about should return an response like:
-
 [.console-output]
 [source,json]
 ----
-[ 
-   { 
-      "abv":7.2,
-      "description":"An Imperial Pilsner in collaboration with beer writers...." ,
-      "name":"Avery Brown Dredge",
-      "tagline":"Bloggers' Imperial Pilsner."
-   },
-   ...
+[
+  {
+    "abv": 55,
+    "name": "The End Of History",
+    "tagline": "The World's Strongest Beer."
+  },
+  {
+    "abv": 16.5,
+    "name": "Anarchist Alchemist",
+    "tagline": "Triple Hopped Triple Ipa."
+  },
+  {
+    "abv": 15.2,
+    "name": "Lumberjack Stout",
+    "tagline": "Blueberry Bacon Stout."
+  },
+  {
+    "abv": 18.3,
+    "name": "Bowman's Beard - B-Sides",
+    "tagline": "English Barley Wine."
+  },
+  {
+    "abv": 41,
+    "name": "Sink The Bismarck!",
+    "tagline": "IPA For The Dedicated."
+  },
+  {
+    "abv": 16.2,
+    "name": "Tokyo*",
+    "tagline": "Intergalactic Stout. Rich. Smoky. Fruity."
+  },
+  {
+    "abv": 18,
+    "name": "AB:02",
+    "tagline": "Triple Dry Hopped Imperial Red Ale."
+  },
+  {
+    "abv": 17.2,
+    "name": "Black Tokyo Horizon (w/Nøgne Ø & Mikkeller)",
+    "tagline": "Imperial Stout Collaboration."
+  },
+  {
+    "abv": 16.1,
+    "name": "Dog D",
+    "tagline": "Anniversary Imperial Stout."
+  },
+  {
+    "abv": 32,
+    "name": "Tactical Nuclear Penguin",
+    "tagline": "Uber Imperial Stout."
+  },
+  {
+    "abv": 16.1,
+    "name": "Dog E",
+    "tagline": "Ninth Anniversary Imperial Stout."
+  },
+  {
+    "abv": 17,
+    "name": "Dog G",
+    "tagline": "11th Anniversary Imperial Stout."
+  }
 ]
 ----

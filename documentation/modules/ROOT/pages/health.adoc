@@ -4,26 +4,31 @@ We can add `{quarkus-health-ext-name}` extension to allow Quarkus application to
 
 To add `{quarkus-health-ext-name}` to the Quarkus application, run the following command from `{quarkus-project-name}` project directory:
 
-[#qext-mvn-add-extension]
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:add-extension -Dextension="{quarkus-health-ext-name}"
+./mvnw quarkus:add-extension -Dextension=quarkus-smallrye-health
 ----
 
-After successful execution of the above command, you will have the following dependency added to the `{quarkus-project-name}` project's pom.xml:
-
-.pom.xml 
-[.console-input]
-[source,xml]
+[.console-output]
+[source,text]
 ----
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-smallrye-health</artifactId>
-    </dependency>
+[INFO] Scanning for projects...
+[INFO]
+[INFO] -----------------< com.redhat.developers:tutorial-app >-----------------
+[INFO] Building tutorial-app 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
+✅ Adding extension io.quarkus:quarkus-smallrye-health
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.131 s
+[INFO] Finished at: 2020-05-11T22:41:15-04:00
+[INFO] ------------------------------------------------------------------------
 ----
 
-[#qext-health-check-default-run-quarkus-app-dev-mode]
 === Run Quarkus Application in Development mode
 
 :section-build-run: health-check-default

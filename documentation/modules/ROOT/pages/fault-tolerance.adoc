@@ -1,14 +1,28 @@
 = Fault Tolerance
 
-include::_attributes.adoc[]
-:quarkus-project-name: fruits-app
-:svc-path: fruit
-:experimental:
-
 [.console-input]
-[source,bash,subs="+macros,+attributes"]
+[source,bash]
 ----
-./mvnw quarkus:add-extension -Dextension="{quarkus-fault-tolerance-ext-name}"
+./mvnw quarkus:add-extension -Dextension=quarkus-smallrye-fault-tolerance
+----
+
+[.console-output]
+[source,text]
+----
+[INFO] Scanning for projects...
+[INFO]
+[INFO] -----------------< com.redhat.developers:tutorial-app >-----------------
+[INFO] Building tutorial-app 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
+✅ Adding extension io.quarkus:quarkus-smallrye-fault-tolerance
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.963 s
+[INFO] Finished at: 2020-05-11T22:39:44-04:00
+[INFO] ------------------------------------------------------------------------
 ----
 
 [#qext-retry-fruity-vice-service]
@@ -18,15 +32,31 @@ Let's add the retry policy in `FruityViceService`.
 
 Add the `org.eclipse.microprofile.faulttolerance.Retry` annotation to `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruityViceService.java`:
 
-[#quarkusft-retry-fruit-vice-service]
 [.console-input]
-[source,config,subs="+macros"]
+[source,java]
 ----
-@GET
-@Path("/fruit/{name}")
-@Produces(MediaType.APPLICATION_JSON)
-@Retry(maxRetries = 3, delay = 2000)
-public FruityVice getFruitByName(@PathParam("name") String name);
+package com.redhat.developers;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
+@Path("/api/fruit")
+@RegisterRestClient
+public interface FruityViceService {
+
+    @GET
+    @Path("/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Retry(maxRetries = 3, delay = 2000)
+    public FruityVice getFruitByName(@PathParam("name") String name);
+    
+}
 ----
 
 Now in case of any error, 3 retries are done automatically, waiting for 2 seconds between retries.
@@ -80,23 +110,45 @@ Let's add a fallback policy in case of an error in `FruityViceService`.
 
 Add the `org.eclipse.microprofile.faulttolerance.Fallback` annotation to `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruityViceService.java`:
 
-[#quarkusft-fallback-fruit-vice-service]
 [.console-input]
-[source,config,subs="+macros"]
+[source,java]
 ----
-@GET
-@Path("/fruit/{name}")
-@Produces(MediaType.APPLICATION_JSON)
-@Retry(maxRetries = 3, delay = 2000)
-@Fallback(value = FruityViceRecovery.class)
-public FruityVice getFruitByName(@PathParam("name") String name);
+package com.redhat.developers;
 
-public static class FruityViceRecovery implements FallbackHandler<FruityVice> {
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
-    @Override
-    public FruityVice handle(ExecutionContext context) {
-        return FruityVice.EMPTY_FRUIT;
-	}
+import com.redhat.developers.FruityVice.Nutritions;
+
+import org.eclipse.microprofile.faulttolerance.ExecutionContext;
+import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.faulttolerance.FallbackHandler;
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
+@Path("/api/fruit")
+@RegisterRestClient
+public interface FruityViceService {
+
+    @GET
+    @Path("/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Retry(maxRetries = 3, delay = 2000)
+    @Fallback(FruityViceFallback.class)
+    public FruityVice getFruitByName(@PathParam("name") String name);
+    
+    public static class FruityViceFallback implements FallbackHandler<FruityVice> {
+
+        private static final FruityVice EMPTY_FRUITY_VICE = FruityVice.of("empty", Nutritions.of(0.0, 0.0));
+        @Override
+        public FruityVice handle(ExecutionContext context) {
+            return EMPTY_FRUITY_VICE;
+        }
+ 
+    }
 
 }
 ----
@@ -138,23 +190,32 @@ Let's add the circuit breaker policy in `FruityViceService`.
 
 Remove previous annotations of fallback and retry policies and add the following annotation to `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruityViceService.java`:
 
-[#quarkusft-circuit-breaker-fruit-vice-service]
 [.console-input]
-[source,config,subs="+macros"]
+[source,java]
 ----
-@GET
-@Path("/fruit/{name}")
-@Produces(MediaType.APPLICATION_JSON)
-@CircuitBreaker(requestVolumeThreshold = 4, failureRatio=0.75, delay = 5000)
-public FruityVice getFruitByName(@PathParam("name") String name);
+package com.redhat.developers;
 
-public static class FruityViceRecovery implements FallbackHandler<FruityVice> {
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
-    @Override
-    public FruityVice handle(ExecutionContext context) {
-        return FruityVice.EMPTY_FRUIT;
-	}
+import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
+@Path("/api/fruit")
+@RegisterRestClient
+public interface FruityViceService {
+
+    @GET
+    @Path("/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Retry(maxRetries = 3, delay = 2000)
+    @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.75, delay = 5000)
+    public FruityVice getFruitByName(@PathParam("name") String name);
+    
 }
 ----
 
