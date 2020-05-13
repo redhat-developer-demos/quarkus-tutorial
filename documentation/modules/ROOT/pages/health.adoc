@@ -207,3 +207,7 @@ curl localhost:8080/health/ready
 ----
 
 You can see that the readiness endpoints only returns information about the readiness probes.
+
+== The Health extension and Kubernetes
+
+NOTE: If you're using the Quarkus Kubernetes extension, the liveness and readiness probes are automatically configured in your `Deployment` when you generate the Kubernetes yaml files.

@@ -1,5 +1,11 @@
 = Fault Tolerance
 
+When trying to achieve the goal of resilience in our distributed systems, sometimes we need features like retries, fallbacks, and circuit breakers. Luckily for us, Quarkus provides these features for us through the _fault tolerance_ extension.
+
+== Add the Fault Tolerance extension
+
+Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
+
 [.console-input]
 [source,bash]
 ----
@@ -25,12 +31,11 @@
 [INFO] ------------------------------------------------------------------------
 ----
 
-[#qext-retry-fruity-vice-service]
-== Add Retry to Fruity Vice Service
+== Add Retry to FruityViceService
 
 Let's add the retry policy in `FruityViceService`.
 
-Add the `org.eclipse.microprofile.faulttolerance.Retry` annotation to `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruityViceService.java`:
+Change the `FruityViceService` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
@@ -61,54 +66,58 @@ public interface FruityViceService {
 
 Now in case of any error, 3 retries are done automatically, waiting for 2 seconds between retries.
 
-[#qext-fault-tolerance-run-quarkus-app-dev-mode]
-== Run Quarkus Application in Development mode
+== Invoke the endpoint with Retry
 
-:section-build-run: fault-tolerance
+Run the following command:
 
-include::ROOT:partial$run-dev-mode.adoc[]
-
-[#qext-call-fruity-fault-tolerance-retry]
-=== Invoke Service
-:doc-sec: fault-tolerance-retry
-:k8s-cli: cli
-:path: fruit/banana
-:k8s-env: minikube
-:cli-tool: curl
-:address: localhost
-
-The simple `{path}` REST URI can be called via browser using http://localhost:8080/{path} or using CLI like: 
-
-include::ROOT:partial$invoke-service.adoc[tag=call]
-
-The REST call should return an response like:
+[.console-input]
+[source,bash]
+----
+curl localhost:8080/fruit?season=Summer
+----
 
 [.console-output]
 [source,json]
 ----
-{
-    "name":"Banana",
-    "nutritions":{
-        "calories":96,
-        "fat":0.2
-    }
-}
+[
+  {
+    "calories": 0,
+    "carbohydrates": 29,
+    "name": "Blueberry",
+    "season": "Summer"
+  },
+  {
+    "calories": 0,
+    "carbohydrates": 96,
+    "name": "Banana",
+    "season": "Summer"
+  },
+  {
+    "calories": 0,
+    "carbohydrates": 30,
+    "name": "Watermelon",
+    "season": "Summer"
+  }
+]
 ----
 
 No change from calls done previously, but now switch off your network so you do not have access to http://www.fruityvice.com.
-And make again a request to http://localhost:8080/{path}.
 
-:doc-sec: fault-tolerance-retry-no-network
-include::ROOT:partial$invoke-service.adoc[tag=call]
+Run the following command again:
+
+[.console-input]
+[source,bash]
+----
+curl localhost:8080/fruit?season=Summer
+----
 
 Now after waiting 6 seconds (3 retries x 2 seconds), the next exception is thrown `java.net.UnknownHostException: www.fruityvice.com`.
 
-[#qext-fallback-fruity-vice-service]
 == Add Fallback to Fruity Vice Service
 
 Let's add a fallback policy in case of an error in `FruityViceService`.
 
-Add the `org.eclipse.microprofile.faulttolerance.Fallback` annotation to `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruityViceService.java`:
+Change the `FruityViceService` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
@@ -154,41 +163,51 @@ public interface FruityViceService {
 ----
 
 Now in case of any error, 3 retries are done automatically, waiting for 2 seconds between retries. 
+
 If the error persits, then the fallback method is executed.
-
-[#qext-fault-tolerance-fallback-run-quarkus-app-dev-mode]
-== Run Quarkus Application in Development mode
-
-:section-build-run: fault-tolerance-fallback
-
-include::ROOT:partial$run-dev-mode.adoc[]
-
-[#qext-call-fruity-fault-tolerance-fallback]
-=== Invoke Service
-:doc-sec: fault-tolerance-fallback
-:k8s-cli: k8s
-:path: fruit/banana
-:k8s-env: minikube
-:cli-tool: curl
-:address: localhost
-
-The simple `{path}` REST URI can be called via browser using http://localhost:8080/{path} or using CLI like: 
-
-include::ROOT:partial$invoke-service.adoc[tag=call]
 
 Now after waiting for 6 seconds (3 retries x 2 seconds), an empty object is sent instead of an exception.
 
-[source,json]
+== Invoke the endpoint with Retry and Fallback
+
+Run the following command:
+
+[.console-input]
+[source,bash]
 ----
-{}
+curl localhost:8080/fruit?season=Summer
 ----
 
-[#qext-circuit-breaker-fruity-vice-service]
+[.console-output]
+[source,json]
+----
+[
+  {
+    "calories": 0,
+    "carbohydrates": 0,
+    "name": "Blueberry",
+    "season": "Summer"
+  },
+  {
+    "calories": 0,
+    "carbohydrates": 0,
+    "name": "Banana",
+    "season": "Summer"
+  },
+  {
+    "calories": 0,
+    "carbohydrates": 0,
+    "name": "Watermelon",
+    "season": "Summer"
+  }
+]
+----
+
 == Add Circuit Breaker to Fruity Vice Service
 
 Let's add the circuit breaker policy in `FruityViceService`.
 
-Remove previous annotations of fallback and retry policies and add the following annotation to `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruityViceService.java`:
+Change the `FruityViceService` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
@@ -222,25 +241,13 @@ public interface FruityViceService {
 Now, if 3 (4 x 0.75) failures occur among the rolling window of 4 consecutive invocations then the circuit is opened for 5000 ms and then be back to half open. 
 If the invocation succeeds then the circuit is back to closed again.
 
-[#qext-circuit-breaker-run-quarkus-app-dev-mode]
-== Run Quarkus Application in Development mode
+Run the following command at least 5 times:
 
-:section-build-run: fault-tolerance-circuit-breaker
-
-include::ROOT:partial$run-dev-mode.adoc[]
-
-[#qext-call-fruity-fault-tolerance-circuit-breaker]
-=== Invoke Service
-:doc-sec: fault-tolerance-cb
-:k8s-cli: k8s
-:path: fruit/banana
-:k8s-env: minikube
-:cli-tool: curl
-:address: localhost
-
-Do 5 consecutive calls to the service, `{path}` REST URI can be called via browser using http://localhost:8080/{path} or using CLI like: 
-
-include::ROOT:partial$invoke-service.adoc[tag=call]
+[.console-input]
+[source,bash]
+----
+curl localhost:8080/fruit?season=Summer
+----
 
 The output changes form `java.net.UnknownHostException: www.fruityvice.com` (or any other network exception) in the first calls to `org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getFruitByName` when circuit is opened.
 
@@ -248,14 +255,4 @@ The big difference between first exception and second one is that in first one, 
 
 TIP: You can use `@Retry` and `@Fallback` annotations together with `@CircuitBreaker` annotation.
 
-[#qext-turn-on-network]
-== Turn Network on
-
-Turn network on again to continue with the workshop.
-
-[#qext-health-checks]
-== Health checks
-
-If you had observed, the quarkus application deployed on Kubernetes does not have any health checks on it. As Kubernetes best practice its highly recommended that health checks be added to the all the deployments.
-
-Health checks in Kubernetes can be added using https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/[Liveness and Readiness] probes.
+IMPORTANT: If you turned your network off for this chapter, remember to turn it back on again after you finished the exercises for this chapter.
