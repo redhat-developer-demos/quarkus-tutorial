@@ -179,7 +179,6 @@ import io.smallrye.mutiny.Multi;
 @Path("/wine")
 public class WineResource {
     
-    @Inject
     @Channel("priced-wine") <1>
     Multi<String> pricedWines;
 
