@@ -210,7 +210,7 @@ mp.messaging.outgoing.wine.topic=wine
 mp.messaging.outgoing.wine.value.serializer=org.apache.kafka.common.serialization.StringSerializer
 ----
 
-== Create Docker Compose configuration
+== Create docker-compose configuration
 
 The external dependencies required to run this chapter are:
 
