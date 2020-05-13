@@ -136,6 +136,22 @@
   <div class="content">
 <article class="doc">
 <h1 class="page">Apache Kafka with Reactive Streams</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Mutiny is just part of the Reactive story. To complement it, we need Reactive Streams too. And an important service that can serve as the underlying implementation for our stream is <a href="http://kafka.apache.org" target="_blank" rel="noopener">Apache Kafka</a>.</p>
+</div>
+<div class="paragraph">
+<p>In this chapter we&#8217;re going to use Mutiny to create price request for wines to a remote service called <code>price-generator</code> using Kafka as the broker for our messages in a Kafka topic called <code>wine</code>. The <code>price-generator</code> will get the wine from this topic, add a tag price to it, and send the information back in a Kafka topic called <code>priced-wine</code>. Finally, we&#8217;ll read the priced wines from the topic and send it throught our REST endpoint using SSE (Server-Side Events).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_add_the_reactive_messaging_kafka_extension"><a class="anchor" href="#_add_the_reactive_messaging_kafka_extension"></a>Add the Reactive Messaging Kafka extension</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Just open a new terminal window, and make sure you’re at the root of your <code>tutorial-app</code> project, then run:</p>
+</div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging-kafka"</code></pre>
@@ -158,6 +174,14 @@
 [INFO] Finished at: 2020-05-12T21:58:51-04:00
 [INFO] ------------------------------------------------------------------------</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_wine_pojo"><a class="anchor" href="#_create_wine_pojo"></a>Create Wine POJO</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Create a new <code>Wine</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -187,6 +211,14 @@ public class Wine {
 
 }</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_pricedwine_pojo"><a class="anchor" href="#_create_pricedwine_pojo"></a>Create PricedWine POJO</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Create a new <code>PricedWine</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -223,6 +255,14 @@ public class PricedWine {
 }</code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_winegenerator"><a class="anchor" href="#_create_winegenerator"></a>Create WineGenerator</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Create a new <code>WineGenerator</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+</div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
@@ -249,14 +289,42 @@ public class WineGenerator {
 
     @Outgoing("wine")
     Multi&lt;String&gt; wines() {
-        return Multi.createFrom().ticks().every(Duration.ofSeconds(1))
-        .onOverflow().drop()
-        .map(tick -&gt; WINES.get(ThreadLocalRandom.current().nextInt(0, WINES.size())))
-        .map(JsonbBuilder.create()::toJson);
+        return Multi.createFrom().ticks().every(Duration.ofSeconds(1)) <i class="conum" data-value="1"></i><b>(1)</b>
+        .onOverflow().drop() <i class="conum" data-value="2"></i><b>(2)</b>
+        .map(tick -&gt; WINES.get(ThreadLocalRandom.current().nextInt(0, WINES.size()))) <i class="conum" data-value="3"></i><b>(3)</b>
+        .map(JsonbBuilder.create()::toJson); <i class="conum" data-value="4"></i><b>(4)</b>
     }
 
 }</code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We&#8217;re creating a Multi that generates a new message every <code>1</code> second.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We apply backpressure by dropping the messages if the topic is not ready.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>For each message we choose a random <code>Wine</code> from our list.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>We map the <code>Wine</code> to JSON format.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_wineresource"><a class="anchor" href="#_create_wineresource"></a>Create WineResource</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Create a new <code>WineResource</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -278,18 +346,38 @@ import io.smallrye.mutiny.Multi;
 public class WineResource {
 
     @Inject
-    @Channel("priced-wine")
+    @Channel("priced-wine") <i class="conum" data-value="1"></i><b>(1)</b>
     Multi&lt;String&gt; pricedWines;
 
     @GET
     @Produces(MediaType.SERVER_SENT_EVENTS)
     @SseElementType(MediaType.APPLICATION_JSON)
     public Multi&lt;PricedWine&gt; wines() {
-        return pricedWines.map(s -&gt; JsonbBuilder.create().fromJson(s, PricedWine.class));
+        return pricedWines.map(s -&gt; JsonbBuilder.create().fromJson(s, PricedWine.class)); <i class="conum" data-value="2"></i><b>(2)</b>
     }
 
 }</code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We inject the Multi directly by using the <code>@Channel</code> annotation.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We just map the <code>PricedWine</code> to JSON format.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_add_the_reactive_messaging_kafka_properties"><a class="anchor" href="#_add_the_reactive_messaging_kafka_properties"></a>Add the Reactive Messaging Kafka properties</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Add the following properties to your <code>application.properties</code> in <code>src/main/resources</code>:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -301,6 +389,33 @@ mp.messaging.outgoing.wine.connector=smallrye-kafka
 mp.messaging.outgoing.wine.topic=wine
 mp.messaging.outgoing.wine.value.serializer=org.apache.kafka.common.serialization.StringSerializer</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_docker_compose_configuration"><a class="anchor" href="#_create_docker_compose_configuration"></a>Create Docker Compose configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The external dependencies required to run this chapter are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Kafka</p>
+</li>
+<li>
+<p>Zookeeper (required by Kafka)</p>
+</li>
+<li>
+<p>The <code>price-generator</code> service</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>We&#8217;re going to use <code>docker-compose</code> to bootstrap these external services.</p>
+</div>
+<div class="paragraph">
+<p>Create a new file called <code>docker-compose.yml</code> in the root of your <code>tutorial-app</code> folder:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -338,6 +453,14 @@ services:
       - kafka</code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_run_docker_compose"><a class="anchor" href="#_run_docker_compose"></a>Run docker-compose</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Make sure you are in the same folder that you&#8217;ve created the <code>docker-compose.yml</code> file (in our case, the root of our <code>tutorial-app</code> folder).</p>
+</div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker-compose up</code></pre>
@@ -353,6 +476,14 @@ kafka_1            | [2020-05-13 01:54:53,504] INFO [Log partition=__consumer_of
 kafka_1            | [2020-05-13 01:54:53,531] INFO [ProducerStateManager partition=__consumer_offsets-38] Loading producer state from snapshot file '/tmp/kafka-logs/__consumer_offsets-38/00000000000000000015.snapshot' (kafka.log.ProducerStateManager)
 kafka_1            | [2020-05-13 01:54:53,550] INFO [Log partition=__consumer_offsets-38, dir=/tmp/kafka-logs] Completed load of log with 1 segments, log start offset 0 and log end offset 15 in 125 ms (kafka.log.Log)</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_invoke_the_wine_endpoint"><a class="anchor" href="#_invoke_the_wine_endpoint"></a>Invoke the /wine endpoint</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Run the following command:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -390,6 +521,8 @@ data: {"name":"Don Melchor","price":1468.00}
 data: {"name":"Pera Manca","price":1534.00}
 
 data: {"name":"Barca Velha","price":316.00}</code></pre>
+</div>
+</div>
 </div>
 </div>
 </article>
