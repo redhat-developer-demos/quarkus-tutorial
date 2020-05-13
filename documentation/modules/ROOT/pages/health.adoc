@@ -60,6 +60,8 @@ curl localhost:8080/health
 
 == Add a custom liveness probe
 
+Create a new `LivenessProbe` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
 [.console-input]
 [source,java]
 ----
@@ -83,6 +85,8 @@ public class LivenessProbe implements HealthCheck {
 ----
 
 == Add a custom readiness probe
+
+Create a new `ReadinessProbe` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]

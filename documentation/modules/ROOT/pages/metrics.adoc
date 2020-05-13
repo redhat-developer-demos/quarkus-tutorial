@@ -83,7 +83,7 @@ We need to send some requests to our endpoint to increment our `@Counted` metric
 [.console-input]
 [source,bash]
 ----
-for i in {1..5}; do curl localhost:8080/time; done
+for i in {1..5}; do curl -w '\n' localhost:8080/time; done
 ----
 
 [.console-output]
