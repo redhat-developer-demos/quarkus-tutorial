@@ -5,7 +5,7 @@ on:
     branches: 
     - master
     paths:
-    - '.github/workflows/price-generator.yml
+    - '.github/workflows/price-generator.yml'
     - 'apps/price-generator/**'
 
 jobs:
