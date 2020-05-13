@@ -73,91 +73,90 @@ readiness:: Checks if the application can receive public requests.
 Let's create a custom check for both liveness and readiness checks.
 Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `FruitHealthCheck` with the following contents:
 
-[#quarkusp-fruit-checks]
 [.console-input]
-[source,java,subs="+macros,+attributes"]
+[source,java]
 ----
-package com.example;
+package com.redhat.developers;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
 
 import org.eclipse.microprofile.health.HealthCheck;
+import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Liveness;
-import org.eclipse.microprofile.health.Readiness;
-
-import io.smallrye.health.HealthStatus;
 
 @ApplicationScoped
-public class FruitHealthCheck {
-
-    @Produces
-    @ApplicationScoped
-    @Liveness
-    HealthCheck liveCheck() {
-      return HealthStatus.up("successful-live");
+@Liveness
+public class LivenessProbe implements HealthCheck {
+    @Override
+    public HealthCheckResponse call() {
+        return HealthCheckResponse.up("I'm alive");
     }
 
-    @Produces
-    @ApplicationScoped
-    @Readiness
-    HealthCheck readyCheck() {
-      return HealthStatus.state("successful-read", this::isReady);
-    }
-
-    private boolean isReady() {
-        return true;
-    }
 }
 ----
 
-[#qext-health-check-custom-run-quarkus-app-dev-mode]
-=== Run Quarkus Application in Development mode
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
 
-:section-build-run: health-check-custom
+import javax.enterprise.context.ApplicationScoped;
 
-include::ROOT:partial$run-dev-mode.adoc[]
+import org.eclipse.microprofile.health.HealthCheck;
+import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.health.Readiness;
 
-[#qext-call-health-custom]
-=== Invoke Service
-:doc-sec: custom-health
-:k8s-cli: k8s
-:path: health
-:k8s-env: minikube
-:cli-tool: curl
-:address: localhost
+@ApplicationScoped
+@Readiness
+public class ReadinessProbe implements HealthCheck{
+    
+    @Override
+    public HealthCheckResponse call() {
+        return HealthCheckResponse.builder()
+            .name("database")
+            .withData("connections", "10")
+            .up()
+            .build();
+    }
 
-The simple `{path}` REST URI can be called via browser using `http://localhost:8080/{path}` or using CLI like: 
-
-include::ROOT:partial$invoke-service.adoc[tag=call]
-
-The REST call about should return an response like:
+}
+----
+[.console-input]
+[source,bash]
+----
+curl localhost:8080/health
+----
 
 [.console-output]
-[source,json]
+[source, json]
 ----
 {
     "status": "UP",
     "checks": [
         {
-            "name": "successful-live",
+            "name": "I'm alive",
             "status": "UP"
         },
         {
-            "name": "successful-read",
+            "name": "database",
+            "status": "UP",
+            "data": {
+                "connections": "10"
+            }
+        },
+        {
+            "name": "Database connections health check",
             "status": "UP"
         }
     ]
 }
 ----
 
-But also you can invoke them individually by calling `/health/live` and `/health/ready`.
-
-:doc-sec: custom-health-live
-:path: health/live
-include::ROOT:partial$invoke-service.adoc[tag=call]
-
-The REST call about should return an response like:
+[.console-input]
+[source,bash]
+----
+curl localhost:8080/health/live
+----
 
 [.console-output]
 [source, json]
@@ -166,18 +165,18 @@ The REST call about should return an response like:
     "status": "UP",
     "checks": [
         {
-            "name": "successful-live",
+            "name": "I'm alive",
             "status": "UP"
         }
     ]
 }
 ----
 
-:doc-sec: custom-health-ready
-:path: health/ready
-include::ROOT:partial$invoke-service.adoc[tag=call]
-
-The REST call about should return an response like:
+[.console-input]
+[source,bash]
+----
+curl localhost:8080/health/ready
+----
 
 [.console-output]
 [source, json]
@@ -186,25 +185,16 @@ The REST call about should return an response like:
     "status": "UP",
     "checks": [
         {
-            "name": "successful-read",
+            "name": "database",
+            "status": "UP",
+            "data": {
+                "connections": "10"
+            }
+        },
+        {
+            "name": "Database connections health check",
             "status": "UP"
         }
     ]
 }
 ----
-
-Then you can stop the container by typing kbd:[Ctrl+C].
-
-ifndef::workshop[]
-
-[#qext-health-checks-kubernetes]
-=== Kubernetes Extension and Health Checks
-
-Kubernetes extension detects that Health Check extension is registered and registers them in generated Kubernetes resource.
-
-:doc-sec: k8s-health-check
-include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-prep]
-
-:section-k8s: health-check
-include::ROOT:partial$k8s-build-deploy.adoc[tag=k8s-delete]
-endif::workshop[]
