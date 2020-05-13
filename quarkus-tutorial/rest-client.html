@@ -203,7 +203,7 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="_create_the_fruityvice_pojo"><a class="anchor" href="#_create_the_fruityvice_pojo"></a>Create the FruityVice POJO</h2>
+<h2 id="_create_fruityvice_pojo"><a class="anchor" href="#_create_fruityvice_pojo"></a>Create FruityVice POJO</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>We need to create a POJO object that is used to unmarshal JSON message from <a href="http://www.fruityvice.com" class="bare" target="_blank" rel="noopener">http://www.fruityvice.com</a>.</p>
@@ -271,9 +271,9 @@ public class FruityVice {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_create_the_fruityviceservice"><a class="anchor" href="#_create_the_fruityviceservice"></a>Create the FruityViceService</h3>
+<h3 id="_create_fruityviceservice"><a class="anchor" href="#_create_fruityviceservice"></a>Create FruityViceService</h3>
 <div class="paragraph">
-<p>Now we&#8217;re going to implemente a Java interface that mimics the remote REST endpoint.</p>
+<p>Now we&#8217;re going to implement a Java interface that mimics the remote REST endpoint.</p>
 </div>
 <div class="paragraph">
 <p>Create a new <code>FruitViceService</code> Java interface in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
@@ -306,10 +306,10 @@ public interface FruityViceService {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_configure_the_rest_client_properties"><a class="anchor" href="#_configure_the_rest_client_properties"></a>Configure the REST Client properties</h2>
+<h2 id="_configure_rest_client_properties"><a class="anchor" href="#_configure_rest_client_properties"></a>Configure REST Client properties</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Add the following database properties to your <code>application.properties</code> in <code>src/main/resources</code>:</p>
+<p>Add the following properties to your <code>application.properties</code> in <code>src/main/resources</code>:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -378,7 +378,7 @@ public class FruitDTO {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_change_fruitresource_to_use_the_fruityviceservice"><a class="anchor" href="#_change_fruitresource_to_use_the_fruityviceservice"></a>Change FruitResource to use the FruityViceService</h2>
+<h2 id="_change_fruitresource_to_use_fruityviceservice"><a class="anchor" href="#_change_fruitresource_to_use_fruityviceservice"></a>Change FruitResource to use FruityViceService</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Now that we have all of the required classes, we can change <code>FruitResource</code> to use our <code>FruityViceService</code> REST client.</p>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Reactive Programming :: Quarkus Tutorial</title>
+    <title>Reactive with Mutiny :: Quarkus Tutorial</title>
     <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/reactive.html">
     <meta name="generator" content="Antora 2.3.1">
     <link rel="stylesheet" href="../_/css/site.css">
@@ -135,9 +135,23 @@
   </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Reactive Programming</h1>
+<h1 class="page">Reactive with Mutiny</h1>
 <div id="preamble">
 <div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus provides a novel reactive API called Mutiny, with the goal of easing the development of highly scalable, resilient, and asynchronous systems.</p>
+</div>
+<div class="paragraph">
+<p>In this chapter we&#8217;re going to see some examples of how Mutiny changes the design of our Quarkus applications. We&#8217;re going to develop an asynchronous REST client that connects to an online beer database (<a href="https://punkapi.com/documentation/v2" class="bare">https://punkapi.com/documentation/v2</a>) to retrieve beer information. This API does not return all beers at once, so we&#8217;ll need to navigate through the pages to fetch all the information. Then we&#8217;re going to filter all the beers with an ABV greater than 15.0 and return these values in a Reactive REST endpoint.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_add_the_resteasy_mutiny_extension"><a class="anchor" href="#_add_the_resteasy_mutiny_extension"></a>Add the RestEasy Mutiny extension</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Just open a new terminal window, and make sure you’re at the root of your <code>tutorial-app</code> project, then run:</p>
+</div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextensions=io.quarkus:quarkus-resteasy-mutiny</code></pre>
@@ -161,60 +175,13 @@
 [INFO] ------------------------------------------------------------------------</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Unresolved include directive in modules/ROOT/pages/reactive.adoc - include::_attributes.adoc[]
-:quarkus-project-name: fruits-app
-:svc-path: beer</p>
-</div>
-<div class="paragraph">
-<p>At the end of this chapter you will be able to :</p>
-</div>
-<div class="ulist checklist">
-<ul class="checklist">
-<li>
-<p><i class="fa fa-check-square-o"></i> Use reactive programming in Quarkus.</p>
-</li>
-<li>
-<p><i class="fa fa-check-square-o"></i> How to use Reactive programming for accessing Rest API services with pagination and back pressure.</p>
-</li>
-</ul>
-</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="quarkusrpb-demo-overview"><a class="anchor" href="#quarkusrpb-demo-overview"></a>Beer Demo Overview</h2>
+<h2 id="_create_beer_pojo"><a class="anchor" href="#_create_beer_pojo"></a>Create Beer POJO</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To demonstrate how to use reactive programming in Quarkus, you will be developing a REST client that connects to a beer database (<a href="https://punkapi.com/documentation/v2" class="bare">https://punkapi.com/documentation/v2</a>) to retrieve beer information.
-This API does not return all beers at once, but you need to use pagination to navigate through all beer database.</p>
-</div>
-<div class="paragraph">
-<p>In this section, you are going to develop a service that returns all beers with an <em>abv</em> value greater than <em>7.0</em> and using a reactive approach as a solution.</p>
-</div>
-<div class="sect2">
-<h3 id="quarkusrpb-buld-beer-reactive"><a class="anchor" href="#quarkusrpb-buld-beer-reactive"></a>Build Beer Service</h3>
-<div class="paragraph">
-<p>The skeleton project to get started is the same you created at <a href="#02-basics-fundas.adoc" class="page unresolved">Basics and Fundamentals</a>.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-For the easier reference, we shall call the <code>fruits-app</code> project folder as $PROJECT_HOME
-</td>
-</tr>
-</table>
-</div>
-<div class="sect3">
-<h4 id="quarkusrpb-create-pojo"><a class="anchor" href="#quarkusrpb-create-pojo"></a>Create Beer POJO</h4>
-<div class="paragraph">
-<p>Let&#8217;s create the <code>Beer</code> pojo.</p>
-</div>
-<div class="paragraph">
-<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>Beer</code> with the following contents:</p>
+<p>Create a new <code>Beer</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -230,11 +197,11 @@ public class Beer {
 
     private double abv;
 
-	private Beer(String name, String tagline, double abv) {
-		this.name = name;
-		this.tagline = tagline;
-		this.abv = abv;
-	}
+    private Beer(String name, String tagline, double abv) {
+      this.name = name;
+      this.tagline = tagline;
+      this.abv = abv;
+    }
 
     @JsonbCreator
     public static Beer of(String name, String tagline, double abv) {
@@ -257,10 +224,15 @@ public class Beer {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="quarkusrpb-create-beer-client"><a class="anchor" href="#quarkusrpb-create-beer-client"></a>Create Rest Client to Punk Beer API</h4>
+</div>
+<div class="sect1">
+<h2 id="_create_beerservice"><a class="anchor" href="#_create_beerservice"></a>Create BeerService</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>BeerGateway</code> with the following contents:</p>
+<p>Now we&#8217;re going to implement a Java interface that mimics the remote REST endpoint.</p>
+</div>
+<div class="paragraph">
+<p>Create a new <code>BeerService</code> Java interface in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -290,10 +262,11 @@ public interface BeerService {
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_edit_the_application_properties"><a class="anchor" href="#_edit_the_application_properties"></a>Edit the application.properties</h3>
+<div class="sect1">
+<h2 id="_configure_rest_client_properties"><a class="anchor" href="#_configure_rest_client_properties"></a>Configure REST Client properties</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Add the following properties to $PROJECT_HOME/src/main/resources/application.properties:</p>
+<p>Add the following properties to your <code>application.properties</code> in <code>src/main/resources</code>:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -301,13 +274,12 @@ public interface BeerService {
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="quarkusrpb-beer-reactive-service"><a class="anchor" href="#quarkusrpb-beer-reactive-service"></a>Create Beer Punk API Reactive Service</h3>
-<div class="paragraph">
-<p>Let&#8217;s create the service that uses <code>BeerGateway</code> to retrieve beer information by page and reactively emits each of the beer information.</p>
 </div>
+<div class="sect1">
+<h2 id="_create_beerresource"><a class="anchor" href="#_create_beerresource"></a>Create BeerResource</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>BeerService</code> with the following contents:</p>
+<p>Create a new <code>BeerResource</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -336,44 +308,58 @@ public class BeerResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Multi&lt;Beer&gt; beers() {
-        return Multi.createBy().repeating() //1
-            .supplier(
-                () -&gt; new AtomicInteger(1), //2
-                i -&gt; beerService.getBeers(i.getAndIncrement()) //3
+        return Multi.createBy().repeating() <i class="conum" data-value="1"></i><b>(1)</b>
+            .supplier( <i class="conum" data-value="2"></i><b>(2)</b>
+                () -&gt; new AtomicInteger(1),
+                i -&gt; beerService.getBeers(i.getAndIncrement())
             )
-            .until(List::isEmpty) //4
-            .onItem().&lt;Beer&gt;disjoint() //5
-            .transform().byFilteringItemsWith(b -&gt; b.getAbv() &gt; 15.0); //6
+            .until(List::isEmpty) <i class="conum" data-value="3"></i><b>(3)</b>
+            .onItem().&lt;Beer&gt;disjoint() <i class="conum" data-value="4"></i><b>(4)</b>
+            .transform().byFilteringItemsWith(b -&gt; b.getAbv() &gt; 15.0); <i class="conum" data-value="6"></i><b>(6)</b>
     }
 
 }</code></pre>
 </div>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Gets first batch of beers</p>
-</li>
-<li>
-<p>Sends an event that the process is completed</p>
-</li>
-<li>
-<p>Emits each beer</p>
-</li>
-<li>
-<p>Gets beers from next page</p>
-</li>
-<li>
-<p>Flatten the list of beers event into event of beers</p>
-</li>
-</ol>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Creates a <code>Multi</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The supplier will start with 1 and will query the remote endpoing asking for page <code>i</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The multi will end when the beer list returned is empty.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>We dismember all the returned lists and create a sequence of beers.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>And then we filter the <code>Multi</code> with beers with ABV &gt; 15.0.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_invoke_the_endpoint"><a class="anchor" href="#_invoke_the_endpoint"></a>Invoke the endpoint</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can check the your new implementation using a REST client by pointing your browser to <a href="http://localhost:8080/beer" class="bare" target="_blank" rel="noopener">http://localhost:8080/beer</a></p>
 </div>
 <div class="paragraph">
-<p>So far nothing really new, but notice that now instead of reading all the beers, put them in memory and then filter out by any parameter, you are just emitting them individually per page.
-The caller is responsible to manipulate this information as it starts receiving the information and it is not necessary to store all beers in memory but just the ones that matches any condition.</p>
+<p>You can also run the following command:</p>
 </div>
-<div class="paragraph">
-<p>Notice that until a caller subscribes to a stream (<code>Flowable</code> in this case), the logic is not executed.</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/beer</code></pre>
+</div>
 </div>
 <div class="listingblock console-output">
 <div class="content">
@@ -439,7 +425,6 @@ The caller is responsible to manipulate this information as it starts receiving 
     "tagline": "11th Anniversary Imperial Stout."
   }
 ]</code></pre>
-</div>
 </div>
 </div>
 </div>
