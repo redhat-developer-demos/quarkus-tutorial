@@ -1,8 +1,16 @@
 = Health Check
 
-We can add `{quarkus-health-ext-name}` extension to allow Quarkus application to be probed on the REST endpoint called `health` to know about its current health.
+Health Checks are important in platforms like Kubernetes because it allows the infrastructure to be aware of the state of the application.
 
-To add `{quarkus-health-ext-name}` to the Quarkus application, run the following command from `{quarkus-project-name}` project directory:
+There are two different types of health checks:
+
+- *Liveness probes* tells your platform if your application is running ok or not. When your liveness probe is down, your platform might restart your instance to guarantee that you have the minimum required amount of running instances in production.
+
+- *Readiness probes* tells your platform if your application is _warm_ enough to reply to requests in a reasonable amount of time. Java applications, for example, might need some time to warm up, so the readiness probe should be up only when it's ready to reply to request in a timely manner. Checks that depends on other services should be implemented as readiness probes: if a remote service is down, restarting your application won't fix the issue.
+
+== Add the Health extension
+
+Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -29,26 +37,17 @@ To add `{quarkus-health-ext-name}` to the Quarkus application, run the following
 [INFO] ------------------------------------------------------------------------
 ----
 
-=== Run Quarkus Application in Development mode
+== Invoke the /health endpoint
 
-:section-build-run: health-check-default
+Just by adding the Health extension you'll have a `/health` endpoint providing a very trivial health check.
 
-include::ROOT:partial$run-dev-mode.adoc[]
+Run the following command:
 
-[#qext-call-health-ep]
-=== Invoke Service
-:doc-sec: basics-health-check
-:k8s-cli: k8s
-:path: health
-:k8s-env: minikube
-:cli-tool: curl
-:address: localhost
-
-The simple `{path}` REST URI can be called via browser using `http://localhost:8080/{path}` or using CLI like: 
-
-include::ROOT:partial$invoke-service.adoc[tag=call]
-
-The REST call about should return an response like:
+[.console-input]
+[source,bash]
+----
+curl localhost:8080/health
+----
 
 [.console-output]
 [source,json]
@@ -59,19 +58,7 @@ The REST call about should return an response like:
 }
 ----
 
-Then you can stop the App by typing kbd:[Ctrl+C].
-
-[#qext-custom-health-check]
-=== Customizing Health Checks
-
-So far, you've seen that some a default health check is provided but in most cases, you'd like to customize this logic providing custom logic.
-Moreover, Kubernetes provides the concept of liveness and readiness probe to regularly check the health of the application.
-
-liveness:: Checks if the application is up and running.
-readiness:: Checks if the application can receive public requests.
-
-Let's create a custom check for both liveness and readiness checks.
-Add new Java file in `$PROJECT_HOME/src/main/java/com/example` called `FruitHealthCheck` with the following contents:
+== Add a custom liveness probe
 
 [.console-input]
 [source,java]
@@ -95,6 +82,8 @@ public class LivenessProbe implements HealthCheck {
 }
 ----
 
+== Add a custom readiness probe
+
 [.console-input]
 [source,java]
 ----
@@ -114,13 +103,19 @@ public class ReadinessProbe implements HealthCheck{
     public HealthCheckResponse call() {
         return HealthCheckResponse.builder()
             .name("database")
-            .withData("connections", "10")
+            .withData("connections", "10") <1>
             .up()
             .build();
     }
 
 }
 ----
+<1> You can use a `HealthCheckResponse` builder to add custom information to your health checks.
+
+== Invoke the /health endpoint with custom probes
+
+Run the following command:
+
 [.console-input]
 [source,bash]
 ----
@@ -152,6 +147,12 @@ curl localhost:8080/health
 }
 ----
 
+You can see that the `/health` endpoint consolidates information from both the liveness and readiness probes.
+
+== Invoke the liveness endpoint
+
+Run the following command:
+
 [.console-input]
 [source,bash]
 ----
@@ -171,6 +172,12 @@ curl localhost:8080/health/live
     ]
 }
 ----
+
+You can see that the liveness endpoints only returns information about the liveness probes.
+
+== Invoke the readiness endpoint
+
+Run the following command:
 
 [.console-input]
 [source,bash]
@@ -198,3 +205,5 @@ curl localhost:8080/health/ready
     ]
 }
 ----
+
+You can see that the readiness endpoints only returns information about the readiness probes.
