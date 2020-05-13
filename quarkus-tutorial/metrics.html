@@ -136,6 +136,22 @@
   <div class="content">
 <article class="doc">
 <h1 class="page">Metrics</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>When running applications in production we need to send monitoring information to some services like Prometheus.</p>
+</div>
+<div class="paragraph">
+<p>Quarkus provides JVM and other statistics out-of-box with the Metrics extension, but it&#8217;s very valuable for our application to produce its own metrics. Let&#8217;s see how we can achieve it in this chapter.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_add_the_metrics_extension"><a class="anchor" href="#_add_the_metrics_extension"></a>Add the Metrics extension</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Just open a new terminal window, and make sure you’re at the root of your <code>tutorial-app</code> project, then run:</p>
+</div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension=quarkus-smallrye-metrics</code></pre>
@@ -159,6 +175,14 @@
 [INFO] ------------------------------------------------------------------------</code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_the_timeresource"><a class="anchor" href="#_create_the_timeresource"></a>Create the TimeResource</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Create a new <code>TimeResource</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+</div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
@@ -179,20 +203,40 @@ import org.eclipse.microprofile.metrics.annotation.Gauge;
 @Path("/time")
 public class TimeResource {
 
-    @Counted(name = "time.now")
+    @Counted(name = "time.now") <i class="conum" data-value="1"></i><b>(1)</b>
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public Instant now() {
         return Instant.now();
     }
 
-    @Gauge(name = "offsetFromUTC", unit = "hours")
+    @Gauge(name = "offsetFromUTC", unit = "hours") <i class="conum" data-value="2"></i><b>(2)</b>
     public int offsetFromUTC() {
         return TimeZone.getDefault().getOffset(Calendar.ZONE_OFFSET)/(3600*1000);
     }
 
 }</code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>@Counted</code> annotation allows the Metrics extension to count the number of invocations to this method.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>@Gauge</code> annotation return a value computed by our application.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_invoke_the_endpoing_multiple_times"><a class="anchor" href="#_invoke_the_endpoing_multiple_times"></a>Invoke the endpoing multiple times</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We need to send some requests to our endpoint to increment our <code>@Counted</code> metrics, so use the following command:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -208,6 +252,17 @@ public class TimeResource {
 2020-05-12T22:38:11.832583Z</code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_check_the_metrics"><a class="anchor" href="#_check_the_metrics"></a>Check the metrics</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>By default the metrics are exposed in Prometheus format. You can check the output by pointing your browser to <a href="http://localhost:8080/metrics/application" class="bare" target="_blank" rel="noopener">http://localhost:8080/metrics/application</a></p>
+</div>
+<div class="paragraph">
+<p>You can also check the metrics in JSON format by running this command:</p>
+</div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -H "Accept: application/json" localhost:8080/metrics/application</code></pre>
@@ -219,6 +274,8 @@ public class TimeResource {
     "com.redhat.developers.TimeResource.time.now": 5,
     "com.redhat.developers.TimeResource.offsetFromUTC": -5
 }</code></pre>
+</div>
+</div>
 </div>
 </div>
 </article>
