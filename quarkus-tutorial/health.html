@@ -139,10 +139,28 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>We can add <code>{quarkus-health-ext-name}</code> extension to allow Quarkus application to be probed on the REST endpoint called <code>health</code> to know about its current health.</p>
+<p>Health Checks are important in platforms like Kubernetes because it allows the infrastructure to be aware of the state of the application.</p>
 </div>
 <div class="paragraph">
-<p>To add <code>{quarkus-health-ext-name}</code> to the Quarkus application, run the following command from <code>{quarkus-project-name}</code> project directory:</p>
+<p>There are two different types of health checks:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Liveness probes</strong> tells your platform if your application is running ok or not. When your liveness probe is down, your platform might restart your instance to guarantee that you have the minimum required amount of running instances in production.</p>
+</li>
+<li>
+<p><strong>Readiness probes</strong> tells your platform if your application is <em>warm</em> enough to reply to requests in a reasonable amount of time. Java applications, for example, might need some time to warm up, so the readiness probe should be up only when it&#8217;s ready to reply to request in a timely manner. Checks that depends on other services should be implemented as readiness probes: if a remote service is down, restarting your application won&#8217;t fix the issue.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_add_the_health_extension"><a class="anchor" href="#_add_the_health_extension"></a>Add the Health extension</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Just open a new terminal window, and make sure you’re at the root of your <code>tutorial-app</code> project, then run:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -169,29 +187,19 @@
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_run_quarkus_application_in_development_mode"><a class="anchor" href="#_run_quarkus_application_in_development_mode"></a>Run Quarkus Application in Development mode</h3>
+<div class="sect1">
+<h2 id="_invoke_the_health_endpoint"><a class="anchor" href="#_invoke_the_health_endpoint"></a>Invoke the /health endpoint</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
+<p>Just by adding the Health extension you&#8217;ll have a <code>/health</code> endpoint providing a very trivial health check.</p>
 </div>
-<div id="health-check-default-build-run-dev" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="qext-call-health-ep"><a class="anchor" href="#qext-call-health-ep"></a>Invoke Service</h3>
 <div class="paragraph">
-<p>The simple <code>health</code> REST URI can be called via browser using <code><a href="http://localhost:8080/health" class="bare">http://localhost:8080/health</a></code> or using CLI like:</p>
+<p>Run the following command:</p>
 </div>
-<div id="basics-health-check-k8s-svc-call" class="listingblock console-input">
+<div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/health</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>The REST call about should return an response like:</p>
 </div>
 <div class="listingblock console-output">
 <div class="content">
@@ -201,32 +209,11 @@
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Then you can stop the App by typing <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="qext-custom-health-check"><a class="anchor" href="#qext-custom-health-check"></a>Customizing Health Checks</h3>
-<div class="paragraph">
-<p>So far, you&#8217;ve seen that some a default health check is provided but in most cases, you&#8217;d like to customize this logic providing custom logic.
-Moreover, Kubernetes provides the concept of liveness and readiness probe to regularly check the health of the application.</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">liveness</dt>
-<dd>
-<p>Checks if the application is up and running.</p>
-</dd>
-<dt class="hdlist1">readiness</dt>
-<dd>
-<p>Checks if the application can receive public requests.</p>
-</dd>
-</dl>
-</div>
-<div class="paragraph">
-<p>Let&#8217;s create a custom check for both liveness and readiness checks.
-Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>FruitHealthCheck</code> with the following contents:</p>
-</div>
+<div class="sect1">
+<h2 id="_add_a_custom_liveness_probe"><a class="anchor" href="#_add_a_custom_liveness_probe"></a>Add a custom liveness probe</h2>
+<div class="sectionbody">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
@@ -248,6 +235,11 @@ public class LivenessProbe implements HealthCheck {
 }</code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_add_a_custom_readiness_probe"><a class="anchor" href="#_add_a_custom_readiness_probe"></a>Add a custom readiness probe</h2>
+<div class="sectionbody">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
@@ -266,13 +258,29 @@ public class ReadinessProbe implements HealthCheck{
     public HealthCheckResponse call() {
         return HealthCheckResponse.builder()
             .name("database")
-            .withData("connections", "10")
+            .withData("connections", "10") <i class="conum" data-value="1"></i><b>(1)</b>
             .up()
             .build();
     }
 
 }</code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>You can use a <code>HealthCheckResponse</code> builder to add custom information to your health checks.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_invoke_the_health_endpoint_with_custom_probes"><a class="anchor" href="#_invoke_the_health_endpoint_with_custom_probes"></a>Invoke the /health endpoint with custom probes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Run the following command:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -303,6 +311,17 @@ public class ReadinessProbe implements HealthCheck{
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>You can see that the <code>/health</code> endpoint consolidates information from both the liveness and readiness probes.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_invoke_the_liveness_endpoint"><a class="anchor" href="#_invoke_the_liveness_endpoint"></a>Invoke the liveness endpoint</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Run the following command:</p>
+</div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/health/live</code></pre>
@@ -320,6 +339,17 @@ public class ReadinessProbe implements HealthCheck{
     ]
 }</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>You can see that the liveness endpoints only returns information about the liveness probes.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_invoke_the_readiness_endpoint"><a class="anchor" href="#_invoke_the_readiness_endpoint"></a>Invoke the readiness endpoint</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Run the following command:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -344,6 +374,10 @@ public class ReadinessProbe implements HealthCheck{
         }
     ]
 }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can see that the readiness endpoints only returns information about the readiness probes.</p>
 </div>
 </div>
 </div>
