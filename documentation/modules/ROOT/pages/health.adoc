@@ -67,13 +67,10 @@ Create a new `LivenessProbe` Java class in `src/main/java` in the `com.redhat.de
 ----
 package com.redhat.developers;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Liveness;
 
-@ApplicationScoped
 @Liveness
 public class LivenessProbe implements HealthCheck {
     @Override
@@ -93,13 +90,10 @@ Create a new `ReadinessProbe` Java class in `src/main/java` in the `com.redhat.d
 ----
 package com.redhat.developers;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Readiness;
 
-@ApplicationScoped
 @Readiness
 public class ReadinessProbe implements HealthCheck{
     
