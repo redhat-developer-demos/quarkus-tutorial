@@ -1,6 +1,8 @@
 = Quarkus Tutorial
 
 image:https://github.com/redhat-developer-demos/quarkus-tutorial/workflows/docs/badge.svg[]
+image:https://github.com/redhat-developer-demos/quarkus-tutorial/workflows/price-generator/badge.svg[]
+
 
 You can access the HTML version of this tutorial here: https://redhat-developer-demos.github.io/quarkus-tutorial/[window="_blank"]
 
