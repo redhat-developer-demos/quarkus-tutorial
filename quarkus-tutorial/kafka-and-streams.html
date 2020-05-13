@@ -244,6 +244,10 @@ public class PricedWine {
         return new PricedWine(name, new BigDecimal(price).setScale(2));
     }
 
+    public static PricedWine of(String name, BigDecimal price) {
+        return new PricedWine(name, price);
+    }
+
     public String getName() {
         return name;
     }
