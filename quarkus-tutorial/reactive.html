@@ -138,6 +138,29 @@
 <h1 class="page">Reactive Programming</h1>
 <div id="preamble">
 <div class="sectionbody">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextensions=io.quarkus:quarkus-resteasy-mutiny</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">[INFO] Scanning for projects...
+[INFO]
+[INFO] -----------------&lt; com.redhat.developers:tutorial-app &gt;-----------------
+[INFO] Building tutorial-app 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
+✅ Adding dependency io.quarkus:quarkus-resteasy-mutiny:jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.217 s
+[INFO] Finished at: 2020-05-12T09:03:59-04:00
+[INFO] ------------------------------------------------------------------------</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>Unresolved include directive in modules/ROOT/pages/reactive.adoc - include::_attributes.adoc[]
 :quarkus-project-name: fruits-app
@@ -186,14 +209,6 @@ For the easier reference, we shall call the <code>fruits-app</code> project fold
 </table>
 </div>
 <div class="sect3">
-<h4 id="quarkusrpb-add-reactive"><a class="anchor" href="#quarkusrpb-add-reactive"></a>Add Extensions</h4>
-<div id="qext-mvn-add-reactive-extensions" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-rest-client, quarkus-smallrye-reactive-streams-operators"</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
 <h4 id="quarkusrpb-create-pojo"><a class="anchor" href="#quarkusrpb-create-pojo"></a>Create Beer POJO</h4>
 <div class="paragraph">
 <p>Let&#8217;s create the <code>Beer</code> pojo.</p>
@@ -201,18 +216,44 @@ For the easier reference, we shall call the <code>fruits-app</code> project fold
 <div class="paragraph">
 <p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>Beer</code> with the following contents:</p>
 </div>
-<div id="qext-quarkusrpb-beer-pojo" class="listingblock console-input">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+
+import javax.json.bind.annotation.JsonbCreator;
 
 public class Beer {
 
     private String name;
-    private String tagline;
-    private double abv;
-    private String description;
 
-    // generate getters/setters</code></pre>
+    private String tagline;
+
+    private double abv;
+
+	private Beer(String name, String tagline, double abv) {
+		this.name = name;
+		this.tagline = tagline;
+		this.abv = abv;
+	}
+
+    @JsonbCreator
+    public static Beer of(String name, String tagline, double abv) {
+        return new Beer(name, tagline, abv);
+     }
+
+     public String getName() {
+         return name;
+     }
+
+     public String getTagline() {
+         return tagline;
+     }
+
+     public double getAbv() {
+         return abv;
+     }
+
+}</code></pre>
 </div>
 </div>
 </div>
@@ -221,12 +262,11 @@ public class Beer {
 <div class="paragraph">
 <p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>BeerGateway</code> with the following contents:</p>
 </div>
-<div id="qext-quarkusrpb-beer-client" class="listingblock console-input">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
 import java.util.List;
-import java.util.concurrent.CompletionStage;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -238,76 +278,72 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 @Path("/v2")
 @RegisterRestClient
-public interface BeerGateway {
+public interface BeerService {
 
     @GET
     @Path("/beers")
     @Produces(MediaType.APPLICATION_JSON)
-    @ClientHeaderParam(name="user-agent", value="curl/7.54.0")
-    List&lt;Beer&gt; getBeers(@QueryParam("page") int page); //1
+    List&lt;Beer&gt; getBeers(@QueryParam("page") int page);
 
 }</code></pre>
 </div>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Retrieves all beers from a specific page.</p>
-</li>
-</ol>
 </div>
-<div class="sect4">
-<h5 id="quarkusrpb-configure-props"><a class="anchor" href="#quarkusrpb-configure-props"></a>Edit the application.properties</h5>
+</div>
+<div class="sect2">
+<h3 id="_edit_the_application_properties"><a class="anchor" href="#_edit_the_application_properties"></a>Edit the application.properties</h3>
 <div class="paragraph">
 <p>Add the following properties to $PROJECT_HOME/src/main/resources/application.properties:</p>
 </div>
-<div id="qext-quarkusrpb-update-props" class="listingblock console-input">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">com.example.BeerGateway/mp-rest/url=https://api.punkapi.com</code></pre>
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">com.redhat.developers.BeerService/mp-rest/url=https://api.punkapi.com</code></pre>
 </div>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="quarkusrpb-beer-reactive-service"><a class="anchor" href="#quarkusrpb-beer-reactive-service"></a>Create Beer Punk API Reactive Service</h4>
+<div class="sect2">
+<h3 id="quarkusrpb-beer-reactive-service"><a class="anchor" href="#quarkusrpb-beer-reactive-service"></a>Create Beer Punk API Reactive Service</h3>
 <div class="paragraph">
 <p>Let&#8217;s create the service that uses <code>BeerGateway</code> to retrieve beer information by page and reactively emits each of the beer information.</p>
 </div>
 <div class="paragraph">
 <p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>BeerService</code> with the following contents:</p>
 </div>
-<div id="qext-quarkusrpb-beer-service" class="listingblock console-input">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code>package com.example;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
-import io.reactivex.Flowable;
-import io.reactivex.schedulers.Schedulers;
+import io.smallrye.mutiny.Multi;
 
-@ApplicationScoped
-public class BeerService {
+@Path("/beer")
+public class BeerResource {
 
+    @Inject
     @RestClient
-    BeerGateway beerGateway;
+    BeerService beerService;
 
-    public Flowable&lt;Beer&gt; beers() {
-        Flowable&lt;List&lt;Beer&gt;&gt; beerStream = Flowable.generate) -&gt; 1, (page, emitter) -&gt; { //1             final List&lt;Beer&gt; beers = beerGateway.getBeers(page);             if (beers.isEmpty( {
-                emitter.onComplete(); //2
-            } else {
-                emitter.onNext(beers); //3
-            }
-
-            return page + 1; //4
-        });
-
-        return beerStream
-                .subscribeOn(Schedulers.io())
-                .flatMap(Flowable::fromIterable); //5
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Multi&lt;Beer&gt; beers() {
+        return Multi.createBy().repeating() //1
+            .supplier(
+                () -&gt; new AtomicInteger(1), //2
+                i -&gt; beerService.getBeers(i.getAndIncrement()) //3
+            )
+            .until(List::isEmpty) //4
+            .onItem().&lt;Beer&gt;disjoint() //5
+            .transform().byFilteringItemsWith(b -&gt; b.getAbv() &gt; 15.0); //6
     }
 
 }</code></pre>
@@ -339,108 +375,70 @@ The caller is responsible to manipulate this information as it starts receiving 
 <div class="paragraph">
 <p>Notice that until a caller subscribes to a stream (<code>Flowable</code> in this case), the logic is not executed.</p>
 </div>
-</div>
-<div class="sect3">
-<h4 id="quarkusrpb-beer-resource"><a class="anchor" href="#quarkusrpb-beer-resource"></a>Create Beer Resource</h4>
-<div class="paragraph">
-<p>The last step is to manipulate the beer <em>stream</em> created in the previous section to filter out by <em>abv</em> and return the result to the caller.</p>
-</div>
-<div class="paragraph">
-<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>BeerResource</code> with the following contents:</p>
-</div>
-<div id="qext-quarkusrpb-beer-resource" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
-
-import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import org.reactivestreams.Publisher;
-
-@Path("/beer")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
-public class BeerResource {
-
-    @Inject
-    BeerService beerService; //1
-
-    @GET
-    public Publisher&lt;Beer&gt; hello() {
-        return beerService.beers() //2
-                .filter(b -&gt; b.getAbv() &gt; 7.0); //3
-                //4
-    }
-}</code></pre>
-</div>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Injects <code>BeerService</code></p>
-</li>
-<li>
-<p>Gets the beer stream</p>
-</li>
-<li>
-<p>For each beer emitted checks that <em>abv</em> is greater than 7</p>
-</li>
-<li>
-<p>Automatically subscribes to the stream and get back the result as <code>List&lt;Beer&gt;</code></p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>The big change here is that now instead of having to deal with all beers in memory and then apply some operations, you are just loading into memory a <em>page</em> of beers, then filter them and finally return them to the caller.</p>
-</div>
-<div class="paragraph">
-<p>Another big advantage is that now the <em>beer servcie</em> is just called if the consumer requests it.
-If the operation is canceled/aborted before completion, then you also save IO by not executing the operations.</p>
-</div>
-<div class="paragraph">
-<p>Notice that one of the big advantages of this approach (apart from the memory usage) is that you can apply any reactive operator without modifying the creation of the stream.</p>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="qext-reactive-beer-run-quarkus-app-dev-mode"><a class="anchor" href="#qext-reactive-beer-run-quarkus-app-dev-mode"></a>Run Quarkus Application in Development mode</h3>
-<div class="paragraph">
-<p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
-</div>
-<div id="beer-reactive-build-run-dev" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
-</div>
-</div>
-<div class="sect3">
-<h4 id="qext-call-beer-reactive-service"><a class="anchor" href="#qext-call-beer-reactive-service"></a>Invoke Service</h4>
-<div class="paragraph">
-<p>The simple <code>beer</code> REST URI can be called via browser using <a href="http://localhost:8080/beer" class="bare">http://localhost:8080/beer</a> or using CLI like:</p>
-</div>
-<div id="beer-reactive-k8s-svc-call" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/beer</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The REST call about should return an response like:</p>
-</div>
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">[
-   {
-      "abv":7.2,
-      "description":"An Imperial Pilsner in collaboration with beer writers...." ,
-      "name":"Avery Brown Dredge",
-      "tagline":"Bloggers' Imperial Pilsner."
-   },
-   ...
+  {
+    "abv": 55,
+    "name": "The End Of History",
+    "tagline": "The World's Strongest Beer."
+  },
+  {
+    "abv": 16.5,
+    "name": "Anarchist Alchemist",
+    "tagline": "Triple Hopped Triple Ipa."
+  },
+  {
+    "abv": 15.2,
+    "name": "Lumberjack Stout",
+    "tagline": "Blueberry Bacon Stout."
+  },
+  {
+    "abv": 18.3,
+    "name": "Bowman's Beard - B-Sides",
+    "tagline": "English Barley Wine."
+  },
+  {
+    "abv": 41,
+    "name": "Sink The Bismarck!",
+    "tagline": "IPA For The Dedicated."
+  },
+  {
+    "abv": 16.2,
+    "name": "Tokyo*",
+    "tagline": "Intergalactic Stout. Rich. Smoky. Fruity."
+  },
+  {
+    "abv": 18,
+    "name": "AB:02",
+    "tagline": "Triple Dry Hopped Imperial Red Ale."
+  },
+  {
+    "abv": 17.2,
+    "name": "Black Tokyo Horizon (w/Nøgne Ø &amp; Mikkeller)",
+    "tagline": "Imperial Stout Collaboration."
+  },
+  {
+    "abv": 16.1,
+    "name": "Dog D",
+    "tagline": "Anniversary Imperial Stout."
+  },
+  {
+    "abv": 32,
+    "name": "Tactical Nuclear Penguin",
+    "tagline": "Uber Imperial Stout."
+  },
+  {
+    "abv": 16.1,
+    "name": "Dog E",
+    "tagline": "Ninth Anniversary Imperial Stout."
+  },
+  {
+    "abv": 17,
+    "name": "Dog G",
+    "tagline": "11th Anniversary Imperial Stout."
+  }
 ]</code></pre>
-</div>
 </div>
 </div>
 </div>

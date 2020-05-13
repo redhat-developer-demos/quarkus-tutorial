@@ -136,16 +136,6 @@
   <div class="content">
 <article class="doc">
 <h1 class="page">Security with JWT RBAC</h1>
-<div id="preamble">
-<div class="sectionbody">
-<div class="paragraph">
-<p>Unresolved include directive in modules/ROOT/pages/security.adoc - include::_attributes.adoc[]
-:quarkus-project-name: fruits-app
-:svc-path: fruit
-:experimental:</p>
-</div>
-</div>
-</div>
 <div class="sect1">
 <h2 id="_securing_endpoints_with_jwt"><a class="anchor" href="#_securing_endpoints_with_jwt"></a>Securing endpoints with JWT</h2>
 <div class="sectionbody">
@@ -172,25 +162,11 @@ Quarkus provides an integration to the <a href="https://github.com/eclipse/micro
 <div class="paragraph">
 <p>Add the following properties to <code>$PROJECT_HOME/src/main/resources/application.properties</code>:</p>
 </div>
-<div id="quarkussec-config-jwt" class="listingblock console-input">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">mp.jwt.verify.publickey.location=https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/0c6d1ed65d38e4dd48992f7410a29aa4e5a35131/quarkus.jwt.pub.jwk.json
-<i class="conum" data-value="1"></i><b>(1)</b>
-mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac
-<i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">mp.jwt.verify.publickey.location=https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.pub.jwk.json
+mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac</code></pre>
 </div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Sets the location of public key to verify the token</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Issuer of the token</td>
-</tr>
-</table>
 </div>
 <div class="paragraph">
 <p>We are also providing a valid token that can be verified by the configured public key:</p>
@@ -329,20 +305,11 @@ public String getClaim() {
 </div>
 <div class="sect2">
 <h3 id="qext-call-jwt-rbac"><a class="anchor" href="#qext-call-jwt-rbac"></a>Invoke Service</h3>
-<div class="paragraph">
-<p>The simple <code>fruit/claim</code> REST URI can be called via browser using <a href="http://localhost:8080/fruit/claim" class="bare">http://localhost:8080/fruit/claim</a> or using CLI like:</p>
-</div>
-<div id="rjwt-rbac-k8s-svc-call" class="listingblock console-input">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/5f8c5b7a9c11ed455f4910ed2032d79612b5e6f6/quarkus.jwt.token -s)
-curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.pub.jwk.json -s)
+curl -H "Authorization: Bearer $token" localhost:8080/beer</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>And you&#8217;ll see the <code>preferred_username</code> field for given token (<code>jdoe</code>).</p>
-</div>
-<div class="paragraph">
-<p>But the big difference now, and it is that you see the result only because the token contains in <code>groups</code> claim the <code>Subscriber</code> role.</p>
 </div>
 <div class="paragraph">
 <p>Open <code>$PROJECT_HOME/src/main/java/java/com/example/FruitResource.java</code> and change the  <code>RolesAllowed</code> value to <code>Subscriber2</code>:</p>
@@ -363,9 +330,9 @@ public String getClaim() {
 <div class="paragraph">
 <p>The simple <code>fruit/claim</code> REST URI can be called via browser using <a href="http://localhost:8080/fruit/claim" class="bare">http://localhost:8080/fruit/claim</a> or using CLI like:</p>
 </div>
-<div id="rjwt-rbac-k8s-svc-call" class="listingblock console-input">
+<div id="jwt-claim-k8s-svc-call" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/5f8c5b7a9c11ed455f4910ed2032d79612b5e6f6/quarkus.jwt.token -s)
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=XXXX
 curl -H "Authorization: Bearer $token" localhost:8080/fruit/claim</code></pre>
 </div>
 </div>

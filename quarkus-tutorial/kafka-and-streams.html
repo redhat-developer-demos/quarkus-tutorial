@@ -136,314 +136,260 @@
   <div class="content">
 <article class="doc">
 <h1 class="page">Apache Kafka with Reactive Streams</h1>
-<div id="preamble">
-<div class="sectionbody">
-<div class="paragraph">
-<p>Unresolved include directive in modules/ROOT/pages/kafka-and-streams.adoc - include::_attributes.adoc[]
-:quarkus-project-name: fruits-app
-:svc-path: beer</p>
-</div>
-<div class="paragraph">
-<p>At the end of this chapter you will be able to :</p>
-</div>
-<div class="ulist checklist">
-<ul class="checklist">
-<li>
-<p><i class="fa fa-check-square-o"></i> Use reactive programming in Quarkus.</p>
-</li>
-<li>
-<p><i class="fa fa-check-square-o"></i> How to use Reactive programming for accessing Rest API services with pagination and back pressure.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="quarkusrpb-demo-overview"><a class="anchor" href="#quarkusrpb-demo-overview"></a>Beer Demo Overview</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>To demonstrate how to use reactive programming in Quarkus, you will be developing a REST client that connects to a beer database (<a href="https://punkapi.com/documentation/v2" class="bare">https://punkapi.com/documentation/v2</a>) to retrieve beer information.
-This API does not return all beers at once, but you need to use pagination to navigate through all beer database.</p>
-</div>
-<div class="paragraph">
-<p>In this section, you are going to develop a service that returns all beers with an <em>abv</em> value greater than <em>7.0</em> and using a reactive approach as a solution.</p>
-</div>
-<div class="sect2">
-<h3 id="quarkusrpb-buld-beer-reactive"><a class="anchor" href="#quarkusrpb-buld-beer-reactive"></a>Build Beer Service</h3>
-<div class="paragraph">
-<p>The skeleton project to get started is the same you created at <a href="#02-basics-fundas.adoc" class="page unresolved">Basics and Fundamentals</a>.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-For the easier reference, we shall call the <code>fruits-app</code> project folder as $PROJECT_HOME
-</td>
-</tr>
-</table>
-</div>
-<div class="sect3">
-<h4 id="quarkusrpb-add-reactive"><a class="anchor" href="#quarkusrpb-add-reactive"></a>Add Extensions</h4>
-<div id="qext-mvn-add-reactive-extensions" class="listingblock console-input">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-rest-client, quarkus-smallrye-reactive-streams-operators"</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging-kafka"</code></pre>
 </div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="quarkusrpb-create-pojo"><a class="anchor" href="#quarkusrpb-create-pojo"></a>Create Beer POJO</h4>
-<div class="paragraph">
-<p>Let&#8217;s create the <code>Beer</code> pojo.</p>
-</div>
-<div class="paragraph">
-<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>Beer</code> with the following contents:</p>
-</div>
-<div id="qext-quarkusrpb-beer-pojo" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
-
-public class Beer {
-
-    private String name;
-    private String tagline;
-    private double abv;
-    private String description;
-
-    // generate getters/setters</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="quarkusrpb-create-beer-client"><a class="anchor" href="#quarkusrpb-create-beer-client"></a>Create Rest Client to Punk Beer API</h4>
-<div class="paragraph">
-<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>BeerGateway</code> with the following contents:</p>
-</div>
-<div id="qext-quarkusrpb-beer-client" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
-
-import java.util.List;
-import java.util.concurrent.CompletionStage;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
-import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
-
-@Path("/v2")
-@RegisterRestClient
-public interface BeerGateway {
-
-    @GET
-    @Path("/beers")
-    @Produces(MediaType.APPLICATION_JSON)
-    @ClientHeaderParam(name="user-agent", value="curl/7.54.0")
-    List&lt;Beer&gt; getBeers(@QueryParam("page") int page); //1
-
-}</code></pre>
-</div>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Retrieves all beers from a specific page.</p>
-</li>
-</ol>
-</div>
-<div class="sect4">
-<h5 id="quarkusrpb-configure-props"><a class="anchor" href="#quarkusrpb-configure-props"></a>Edit the application.properties</h5>
-<div class="paragraph">
-<p>Add the following properties to $PROJECT_HOME/src/main/resources/application.properties:</p>
-</div>
-<div id="qext-quarkusrpb-update-props" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">com.example.BeerGateway/mp-rest/url=https://api.punkapi.com</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="quarkusrpb-beer-reactive-service"><a class="anchor" href="#quarkusrpb-beer-reactive-service"></a>Create Beer Punk API Reactive Service</h4>
-<div class="paragraph">
-<p>Let&#8217;s create the service that uses <code>BeerGateway</code> to retrieve beer information by page and reactively emits each of the beer information.</p>
-</div>
-<div class="paragraph">
-<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>BeerService</code> with the following contents:</p>
-</div>
-<div id="qext-quarkusrpb-beer-service" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code>package com.example;
-
-import java.util.List;
-
-import javax.enterprise.context.ApplicationScoped;
-
-import org.eclipse.microprofile.rest.client.inject.RestClient;
-
-import io.reactivex.Flowable;
-import io.reactivex.schedulers.Schedulers;
-
-@ApplicationScoped
-public class BeerService {
-
-    @RestClient
-    BeerGateway beerGateway;
-
-    public Flowable&lt;Beer&gt; beers() {
-        Flowable&lt;List&lt;Beer&gt;&gt; beerStream = Flowable.generate) -&gt; 1, (page, emitter) -&gt; { //1             final List&lt;Beer&gt; beers = beerGateway.getBeers(page);             if (beers.isEmpty( {
-                emitter.onComplete(); //2
-            } else {
-                emitter.onNext(beers); //3
-            }
-
-            return page + 1; //4
-        });
-
-        return beerStream
-                .subscribeOn(Schedulers.io())
-                .flatMap(Flowable::fromIterable); //5
-    }
-
-}</code></pre>
-</div>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Gets first batch of beers</p>
-</li>
-<li>
-<p>Sends an event that the process is completed</p>
-</li>
-<li>
-<p>Emits each beer</p>
-</li>
-<li>
-<p>Gets beers from next page</p>
-</li>
-<li>
-<p>Flatten the list of beers event into event of beers</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>So far nothing really new, but notice that now instead of reading all the beers, put them in memory and then filter out by any parameter, you are just emitting them individually per page.
-The caller is responsible to manipulate this information as it starts receiving the information and it is not necessary to store all beers in memory but just the ones that matches any condition.</p>
-</div>
-<div class="paragraph">
-<p>Notice that until a caller subscribes to a stream (<code>Flowable</code> in this case), the logic is not executed.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="quarkusrpb-beer-resource"><a class="anchor" href="#quarkusrpb-beer-resource"></a>Create Beer Resource</h4>
-<div class="paragraph">
-<p>The last step is to manipulate the beer <em>stream</em> created in the previous section to filter out by <em>abv</em> and return the result to the caller.</p>
-</div>
-<div class="paragraph">
-<p>Add new Java file in <code>$PROJECT_HOME/src/main/java/com/example</code> called <code>BeerResource</code> with the following contents:</p>
-</div>
-<div id="qext-quarkusrpb-beer-resource" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
-
-import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import org.reactivestreams.Publisher;
-
-@Path("/beer")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
-public class BeerResource {
-
-    @Inject
-    BeerService beerService; //1
-
-    @GET
-    public Publisher&lt;Beer&gt; hello() {
-        return beerService.beers() //2
-                .filter(b -&gt; b.getAbv() &gt; 7.0); //3
-                //4
-    }
-}</code></pre>
-</div>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Injects <code>BeerService</code></p>
-</li>
-<li>
-<p>Gets the beer stream</p>
-</li>
-<li>
-<p>For each beer emitted checks that <em>abv</em> is greater than 7</p>
-</li>
-<li>
-<p>Automatically subscribes to the stream and get back the result as <code>List&lt;Beer&gt;</code></p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>The big change here is that now instead of having to deal with all beers in memory and then apply some operations, you are just loading into memory a <em>page</em> of beers, then filter them and finally return them to the caller.</p>
-</div>
-<div class="paragraph">
-<p>Another big advantage is that now the <em>beer servcie</em> is just called if the consumer requests it.
-If the operation is canceled/aborted before completion, then you also save IO by not executing the operations.</p>
-</div>
-<div class="paragraph">
-<p>Notice that one of the big advantages of this approach (apart from the memory usage) is that you can apply any reactive operator without modifying the creation of the stream.</p>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="qext-reactive-beer-run-quarkus-app-dev-mode"><a class="anchor" href="#qext-reactive-beer-run-quarkus-app-dev-mode"></a>Run Quarkus Application in Development mode</h3>
-<div class="paragraph">
-<p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
-</div>
-<div id="beer-reactive-build-run-dev" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw compile quarkus:dev</code></pre>
-</div>
-</div>
-<div class="sect3">
-<h4 id="qext-call-beer-reactive-service"><a class="anchor" href="#qext-call-beer-reactive-service"></a>Invoke Service</h4>
-<div class="paragraph">
-<p>The simple <code>beer</code> REST URI can be called via browser using <a href="http://localhost:8080/beer" class="bare">http://localhost:8080/beer</a> or using CLI like:</p>
-</div>
-<div id="beer-reactive-k8s-svc-call" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/beer</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The REST call about should return an response like:</p>
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">[
-   {
-      "abv":7.2,
-      "description":"An Imperial Pilsner in collaboration with beer writers...." ,
-      "name":"Avery Brown Dredge",
-      "tagline":"Bloggers' Imperial Pilsner."
-   },
-   ...
-]</code></pre>
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">[INFO] Scanning for projects...
+[INFO]
+[INFO] -----------------&lt; com.redhat.developers:tutorial-app &gt;-----------------
+[INFO] Building tutorial-app 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
+✅ Adding dependency io.quarkus:quarkus-smallrye-reactive-messaging-kafka:jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.522 s
+[INFO] Finished at: 2020-05-12T21:58:51-04:00
+[INFO] ------------------------------------------------------------------------</code></pre>
 </div>
 </div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+
+import java.math.BigDecimal;
+
+public class Wine {
+
+    private String name;
+
+    private Wine(String name) {
+        this.name = name;
+    }
+
+    public static Wine of(String name) {
+        return new Wine(name);
+    }
+
+    public PricedWine withPrice(BigDecimal price) {
+        return PricedWine.of(this.name, price);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+}</code></pre>
 </div>
 </div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+
+import java.math.BigDecimal;
+
+import javax.json.bind.annotation.JsonbCreator;
+
+public class PricedWine {
+
+    private String name;
+
+    private BigDecimal price;
+
+    private PricedWine(String name, BigDecimal price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    @JsonbCreator
+    public static PricedWine of(String name, double price) {
+        return new PricedWine(name, new BigDecimal(price).setScale(2));
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.json.bind.JsonbBuilder;
+
+import org.eclipse.microprofile.reactive.messaging.Outgoing;
+
+import io.smallrye.mutiny.Multi;
+
+@ApplicationScoped
+public class WineGenerator {
+
+    private static final List&lt;Wine&gt; WINES =
+        Arrays.asList("Fay", "Cask 23", "Jordan", "Caymus", "Don Melchor", "Barca Velha", "Pera Manca")
+            .stream().map(Wine::of).collect(Collectors.toList());
+
+    @Outgoing("wine")
+    Multi&lt;String&gt; wines() {
+        return Multi.createFrom().ticks().every(Duration.ofSeconds(1))
+        .onOverflow().drop()
+        .map(tick -&gt; WINES.get(ThreadLocalRandom.current().nextInt(0, WINES.size())))
+        .map(JsonbBuilder.create()::toJson);
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+
+import javax.inject.Inject;
+import javax.json.bind.JsonbBuilder;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.jboss.resteasy.annotations.SseElementType;
+
+import io.smallrye.mutiny.Multi;
+
+@Path("/wine")
+public class WineResource {
+
+    @Inject
+    @Channel("priced-wine")
+    Multi&lt;String&gt; pricedWines;
+
+    @GET
+    @Produces(MediaType.SERVER_SENT_EVENTS)
+    @SseElementType(MediaType.APPLICATION_JSON)
+    public Multi&lt;PricedWine&gt; wines() {
+        return pricedWines.map(s -&gt; JsonbBuilder.create().fromJson(s, PricedWine.class));
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">mp.messaging.incoming.priced-wine.connector=smallrye-kafka
+mp.messaging.incoming.priced-wine.topic=priced-wine
+mp.messaging.incoming.priced-wine.value.deserializer=org.apache.kafka.common.serialization.StringDeserializer
+
+mp.messaging.outgoing.wine.connector=smallrye-kafka
+mp.messaging.outgoing.wine.topic=wine
+mp.messaging.outgoing.wine.value.serializer=org.apache.kafka.common.serialization.StringSerializer</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">version: '3'
+services:
+  zookeeper:
+    image: strimzi/kafka:0.11.3-kafka-2.1.0
+    command: [
+      "sh", "-c",
+      "bin/zookeeper-server-start.sh config/zookeeper.properties"
+    ]
+    ports:
+      - "2181:2181"
+    environment:
+      LOG_DIR: /tmp/logs
+  kafka:
+    image: strimzi/kafka:0.11.3-kafka-2.1.0
+    command: [
+      "sh", "-c",
+      "bin/kafka-server-start.sh config/server.properties --override listeners=$${KAFKA_LISTENERS} --override advertised.listeners=$${KAFKA_ADVERTISED_LISTENERS} --override zookeeper.connect=$${KAFKA_ZOOKEEPER_CONNECT}"
+    ]
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      LOG_DIR: "/tmp/logs"
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  price-generator:
+    image: quay.io/rhdevelopers/quarkus-tutorial-price-generator:1.0
+    network_mode: host
+    depends_on:
+      - kafka</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker-compose up</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">kafka_1            | [2020-05-13 01:54:53,281] INFO [ThrottledChannelReaper-Fetch]: Starting (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+kafka_1            | [2020-05-13 01:54:53,281] INFO [ThrottledChannelReaper-Produce]: Starting (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+kafka_1            | [2020-05-13 01:54:53,284] INFO [ThrottledChannelReaper-Request]: Starting (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+kafka_1            | [2020-05-13 01:54:53,367] INFO Loading logs. (kafka.log.LogManager)
+kafka_1            | [2020-05-13 01:54:53,504] INFO [Log partition=__consumer_offsets-38, dir=/tmp/kafka-logs] Loading producer state till offset 15 with message format version 2 (kafka.log.Log)
+kafka_1            | [2020-05-13 01:54:53,531] INFO [ProducerStateManager partition=__consumer_offsets-38] Loading producer state from snapshot file '/tmp/kafka-logs/__consumer_offsets-38/00000000000000000015.snapshot' (kafka.log.ProducerStateManager)
+kafka_1            | [2020-05-13 01:54:53,550] INFO [Log partition=__consumer_offsets-38, dir=/tmp/kafka-logs] Completed load of log with 1 segments, log start offset 0 and log end offset 15 in 125 ms (kafka.log.Log)</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -N localhost:8080/wine</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">data: {"name":"Don Melchor","price":1921.00}
+
+data: {"name":"Jordan","price":546.00}
+
+data: {"name":"Cask 23","price":1089.00}
+
+data: {"name":"Barca Velha","price":1855.00}
+
+data: {"name":"Don Melchor","price":272.00}
+
+data: {"name":"Cask 23","price":1500.00}
+
+data: {"name":"Caymus","price":275.00}
+
+data: {"name":"Cask 23","price":1084.00}
+
+data: {"name":"Fay","price":1547.00}
+
+data: {"name":"Jordan","price":917.00}
+
+data: {"name":"Jordan","price":1090.00}
+
+data: {"name":"Jordan","price":235.00}
+
+data: {"name":"Don Melchor","price":1468.00}
+
+data: {"name":"Pera Manca","price":1534.00}
+
+data: {"name":"Barca Velha","price":316.00}</code></pre>
 </div>
 </div>
 </article>

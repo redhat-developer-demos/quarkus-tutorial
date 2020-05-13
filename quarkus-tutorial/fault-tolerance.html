@@ -138,15 +138,27 @@
 <h1 class="page">Fault Tolerance</h1>
 <div id="preamble">
 <div class="sectionbody">
-<div class="paragraph">
-<p>Unresolved include directive in modules/ROOT/pages/fault-tolerance.adoc - include::_attributes.adoc[]
-:quarkus-project-name: fruits-app
-:svc-path: fruit
-:experimental:</p>
-</div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="{quarkus-fault-tolerance-ext-name}"</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension=quarkus-smallrye-fault-tolerance</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">[INFO] Scanning for projects...
+[INFO]
+[INFO] -----------------&lt; com.redhat.developers:tutorial-app &gt;-----------------
+[INFO] Building tutorial-app 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
+✅ Adding extension io.quarkus:quarkus-smallrye-fault-tolerance
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.963 s
+[INFO] Finished at: 2020-05-11T22:39:44-04:00
+[INFO] ------------------------------------------------------------------------</code></pre>
 </div>
 </div>
 </div>
@@ -160,13 +172,30 @@
 <div class="paragraph">
 <p>Add the <code>org.eclipse.microprofile.faulttolerance.Retry</code> annotation to <code>$PROJECT_HOME/src/main/java/java/com/example/FruityViceService.java</code>:</p>
 </div>
-<div id="quarkusft-retry-fruit-vice-service" class="listingblock console-input">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">@GET
-@Path("/fruit/{name}")
-@Produces(MediaType.APPLICATION_JSON)
-@Retry(maxRetries = 3, delay = 2000)
-public FruityVice getFruitByName(@PathParam("name") String name);</code></pre>
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
+@Path("/api/fruit")
+@RegisterRestClient
+public interface FruityViceService {
+
+    @GET
+    @Path("/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Retry(maxRetries = 3, delay = 2000)
+    public FruityVice getFruitByName(@PathParam("name") String name);
+
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -233,21 +262,44 @@ And make again a request to <a href="http://localhost:8080/fruit/banana" class="
 <div class="paragraph">
 <p>Add the <code>org.eclipse.microprofile.faulttolerance.Fallback</code> annotation to <code>$PROJECT_HOME/src/main/java/java/com/example/FruityViceService.java</code>:</p>
 </div>
-<div id="quarkusft-fallback-fruit-vice-service" class="listingblock console-input">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">@GET
-@Path("/fruit/{name}")
-@Produces(MediaType.APPLICATION_JSON)
-@Retry(maxRetries = 3, delay = 2000)
-@Fallback(value = FruityViceRecovery.class)
-public FruityVice getFruitByName(@PathParam("name") String name);
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
-public static class FruityViceRecovery implements FallbackHandler&lt;FruityVice&gt; {
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
-    @Override
-    public FruityVice handle(ExecutionContext context) {
-        return FruityVice.EMPTY_FRUIT;
-	}
+import com.redhat.developers.FruityVice.Nutritions;
+
+import org.eclipse.microprofile.faulttolerance.ExecutionContext;
+import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.faulttolerance.FallbackHandler;
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
+@Path("/api/fruit")
+@RegisterRestClient
+public interface FruityViceService {
+
+    @GET
+    @Path("/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Retry(maxRetries = 3, delay = 2000)
+    @Fallback(FruityViceFallback.class)
+    public FruityVice getFruitByName(@PathParam("name") String name);
+
+    public static class FruityViceFallback implements FallbackHandler&lt;FruityVice&gt; {
+
+        private static final FruityVice EMPTY_FRUITY_VICE = FruityVice.of("empty", Nutritions.of(0.0, 0.0));
+        @Override
+        public FruityVice handle(ExecutionContext context) {
+            return EMPTY_FRUITY_VICE;
+        }
+
+    }
 
 }</code></pre>
 </div>
@@ -299,20 +351,30 @@ If the error persits, then the fallback method is executed.</p>
 <div class="paragraph">
 <p>Remove previous annotations of fallback and retry policies and add the following annotation to <code>$PROJECT_HOME/src/main/java/java/com/example/FruityViceService.java</code>:</p>
 </div>
-<div id="quarkusft-circuit-breaker-fruit-vice-service" class="listingblock console-input">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">@GET
-@Path("/fruit/{name}")
-@Produces(MediaType.APPLICATION_JSON)
-@CircuitBreaker(requestVolumeThreshold = 4, failureRatio=0.75, delay = 5000)
-public FruityVice getFruitByName(@PathParam("name") String name);
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
-public static class FruityViceRecovery implements FallbackHandler&lt;FruityVice&gt; {
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
-    @Override
-    public FruityVice handle(ExecutionContext context) {
-        return FruityVice.EMPTY_FRUIT;
-	}
+import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
+@Path("/api/fruit")
+@RegisterRestClient
+public interface FruityViceService {
+
+    @GET
+    @Path("/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Retry(maxRetries = 3, delay = 2000)
+    @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.75, delay = 5000)
+    public FruityVice getFruitByName(@PathParam("name") String name);
 
 }</code></pre>
 </div>

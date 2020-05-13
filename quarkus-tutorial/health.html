@@ -144,27 +144,33 @@
 <div class="paragraph">
 <p>To add <code>{quarkus-health-ext-name}</code> to the Quarkus application, run the following command from <code>{quarkus-project-name}</code> project directory:</p>
 </div>
-<div id="qext-mvn-add-extension" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="{quarkus-health-ext-name}"</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>After successful execution of the above command, you will have the following dependency added to the <code>{quarkus-project-name}</code> project&#8217;s pom.xml:</p>
-</div>
 <div class="listingblock console-input">
-<div class="title">pom.xml</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">    &lt;dependency&gt;
-      &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-      &lt;artifactId&gt;quarkus-smallrye-health&lt;/artifactId&gt;
-    &lt;/dependency&gt;</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension=quarkus-smallrye-health</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">[INFO] Scanning for projects...
+[INFO]
+[INFO] -----------------&lt; com.redhat.developers:tutorial-app &gt;-----------------
+[INFO] Building tutorial-app 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
+✅ Adding extension io.quarkus:quarkus-smallrye-health
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.131 s
+[INFO] Finished at: 2020-05-11T22:41:15-04:00
+[INFO] ------------------------------------------------------------------------</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="qext-health-check-default-run-quarkus-app-dev-mode"><a class="anchor" href="#qext-health-check-default-run-quarkus-app-dev-mode"></a>Run Quarkus Application in Development mode</h3>
+<h3 id="_run_quarkus_application_in_development_mode"><a class="anchor" href="#_run_quarkus_application_in_development_mode"></a>Run Quarkus Application in Development mode</h3>
 <div class="paragraph">
 <p>If you are not in dev mode, run the following command to start Quarkus application in development mode:</p>
 </div>
