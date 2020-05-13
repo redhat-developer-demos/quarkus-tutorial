@@ -1,42 +1,37 @@
 = Security with JWT RBAC
 
-== Securing endpoints with JWT
+== Securing endpoints with JWT RBAC
 
 In a microservices architecture, and generally speaking, any kind of application, might need to be protected so only certain users can access to the defined endpoint.
-Quarkus provides an integration to the https://github.com/eclipse/microprofile-jwt-auth[MicroProfile JWT RBAC] spec.
+Quarkus provides an integration to the https://github.com/eclipse/microprofile-jwt-auth[MicroProfile JWT RBAC,window=_blank] spec.
 
-So let's see how you can start using JWT for role based access control (RBAC) of endpoints.
+So let's see how you can start using JWT for _Role Based Access Control_ (RBAC) of endpoints.
 
-[#qext-add-jwt-extensions]
-=== Adding JWT RBAC extension
+== Add the JWT extension
 
-:quarkus-jwt-ext-name: quarkus-smallrye-jwt
+Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
 
-To add JWT RBAC extension (`{quarkus-jwt-ext-name}`) to the Quarkus application, run the following command from `{quarkus-project-name}` project directory:
-
-[#qext-mvn-add-jwt-extension]
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:add-extension -Dextension="{quarkus-jwt-ext-name}"
+./mvnw quarkus:add-extension -Dextension=quarkus-smallrye-jwt
 ----
 
-[#qext-configure-jwt-parameters]
-=== Configuring JWT parameters
+== Add the JWT properties
 
-Add the following properties to `pass:[$PROJECT_HOME]/src/main/resources/application.properties`:
+Add the following properties to your `application.properties` in `src/main/resources`:
 
 [.console-input]
 [source,properties]
 ----
-mp.jwt.verify.publickey.location=https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.pub.jwk.json
+mp.jwt.verify.publickey.location=https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.pub
 mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac
 ----
 
-We are also providing a valid token that can be verified by the configured public key:
+We are providing a valid token that can be verified by the configured public key:
 
 [.console-output]
-[source, javascript]
+[source,json]
 ----
 {
   "kid": "/privateKey.pem",
@@ -69,111 +64,205 @@ We are also providing a valid token that can be verified by the configured publi
 <1> The issuer you set in `application.properties`
 <2> `groups` field is used by `MicroProfile JWT RBAC` to get the access groups (or roles) that the owner of the token has
 
-[#qext-jwt-inject-claim]
-=== Inject claims into an Object
+== Create SecureResource
 
 You can inject any defined claim into an object by using `@Claim` annotation:
 
-Open `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruitResource.java` and inject username claim:
+Change the `SecureResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
-[#quarkussec-jwt-claim-username]
 [.console-input]
-[source,config,subs="+macros"]
+[source,java]
 ----
-@Inject @Claim(standard = Claims.preferred_username)
-String username;
+package com.redhat.developers;
 
-@GET
-@Path("/claim")
-public String getClaim() {
-    return username;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+
+import org.eclipse.microprofile.jwt.Claim;
+import org.eclipse.microprofile.jwt.Claims;
+
+@Path("/secure")
+public class SecureResource {
+    
+    @Claim(standard = Claims.preferred_username)
+    String username;
+
+    @GET
+    @Path("/claim")
+    public String getClaim() {
+        return username;
+    }
+
 }
 ----
 
-Rename the `@Path` used in `FruityVice getFruitInfoByName` to `@Path("name-{name})"` to avoid conflict with the path `/fruit/claim`.
+== Invoke the /secure/claim endpoint
 
-[#qext-jwt-claim-quarkus-app-dev-mode]
-== Run Quarkus Application in Development mode
+Run the following command:
 
-:section-build-run: jwt-claim-dev
+[.console-input]
+[source,bash]
+----
+token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token -s)
+curl -H "Authorization: Bearer $token" localhost:8080/secure/claim
+----
 
-include::ROOT:partial$run-dev-mode.adoc[]
+And you’ll see the preferred_username field for the given token (jdoe).
 
-[#qext-call-jwt-claim]
-=== Invoke Service
-:doc-sec: jwt-claim
-:k8s-cli: k8s
-:path: fruit/claim
-:k8s-env: minikube
-:cli-tool: curl
-:address: localhost
-:token-url: https://gist.githubusercontent.com/lordofthejars/9a0b47298c807739a9eb1adfba50795e/raw/5f8c5b7a9c11ed455f4910ed2032d79612b5e6f6/quarkus.jwt.token
-:token-value: $(curl {token-url} -s)
+[.console-output]
+[source,text]
+----
+jdoe
+----
 
-The simple `{path}` REST URI can be called via browser using http://localhost:8080/{path} or using CLI like: 
-
-include::ROOT:partial$invoke-service.adoc[tag=callToken]
-
-And you'll see the `preferred_username` field for the given token (`jdoe`).
-
-MircoProfile JWT RBAC spec is providing out-of-the-box the validation of the given token. 
-These validations include for example that the token has not been modified, has not expired or the issuer is the expected one.
+MicroProfile JWT RBAC spec is providing out-of-the-box the validation of the given token. These validations include for example that the token has not been modified, has not expired or the issuer is the expected one.
 
 To validate this just invoke again the service but changing the token:
 
-:token-value: XXXX
+[.console-input]
+[source,bash]
+----
+token=XXXX
+curl -v -H "Authorization: Bearer $token" localhost:8080/secure/claim
+----
 
-include::ROOT:partial$invoke-service.adoc[tag=callToken]
+[.console-output]
+[source,text]
+----
+*   Trying ::1...
+* TCP_NODELAY set
+* Connected to localhost (::1) port 8080 (#0)
+> GET /secure/claim HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/7.64.1
+> Accept: */*
+> Authorization: Bearer XXXX
+>
+< HTTP/1.1 401 Unauthorized
+< www-authenticate: Bearer {token}
+< content-length: 0
+<
+* Connection #0 to host localhost left intact
+* Closing connection 0
+----
 
-And now the invocation returns and HTTP code `401 Unauthorized` because the token is invalid.
+You can check the `401 Unauthorized` response.
 
-[#qext-jwt-inject-rbac]
-=== Adds RBAC to the endpoint
+== Add RBAC to SecureResource
 
 So far, you've seen how to get claims from the provided JWT token, but anyone could access that endpoint, let's protected it with a role.
 For this case you need to use a role that is defined in JWT token into `groups` claim (ie `Subscriber`).
 
-Open `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruitResource.java` and annotate the method with `javax.annotation.security.RolesAllowed`:
+Change the `SecureResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
-[#quarkussec-jwt-rbac]
 [.console-input]
-[source,config,subs="+macros"]
+[source,java]
 ----
-@GET
-@Path("/claim")
-@RolesAllowed("Subscriber")
-public String getClaim() {
-    return username;
+package com.redhat.developers;
+
+import javax.annotation.security.RolesAllowed;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+
+import org.eclipse.microprofile.jwt.Claim;
+import org.eclipse.microprofile.jwt.Claims;
+
+@Path("/secure")
+public class SecureResource {
+    
+    @Claim(standard = Claims.preferred_username)
+    String username;
+
+    @RolesAllowed("Subscriber")
+    @GET
+    @Path("/claim")
+    public String getClaim() {
+        return username;
+    }
+
 }
 ----
 
-[#qext-call-jwt-rbac]
-=== Invoke Service
+== Invoke the /secure/claim endpoint with RBAC
 
-:token-value: $(curl {token-url} -s)
-include::ROOT:partial$invoke-service.adoc[tag=callToken]
+Run the following command:
 
-Open `pass:[$PROJECT_HOME]/src/main/java/java/com/example/FruitResource.java` and change the  `RolesAllowed` value to `Subscriber2`:
-
-[#quarkussec-jwt-rbac-invalid]
 [.console-input]
-[source,config,subs="+macros"]
+[source,bash]
 ----
-@GET
-@Path("/claim")
-@RolesAllowed("Subscriber2")
-public String getClaim() {
-    return username;
+token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token -s)
+curl -H "Authorization: Bearer $token" localhost:8080/secure/claim
+----
+
+And you’ll see the preferred_username field for the given token (jdoe).
+
+[.console-output]
+[source,text]
+----
+jdoe
+----
+
+== Add incorrect RBAC to SecureResource
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import javax.annotation.security.RolesAllowed;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+
+import org.eclipse.microprofile.jwt.Claim;
+import org.eclipse.microprofile.jwt.Claims;
+
+@Path("/secure")
+public class SecureResource {
+    
+    @Claim(standard = Claims.preferred_username)
+    String username;
+
+    @RolesAllowed("Not-Subscriber")
+    @GET
+    @Path("/claim")
+    public String getClaim() {
+        return username;
+    }
+
 }
 ----
 
-And then do the request again:
+== Invoke the /secure/claim endpoint with incorret RBAC
 
-The simple `{path}` REST URI can be called via browser using http://localhost:8080/{path} or using CLI like: 
+Run the following command:
 
-:token-value: $(curl {token-url} -s)
-include::ROOT:partial$invoke-service.adoc[tag=callToken]
+[.console-input]
+[source,bash]
+----
+token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token -s)
+curl -v -H "Authorization: Bearer $token" localhost:8080/secure/claim
+----
 
-And the output now is different: `Forbidden`.
+And you’ll see the preferred_username field for the given token (jdoe).
 
-This is the result because the provided token does not contain `Subscriber2` in the `groups` claim.
+[.console-output]
+[source,text]
+----
+*   Trying ::1...
+* TCP_NODELAY set
+* Connected to localhost (::1) port 8080 (#0)
+> GET /secure/claim HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/7.64.1
+> Accept: */*
+> Authorization: Bearer eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJqZG9lLXVzaW5nLWp3dC1yYmFjIiwiYXVkIjoidXNpbmctand0LXJiYWMiLCJ1cG4iOiJqZG9lQHF1YXJrdXMuaW8iLCJiaXJ0aGRhdGUiOiIyMDAxLTA3LTEzIiwiYXV0aF90aW1lIjoxNTcwMDk0MTcxLCJpc3MiOiJodHRwczpcL1wvcXVhcmt1cy5pb1wvdXNpbmctand0LXJiYWMiLCJyb2xlTWFwcGluZ3MiOnsiZ3JvdXAyIjoiR3JvdXAyTWFwcGVkUm9sZSIsImdyb3VwMSI6Ikdyb3VwMU1hcHBlZFJvbGUifSwiZ3JvdXBzIjpbIkVjaG9lciIsIlRlc3RlciIsIlN1YnNjcmliZXIiLCJncm91cDIiXSwicHJlZmVycmVkX3VzZXJuYW1lIjoiamRvZSIsImV4cCI6MjIwMDgxNDE3MSwiaWF0IjoxNTcwMDk0MTcxLCJqdGkiOiJhLTEyMyJ9.Hzr41h3_uewy-g2B-sonOiBObtcpkgzqmF4bT3cO58v45AIOiegl7HIx7QgEZHRO4PdUtR34x9W23VJY7NJ545ucpCuKnEV1uRlspJyQevfI-mSRg1bHlMmdDt661-V3KmQES8WX2B2uqirykO5fCeCp3womboilzCq4VtxbmM2qgf6ag8rUNnTCLuCgEoulGwTn0F5lCrom-7dJOTryW1KI0qUWHMMwl4TX5cLmqJLgBzJapzc5_yEfgQZ9qXzvsT8zeOWSKKPLm7LFVt2YihkXa80lWcjewwt61rfQkpmqSzAHL0QIs7CsM9GfnoYc0j9po83-P3GJiBMMFmn-vg
+>
+< HTTP/1.1 403 Forbidden
+< Content-Length: 9
+< Content-Type: application/octet-stream
+<
+* Connection #0 to host localhost left intact
+Forbidden* Closing connection 0
+----
+
+You can check the `403 Forbidden` response.
