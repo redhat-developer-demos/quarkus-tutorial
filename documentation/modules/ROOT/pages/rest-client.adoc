@@ -58,7 +58,7 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 
 We need to create a POJO object that is used to unmarshal JSON message from http://www.fruityvice.com[window=_blank].
 
-Create a new `FruitVice` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Create a new `FruityVice` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
