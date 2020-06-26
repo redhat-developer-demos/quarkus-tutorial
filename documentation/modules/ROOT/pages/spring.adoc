@@ -96,7 +96,7 @@ Let's try to filter only the fruits with the *Summer* season:
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/fruit?season=Summer
+curl localhost:8080/spring-fruit?season=Summer
 ----
 
 [.console-output]
