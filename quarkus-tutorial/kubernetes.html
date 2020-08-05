@@ -139,10 +139,13 @@
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-You will need a public container registry to store your image. If you don&#8217;t have an account, we recommend you to create a free account at <a href="http://quay.io" class="bare" target="_blank" rel="noopener">http://quay.io</a>. Our examples will be using the <code>quay.io</code> container registry and the <code>myrepo</code> organization, but you should change it to match your configuration.
+You will need a public container registry to store your image. If you don&#8217;t have an account, we recommend you to create a free account at <a href="http://quay.io" class="bare" target="_blank" rel="noopener">http://quay.io</a>.
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>Our examples will be using the <code>quay.io</code> container registry and the <code>myrepo</code> organization, but you should change it to match your configuration.</p>
 </div>
 </div>
 </div>
@@ -150,10 +153,10 @@ You will need a public container registry to store your image. If you don&#8217;
 <h2 id="_adding_the_kubernetes_and_jib_extensions"><a class="anchor" href="#_adding_the_kubernetes_and_jib_extensions"></a>Adding the Kubernetes and Jib extensions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You need a container registry that is accessible to your Kubernetes cluster so you can deploy your application in it.</p>
+<p>You need a container registry that is accessible from your Kubernetes cluster to deploy the application container image in it.</p>
 </div>
 <div class="paragraph">
-<p>In this chapter we&#8217;ll be using the Quarkus Kubernetes extension to create our Kubernetes files, and we&#8217;ll be using the Quarkus Jib extension to create and push the container image to our container registry without the need for a local running docker daemon.</p>
+<p>In this chapter we&#8217;ll be using the Quarkus Kubernetes Extension to create the Kubernetes deployment file, and the Quarkus Jib Extension to create and push the container image to your container registry without the need of running local docker daemon.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s add the required extensions:</p>
@@ -185,22 +188,10 @@ You will need a public container registry to store your image. If you don&#8217;
 </div>
 </div>
 <div class="sect1">
-<h2 id="_adding_the_kubernetes_extension_properties"><a class="anchor" href="#_adding_the_kubernetes_extension_properties"></a>Adding the Kubernetes extension properties</h2>
+<h2 id="_adding_the_configuration_properties"><a class="anchor" href="#_adding_the_configuration_properties"></a>Adding the configuration properties</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Add the following Kubernetes properties to your <code>application.properties</code> so that it looks like:</p>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-Change <code>quay.io</code> to your container registry and <code>myrepo</code> to your organization. If you don&#8217;t, your push <strong>will</strong> fail.
-</td>
-</tr>
-</table>
+<p>Add the following properties to your <code>application.properties</code> so that can push the container to correct location:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -211,12 +202,46 @@ quarkus.datasource.url=jdbc:h2:mem:default
 quarkus.datasource.driver=org.h2.Driver
 quarkus.hibernate-orm.database.generation=drop-and-create
 quarkus.hibernate-orm.sql-load-script=import.sql
-quarkus.container-image.registry=quay.io
-quarkus.container-image.group=myrepo
-quarkus.container-image.name=tutorial-app
-quarkus.container-image.tag=1.0-SNAPSHOT
+
+quarkus.container-image.registry=quay.io <i class="conum" data-value="1"></i><b>(1)</b>
+quarkus.container-image.group=myrepo <i class="conum" data-value="2"></i><b>(2)</b>
+quarkus.container-image.name=tutorial-app <i class="conum" data-value="3"></i><b>(3)</b>
+quarkus.container-image.tag=1.0-SNAPSHOT <i class="conum" data-value="4"></i><b>(4)</b>
 quarkus.kubernetes.service-type=load-balancer</code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Registry where image is pushed. By default is docker hub.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Group name of the conatiner image.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Container name. By default is the <code>artifactId</code> element of <code>pom.xml</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Tag of the container image. By default is the <code>version</code> element of <code>pom.xml</code>.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Change <code>quay.io</code> to your container registry and <code>myrepo</code> to your organization.
+If you don&#8217;t, your push <strong>will</strong> fail.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -224,7 +249,7 @@ quarkus.kubernetes.service-type=load-balancer</code></pre>
 <h2 id="_authenticating_and_pushing_the_image_to_your_container_registry"><a class="anchor" href="#_authenticating_and_pushing_the_image_to_your_container_registry"></a>Authenticating and pushing the image to your container registry</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In order to push the container image that will be created by the <code>quarkus-container-image-jib</code> extension, you&#8217;ll need to authenticate to your container registry:</p>
+<p>In order to push the container image, you need to authenticate to your container registry:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -259,6 +284,9 @@ quarkus.kubernetes.service-type=load-balancer</code></pre>
 <div class="sect1">
 <h2 id="_deploy_your_application_to_your_kubernetes_cluster"><a class="anchor" href="#_deploy_your_application_to_your_kubernetes_cluster"></a>Deploy your application to your Kubernetes cluster</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>When Kubernetes extension is present in the classpath, a Kubernetes deployment file is scaffolded for you during package phase.</p>
+</div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f target/kubernetes/kubernetes.yml</code></pre>
@@ -336,6 +364,18 @@ echo $IP:$PORT</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">Hello y'all!</code></pre>
 </div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+You can build, push and deploy the container image by running: <code>./mvnw clean package -Dquarkus.kubernetes.deploy=true</code>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
