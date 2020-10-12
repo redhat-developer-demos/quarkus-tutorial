@@ -17,6 +17,7 @@ asciidoc:
     quarkus-version: 1.4.2.Final
     graalvm-version: 20.0.0
     project-name: tutorial-app
+    page-pagination: true
   extensions:
     - ./lib/tab-block.js
     - ./lib/remote-include-processor.js
