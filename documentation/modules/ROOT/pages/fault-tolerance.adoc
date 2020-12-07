@@ -12,25 +12,6 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 ./mvnw quarkus:add-extension -Dextension=quarkus-smallrye-fault-tolerance
 ----
 
-[.console-output]
-[source,text]
-----
-[INFO] Scanning for projects...
-[INFO]
-[INFO] -----------------< com.redhat.developers:tutorial-app >-----------------
-[INFO] Building tutorial-app 1.0-SNAPSHOT
-[INFO] --------------------------------[ jar ]---------------------------------
-[INFO]
-[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
-✅ Adding extension io.quarkus:quarkus-smallrye-fault-tolerance
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time:  0.963 s
-[INFO] Finished at: 2020-05-11T22:39:44-04:00
-[INFO] ------------------------------------------------------------------------
-----
-
 == Add Retry to FruityViceService
 
 Let's add the retry policy in `FruityViceService`.
