@@ -11,26 +11,18 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 [.console-input]
 [source,bash]
 ----
-./mvnw quarkus:add-extension -Dextension=quarkus-smallrye-metrics
+./mvnw quarkus:add-extension -Dextension=quarkus-micrometer
 ----
 
-[.console-output]
-[source,text]
+You should also add the `micrometer-registry-prometheus` dependency to the `pom.xml` : 
+
+[.console-input]
+[source,xml]
 ----
-[INFO] Scanning for projects...
-[INFO]
-[INFO] -----------------< com.redhat.developers:tutorial-app >-----------------
-[INFO] Building tutorial-app 1.0-SNAPSHOT
-[INFO] --------------------------------[ jar ]---------------------------------
-[INFO]
-[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
-✅ Adding extension io.quarkus:quarkus-smallrye-metrics
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.128 s
-[INFO] Finished at: 2020-05-11T22:44:28-04:00
-[INFO] ------------------------------------------------------------------------
+<dependency>
+    <groupId>io.micrometer</groupId>
+    <artifactId>micrometer-registry-prometheus</artifactId>
+</dependency>
 ----
 
 == Create TimeResource
@@ -41,7 +33,6 @@ Create a new `TimeResource` Java class in `src/main/java` in the `com.redhat.dev
 [source,java]
 ----
 package com.redhat.developers;
-
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -51,30 +42,35 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.eclipse.microprofile.metrics.annotation.Counted;
-import org.eclipse.microprofile.metrics.annotation.Gauge;
-
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.instrument.MeterRegistry;
 
 @Path("/time")
 public class TimeResource {
-    
-    @Counted(name = "time.now") <1>
+
+    private final MeterRegistry registry;
+
+    TimeResource(MeterRegistry registry) {
+        this.registry = registry;
+        registry.gauge("offsetFromUTC", this,
+        TimeResource::offsetFromUTC);<1>
+    }
+
+    @Counted(value = "time.now") 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public Instant now() {
         return Instant.now();
     }
 
-    @Gauge(name = "offsetFromUTC", unit = "hours") <2>
-    public int offsetFromUTC() {
+    int offsetFromUTC() {
         return TimeZone.getDefault().getOffset(Calendar.ZONE_OFFSET)/(3600*1000);
     }
-
 }
 ----
 
-<1> The `@Counted` annotation allows the Metrics extension to count the number of invocations to this method.
-<2> The `@Gauge` annotation return a value computed by our application.
+<1> The add a gauge that returns a value computed by our application.
+<2> The `@Counted` annotation allows the Metrics extension to count the number of invocations to this method.
 
 == Invoke the endpoing multiple times
 
@@ -98,22 +94,5 @@ for i in {1..5}; do curl -w '\n' localhost:8080/time; done
 
 == Check the metrics
 
-By default the metrics are exposed in Prometheus format. You can check the output by pointing your browser to http://localhost:8080/metrics/application[window=_blank]
+By default the metrics are exposed in Prometheus format. You can check the output by pointing your browser to http://localhost:8080/metrics[window=_blank]
 
-You can also check the metrics in JSON format by running this command:
-
-[.console-input]
-[source,bash]
-----
-curl -H "Accept: application/json" localhost:8080/metrics/application
-----
-
-
-[.console-output]
-[source,json]
-----
-{
-    "com.redhat.developers.TimeResource.time.now": 5,
-    "com.redhat.developers.TimeResource.offsetFromUTC": -5
-}
-----
