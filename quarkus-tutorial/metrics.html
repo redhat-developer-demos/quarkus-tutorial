@@ -150,25 +150,18 @@
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension=quarkus-smallrye-metrics</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension=quarkus-micrometer</code></pre>
 </div>
 </div>
-<div class="listingblock console-output">
+<div class="paragraph">
+<p>You should also add the <code>micrometer-registry-prometheus</code> dependency to the <code>pom.xml</code> :</p>
+</div>
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">[INFO] Scanning for projects...
-[INFO]
-[INFO] -----------------&lt; com.redhat.developers:tutorial-app &gt;-----------------
-[INFO] Building tutorial-app 1.0-SNAPSHOT
-[INFO] --------------------------------[ jar ]---------------------------------
-[INFO]
-[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
-✅ Adding extension io.quarkus:quarkus-smallrye-metrics
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.128 s
-[INFO] Finished at: 2020-05-11T22:44:28-04:00
-[INFO] ------------------------------------------------------------------------</code></pre>
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;io.micrometer&lt;/groupId&gt;
+    &lt;artifactId&gt;micrometer-registry-prometheus&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -182,7 +175,6 @@
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
-
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -192,25 +184,30 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.eclipse.microprofile.metrics.annotation.Counted;
-import org.eclipse.microprofile.metrics.annotation.Gauge;
-
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.instrument.MeterRegistry;
 
 @Path("/time")
 public class TimeResource {
 
-    @Counted(name = "time.now") <i class="conum" data-value="1"></i><b>(1)</b>
+    private final MeterRegistry registry;
+
+    TimeResource(MeterRegistry registry) {
+        this.registry = registry;
+        registry.gauge("offsetFromUTC", this,
+        TimeResource::offsetFromUTC);<i class="conum" data-value="1"></i><b>(1)</b>
+    }
+
+    @Counted(value = "time.now")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public Instant now() {
         return Instant.now();
     }
 
-    @Gauge(name = "offsetFromUTC", unit = "hours") <i class="conum" data-value="2"></i><b>(2)</b>
-    public int offsetFromUTC() {
+    int offsetFromUTC() {
         return TimeZone.getDefault().getOffset(Calendar.ZONE_OFFSET)/(3600*1000);
     }
-
 }</code></pre>
 </div>
 </div>
@@ -218,11 +215,11 @@ public class TimeResource {
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The <code>@Counted</code> annotation allows the Metrics extension to count the number of invocations to this method.</td>
+<td>The add a gauge that returns a value computed by our application.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>The <code>@Gauge</code> annotation return a value computed by our application.</td>
+<td>The <code>@Counted</code> annotation allows the Metrics extension to count the number of invocations to this method.</td>
 </tr>
 </table>
 </div>
@@ -254,23 +251,7 @@ public class TimeResource {
 <h2 id="_check_the_metrics"><a class="anchor" href="#_check_the_metrics"></a>Check the metrics</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>By default the metrics are exposed in Prometheus format. You can check the output by pointing your browser to <a href="http://localhost:8080/metrics/application" class="bare" target="_blank" rel="noopener">http://localhost:8080/metrics/application</a></p>
-</div>
-<div class="paragraph">
-<p>You can also check the metrics in JSON format by running this command:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -H "Accept: application/json" localhost:8080/metrics/application</code></pre>
-</div>
-</div>
-<div class="listingblock console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
-    "com.redhat.developers.TimeResource.time.now": 5,
-    "com.redhat.developers.TimeResource.offsetFromUTC": -5
-}</code></pre>
-</div>
+<p>By default the metrics are exposed in Prometheus format. You can check the output by pointing your browser to <a href="http://localhost:8080/metrics" class="bare" target="_blank" rel="noopener">http://localhost:8080/metrics</a></p>
 </div>
 </div>
 </div>

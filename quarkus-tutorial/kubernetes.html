@@ -168,25 +168,6 @@ You will need a public container registry to store your image. If you don&#8217;
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextensions=quarkus-kubernetes,quarkus-container-image-jib</code></pre>
 </div>
 </div>
-<div class="listingblock console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">[INFO] Scanning for projects...
-[INFO]
-[INFO] -----------------&lt; com.redhat.developers:tutorial-app &gt;-----------------
-[INFO] Building tutorial-app 1.0-SNAPSHOT
-[INFO] --------------------------------[ jar ]---------------------------------
-[INFO]
-[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
-✅ Adding extension io.quarkus:quarkus-kubernetes
-✅ Adding extension io.quarkus:quarkus-container-image-jib
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.744 s
-[INFO] Finished at: 2020-05-11T21:34:00-04:00
-[INFO] ------------------------------------------------------------------------</code></pre>
-</div>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -200,8 +181,8 @@ You will need a public container registry to store your image. If you don&#8217;
 <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties"># Configuration file
 # key = value
 greeting=Hello y'all!
-quarkus.datasource.url=jdbc:h2:mem:default
-quarkus.datasource.driver=org.h2.Driver
+quarkus.datasource.jdbc.url=jdbc:h2:mem:default
+quarkus.datasource.db-kind=h2
 quarkus.hibernate-orm.database.generation=drop-and-create
 quarkus.hibernate-orm.sql-load-script=import.sql
 

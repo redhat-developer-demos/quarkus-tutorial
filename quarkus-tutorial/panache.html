@@ -162,14 +162,7 @@
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">[INFO] Scanning for projects...
-[INFO]
-[INFO] -----------------&lt; com.redhat.developers:tutorial-app &gt;-----------------
-[INFO] Building tutorial-app 1.0-SNAPSHOT
-[INFO] --------------------------------[ jar ]---------------------------------
-[INFO]
-[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
-✅ Adding extension io.quarkus:quarkus-resteasy-jsonb
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">✅ Adding extension io.quarkus:quarkus-resteasy-jsonb
 ✅ Adding extension io.quarkus:quarkus-smallrye-openapi
 ✅ Adding extension io.quarkus:quarkus-hibernate-orm-panache
 ✅ Adding extension io.quarkus:quarkus-jdbc-h2
@@ -197,8 +190,8 @@
 <pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config"># Configuration file
 # key = value
 greeting=Hello y'all!
-quarkus.datasource.url=jdbc:h2:mem:default
-quarkus.datasource.driver=org.h2.Driver
+quarkus.datasource.jdbc.url=jdbc:h2:mem:default
+quarkus.datasource.db-kind=h2
 quarkus.hibernate-orm.database.generation=drop-and-create</code></pre>
 </div>
 </div>
