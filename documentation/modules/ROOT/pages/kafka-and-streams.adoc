@@ -14,25 +14,6 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 ./mvnw quarkus:add-extension -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging-kafka"
 ----
 
-[.console-output]
-[source,text]
-----
-[INFO] Scanning for projects...
-[INFO] 
-[INFO] -----------------< com.redhat.developers:tutorial-app >-----------------
-[INFO] Building tutorial-app 1.0-SNAPSHOT
-[INFO] --------------------------------[ jar ]---------------------------------
-[INFO] 
-[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
-✅ Adding dependency io.quarkus:quarkus-smallrye-reactive-messaging-kafka:jar
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.522 s
-[INFO] Finished at: 2020-05-12T21:58:51-04:00
-[INFO] ------------------------------------------------------------------------
-----
-
 == Create Wine POJO
 
 Create a new `Wine` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:

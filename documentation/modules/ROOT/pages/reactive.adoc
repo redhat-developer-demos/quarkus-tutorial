@@ -14,25 +14,6 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 ./mvnw quarkus:add-extension -Dextensions=io.quarkus:quarkus-resteasy-mutiny
 ----
 
-[.console-output]
-[source,text]
-----
-[INFO] Scanning for projects...
-[INFO] 
-[INFO] -----------------< com.redhat.developers:tutorial-app >-----------------
-[INFO] Building tutorial-app 1.0-SNAPSHOT
-[INFO] --------------------------------[ jar ]---------------------------------
-[INFO] 
-[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
-✅ Adding dependency io.quarkus:quarkus-resteasy-mutiny:jar
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.217 s
-[INFO] Finished at: 2020-05-12T09:03:59-04:00
-[INFO] ------------------------------------------------------------------------
-----
-
 == Create Beer POJO
 
 Create a new `Beer` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:

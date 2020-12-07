@@ -68,31 +68,6 @@ You can run the test in your IDE or by running Maven:
 ./mvnw clean test
 ----
 
-[.console-output]
-[source,bash]
-----
-[INFO] -------------------------------------------------------
-[INFO]  T E S T S
-[INFO] -------------------------------------------------------
-[INFO] Running com.redhat.developers.HelloResourceTest
-2020-05-11 21:28:53,566 INFO  [io.quarkus] (main) Quarkus 1.4.2.Final started in 1.636s. Listening on: http://0.0.0.0:8081
-2020-05-11 21:28:53,568 INFO  [io.quarkus] (main) Profile test activated.
-2020-05-11 21:28:53,568 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy]
-[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.525 s - in com.redhat.developers.HelloResourceTest
-2020-05-11 21:28:55,158 INFO  [io.quarkus] (main) Quarkus stopped in 0.040s
-[INFO]
-[INFO] Results:
-[INFO]
-[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
-[INFO]
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time:  11.942 s
-[INFO] Finished at: 2020-05-11T21:28:55-04:00
-[INFO] ------------------------------------------------------------------------
-----
-
 == Open the Project in your IDE
 
 Open or import the generated project into your IDE.

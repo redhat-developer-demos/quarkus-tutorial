@@ -26,13 +26,6 @@ Just open a new terminal window, and make sure you're at the root of your `{proj
 [.console-output]
 [source,text]
 ----
-[INFO] Scanning for projects...
-[INFO]
-[INFO] -----------------< com.redhat.developers:tutorial-app >-----------------
-[INFO] Building tutorial-app 1.0-SNAPSHOT
-[INFO] --------------------------------[ jar ]---------------------------------
-[INFO]
-[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
 ✅ Adding extension io.quarkus:quarkus-resteasy-jsonb
 ✅ Adding extension io.quarkus:quarkus-smallrye-openapi
 ✅ Adding extension io.quarkus:quarkus-hibernate-orm-panache
@@ -58,8 +51,8 @@ Add the following database properties to your `application.properties` so that i
 # Configuration file
 # key = value
 greeting=Hello y'all!
-quarkus.datasource.url=jdbc:h2:mem:default
-quarkus.datasource.driver=org.h2.Driver
+quarkus.datasource.jdbc.url=jdbc:h2:mem:default
+quarkus.datasource.db-kind=h2
 quarkus.hibernate-orm.database.generation=drop-and-create
 ----
 

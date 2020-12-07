@@ -18,25 +18,6 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 ./mvnw quarkus:add-extension -Dextension=quarkus-smallrye-health
 ----
 
-[.console-output]
-[source,text]
-----
-[INFO] Scanning for projects...
-[INFO]
-[INFO] -----------------< com.redhat.developers:tutorial-app >-----------------
-[INFO] Building tutorial-app 1.0-SNAPSHOT
-[INFO] --------------------------------[ jar ]---------------------------------
-[INFO]
-[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
-✅ Adding extension io.quarkus:quarkus-smallrye-health
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.131 s
-[INFO] Finished at: 2020-05-11T22:41:15-04:00
-[INFO] ------------------------------------------------------------------------
-----
-
 == Invoke the /health endpoint
 
 Just by adding the Health extension you'll have a `/health` endpoint providing a very trivial health check.
