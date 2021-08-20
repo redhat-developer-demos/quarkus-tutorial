@@ -2,8 +2,8 @@
 
 == Securing endpoints with JWT RBAC
 
-In a microservices architecture, and generally speaking, any kind of application, might need to be protected so only certain users can access to the defined endpoint.
-Quarkus provides an integration to the https://github.com/eclipse/microprofile-jwt-auth[MicroProfile JWT RBAC,window=_blank] spec.
+In a microservices architecture, and generally speaking, any application, might need to be protected so only specific users can access the defined endpoint. 
+Quarkus provides integration to the https://github.com/eclipse/microprofile-jwt-auth[MicroProfile JWT RBAC,window=_blank] spec.
 
 So let's see how you can start using JWT for _Role Based Access Control_ (RBAC) of endpoints.
 
@@ -107,7 +107,7 @@ token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tu
 curl -H "Authorization: Bearer $token" localhost:8080/secure/claim
 ----
 
-And you’ll see the preferred_username field for the given token (jdoe).
+You should see the `preferred_username` field for the given token (jdoe).
 
 [.console-output]
 [source,text]
@@ -265,4 +265,4 @@ And you’ll see the preferred_username field for the given token (jdoe).
 Forbidden* Closing connection 0
 ----
 
-You can check the `403 Forbidden` response.
+You can notice the `403 Forbidden` response.

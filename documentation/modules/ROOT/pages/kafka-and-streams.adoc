@@ -145,7 +145,6 @@ Create a new `WineResource` Java class in `src/main/java` in the `com.redhat.dev
 ----
 package com.redhat.developers;
 
-import javax.inject.Inject;
 import javax.json.bind.JsonbBuilder;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

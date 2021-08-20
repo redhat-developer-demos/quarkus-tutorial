@@ -7,7 +7,7 @@ JVM mode::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw -DskipTests clean package
+./mvnw package
 ----
 
 To run the application in jvm mode
@@ -16,7 +16,7 @@ To run the application in jvm mode
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-java -jar target/{project-name}-1.0-SNAPSHOT-runner.jar
+java -jar target/quarkus-app/quarkus-run.jar
 ----
 
 --

@@ -14,15 +14,12 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 ./mvnw quarkus:add-extension -Dextension=quarkus-micrometer
 ----
 
-You should also add the `micrometer-registry-prometheus` dependency to the `pom.xml` : 
+You should also add the `quarkus-micrometer-registry-prometheus` extension : 
 
 [.console-input]
-[source,xml]
+[source,bash]
 ----
-<dependency>
-    <groupId>io.micrometer</groupId>
-    <artifactId>micrometer-registry-prometheus</artifactId>
-</dependency>
+./mvnw quarkus:add-extension -Dextensions="io.quarkus:quarkus-micrometer-registry-prometheus"
 ----
 
 == Create TimeResource
@@ -48,15 +45,15 @@ import io.micrometer.core.instrument.MeterRegistry;
 @Path("/time")
 public class TimeResource {
 
-    private final MeterRegistry registry;
+    private final MeterRegistry registry; <1>
 
     TimeResource(MeterRegistry registry) {
         this.registry = registry;
         registry.gauge("offsetFromUTC", this,
-        TimeResource::offsetFromUTC);<1>
+        TimeResource::offsetFromUTC);<2>
     }
 
-    @Counted(value = "time.now") 
+    @Counted(value = "time.now") <3>
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public Instant now() {
@@ -68,11 +65,11 @@ public class TimeResource {
     }
 }
 ----
+<1> Meters in Micrometer are created from and contained in a MeterRegistry.
+<2> Add a gauge that returns a value computed by our application.
+<3> The `@Counted` annotation allows the Metrics extension to count the number of invocations to this method.
 
-<1> The add a gauge that returns a value computed by our application.
-<2> The `@Counted` annotation allows the Metrics extension to count the number of invocations to this method.
-
-== Invoke the endpoing multiple times
+== Invoke the endpoint multiple times
 
 We need to send some requests to our endpoint to increment our `@Counted` metrics, so use the following command:
 
@@ -94,5 +91,5 @@ for i in {1..5}; do curl -w '\n' localhost:8080/time; done
 
 == Check the metrics
 
-By default the metrics are exposed in Prometheus format. You can check the output by pointing your browser to http://localhost:8080/metrics[window=_blank]
+By default the metrics are exposed in Prometheus format. You can check the output by pointing your browser to http://localhost:8080/q/metrics[window=_blank]
 

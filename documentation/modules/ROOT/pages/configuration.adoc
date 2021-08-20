@@ -93,7 +93,7 @@ Hello y'all!
 
 Since we changed the output of our `/hello` endpoint, our integration test doesn't pass anymore.
 
-Let's update `FruitResourceTest` to reflect our recent changes:
+Let's update `HelloResourceTest` to reflect our recent changes:
 
 [.console-input]
 [source,java]
