@@ -135,8 +135,8 @@
 <h2 id="_securing_endpoints_with_jwt_rbac"><a class="anchor" href="#_securing_endpoints_with_jwt_rbac"></a>Securing endpoints with JWT RBAC</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In a microservices architecture, and generally speaking, any kind of application, might need to be protected so only certain users can access to the defined endpoint.
-Quarkus provides an integration to the <a href="https://github.com/eclipse/microprofile-jwt-auth" target="_blank" rel="noopener">MicroProfile JWT RBAC</a> spec.</p>
+<p>In a microservices architecture, and generally speaking, any application, might need to be protected so only specific users can access the defined endpoint.
+Quarkus provides integration to the <a href="https://github.com/eclipse/microprofile-jwt-auth" target="_blank" rel="noopener">MicroProfile JWT RBAC</a> spec.</p>
 </div>
 <div class="paragraph">
 <p>So let&#8217;s see how you can start using JWT for <em>Role Based Access Control</em> (RBAC) of endpoints.</p>
@@ -265,7 +265,7 @@ curl -H "Authorization: Bearer $token" localhost:8080/secure/claim</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>And you’ll see the preferred_username field for the given token (jdoe).</p>
+<p>You should see the <code>preferred_username</code> field for the given token (jdoe).</p>
 </div>
 <div class="listingblock console-output">
 <div class="content">
@@ -436,7 +436,7 @@ Forbidden* Closing connection 0</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>You can check the <code>403 Forbidden</code> response.</p>
+<p>You can notice the <code>403 Forbidden</code> response.</p>
 </div>
 </div>
 </div>

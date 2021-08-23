@@ -266,7 +266,6 @@ public interface BeerService {
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -292,7 +291,7 @@ public class BeerResource {
             )
             .until(List::isEmpty) <i class="conum" data-value="3"></i><b>(3)</b>
             .onItem().&lt;Beer&gt;disjoint() <i class="conum" data-value="4"></i><b>(4)</b>
-            .transform().byFilteringItemsWith(b -&gt; b.getAbv() &gt; 15.0); <i class="conum" data-value="6"></i><b>(6)</b>
+            .select().where(b -&gt; b.getAbv() &gt; 15.0); <i class="conum" data-value="6"></i><b>(6)</b>
     }
 
 }</code></pre>
@@ -328,7 +327,7 @@ public class BeerResource {
 <h2 id="_invoke_the_endpoint"><a class="anchor" href="#_invoke_the_endpoint"></a>Invoke the endpoint</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can check the your new implementation using a REST client by pointing your browser to <a href="http://localhost:8080/beer" class="bare" target="_blank" rel="noopener">http://localhost:8080/beer</a></p>
+<p>You can check your new implementation by pointing your browser to <a href="http://localhost:8080/beer" class="bare" target="_blank" rel="noopener">http://localhost:8080/beer</a></p>
 </div>
 <div class="paragraph">
 <p>You can also run the following command:</p>

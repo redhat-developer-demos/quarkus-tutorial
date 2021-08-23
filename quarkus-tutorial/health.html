@@ -169,14 +169,14 @@
 <h2 id="_invoke_the_health_endpoint"><a class="anchor" href="#_invoke_the_health_endpoint"></a>Invoke the /health endpoint</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Just by adding the Health extension you&#8217;ll have a <code>/health</code> endpoint providing a very trivial health check.</p>
+<p>Just by adding the Health extension you&#8217;ll have a <code>/q/health</code> endpoint providing a very trivial health check.</p>
 </div>
 <div class="paragraph">
 <p>Run the following command:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/health</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/q/health</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -194,6 +194,23 @@
 </div>
 <div class="paragraph">
 <p>Notice that since we&#8217;re using the Hibernate and database extensions, Quarkus automatically added a readiness probe checking the status of our database connections.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+You can modify the default path by adding the following property in <code>applications.properties</code> :
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">quarkus.smallrye-health.root-path=/health</code></pre>
+</div>
 </div>
 </div>
 </div>
