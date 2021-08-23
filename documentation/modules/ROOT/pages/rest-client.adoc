@@ -1,6 +1,6 @@
 = REST Client
 
-A not usual scenario in a Microservices architecture is the remote invocation of remote REST HTTP endpoints. Quarkus provides a typed REST client that follows the  https://github.com/eclipse/microprofile-rest-client[MicroProfile REST Client, window=_blank] specification.
+An atypical scenario in a Microservices architecture is the remote invocation of remote REST HTTP endpoints. Quarkus provides a typed REST client that follows the  https://github.com/eclipse/microprofile-rest-client[MicroProfile REST Client, window=_blank] specification.
 
 Let's create a REST client that access https://www.fruityvice.com[window=_blank] to get nutrition information about our fruits. The endpoint we're interested into is this one:
 
@@ -218,7 +218,7 @@ public class FruitDTO {
 
 == Change FruitResource to use FruityViceService
 
-Now that we have all of the required classes, we can change `FruitResource` to use our `FruityViceService` REST client.
+Now that we have all the required classes, we can change `FruitResource` to get fruits by season and use our `FruityViceService` REST client via `@RestClient` annotation.
 
 Change the `FruitResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
@@ -278,7 +278,7 @@ public class FruitResource {
 
 == Invoke the endpoint
 
-You can check the your new implementation using a REST client by pointing your browser to http://localhost:8080/fruit?season=Summer[window=_blank]
+You can check your new implementation using a REST client by pointing your browser to http://localhost:8080/fruit?season=Summer[window=_blank]
 
 You can also run the following command:
 

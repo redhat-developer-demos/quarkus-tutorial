@@ -20,14 +20,14 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 
 == Invoke the /health endpoint
 
-Just by adding the Health extension you'll have a `/health` endpoint providing a very trivial health check.
+Just by adding the Health extension you'll have a `/q/health` endpoint providing a very trivial health check.
 
 Run the following command:
 
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/health
+curl localhost:8080/q/health
 ----
 
 [.console-output]
@@ -45,6 +45,13 @@ curl localhost:8080/health
 ----
 
 Notice that since we're using the Hibernate and database extensions, Quarkus automatically added a readiness probe checking the status of our database connections.
+
+TIP: You can modify the default path by adding the following property in `applications.properties` :
+[.console-input]
+[source,properties]
+----
+quarkus.smallrye-health.root-path=/health
+----
 
 == Add a custom liveness probe
 

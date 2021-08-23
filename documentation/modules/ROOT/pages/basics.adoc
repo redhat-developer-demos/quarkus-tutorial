@@ -56,9 +56,9 @@ Quarkus was able to stop in just *0.007s*. Fast to start, fast to stop. Fast alw
 
 The scaffolding process also creates a test case for the example endpoint.
 
-Check the file `FruitResourceTest.java` in the folder `src/test/java` to see how a Quarkus integration test looks like.
+Check the file `HelloResourceTest.java` in the folder `src/test/java` to see how a Quarkus integration test looks like.
 
-When running this test, the application is started once, then all tests are executed, and finally, the application is stopped. Although it is not mandatory, by default RestAssured project is used to test Rest endpoints but it is up to you to change that.
+When running this test, the application is started once, then all tests are executed, and finally, the application stops. Although it is not mandatory, by default RestAssured project is used to test Rest endpoints but it is up to you to change that.
 
 You can run the test in your IDE or by running Maven:
 
@@ -97,3 +97,34 @@ Let's start the _Live Coding_ mode by invoking `mvn`. You probably won't need to
 ----
 ./mvnw quarkus:dev
 ----
+
+== Continuous Testing (Development mode)
+
+Quarkus supports continuous testing, meaning that your tests will run immediately after code changes were saved.
+Let's start again in _Live Coding_ mode by invoking `mvn`:
+
+[.console-input]
+[source,bash]
+----
+mvn quarkus:dev
+----
+
+Quarkus will start in development mode as normal, but down the bottom of the screen you should see the following:
+[.console-input]
+[source,bash]
+----
+Tests paused
+Press [r] to resume testing, [o] Toggle test output, [h] for more options>
+----
+
+Press `r` and the tests will start running. You should see the status change down the bottom of the screen as they are running, and it should finish similar to this:
+
+[.console-input]
+[source,bash]
+----
+All 1 test is passing (0 skipped), 1 test was run in 11705ms. Tests completed at 16:02:32.
+----
+
+TIP: If you don’t want to have continuous testing enabled, you can change this by adding `quarkus.test.continuous-testing=disabled` in `application.properties`. 
+
+You can find more details about controlling continuous testing in https://quarkus.io/guides/continuous-testing#controlling-continuous-testing[this guide]. 

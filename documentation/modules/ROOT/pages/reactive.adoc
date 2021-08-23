@@ -114,7 +114,6 @@ package com.redhat.developers;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -140,7 +139,7 @@ public class BeerResource {
             )
             .until(List::isEmpty) <3>
             .onItem().<Beer>disjoint() <4>
-            .transform().byFilteringItemsWith(b -> b.getAbv() > 15.0); <6>
+            .select().where(b -> b.getAbv() > 15.0); <6>
     }
 
 }
@@ -153,7 +152,7 @@ public class BeerResource {
 
 == Invoke the endpoint
 
-You can check the your new implementation using a REST client by pointing your browser to http://localhost:8080/beer[window=_blank]
+You can check your new implementation by pointing your browser to http://localhost:8080/beer[window=_blank]
 
 You can also run the following command:
 
