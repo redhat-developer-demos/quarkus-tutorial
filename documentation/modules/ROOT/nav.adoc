@@ -16,3 +16,4 @@
 ** xref:reactive.adoc[Reactive with Mutiny]
 ** xref:kafka-and-streams.adoc[Apache Kafka with Reactive Streams]
 ** xref:security.adoc[Security with JWT RBAC]
+** xref:security-oidc.adoc[Security using OpenID Connect]

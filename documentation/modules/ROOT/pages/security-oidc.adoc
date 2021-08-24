@@ -1,0 +1,188 @@
+= Security using OpenID Connect
+
+== Securing endpoints using Bearer Token Authorization
+
+You can protect your JAX-RS microservices by using Bearer Token Authorization where Bearer Tokens are issued by OpenId Connect and OAuth 2.0 compliant Authorization Servers such as https://www.keycloak.org/about.html[Keycloak].
+
+Quarkus introduced an experimental *Dev Services For Keycloak* feature which is enabled by default when the `quarkus-oidc` extension is started in dev mode. It starts a Keycloak container and initializes it by registering the existing Keycloak realm or creating a new realm with the client and users for you to start developing your Quarkus application secured by Keycloak immediately.
+
+So let's see how you can start using Bearer Tokens for securing your endpoints.
+
+== Add the OIDC extension
+
+Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+./mvnw quarkus:add-extension -Dextensions="io.quarkus:quarkus-oidc"
+----
+
+== KeyCloak setup
+Go to http://localhost:8080/q/dev/[Dev UI] and select the OpenId Connect Card linking to a Keycloak page. Click on the http://localhost:8080/q/dev/io.quarkus.quarkus-oidc/provider[Provider: Keycloak link] and you will see a Keycloak page which will be presented slightly differently depending on how Dev Services for Keycloak feature has been configured.
+
+TIP: By default, `alice` and `bob` users (with the passwords matching the names), and user and admin roles are created. `alice` has both admin and user roles and `bob` - the user role.
+
+However, we will add our own user, role and group by following these steps:
+ 
+. Click on http://localhost:55105/auth[KeyCloak Admin link] in the left corner.
+. Login using `admin' as user and password.
+. Go to https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master//jwt-token/realm.json and save it on your local machine.
+. Go to http://localhost:55105/auth/admin/master/console/#/realms/quarkus/partial-import[Import] in the KeyCloak Administration console and import `realm.json`. 
+After this step you should have `Subscriber` Role and Group.
+. Go to http://localhost:55105/auth/admin/master/console/#/realms/quarkus/users[Users] and add the `jdoe` user having the name as password. The `jdoe` user should be mapped to the `Subscriber` role and group.
+
+== Modify SecureResource
+
+If you need to access `JsonWebToken` claims, you can simply inject the token itself.
+
+Change the `SecureResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import org.eclipse.microprofile.jwt.JsonWebToken;
+
+import javax.annotation.security.RolesAllowed;
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+
+@Path("/secure")
+public class SecureResource {
+    
+    @Inject
+    JsonWebToken jwt;
+
+    @GET
+    @Path("/claim")
+    @RolesAllowed("Subscriber") <1>
+    public String getClaim() {
+        return "Access for subject " + jwt.getName() + " is granted";
+    }
+
+}
+----
+<1> The endpoint is accessible only to users that have `Subscriber` role.
+
+== Invoke the /secure/claim endpoint with RBAC
+
+Run the following command:
+
+[.console-input]
+[source,bash]
+----
+token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.keycloak.jwt.token -s)
+curl -H "Authorization: Bearer $token" localhost:8080/secure/claim
+----
+
+And you’ll see the response for the given token:
+
+[.console-output]
+[source,text]
+----
+Access for subject jdoe is granted
+----
+
+== Access SecureResource with an invalid token
+
+Run the following command:
+
+[.console-input]
+[source,bash]
+----
+token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token -s)
+curl -v -H "Authorization: Bearer $token" localhost:8080/secure/claim
+----
+
+And you’ll see the `401 Forbidden` response.
+
+[.console-output]
+[source,text]
+----
+*   Trying ::1...
+* TCP_NODELAY set
+* Connection failed
+* connect to ::1 port 8080 failed: Connection refused
+*   Trying 127.0.0.1...
+* TCP_NODELAY set
+* Connected to localhost (127.0.0.1) port 8080 (#0)
+> GET /secure/claim HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/7.64.1
+> Accept: */*
+> Authorization: Bearer eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJqZG9lLXVzaW5nLWp3dC1yYmFjIiwiYXVkIjoidXNpbmctand0LXJiYWMiLCJ1cG4iOiJqZG9lQHF1YXJrdXMuaW8iLCJiaXJ0aGRhdGUiOiIyMDAxLTA3LTEzIiwiYXV0aF90aW1lIjoxNTcwMDk0MTcxLCJpc3MiOiJodHRwczpcL1wvcXVhcmt1cy5pb1wvdXNpbmctand0LXJiYWMiLCJyb2xlTWFwcGluZ3MiOnsiZ3JvdXAyIjoiR3JvdXAyTWFwcGVkUm9sZSIsImdyb3VwMSI6Ikdyb3VwMU1hcHBlZFJvbGUifSwiZ3JvdXBzIjpbIkVjaG9lciIsIlRlc3RlciIsIlN1YnNjcmliZXIiLCJncm91cDIiXSwicHJlZmVycmVkX3VzZXJuYW1lIjoiamRvZSIsImV4cCI6MjIwMDgxNDE3MSwiaWF0IjoxNTcwMDk0MTcxLCJqdGkiOiJhLTEyMyJ9.Hzr41h3_uewy-g2B-sonOiBObtcpkgzqmF4bT3cO58v45AIOiegl7HIx7QgEZHRO4PdUtR34x9W23VJY7NJ545ucpCuKnEV1uRlspJyQevfI-mSRg1bHlMmdDt661-V3KmQES8WX2B2uqirykO5fCeCp3womboilzCq4VtxbmM2qgf6ag8rUNnTCLuCgEoulGwTn0F5lCrom-7dJOTryW1KI0qUWHMMwl4TX5cLmqJLgBzJapzc5_yEfgQZ9qXzvsT8zeOWSKKPLm7LFVt2YihkXa80lWcjewwt61rfQkpmqSzAHL0QIs7CsM9GfnoYc0j9po83-P3GJiBMMFmn-vg
+> 
+< HTTP/1.1 401 Unauthorized
+< www-authenticate: Bearer
+< content-length: 0
+< 
+* Connection #0 to host localhost left intact
+* Closing connection 0
+----
+
+== Add incorrect RBAC to SecureResource
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import org.eclipse.microprofile.jwt.JsonWebToken;
+
+import javax.annotation.security.RolesAllowed;
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+
+@Path("/secure")
+public class SecureResource {
+    
+    @Inject
+    JsonWebToken jwt;
+
+    @GET
+    @Path("/claim")
+    @RolesAllowed("Not-Subscriber")
+    public String getClaim() {
+        return "Access for subject " + jwt.getName() + " is granted";
+    }
+
+}
+----
+
+== Invoke the /secure/claim endpoint with incorrect RBAC
+
+Run the following command:
+
+[.console-input]
+[source,bash]
+----
+token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.keycloak.jwt.token -s)
+curl -v -H "Authorization: Bearer $token" localhost:8080/secure/claim
+----
+
+And you’ll see the `403 Forbidden` response.
+
+[.console-output]
+[source,text]
+----
+*   Trying ::1...
+* TCP_NODELAY set
+* Connected to localhost (::1) port 8080 (#0)
+> GET /secure/claim HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/7.64.1
+> Accept: */*
+> Authorization: Bearer eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJqZG9lLXVzaW5nLWp3dC1yYmFjIiwiYXVkIjoidXNpbmctand0LXJiYWMiLCJ1cG4iOiJqZG9lQHF1YXJrdXMuaW8iLCJiaXJ0aGRhdGUiOiIyMDAxLTA3LTEzIiwiYXV0aF90aW1lIjoxNTcwMDk0MTcxLCJpc3MiOiJodHRwczpcL1wvcXVhcmt1cy5pb1wvdXNpbmctand0LXJiYWMiLCJyb2xlTWFwcGluZ3MiOnsiZ3JvdXAyIjoiR3JvdXAyTWFwcGVkUm9sZSIsImdyb3VwMSI6Ikdyb3VwMU1hcHBlZFJvbGUifSwiZ3JvdXBzIjpbIkVjaG9lciIsIlRlc3RlciIsIlN1YnNjcmliZXIiLCJncm91cDIiXSwicHJlZmVycmVkX3VzZXJuYW1lIjoiamRvZSIsImV4cCI6MjIwMDgxNDE3MSwiaWF0IjoxNTcwMDk0MTcxLCJqdGkiOiJhLTEyMyJ9.Hzr41h3_uewy-g2B-sonOiBObtcpkgzqmF4bT3cO58v45AIOiegl7HIx7QgEZHRO4PdUtR34x9W23VJY7NJ545ucpCuKnEV1uRlspJyQevfI-mSRg1bHlMmdDt661-V3KmQES8WX2B2uqirykO5fCeCp3womboilzCq4VtxbmM2qgf6ag8rUNnTCLuCgEoulGwTn0F5lCrom-7dJOTryW1KI0qUWHMMwl4TX5cLmqJLgBzJapzc5_yEfgQZ9qXzvsT8zeOWSKKPLm7LFVt2YihkXa80lWcjewwt61rfQkpmqSzAHL0QIs7CsM9GfnoYc0j9po83-P3GJiBMMFmn-vg
+>
+< HTTP/1.1 403 Forbidden
+< Content-Length: 9
+< Content-Type: application/octet-stream
+<
+* Connection #0 to host localhost left intact
+Forbidden* Closing connection 0
+----
+

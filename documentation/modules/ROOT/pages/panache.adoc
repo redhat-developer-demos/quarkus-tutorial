@@ -9,6 +9,20 @@ You'll learn how easy and productive is Quarkus with Hibernate with Panache. For
 
 We'll use http://www.h2database.com[H2,window="_blank"] as our backing database, but it's very easy to use other database engines with Quarkus. As an exercise for later, we suggest you to try your favorite database engine with the documentation found https://quarkus.io/guides/datasource[here,window="_blank"].
 
+[reftext="Dev Services"]
+== Zero Config Database Setup
+
+Quarkus can even provide you with a zero-config database out of the box when testing or running in dev mode, a feature we refer to as Dev Services. Depending on your database type, you may need Docker installed to use this feature.
+
+
+To use Dev Services, all you need to do is include the relevant extension for the type of database you want (either reactive or JDBC, or both), without configuring any database URL, username, and password. 
+
+Quarkus will provide the database. You can just start coding without worrying about config.
+
+TIP: If you are using a proprietary database such as `DB2` or `MSSQL` you will need to accept the license agreement. To do this create a `src/main/resources/container-license-acceptance.txt` file in your project and add a line with the image name and tag of the database. 
+
+More on zero config setup of datasources can be found https://quarkus.io/guides/datasource#dev-services[here].
+
 == Adding Extensions
 
 Quarkus provides a lot of optimized dependencies to its ecosystem through *extensions*. For this particular chapter, we'll need to add extensions that enables us to work with H2, Hibernate ORM, Panache (a novel persistence API), and JSON.
@@ -51,10 +65,11 @@ Add the following database properties to your `application.properties` so that i
 # Configuration file
 # key = value
 greeting=Hello y'all!
-quarkus.datasource.jdbc.url=jdbc:h2:mem:default
 quarkus.datasource.db-kind=h2
 quarkus.hibernate-orm.database.generation=drop-and-create
 ----
+
+Thanks to  <<Dev Services>>  no JDBC URL was provided.
 
 == Create Fruit Entity
 
