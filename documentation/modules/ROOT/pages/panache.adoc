@@ -23,6 +23,8 @@ TIP: If you are using a proprietary database such as `DB2` or `MSSQL` you will n
 
 More on zero config setup of datasources can be found https://quarkus.io/guides/datasource#dev-services[here].
 
+NOTE: Dev Services are enabled by default, but you can disable them by going to `application.properties` and setting `quarkus.datasource.devservices.enabled` to `false`.
+
 == Adding Extensions
 
 Quarkus provides a lot of optimized dependencies to its ecosystem through *extensions*. For this particular chapter, we'll need to add extensions that enables us to work with H2, Hibernate ORM, Panache (a novel persistence API), and JSON.
@@ -65,11 +67,12 @@ Add the following database properties to your `application.properties` so that i
 # Configuration file
 # key = value
 greeting=Hello y'all!
+quarkus.datasource.jdbc.url=jdbc:h2:mem:default
 quarkus.datasource.db-kind=h2
 quarkus.hibernate-orm.database.generation=drop-and-create
 ----
 
-Thanks to  <<Dev Services>>  no JDBC URL was provided.
+NOTE: With <<Dev Services>> enabled, no JDBC URL needs to be provided in Dev Mode. In this case, we input the URL to ensure consistency across all application run modes.
 
 == Create Fruit Entity
 

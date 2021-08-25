@@ -4,62 +4,77 @@
 
 You can protect your JAX-RS microservices by using Bearer Token Authorization where Bearer Tokens are issued by OpenId Connect and OAuth 2.0 compliant Authorization Servers such as https://www.keycloak.org/about.html[Keycloak].
 
-Quarkus introduced an experimental *Dev Services For Keycloak* feature which is enabled by default when the `quarkus-oidc` extension is started in dev mode. It starts a Keycloak container and initializes it by registering the existing Keycloak realm or creating a new realm with the client and users for you to start developing your Quarkus application secured by Keycloak immediately.
+In this section we will secure our endpoints with Bearer Tokens by using Dev Services when running in Dev Mode and, lastly, by configuring the KeyCloak server for all the run modes.
 
-So let's see how you can start using Bearer Tokens for securing your endpoints.
 
-== Add the OIDC extension
+== Add the OIDC and KeyCloak extensions
 
 Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:add-extension -Dextensions="io.quarkus:quarkus-oidc"
+./mvnw quarkus:add-extension -Dextensions="io.quarkus:quarkus-oidc,io.quarkus:quarkus-keycloak-authorization"
 ----
 
-== KeyCloak setup
-Go to http://localhost:8080/q/dev/[Dev UI] and select the OpenId Connect Card linking to a Keycloak page. Click on the http://localhost:8080/q/dev/io.quarkus.quarkus-oidc/provider[Provider: Keycloak link] and you will see a Keycloak page which will be presented slightly differently depending on how Dev Services for Keycloak feature has been configured.
+== Working with DevServices for KeyCloak
+Quarkus introduced an experimental *Dev Services For Keycloak* feature which is enabled by default when the `quarkus-oidc` extension is started in dev mode. It starts a Keycloak container and initializes it by registering the existing Keycloak realm or creating a new realm with the client and users for you to start developing your Quarkus application secured by Keycloak immediately.
+
+When working in Dev Mode, you can use Dev Services for KeyCloak. This is the easy way to locally test your KeyCloak authentication.
+
+Simply go to http://localhost:8080/q/dev/[Dev UI] and select the OpenId Connect Card linking to a Keycloak page.
+
+Click on the http://localhost:8080/q/dev/io.quarkus.quarkus-oidc/provider[Provider: Keycloak link] and you will see a Keycloak page which will be presented slightly differently depending on how Dev Services for Keycloak feature has been configured.
 
 TIP: By default, `alice` and `bob` users (with the passwords matching the names), and user and admin roles are created. `alice` has both admin and user roles and `bob` - the user role.
 
-However, we will add our own user, role and group by following these steps:
- 
+However, we can add our own user, role and group by following these steps:
+
 . Click on http://localhost:55105/auth[KeyCloak Admin link] in the left corner.
 . Login using `admin' as user and password.
-. Go to https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master//jwt-token/realm.json and save it on your local machine.
-. Go to http://localhost:55105/auth/admin/master/console/#/realms/quarkus/partial-import[Import] in the KeyCloak Administration console and import `realm.json`. 
+. Go to https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus-realm.json and save it on your local machine.
+. Go to http://localhost:55105/auth/admin/master/console/#/realms/quarkus/partial-import[Import] in the KeyCloak Administration console and import `quarkus-realm.json`.
 After this step you should have `Subscriber` Role and Group.
-. Go to http://localhost:55105/auth/admin/master/console/#/realms/quarkus/users[Users] and add the `jdoe` user having the name as password. The `jdoe` user should be mapped to the `Subscriber` role and group.
+. Go to http://localhost:55105/auth/admin/master/console/#/realms/quarkus/users[Users] and check that `jdoe` user is mapped to the `Subscriber` role and group.
 
-== Modify SecureResource
+Congratulations! Now you can run this section in Dev Mode without starting the KeyCloak docker container nor adding the KeyCloak setup in `application.properties`.
+[WARNING]
+====
+*Dev Services For Keycloak* will not be activated if either `quarkus.oidc.auth-server-url` is already initialized or the default OIDC tenant is disabled with `quarkus.oidc.tenant.enabled=false`, regardless if you work with Keycloak or not.
+
+If you would like to disable *Dev Services For Keycloak*, just add `quarkus.keycloak.devservices.enabled=true` in `application.properties`.
+====
+
+== Create UserResource
 
 If you need to access `JsonWebToken` claims, you can simply inject the token itself.
 
-Change the `SecureResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Create the `UserResource` Java class in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
 ----
 package com.redhat.developers;
 
-import org.eclipse.microprofile.jwt.JsonWebToken;
-
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
-@Path("/secure")
-public class SecureResource {
-    
+import org.eclipse.microprofile.jwt.JsonWebToken;
+
+@Path("/api/users")
+public class UserResource {
+
     @Inject
     JsonWebToken jwt;
 
     @GET
-    @Path("/claim")
-    @RolesAllowed("Subscriber") <1>
-    public String getClaim() {
+    @Path("/info")
+    @RolesAllowed("Subscriber")<1>
+    public String getInfo() {
         return "Access for subject " + jwt.getName() + " is granted";
     }
 
@@ -67,7 +82,7 @@ public class SecureResource {
 ----
 <1> The endpoint is accessible only to users that have `Subscriber` role.
 
-== Invoke the /secure/claim endpoint with RBAC
+== Invoke the /api/users/info endpoint with RBAC
 
 Run the following command:
 
@@ -75,7 +90,7 @@ Run the following command:
 [source,bash]
 ----
 token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.keycloak.jwt.token -s)
-curl -H "Authorization: Bearer $token" localhost:8080/secure/claim
+curl -H "Authorization: Bearer $token" localhost:8080/api/users/info
 ----
 
 And you’ll see the response for the given token:
@@ -86,7 +101,7 @@ And you’ll see the response for the given token:
 Access for subject jdoe is granted
 ----
 
-== Access SecureResource with an invalid token
+== Access UserResource with an invalid token
 
 Run the following command:
 
@@ -94,7 +109,7 @@ Run the following command:
 [source,bash]
 ----
 token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token -s)
-curl -v -H "Authorization: Bearer $token" localhost:8080/secure/claim
+curl -v -H "Authorization: Bearer $token" localhost:8080/api/users/info
 ----
 
 And you’ll see the `401 Forbidden` response.
@@ -123,37 +138,39 @@ And you’ll see the `401 Forbidden` response.
 * Closing connection 0
 ----
 
-== Add incorrect RBAC to SecureResource
+== Add incorrect RBAC to UserResource
 
 [.console-input]
 [source,java]
 ----
 package com.redhat.developers;
 
-import org.eclipse.microprofile.jwt.JsonWebToken;
-
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
-@Path("/secure")
-public class SecureResource {
-    
+import org.eclipse.microprofile.jwt.JsonWebToken;
+
+@Path("/api/users")
+public class UserResource {
+
     @Inject
     JsonWebToken jwt;
 
     @GET
-    @Path("/claim")
+    @Path("/info")
     @RolesAllowed("Not-Subscriber")
-    public String getClaim() {
+    public String getInfo() {
         return "Access for subject " + jwt.getName() + " is granted";
     }
 
 }
 ----
 
-== Invoke the /secure/claim endpoint with incorrect RBAC
+== Invoke the endpoint with incorrect RBAC
 
 Run the following command:
 
@@ -161,7 +178,7 @@ Run the following command:
 [source,bash]
 ----
 token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.keycloak.jwt.token -s)
-curl -v -H "Authorization: Bearer $token" localhost:8080/secure/claim
+curl -v -H "Authorization: Bearer $token" localhost:8080/api/users/info
 ----
 
 And you’ll see the `403 Forbidden` response.
@@ -185,4 +202,45 @@ And you’ll see the `403 Forbidden` response.
 * Connection #0 to host localhost left intact
 Forbidden* Closing connection 0
 ----
+
+== Application Configuration
+
+Although Dev Services are very useful when running Quarkus in Dev Mode, we need to think forward on how the application configuration will be available for production.
+This section explains how to persist the security configurations done earlier with Dev Services.
+
+OpenID Connect extension allows you to define the adapter configuration using the `application.properties` file which should be located at the `src/main/resources` directory.
+You can simply copy the configuration below to start working with the KeyCloak server:
+
+[.console-input]
+[source,java]
+----
+# OIDC Configuration
+
+quarkus.oidc.auth-server-url=http://localhost:8180/auth/realms/quarkus
+quarkus.oidc.client-id=backend-service
+quarkus.oidc.credentials.secret=secret
+quarkus.oidc.tls.verification=none
+quarkus.http.cors=true
+
+# Enable Policy Enforcement
+quarkus.keycloak.policy-enforcer.enable=true
+----
+
+== Starting and Configuring the Keycloak Server
+
+You can start a Keycloak Server with Docker by running the following command:
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+docker run --name keycloak -e DB_VENDOR=H2 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -p 8180:8080 quay.io/keycloak/keycloak:15.0.2
+----
+
+Go to http://localhost:8180/auth and use `admin` for user and password.
+We will add our own user, role and group by following these steps:
+
+. Click on http://localhost:8180/auth/admin/master/console/#/realms/master/partial-import[Import].
+. Import the realm from https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus-realm.json.
+After this step you should have `Subscriber` Role and Group, together with `jdoe` user correctly configured.
+
 

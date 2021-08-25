@@ -303,3 +303,11 @@ data: {"name":"Pera Manca","price":1534.00}
 
 data: {"name":"Barca Velha","price":316.00}
 ----
+
+== Dev Services for Kafka
+
+Because starting a Kafka broker can be long and you need to develop fast in your local environment, Dev Services for Kafka is here to help you!
+
+Since `quarkus-smallrye-reactive-messaging-kafka` extension is present, Dev Services for Kafka automatically starts a Kafka broker in dev mode and when running tests.
+
+TIP: You can disable Dev Services for Kafka by adding `quarkus.kafka.devservices.enabled=false` or configuring `kafka.bootstrap.servers` in `application.properties`.
