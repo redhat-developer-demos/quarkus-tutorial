@@ -232,7 +232,7 @@ public class SecureResource {
 }
 ----
 
-== Invoke the /secure/claim endpoint with incorret RBAC
+== Invoke the /secure/claim endpoint with incorrect RBAC
 
 Run the following command:
 

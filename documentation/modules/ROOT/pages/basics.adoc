@@ -40,6 +40,11 @@ curl localhost:8080/hello
 hello
 ----
 
+== Dev UI
+
+Quarkus now ships with a new experimental Dev UI, which is available in dev mode at http://localhost:8080/q/dev[/q/dev] by default.
+It allows you to quickly visualize all the extensions currently loaded, see their status and go directly to their documentation.
+
 == Stopping the application
 
 You can stop your running application by issuing a `CTRL+C` in your terminal.
