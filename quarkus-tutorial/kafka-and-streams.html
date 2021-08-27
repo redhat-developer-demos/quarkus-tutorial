@@ -103,8 +103,17 @@
   <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
   </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Advanced Topics</span>
+<ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="security.html">Security with JWT RBAC</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="security-oidc.html">Security using OpenID Connect</a>
   </li>
 </ul>
   </li>
@@ -502,6 +511,29 @@ data: {"name":"Pera Manca","price":1534.00}
 
 data: {"name":"Barca Velha","price":316.00}</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_dev_services_for_kafka"><a class="anchor" href="#_dev_services_for_kafka"></a>Dev Services for Kafka</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Because starting a Kafka broker can be long and you need to develop fast in your local environment, Dev Services for Kafka is here to help you!</p>
+</div>
+<div class="paragraph">
+<p>Since <code>quarkus-smallrye-reactive-messaging-kafka</code> extension is present, Dev Services for Kafka automatically starts a Kafka broker in dev mode and when running tests.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+You can disable Dev Services for Kafka by adding <code>quarkus.kafka.devservices.enabled=false</code> or configuring <code>kafka.bootstrap.servers</code> in <code>application.properties</code>.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>

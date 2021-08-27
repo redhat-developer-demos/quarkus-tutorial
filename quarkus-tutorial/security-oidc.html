@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Security using OpenID Connect :: Quarkus Tutorial</title>
+    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/security-oidc.html">
+    <link rel="prev" href="security.html">
+    <meta name="generator" content="Antora 2.3.1">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://redhat-developer-demos.github.io/quarkus-tutorial">Quarkus Tutorial</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="quarkus-tutorial" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Requirements</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="setup.html">Setup</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Basics</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="basics.html">Basics and Fundamentals</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration.html">Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="panache.html">Hibernate with Panache</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="spring.html">Spring Compatibility</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kubernetes.html">Deploy to Kubernetes</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Cloud Native</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="rest-client.html">REST Client</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="fault-tolerance.html">Fault Tolerance</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="health.html">Health Check</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="metrics.html">Metrics</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Advanced Topics</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="security.html">Security with JWT RBAC</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="security-oidc.html">Security using OpenID Connect</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">quarkus-tutorial</a></li>
+    <li>Advanced Topics</li>
+    <li><a href="security-oidc.html">Security using OpenID Connect</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/redhat-developer-demos/quarkus-tutorial/edit/master/documentation/modules/ROOT/pages/security-oidc.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Security using OpenID Connect</h1>
+<div class="sect1">
+<h2 id="_securing_endpoints_using_bearer_token_authorization"><a class="anchor" href="#_securing_endpoints_using_bearer_token_authorization"></a>Securing endpoints using Bearer Token Authorization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can protect your JAX-RS microservices by using Bearer Token Authorization where Bearer Tokens are issued by OpenId Connect and OAuth 2.0 compliant Authorization Servers such as <a href="https://www.keycloak.org/about.html">Keycloak</a>.</p>
+</div>
+<div class="paragraph">
+<p>In this section we will secure our endpoints with Bearer Tokens by using Dev Services when running in Dev Mode and, lastly, by configuring the KeyCloak server for all the run modes.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_add_the_oidc_and_keycloak_extensions"><a class="anchor" href="#_add_the_oidc_and_keycloak_extensions"></a>Add the OIDC and KeyCloak extensions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Just open a new terminal window, and make sure you’re at the root of your <code>tutorial-app</code> project, then run:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextensions="io.quarkus:quarkus-oidc,io.quarkus:quarkus-keycloak-authorization"</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_working_with_devservices_for_keycloak"><a class="anchor" href="#_working_with_devservices_for_keycloak"></a>Working with DevServices for KeyCloak</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus introduced an experimental <strong>Dev Services For Keycloak</strong> feature which is enabled by default when the <code>quarkus-oidc</code> extension is started in dev mode. It starts a Keycloak container and initializes it by registering the existing Keycloak realm or creating a new realm with the client and users for you to start developing your Quarkus application secured by Keycloak immediately.</p>
+</div>
+<div class="paragraph">
+<p>When working in Dev Mode, you can use Dev Services for KeyCloak. This is the easy way to locally test your KeyCloak authentication.</p>
+</div>
+<div class="paragraph">
+<p>Simply go to <a href="http://localhost:8080/q/dev/">Dev UI</a> and select the OpenId Connect Card linking to a Keycloak page.</p>
+</div>
+<div class="paragraph">
+<p>Click on the <a href="http://localhost:8080/q/dev/io.quarkus.quarkus-oidc/provider">Provider: Keycloak link</a> and you will see a Keycloak page which will be presented slightly differently depending on how Dev Services for Keycloak feature has been configured.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+By default, <code>alice</code> and <code>bob</code> users (with the passwords matching the names), and user and admin roles are created. <code>alice</code> has both admin and user roles and <code>bob</code> - the user role.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>However, we can add our own user, role and group by following these steps:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Click on <a href="http://localhost:55105/auth">KeyCloak Admin link</a> in the left corner.</p>
+</li>
+<li>
+<p>Login using `admin' as user and password.</p>
+</li>
+<li>
+<p>Go to <a href="https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus-realm.json" class="bare">https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus-realm.json</a> and save it on your local machine.</p>
+</li>
+<li>
+<p>Go to <a href="http://localhost:55105/auth/admin/master/console/#/realms/quarkus/partial-import">Import</a> in the KeyCloak Administration console and import <code>quarkus-realm.json</code>.
+After this step you should have <code>Subscriber</code> Role and Group.</p>
+</li>
+<li>
+<p>Go to <a href="http://localhost:55105/auth/admin/master/console/#/realms/quarkus/users">Users</a> and check that <code>jdoe</code> user is mapped to the <code>Subscriber</code> role and group.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Congratulations! Now you can run this section in Dev Mode without starting the KeyCloak docker container nor adding the KeyCloak setup in <code>application.properties</code>.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>Dev Services For Keycloak</strong> will not be activated if either <code>quarkus.oidc.auth-server-url</code> is already initialized or the default OIDC tenant is disabled with <code>quarkus.oidc.tenant.enabled=false</code>, regardless if you work with Keycloak or not.</p>
+</div>
+<div class="paragraph">
+<p>If you would like to disable <strong>Dev Services For Keycloak</strong>, just add <code>quarkus.keycloak.devservices.enabled=true</code> in <code>application.properties</code>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_userresource"><a class="anchor" href="#_create_userresource"></a>Create UserResource</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you need to access <code>JsonWebToken</code> claims, you can simply inject the token itself.</p>
+</div>
+<div class="paragraph">
+<p>Create the <code>UserResource</code> Java class in the <code>com.redhat.developers</code> package with the following contents:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+
+import javax.annotation.security.RolesAllowed;
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.eclipse.microprofile.jwt.JsonWebToken;
+
+@Path("/api/users")
+public class UserResource {
+
+    @Inject
+    JsonWebToken jwt;
+
+    @GET
+    @Path("/info")
+    @RolesAllowed("Subscriber")<i class="conum" data-value="1"></i><b>(1)</b>
+    public String getInfo() {
+        return "Access for subject " + jwt.getName() + " is granted";
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The endpoint is accessible only to users that have <code>Subscriber</code> role.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_invoke_the_apiusersinfo_endpoint_with_rbac"><a class="anchor" href="#_invoke_the_apiusersinfo_endpoint_with_rbac"></a>Invoke the /api/users/info endpoint with RBAC</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Run the following command:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.keycloak.jwt.token -s)
+curl -H "Authorization: Bearer $token" localhost:8080/api/users/info</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And you’ll see the response for the given token:</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">Access for subject jdoe is granted</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_access_userresource_with_an_invalid_token"><a class="anchor" href="#_access_userresource_with_an_invalid_token"></a>Access UserResource with an invalid token</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Run the following command:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token -s)
+curl -v -H "Authorization: Bearer $token" localhost:8080/api/users/info</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And you’ll see the <code>401 Forbidden</code> response.</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">*   Trying ::1...
+* TCP_NODELAY set
+* Connection failed
+* connect to ::1 port 8080 failed: Connection refused
+*   Trying 127.0.0.1...
+* TCP_NODELAY set
+* Connected to localhost (127.0.0.1) port 8080 (#0)
+&gt; GET /secure/claim HTTP/1.1
+&gt; Host: localhost:8080
+&gt; User-Agent: curl/7.64.1
+&gt; Accept: */*
+&gt; Authorization: Bearer eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJqZG9lLXVzaW5nLWp3dC1yYmFjIiwiYXVkIjoidXNpbmctand0LXJiYWMiLCJ1cG4iOiJqZG9lQHF1YXJrdXMuaW8iLCJiaXJ0aGRhdGUiOiIyMDAxLTA3LTEzIiwiYXV0aF90aW1lIjoxNTcwMDk0MTcxLCJpc3MiOiJodHRwczpcL1wvcXVhcmt1cy5pb1wvdXNpbmctand0LXJiYWMiLCJyb2xlTWFwcGluZ3MiOnsiZ3JvdXAyIjoiR3JvdXAyTWFwcGVkUm9sZSIsImdyb3VwMSI6Ikdyb3VwMU1hcHBlZFJvbGUifSwiZ3JvdXBzIjpbIkVjaG9lciIsIlRlc3RlciIsIlN1YnNjcmliZXIiLCJncm91cDIiXSwicHJlZmVycmVkX3VzZXJuYW1lIjoiamRvZSIsImV4cCI6MjIwMDgxNDE3MSwiaWF0IjoxNTcwMDk0MTcxLCJqdGkiOiJhLTEyMyJ9.Hzr41h3_uewy-g2B-sonOiBObtcpkgzqmF4bT3cO58v45AIOiegl7HIx7QgEZHRO4PdUtR34x9W23VJY7NJ545ucpCuKnEV1uRlspJyQevfI-mSRg1bHlMmdDt661-V3KmQES8WX2B2uqirykO5fCeCp3womboilzCq4VtxbmM2qgf6ag8rUNnTCLuCgEoulGwTn0F5lCrom-7dJOTryW1KI0qUWHMMwl4TX5cLmqJLgBzJapzc5_yEfgQZ9qXzvsT8zeOWSKKPLm7LFVt2YihkXa80lWcjewwt61rfQkpmqSzAHL0QIs7CsM9GfnoYc0j9po83-P3GJiBMMFmn-vg
+&gt;
+&lt; HTTP/1.1 401 Unauthorized
+&lt; www-authenticate: Bearer
+&lt; content-length: 0
+&lt;
+* Connection #0 to host localhost left intact
+* Closing connection 0</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_add_incorrect_rbac_to_userresource"><a class="anchor" href="#_add_incorrect_rbac_to_userresource"></a>Add incorrect RBAC to UserResource</h2>
+<div class="sectionbody">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+
+import javax.annotation.security.RolesAllowed;
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.eclipse.microprofile.jwt.JsonWebToken;
+
+@Path("/api/users")
+public class UserResource {
+
+    @Inject
+    JsonWebToken jwt;
+
+    @GET
+    @Path("/info")
+    @RolesAllowed("Not-Subscriber")
+    public String getInfo() {
+        return "Access for subject " + jwt.getName() + " is granted";
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_invoke_the_endpoint_with_incorrect_rbac"><a class="anchor" href="#_invoke_the_endpoint_with_incorrect_rbac"></a>Invoke the endpoint with incorrect RBAC</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Run the following command:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.keycloak.jwt.token -s)
+curl -v -H "Authorization: Bearer $token" localhost:8080/api/users/info</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And you’ll see the <code>403 Forbidden</code> response.</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">*   Trying ::1...
+* TCP_NODELAY set
+* Connected to localhost (::1) port 8080 (#0)
+&gt; GET /secure/claim HTTP/1.1
+&gt; Host: localhost:8080
+&gt; User-Agent: curl/7.64.1
+&gt; Accept: */*
+&gt; Authorization: Bearer eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJqZG9lLXVzaW5nLWp3dC1yYmFjIiwiYXVkIjoidXNpbmctand0LXJiYWMiLCJ1cG4iOiJqZG9lQHF1YXJrdXMuaW8iLCJiaXJ0aGRhdGUiOiIyMDAxLTA3LTEzIiwiYXV0aF90aW1lIjoxNTcwMDk0MTcxLCJpc3MiOiJodHRwczpcL1wvcXVhcmt1cy5pb1wvdXNpbmctand0LXJiYWMiLCJyb2xlTWFwcGluZ3MiOnsiZ3JvdXAyIjoiR3JvdXAyTWFwcGVkUm9sZSIsImdyb3VwMSI6Ikdyb3VwMU1hcHBlZFJvbGUifSwiZ3JvdXBzIjpbIkVjaG9lciIsIlRlc3RlciIsIlN1YnNjcmliZXIiLCJncm91cDIiXSwicHJlZmVycmVkX3VzZXJuYW1lIjoiamRvZSIsImV4cCI6MjIwMDgxNDE3MSwiaWF0IjoxNTcwMDk0MTcxLCJqdGkiOiJhLTEyMyJ9.Hzr41h3_uewy-g2B-sonOiBObtcpkgzqmF4bT3cO58v45AIOiegl7HIx7QgEZHRO4PdUtR34x9W23VJY7NJ545ucpCuKnEV1uRlspJyQevfI-mSRg1bHlMmdDt661-V3KmQES8WX2B2uqirykO5fCeCp3womboilzCq4VtxbmM2qgf6ag8rUNnTCLuCgEoulGwTn0F5lCrom-7dJOTryW1KI0qUWHMMwl4TX5cLmqJLgBzJapzc5_yEfgQZ9qXzvsT8zeOWSKKPLm7LFVt2YihkXa80lWcjewwt61rfQkpmqSzAHL0QIs7CsM9GfnoYc0j9po83-P3GJiBMMFmn-vg
+&gt;
+&lt; HTTP/1.1 403 Forbidden
+&lt; Content-Length: 9
+&lt; Content-Type: application/octet-stream
+&lt;
+* Connection #0 to host localhost left intact
+Forbidden* Closing connection 0</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_application_configuration"><a class="anchor" href="#_application_configuration"></a>Application Configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Although Dev Services are very useful when running Quarkus in Dev Mode, we need to think forward on how the application configuration will be available for production.
+This section explains how to persist the security configurations done earlier with Dev Services.</p>
+</div>
+<div class="paragraph">
+<p>OpenID Connect extension allows you to define the adapter configuration using the <code>application.properties</code> file which should be located at the <code>src/main/resources</code> directory.
+You can simply copy the configuration below to start working with the KeyCloak server:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java"># OIDC Configuration
+
+quarkus.oidc.auth-server-url=http://localhost:8180/auth/realms/quarkus
+quarkus.oidc.client-id=backend-service
+quarkus.oidc.credentials.secret=secret
+quarkus.oidc.tls.verification=none
+quarkus.http.cors=true
+
+# Enable Policy Enforcement
+quarkus.keycloak.policy-enforcer.enable=true</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_starting_and_configuring_the_keycloak_server"><a class="anchor" href="#_starting_and_configuring_the_keycloak_server"></a>Starting and Configuring the Keycloak Server</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can start a Keycloak Server with Docker by running the following command:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run --name keycloak -e DB_VENDOR=H2 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -p 8180:8080 quay.io/keycloak/keycloak:15.0.2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Go to <a href="http://localhost:8180/auth" class="bare">http://localhost:8180/auth</a> and use <code>admin</code> for user and password.
+We will add our own user, role and group by following these steps:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Click on <a href="http://localhost:8180/auth/admin/master/console/#/realms/master/partial-import">Import</a>.</p>
+</li>
+<li>
+<p>Import the realm from <a href="https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus-realm.json" class="bare">https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus-realm.json</a>.
+After this step you should have <code>Subscriber</code> Role and Group, together with <code>jdoe</code> user correctly configured.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="security.html">Security with JWT RBAC</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

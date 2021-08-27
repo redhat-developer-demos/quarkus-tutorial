@@ -6,6 +6,7 @@
     <title>Security with JWT RBAC :: Quarkus Tutorial</title>
     <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/security.html">
     <link rel="prev" href="kafka-and-streams.html">
+    <link rel="next" href="security-oidc.html">
     <meta name="generator" content="Antora 2.3.1">
     <link rel="stylesheet" href="../_/css/site.css">
   </head>
@@ -102,8 +103,17 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
   </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Advanced Topics</span>
+<ul class="nav-list">
   <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="security.html">Security with JWT RBAC</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="security-oidc.html">Security using OpenID Connect</a>
   </li>
 </ul>
   </li>
@@ -122,7 +132,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">quarkus-tutorial</a></li>
-    <li>Cloud Native</li>
+    <li>Advanced Topics</li>
     <li><a href="security.html">Security with JWT RBAC</a></li>
   </ul>
 </nav>
@@ -402,7 +412,7 @@ public class SecureResource {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_invoke_the_secureclaim_endpoint_with_incorret_rbac"><a class="anchor" href="#_invoke_the_secureclaim_endpoint_with_incorret_rbac"></a>Invoke the /secure/claim endpoint with incorret RBAC</h2>
+<h2 id="_invoke_the_secureclaim_endpoint_with_incorrect_rbac"><a class="anchor" href="#_invoke_the_secureclaim_endpoint_with_incorrect_rbac"></a>Invoke the /secure/claim endpoint with incorrect RBAC</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Run the following command:</p>
@@ -442,6 +452,7 @@ Forbidden* Closing connection 0</code></pre>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a></span>
+  <span class="next"><a href="security-oidc.html">Security using OpenID Connect</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
