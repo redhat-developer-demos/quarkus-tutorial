@@ -145,7 +145,7 @@ public interface FruityViceService {
 
 Now in case of any error, 3 retries are done automatically, waiting for 2 seconds between retries. 
 
-If the error persits, then the fallback method is executed.
+If the error persists, then the fallback method is executed.
 
 Now after waiting for 6 seconds (3 retries x 2 seconds), an empty object is sent instead of an exception.
 
@@ -219,8 +219,8 @@ public interface FruityViceService {
 }
 ----
 
-Now, if 3 (4 x 0.75) failures occur among the rolling window of 4 consecutive invocations then the circuit is opened for 5000 ms and then be back to half open. 
-If the invocation succeeds then the circuit is back to closed again.
+Now, if 3 (4 x 0.75) failures occur among the rolling window of 4 consecutive invocations, then the circuit is opened for 5000 ms and then will be back to half open. 
+If the invocation succeeds, then the circuit is back to closed again.
 
 Run the following command at least 5 times:
 
@@ -230,9 +230,9 @@ Run the following command at least 5 times:
 curl localhost:8080/fruit?season=Summer
 ----
 
-The output changes form `java.net.UnknownHostException: www.fruityvice.com` (or any other network exception) in the first calls to `org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getFruitByName` when circuit is opened.
+The output changes from `java.net.UnknownHostException: www.fruityvice.com` (or any other network exception) in the first calls to `org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getFruitByName` when the circuit is opened.
 
-The big difference between first exception and second one is that in first one, occurs because the circuit is closed and means that the system is trying to reach the host, in the second one, the circuit is closed and the exception is thrown automatically instead of trying to reach the host.
+The big difference between the first exception and the second one is that the first one occurs because the circuit is closed while the system is trying to reach the host, while in the second one, the circuit is closed and the exception is thrown automatically without trying to reach the host.
 
 TIP: You can use `@Retry` and `@Fallback` annotations together with `@CircuitBreaker` annotation.
 
