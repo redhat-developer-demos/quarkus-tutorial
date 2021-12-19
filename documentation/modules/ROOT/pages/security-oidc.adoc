@@ -26,18 +26,18 @@ Simply go to http://localhost:8080/q/dev/[Dev UI] and select the OpenId Connect 
 
 Click on the http://localhost:8080/q/dev/io.quarkus.quarkus-oidc/provider[Provider: Keycloak link] and you will see a Keycloak page which will be presented slightly differently depending on how Dev Services for Keycloak feature has been configured.
 
-TIP: By default, `alice` and `bob` users (with the passwords matching the names), and user and admin roles are created. `alice` has both admin and user roles and `bob` - the user role.
+TIP: By default, `alice` and `bob` users (with the passwords matching the names), and user and admin roles are created. `alice` has both admin and user roles and `bob` has the user role.
 
 However, we can add our own user, role and group by following these steps:
 
 . Click on http://localhost:55105/auth[KeyCloak Admin link] in the left corner.
-. Login using `admin' as user and password.
+. Login using `admin` as user and password.
 . Go to https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus-realm.json and save it on your local machine.
 . Go to http://localhost:55105/auth/admin/master/console/#/realms/quarkus/partial-import[Import] in the KeyCloak Administration console and import `quarkus-realm.json`.
 After this step you should have `Subscriber` Role and Group.
 . Go to http://localhost:55105/auth/admin/master/console/#/realms/quarkus/users[Users] and check that `jdoe` user is mapped to the `Subscriber` role and group.
 
-Congratulations! Now you can run this section in Dev Mode without starting the KeyCloak docker container nor adding the KeyCloak setup in `application.properties`.
+Congratulations! Now you can run this section in Dev Mode without starting the KeyCloak Docker container nor adding the KeyCloak setup in `application.properties`.
 [WARNING]
 ====
 *Dev Services For Keycloak* will not be activated if either `quarkus.oidc.auth-server-url` is already initialized or the default OIDC tenant is disabled with `quarkus.oidc.tenant.enabled=false`, regardless if you work with Keycloak or not.
@@ -241,6 +241,6 @@ We will add our own user, role and group by following these steps:
 
 . Click on http://localhost:8180/auth/admin/master/console/#/realms/master/partial-import[Import].
 . Import the realm from https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus-realm.json.
-After this step you should have `Subscriber` Role and Group, together with `jdoe` user correctly configured.
+After this step you should have `Subscriber` Role and Group, together with `jdoe` user, correctly configured.
 
 
