@@ -115,9 +115,9 @@ You should see the `preferred_username` field for the given token (jdoe).
 jdoe
 ----
 
-MicroProfile JWT RBAC spec is providing out-of-the-box the validation of the given token. These validations include for example that the token has not been modified, has not expired or the issuer is the expected one.
+MicroProfile JWT RBAC spec is providing out-of-the-box validation of the given token. These validations include, for example, that the token has not been modified, has not expired, or the issuer is the expected one.
 
-To validate this just invoke again the service but changing the token:
+To validate this, just invoke the service again, but change the token:
 
 [.console-input]
 [source,bash]
@@ -150,8 +150,8 @@ You can check the `401 Unauthorized` response.
 
 == Add RBAC to SecureResource
 
-So far, you've seen how to get claims from the provided JWT token, but anyone could access that endpoint, let's protected it with a role.
-For this case you need to use a role that is defined in JWT token into `groups` claim (ie `Subscriber`).
+So far, you've seen how to get claims from the provided JWT token, but anyone could access that endpoint, so let's protect it with a role.
+For this case you need to use a role that is defined in the JWT token inside the `groups` claim (ie `Subscriber`).
 
 Change the `SecureResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
