@@ -167,7 +167,7 @@ You will need a public container registry to store your image. If you don&#8217;
 <p>You need a container registry that is accessible from your Kubernetes cluster to deploy the application container image in it.</p>
 </div>
 <div class="paragraph">
-<p>In this chapter we&#8217;ll be using the Quarkus Kubernetes Extension to create the Kubernetes deployment file, and the Quarkus Jib Extension to create and push the container image to your container registry without the need of running local docker daemon.</p>
+<p>In this chapter we&#8217;ll be using the Quarkus Kubernetes Extension to create the Kubernetes deployment file, and the Quarkus Jib Extension to create and push the container image to your container registry without the need of a running local docker daemon.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s add the required extensions:</p>
@@ -183,7 +183,7 @@ You will need a public container registry to store your image. If you don&#8217;
 <h2 id="_adding_the_configuration_properties"><a class="anchor" href="#_adding_the_configuration_properties"></a>Adding the configuration properties</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Add the following properties to your <code>application.properties</code> so that can push the container to correct location:</p>
+<p>Add the following properties to your <code>application.properties</code> so that you can push the container to the correct location:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -206,11 +206,11 @@ quarkus.kubernetes.service-type=load-balancer</code></pre>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Registry where image is pushed. By default is docker hub.</td>
+<td>Registry where image is pushed. By default is Docker Hub.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Group name of the conatiner image.</td>
+<td>Group name of the container image.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
@@ -277,7 +277,7 @@ If you don&#8217;t, your push <strong>will</strong> fail.
 <h2 id="_deploy_your_application_to_your_kubernetes_cluster"><a class="anchor" href="#_deploy_your_application_to_your_kubernetes_cluster"></a>Deploy your application to your Kubernetes cluster</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>When Kubernetes extension is present in the classpath, a Kubernetes deployment file is scaffolded for you during package phase.</p>
+<p>When a Kubernetes extension is present in the classpath, a Kubernetes deployment file is scaffolded for you during the package phase.</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
