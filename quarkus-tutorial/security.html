@@ -283,10 +283,10 @@ curl -H "Authorization: Bearer $token" localhost:8080/secure/claim</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>MicroProfile JWT RBAC spec is providing out-of-the-box the validation of the given token. These validations include for example that the token has not been modified, has not expired or the issuer is the expected one.</p>
+<p>MicroProfile JWT RBAC spec is providing out-of-the-box validation of the given token. These validations include, for example, that the token has not been modified, has not expired, or the issuer is the expected one.</p>
 </div>
 <div class="paragraph">
-<p>To validate this just invoke again the service but changing the token:</p>
+<p>To validate this, just invoke the service again, but change the token:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -322,8 +322,8 @@ curl -v -H "Authorization: Bearer $token" localhost:8080/secure/claim</code></pr
 <h2 id="_add_rbac_to_secureresource"><a class="anchor" href="#_add_rbac_to_secureresource"></a>Add RBAC to SecureResource</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>So far, you&#8217;ve seen how to get claims from the provided JWT token, but anyone could access that endpoint, let&#8217;s protected it with a role.
-For this case you need to use a role that is defined in JWT token into <code>groups</code> claim (ie <code>Subscriber</code>).</p>
+<p>So far, you&#8217;ve seen how to get claims from the provided JWT token, but anyone could access that endpoint, so let&#8217;s protect it with a role.
+For this case you need to use a role that is defined in the JWT token inside the <code>groups</code> claim (ie <code>Subscriber</code>).</p>
 </div>
 <div class="paragraph">
 <p>Change the <code>SecureResource</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
