@@ -152,10 +152,10 @@
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Liveness probes</strong> tells your platform if your application is running ok or not. When your liveness probe is down, your platform might restart your instance to guarantee that you have the minimum required amount of running instances in production.</p>
+<p><strong>Liveness probes</strong> tell your platform if your application is running ok or not. When your liveness probe is down, your platform might restart your instance to guarantee that you have the minimum required amount of running instances in production.</p>
 </li>
 <li>
-<p><strong>Readiness probes</strong> tells your platform if your application is <em>warm</em> enough to reply to requests in a reasonable amount of time. Java applications, for example, might need some time to warm up, so the readiness probe should be up only when it&#8217;s ready to reply to request in a timely manner. Checks that depends on other services should be implemented as readiness probes: if a remote service is down, restarting your application won&#8217;t fix the issue.</p>
+<p><strong>Readiness probes</strong> tell your platform if your application is <em>warm</em> enough to reply to requests in a reasonable amount of time. Java applications, for example, might need some time to warm up, so the readiness probe should be up only when it&#8217;s ready to reply to a request in a timely manner. Checks that depend on other services should be implemented as readiness probes: if a remote service is down, restarting your application won&#8217;t fix the issue.</p>
 </li>
 </ul>
 </div>
@@ -353,7 +353,7 @@ public class ReadinessProbe implements HealthCheck{
 </div>
 </div>
 <div class="paragraph">
-<p>You can see that the liveness endpoints only returns information about the liveness probes.</p>
+<p>You can see that the liveness endpoint only returns information about the liveness probes.</p>
 </div>
 </div>
 </div>
@@ -389,7 +389,7 @@ public class ReadinessProbe implements HealthCheck{
 </div>
 </div>
 <div class="paragraph">
-<p>You can see that the readiness endpoints only returns information about the readiness probes.</p>
+<p>You can see that the readiness endpoint only returns information about the readiness probes.</p>
 </div>
 </div>
 </div>
