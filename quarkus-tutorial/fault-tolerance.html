@@ -307,7 +307,7 @@ public interface FruityViceService {
 <p>Now in case of any error, 3 retries are done automatically, waiting for 2 seconds between retries.</p>
 </div>
 <div class="paragraph">
-<p>If the error persits, then the fallback method is executed.</p>
+<p>If the error persists, then the fallback method is executed.</p>
 </div>
 <div class="paragraph">
 <p>Now after waiting for 6 seconds (3 retries x 2 seconds), an empty object is sent instead of an exception.</p>
@@ -389,8 +389,8 @@ public interface FruityViceService {
 </div>
 </div>
 <div class="paragraph">
-<p>Now, if 3 (4 x 0.75) failures occur among the rolling window of 4 consecutive invocations then the circuit is opened for 5000 ms and then be back to half open.
-If the invocation succeeds then the circuit is back to closed again.</p>
+<p>Now, if 3 (4 x 0.75) failures occur among the rolling window of 4 consecutive invocations, then the circuit is opened for 5000 ms and then will be back to half open.
+If the invocation succeeds, then the circuit is back to closed again.</p>
 </div>
 <div class="paragraph">
 <p>Run the following command at least 5 times:</p>
@@ -401,10 +401,10 @@ If the invocation succeeds then the circuit is back to closed again.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The output changes form <code>java.net.UnknownHostException: www.fruityvice.com</code> (or any other network exception) in the first calls to <code>org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getFruitByName</code> when circuit is opened.</p>
+<p>The output changes from <code>java.net.UnknownHostException: www.fruityvice.com</code> (or any other network exception) in the first calls to <code>org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getFruitByName</code> when the circuit is opened.</p>
 </div>
 <div class="paragraph">
-<p>The big difference between first exception and second one is that in first one, occurs because the circuit is closed and means that the system is trying to reach the host, in the second one, the circuit is closed and the exception is thrown automatically instead of trying to reach the host.</p>
+<p>The big difference between the first exception and the second one is that the first one occurs because the circuit is closed while the system is trying to reach the host, while in the second one, the circuit is closed and the exception is thrown automatically without trying to reach the host.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
