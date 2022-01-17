@@ -102,7 +102,7 @@ public class BeerResource {
 }
 ----
 <1> Creates a `Multi`.
-<2> The supplier will start with `1` and will query the remote endpoing asking for page `i`.
+<2> The supplier will start with `1` and will query the remote endpoint asking for page `i`.
 <3> The multi will end when the beer list returned is empty.
 <4> We dismember all the returned lists and create a sequence of beers.
 <5> And then we filter the `Multi` with beers with `ABV > 15.0`.

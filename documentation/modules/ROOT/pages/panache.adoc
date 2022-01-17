@@ -228,7 +228,7 @@ Now if you refresh your browser pointing to http://localhost:8080/fruit[window=_
 
 We're using H2, which is an in-memory database. This means that every time Quarkus restarts, we'll lose all the information we have provided.
 
-To provide some meaninful results for our custom finder, let's create some initial data to be populated to our database.
+To provide some meaningful results for our custom finder, let's create some initial data to be populated to our database.
 
 Create the file `import.sql` in the folder `src/main/resources` with the following content:
 

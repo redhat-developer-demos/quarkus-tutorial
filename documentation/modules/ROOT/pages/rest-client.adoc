@@ -2,7 +2,7 @@
 
 An atypical scenario in a Microservices architecture is the remote invocation of remote REST HTTP endpoints. Quarkus provides a typed REST client that follows the  https://github.com/eclipse/microprofile-rest-client[MicroProfile REST Client, window=_blank] specification.
 
-Let's create a REST client that access https://www.fruityvice.com[window=_blank] to get nutrition information about our fruits. The endpoint we're interested into is this one:
+Let's create a REST client that accesses https://www.fruityvice.com[window=_blank] to get nutrition information about our fruits. The endpoint we're interested in is this one:
 
 * `api/fruit/\{name\}`, which returns specific info about the given fruit name.
 
@@ -56,7 +56,7 @@ mvn quarkus:add-extension -Dextensions="io.quarkus:quarkus-rest-client"
 
 == Create FruityVice POJO
 
-We need to create a POJO object that is used to unmarshal JSON message from http://www.fruityvice.com[window=_blank].
+We need to create a POJO object that is used to unmarshal a JSON message from http://www.fruityvice.com[window=_blank].
 
 Create a new `FruityVice` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 

@@ -8,7 +8,7 @@ You can use any Java IDE for this tutorial but if you didn't try it before, we r
 
 [TIP]
 ====
-If you are using vscode then install vscode https://aka.ms/vscode-remote/download/extension[Remote Development Extension pack],
+If you are using VS Code, then install the VS Code https://aka.ms/vscode-remote/download/extension[Remote Development Extension pack],
 which allows you to run this entire tutorial within a container that will have all tools configured.
 ====
 
@@ -24,7 +24,7 @@ endif::workshop[]
 
 [WARNING]
 ====
-GraalVM is only required if you intend to build a native image for you local operating system. If you want to create a container using a native image, you can use the Quarkus feature for this and don't need to install GraalVM locally.
+GraalVM is only required if you intend to build a native image for your local operating system. If you want to create a container using a native image, you can use the Quarkus feature for this and don't need to install GraalVM locally.
 ====
 
 [tabs]
@@ -63,7 +63,7 @@ Please have them installed and configured before you get started with any of the
 Container Image::
 +
 --
-If you have https://www.docker.com/products/docker-desktop[Docker for Mac or Windows or Linux]  then you can pull the linux container image 
+If you have https://www.docker.com/products/docker-desktop[Docker for Mac or Windows or Linux]  then you can pull the Linux container image 
 https://quay.io/repository/rhdevelopers/tutorial-tools?tab=tags[tutorial tools] which has all the tools listed below installed and pre-configured.
 [#docker-pull-tutorials-cli]
 [source,bash]

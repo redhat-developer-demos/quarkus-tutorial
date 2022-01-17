@@ -272,5 +272,3 @@ We will add our own user, role and group by following these steps:
 . Click on http://localhost:8180/auth/admin/master/console/#/realms/master/partial-import[Import].
 . Import the realm from https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus-realm.json.
 After this step you should have `Subscriber` Role and Group, together with `jdoe` user correctly configured.
-
-
