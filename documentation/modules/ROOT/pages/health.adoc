@@ -15,7 +15,7 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:add-extension -Dextension=quarkus-smallrye-health
+mvn quarkus:add-extension -Dextension=quarkus-smallrye-health
 ----
 
 == Invoke the /health endpoint
@@ -78,32 +78,45 @@ public class LivenessProbe implements HealthCheck {
 
 == Add a custom readiness probe
 
-Create a new `ReadinessProbe` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+In dev mode, all your heath checks are visible in health UI: http://localhost:8080/q/health-ui/.
+
+Some extensions may provide default health checks, including that the extension will automatically register its health checks. 
+For example, quarkus-agroal (that is used to manage Quarkus datasources) automatically registers a readiness health check that will validate each datasource.
+
+Since the readiness of the database is already assessed just by adding those extensions, we should look into defining health checks for other dependencies that we have.
+As we depend on the availability of https://www.fruityvice.com, let's create a new `ReadinessProbe` to assess its availability prior to using it.
+
+We will define a new Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
 ----
 package com.redhat.developers;
 
+import io.smallrye.health.checks.UrlHealthCheck;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.health.HealthCheck;
-import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Readiness;
 
-@Readiness
-public class ReadinessProbe implements HealthCheck{
-    
-    @Override
-    public HealthCheckResponse call() {
-        return HealthCheckResponse.builder()
-            .name("database")
-            .withData("connections", "10") <1>
-            .up()
-            .build();
+import javax.enterprise.context.ApplicationScoped;
+import javax.ws.rs.HttpMethod;
+
+@ApplicationScoped
+public class CustomHealthCheck {
+
+    @ConfigProperty(name = "com.redhat.developers.FruityViceService/mp-rest/url")
+    String externalURL;
+
+    @Readiness //<1>
+    HealthCheck checkURL() {
+        return new UrlHealthCheck(externalURL+"/api/fruit/banana") //<2>
+                .name("ExternalURL health check").requestMethod(HttpMethod.GET).statusCode(200);
     }
 
 }
 ----
-<1> You can use a `HealthCheckResponse` builder to add custom information to your health checks.
+<1> Annotate the method with `org.eclipse.microprofile.health.Readiness` to signal its implementation.
+<2> `UrlHealthCheck` checks if host is reachable using a Http URL connection.
 
 == Invoke the /health endpoint with custom probes
 
@@ -118,6 +131,7 @@ curl localhost:8080/health
 [.console-output]
 [source, json]
 ----
+
 {
     "status": "UP",
     "checks": [
@@ -126,10 +140,10 @@ curl localhost:8080/health
             "status": "UP"
         },
         {
-            "name": "database",
+            "name": "ExternalURL health check",
             "status": "UP",
             "data": {
-                "connections": "10"
+                "host": "GET https://www.fruityvice.com/api/fruit/banana"
             }
         },
         {
@@ -185,10 +199,10 @@ curl localhost:8080/health/ready
     "status": "UP",
     "checks": [
         {
-            "name": "database",
+            "name": "ExternalURL health check",
             "status": "UP",
             "data": {
-                "connections": "10"
+                "host": "GET https://www.fruityvice.com/api/fruit/banana"
             }
         },
         {
@@ -203,4 +217,4 @@ You can see that the readiness endpoints only returns information about the read
 
 == The Health extension and Kubernetes
 
-NOTE: If you're using the Quarkus Kubernetes extension, the liveness and readiness probes are automatically configured in your `Deployment` when you generate the Kubernetes yaml files.
+NOTE: If you're using the Quarkus Kubernetes extension, the liveness and readiness probes are automatically generated at compile time in the YAML files.

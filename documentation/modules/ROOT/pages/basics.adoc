@@ -7,7 +7,7 @@
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn "io.quarkus:quarkus-maven-plugin:{quarkus-version}:create" \
+mvn "io.quarkus:quarkus-maven-plugin:create" \
   -DprojectGroupId="com.redhat.developers" \
   -DprojectArtifactId="{project-name}" \
   -DprojectVersion="1.0-SNAPSHOT" \
@@ -70,7 +70,7 @@ You can run the test in your IDE or by running Maven:
 [.console-input]
 [source,bash]
 ----
-./mvnw clean test
+mvn clean test
 ----
 
 == Open the Project in your IDE
@@ -100,7 +100,7 @@ Let's start the _Live Coding_ mode by invoking `mvn`. You probably won't need to
 [.console-input]
 [source,bash]
 ----
-./mvnw quarkus:dev
+mvn quarkus:dev
 ----
 
 == Continuous Testing (Development mode)

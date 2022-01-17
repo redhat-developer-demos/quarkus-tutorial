@@ -9,7 +9,7 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 [.console-input]
 [source,bash]
 ----
-./mvnw quarkus:add-extension -Dextension=quarkus-smallrye-fault-tolerance
+mvn quarkus:add-extension -Dextension=quarkus-smallrye-fault-tolerance
 ----
 
 == Add Retry to FruityViceService
@@ -40,7 +40,7 @@ public interface FruityViceService {
     @Path("/{name}")
     @Produces(MediaType.APPLICATION_JSON)
     @Retry(maxRetries = 3, delay = 2000)
-    public FruityVice getFruitByName(@PathParam("name") String name);
+    FruityVice getFruitByName(@PathParam("name") String name);
     
 }
 ----
@@ -128,7 +128,7 @@ public interface FruityViceService {
     @Produces(MediaType.APPLICATION_JSON)
     @Retry(maxRetries = 3, delay = 2000)
     @Fallback(FruityViceFallback.class)
-    public FruityVice getFruitByName(@PathParam("name") String name);
+    FruityVice getFruitByName(@PathParam("name") String name);
     
     public static class FruityViceFallback implements FallbackHandler<FruityVice> {
 
@@ -214,7 +214,7 @@ public interface FruityViceService {
     @Produces(MediaType.APPLICATION_JSON)
     @Retry(maxRetries = 3, delay = 2000)
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.75, delay = 5000)
-    public FruityVice getFruitByName(@PathParam("name") String name);
+    FruityVice getFruitByName(@PathParam("name") String name);
     
 }
 ----

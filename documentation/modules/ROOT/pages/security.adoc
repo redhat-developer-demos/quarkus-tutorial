@@ -14,7 +14,7 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:add-extension -Dextension=quarkus-smallrye-jwt
+mvn quarkus:add-extension -Dextension=quarkus-smallrye-jwt
 ----
 
 == Add the JWT properties
@@ -26,6 +26,9 @@ Add the following properties to your `application.properties` in `src/main/resou
 ----
 mp.jwt.verify.publickey.location=https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.pub
 mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac
+
+#set jwt expiration duration
+#com.developers.redhat.jwt.duration=3600
 ----
 
 We are providing a valid token that can be verified by the configured public key:
@@ -81,14 +84,14 @@ import javax.ws.rs.Path;
 import org.eclipse.microprofile.jwt.Claim;
 import org.eclipse.microprofile.jwt.Claims;
 
-@Path("/secure")
+@Path("secure")
 public class SecureResource {
     
     @Claim(standard = Claims.preferred_username)
     String username;
 
     @GET
-    @Path("/claim")
+    @Path("claim")
     public String getClaim() {
         return username;
     }

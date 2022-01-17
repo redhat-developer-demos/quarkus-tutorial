@@ -16,7 +16,7 @@ asciidoc:
   attributes:
     tutorial-namespace: quarkus-tutorial
     quarkus-version: 2.1.3.Final
-    graalvm-version: 21.1.0
+    graalvm-version: 21.3.0
     project-name: tutorial-app
     page-pagination: true
   extensions:

@@ -2,7 +2,8 @@
 
 Mutiny is just part of the Reactive story. To complement it, we need Reactive Streams too. And an important service that can serve as the underlying implementation for our stream is http://kafka.apache.org[Apache Kafka,window=_blank].
 
-In this chapter we're going to use Mutiny to create price request for wines to a remote service called `price-generator` using Kafka as the broker for our messages in a Kafka topic called `wine`. The `price-generator` will get the wine from this topic, add a tag price to it, and send the information back in a Kafka topic called `priced-wine`. Finally, we'll read the priced wines from the topic and send it throught our REST endpoint using SSE (Server-Side Events).
+In this chapter we're going to use Mutiny to create price request for beers to a remote service called `price-generator` using Kafka as the broker for our messages in a Kafka topic called `beer`. The `price-generator` will get the beer from this topic, add a tag price to it, and send the information back in a Kafka topic called `priced-beer`. 
+Finally, we'll read the priced beers from the topic and send it throught our REST endpoint using SSE (Server-Side Events).
 
 == Add the Reactive Messaging Kafka extension
 
@@ -11,46 +12,63 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 [.console-input]
 [source,bash]
 ----
-./mvnw quarkus:add-extension -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging-kafka"
+mvn quarkus:add-extension -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging-kafka"
 ----
 
-== Create Wine POJO
+== Modify Beer POJO
 
-Create a new `Wine` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Modify a new `Beer` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
 ----
 package com.redhat.developers;
 
+import javax.json.bind.annotation.JsonbCreator;
 import java.math.BigDecimal;
 
-public class Wine {
-   
+public class Beer {
+
     private String name;
 
-    private Wine(String name) {
+    private String tagline;
+
+    private double abv;
+
+    private Beer(String name, String tagline, double abv) {
         this.name = name;
+        this.tagline = tagline;
+        this.abv = abv;
     }
 
-    public static Wine of(String name) {
-        return new Wine(name);
+    @JsonbCreator
+    public static Beer of(String name, String tagline, double abv) {
+        return new Beer(name, tagline, abv);
     }
-    
-    public PricedWine withPrice(BigDecimal price) {
-        return PricedWine.of(this.name, price);
+
+    public PricedBeer withPrice(BigDecimal price) {
+        return PricedBeer.of(this.name, price);
     }
+
 
     public String getName() {
         return name;
     }
-    
+
+    public String getTagline() {
+        return tagline;
+    }
+
+    public double getAbv() {
+        return abv;
+    }
+
 }
 ----
 
-== Create PricedWine POJO
+== Create PricedBeer POJO
 
-Create a new `PricedWine` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Create a new `PricedBeer` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
@@ -61,24 +79,24 @@ import java.math.BigDecimal;
 
 import javax.json.bind.annotation.JsonbCreator;
 
-public class PricedWine {
+public class PricedBeer {
 
     private String name;
 
     private BigDecimal price;
 
-    private PricedWine(String name, BigDecimal price) {
+    private PricedBeer(String name, BigDecimal price) {
         this.name = name;
         this.price = price;
     }
 
     @JsonbCreator
-    public static PricedWine of(String name, double price) {
-        return new PricedWine(name, new BigDecimal(price).setScale(2));
+    public static PricedBeer of(String name, double price) {
+        return new PricedBeer(name, new BigDecimal(price).setScale(2));
     }
 
-    public static PricedWine of(String name, BigDecimal price) {
-        return new PricedWine(name, price);
+    public static PricedBeer of(String name, BigDecimal price) {
+        return new PricedBeer(name, price);
     }
 
     public String getName() {
@@ -92,9 +110,53 @@ public class PricedWine {
 }
 ----
 
-== Create WineGenerator
+== Create BeerGenerator
 
-Create a new `WineGenerator` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Create a new `BeerGenerator` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+
+import java.time.Duration;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.json.bind.JsonbBuilder;
+
+import io.smallrye.mutiny.Multi;
+import org.eclipse.microprofile.reactive.messaging.Outgoing;
+
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+
+
+@ApplicationScoped
+public class BeerGenerator {
+   
+    @RestClient
+    BeerService service;
+
+    @Outgoing("beers")
+    Multi<String> beers() {
+        List<Beer>  beers = service.getBeers(10);
+        return Multi.createFrom().ticks().every(Duration.ofSeconds(1)) //<1>
+                .onOverflow().drop() //<2>
+                .map(tick -> beers.get(ThreadLocalRandom.current().nextInt(0, beers.size()))) //<3>
+                .map(JsonbBuilder.create()::toJson); //<4>
+    }
+}
+----
+<1> We're creating a Multi that generates a new message every `1` second.
+<2> We apply backpressure by dropping the messages if the topic is not ready.
+<3> For each message we choose a random `Beer` from our list.
+<4> We map the `Beer` to JSON format.
+
+== Update BeerResource
+
+Let's modify the `BeerResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
@@ -102,77 +164,60 @@ Create a new `WineGenerator` Java class in `src/main/java` in the `com.redhat.de
 package com.redhat.developers;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.json.bind.JsonbBuilder;
-
-import org.eclipse.microprofile.reactive.messaging.Outgoing;
-
-import io.smallrye.mutiny.Multi;
-
-@ApplicationScoped
-public class WineGenerator {
-
-    private static final List<Wine> WINES = 
-        Arrays.asList("Fay", "Cask 23", "Jordan", "Caymus", "Don Melchor", "Barca Velha", "Pera Manca")
-            .stream().map(Wine::of).collect(Collectors.toList());
-
-    @Outgoing("wine")
-    Multi<String> wines() {
-        return Multi.createFrom().ticks().every(Duration.ofSeconds(1)) <1>
-        .onOverflow().drop() <2>
-        .map(tick -> WINES.get(ThreadLocalRandom.current().nextInt(0, WINES.size()))) <3>
-        .map(JsonbBuilder.create()::toJson); <4>
-    }
-
-}
-----
-<1> We're creating a Multi that generates a new message every `1` second.
-<2> We apply backpressure by dropping the messages if the topic is not ready.
-<3> For each message we choose a random `Wine` from our list.
-<4> We map the `Wine` to JSON format.
-
-== Create WineResource
-
-Create a new `WineResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
-
-[.console-input]
-[source,java]
-----
-package com.redhat.developers;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.json.bind.JsonbBuilder;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.eclipse.microprofile.reactive.messaging.Channel;
-import org.jboss.resteasy.annotations.SseElementType;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import io.smallrye.mutiny.Multi;
+import org.jboss.resteasy.annotations.SseElementType;
 
-@Path("/wine")
-public class WineResource {
-    
-    @Channel("priced-wine") <1>
-    Multi<String> pricedWines;
+@Path("/beer")
+public class BeerResource {
+
+    @RestClient
+    BeerService beerService;
+
+    @Channel("priced-beer") //<1>
+    Multi<String> pricedBeers; 
+
+
+    @GET
+    @Path("all")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Multi<Beer> beers() {
+        return Multi.createBy().repeating()
+                .supplier(
+                        () -> new AtomicInteger(1),
+                        i -> beerService.getBeers(i.getAndIncrement())
+                )
+                .until(List::isEmpty)
+                .onItem().<Beer>disjoint()
+                .select().where(b -> b.getAbv() > 15.0);
+    }
+
 
     @GET
     @Produces(MediaType.SERVER_SENT_EVENTS)
     @SseElementType(MediaType.APPLICATION_JSON)
-    public Multi<PricedWine> wines() {
-        return pricedWines.map(s -> JsonbBuilder.create().fromJson(s, PricedWine.class)); <2>
+    public Multi<PricedBeer> pricedBeers() {
+        return pricedBeers.map(s -> JsonbBuilder.create().fromJson(s, PricedBeer.class)) //<2>
+                .ifNoItem().after(Duration.ofSeconds(1)).fail(); //<3>
     }
 
 }
 ----
 <1> We inject the Multi directly by using the `@Channel` annotation.
-<2> We just map the `PricedWine` to JSON format.
+<2> We just map the `PricedBeer` to JSON format.
+<3> If no item is retrieved after 1 second, we will assume that the call failed.
 
 == Add the Reactive Messaging Kafka properties
 
@@ -181,13 +226,10 @@ Add the following properties to your `application.properties` in `src/main/resou
 [.console-input]
 [source,properties]
 ----
-mp.messaging.incoming.priced-wine.connector=smallrye-kafka
-mp.messaging.incoming.priced-wine.topic=priced-wine
-mp.messaging.incoming.priced-wine.value.deserializer=org.apache.kafka.common.serialization.StringDeserializer
-
-mp.messaging.outgoing.wine.connector=smallrye-kafka
-mp.messaging.outgoing.wine.topic=wine
-mp.messaging.outgoing.wine.value.serializer=org.apache.kafka.common.serialization.StringSerializer
+# when the consumer application is initialized the first time or binds to a topic 
+# and wants to consume the historical messages present in a topic
+kafka.auto.offset.reset=earliest
+kafka.bootstrap.servers=localhost:9092
 ----
 
 == Create docker-compose configuration
@@ -208,20 +250,20 @@ Create a new file called `docker-compose.yml` in the root of your `{project-name
 version: '3'
 services:
   zookeeper:
-    image: strimzi/kafka:0.11.3-kafka-2.1.0
+    image: quay.io/strimzi/kafka:0.23.0-kafka-2.8.0
     command: [
-      "sh", "-c",
-      "bin/zookeeper-server-start.sh config/zookeeper.properties"
+        "sh", "-c",
+        "bin/zookeeper-server-start.sh config/zookeeper.properties"
     ]
     ports:
       - "2181:2181"
     environment:
       LOG_DIR: /tmp/logs
   kafka:
-    image: strimzi/kafka:0.11.3-kafka-2.1.0
+    image: quay.io/strimzi/kafka:0.23.0-kafka-2.8.0
     command: [
-      "sh", "-c",
-      "bin/kafka-server-start.sh config/server.properties --override listeners=$${KAFKA_LISTENERS} --override advertised.listeners=$${KAFKA_ADVERTISED_LISTENERS} --override zookeeper.connect=$${KAFKA_ZOOKEEPER_CONNECT}"
+        "sh", "-c",
+        "bin/kafka-server-start.sh config/server.properties --override listeners=$${KAFKA_LISTENERS} --override advertised.listeners=$${KAFKA_ADVERTISED_LISTENERS} --override zookeeper.connect=$${KAFKA_ZOOKEEPER_CONNECT}"
     ]
     depends_on:
       - zookeeper
@@ -233,7 +275,7 @@ services:
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
   price-generator:
-    image: quay.io/rhdevelopers/quarkus-tutorial-price-generator:1.0
+    image: quay.io/rhdevelopers/quarkus-tutorial-price-generator:2.0
     network_mode: host
     depends_on:
       - kafka
@@ -260,48 +302,95 @@ kafka_1            | [2020-05-13 01:54:53,531] INFO [ProducerStateManager partit
 kafka_1            | [2020-05-13 01:54:53,550] INFO [Log partition=__consumer_offsets-38, dir=/tmp/kafka-logs] Completed load of log with 1 segments, log start offset 0 and log end offset 15 in 125 ms (kafka.log.Log)
 ----
 
-== Invoke the /wine endpoint
+== Invoke the /beer endpoint
 
 Run the following command:
 
 [.console-input]
 [source,bash]
 ----
-curl -N localhost:8080/wine
+curl -N localhost:8080/beer
 ----
 
 [.console-output]
 [source,text]
 ----
-data: {"name":"Don Melchor","price":1921.00}
+data: {"name":"AB:21","price":1525.00}
 
-data: {"name":"Jordan","price":546.00}
+data: {"name":"Neon Overlord","price":1640.00}
 
-data: {"name":"Cask 23","price":1089.00}
+data: {"name":"Brewdog Vs Beavertown","price":1015.00}
 
-data: {"name":"Barca Velha","price":1855.00}
+data: {"name":"Ace Of Chinook","price":1871.00}
 
-data: {"name":"Don Melchor","price":272.00}
+data: {"name":"Hop Shot","price":1180.00}
 
-data: {"name":"Cask 23","price":1500.00}
+data: {"name":"Neon Overlord","price":213.00}
 
-data: {"name":"Caymus","price":275.00}
+data: {"name":"Hop Shot","price":174.00}
 
-data: {"name":"Cask 23","price":1084.00}
+data: {"name":"Hello My Name Is Ingrid 2016","price":1230.00}
 
-data: {"name":"Fay","price":1547.00}
+data: {"name":"Twin Atlantic","price":1143.00}
 
-data: {"name":"Jordan","price":917.00}
+data: {"name":"AB:21","price":1372.00}
 
-data: {"name":"Jordan","price":1090.00}
+data: {"name":"Self Assembly Pope","price":1667.00}
 
-data: {"name":"Jordan","price":235.00}
+data: {"name":"Kingpin","price":1954.00}
 
-data: {"name":"Don Melchor","price":1468.00}
+data: {"name":"Crew Brew","price":460.00}
 
-data: {"name":"Pera Manca","price":1534.00}
+data: {"name":"Ace Of Chinook","price":307.00}
 
-data: {"name":"Barca Velha","price":316.00}
+data: {"name":"Mango And Chili Barley Wine","price":318.00}
+
+data: {"name":"Self Assembly Pope","price":339.00}
+
+data: {"name":"Ace Of Chinook","price":1578.00}
+
+data: {"name":"Chili Hammer","price":470.00}
+
+data: {"name":"Science IPA","price":968.00}
+
+data: {"name":"Casino Rye Ale","price":1349.00}
+
+data: {"name":"Prototype Helles","price":1721.00}
+
+data: {"name":"Kingpin","price":1992.00}
+
+data: {"name":"Hello My Name Is Ingrid 2016","price":1933.00}
+
+data: {"name":"Casino Rye Ale","price":234.00}
+
+data: {"name":"Ace Of Chinook","price":1343.00}
+
+data: {"name":"Small Batch: Rye IPA","price":167.00}
+
+data: {"name":"Science IPA","price":234.00}
+
+data: {"name":"Brewdog Vs Beavertown","price":1123.00}
+
+data: {"name":"Prototype Helles","price":945.00}
+
+data: {"name":"Kingpin","price":851.00}
+
+data: {"name":"Ace Of Equinox","price":1422.00}
+
+data: {"name":"Crew Brew","price":883.00}
+
+data: {"name":"Prototype Helles","price":502.00}
+
+data: {"name":"Brewdog Vs Beavertown","price":710.00}
+
+data: {"name":"Casino Rye Ale","price":1848.00}
+
+data: {"name":"Gin Blitz","price":278.00}
+
+data: {"name":"Brewdog Vs Beavertown","price":719.00}
+
+data: {"name":"Hello My Name Is Ingrid 2016","price":113.00}
+
 ----
 
 == Dev Services for Kafka

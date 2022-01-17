@@ -9,7 +9,7 @@ Quarkus supports many of your favorite Spring Framework projects. In this chapte
 [.console-input]
 [source,bash]
 ----
-./mvnw quarkus:add-extension -Dextensions=quarkus-spring-web,quarkus-spring-data-jpa
+mvn quarkus:add-extension -Dextensions=quarkus-spring-web,quarkus-spring-data-jpa
 ----
 
 [.console-output]
@@ -31,6 +31,11 @@ Quarkus supports many of your favorite Spring Framework projects. In this chapte
 [INFO] Finished at: 2020-05-11T21:33:15-04:00
 [INFO] ------------------------------------------------------------------------
 ----
+
+IMPORTANT: The extensions above require `quarkus-resteasy-jackson` or `quarkus-resteasy-reactive-jackson`.
+In order to be conservative with our dependencies, please change in `pom.xml` the extension `quarkus-reasteasy` 
+to `quarkus-resteasy-jackson`.
+
 
 == Create a Spring Data Repository for Fruit
 
