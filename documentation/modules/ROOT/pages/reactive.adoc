@@ -2,9 +2,10 @@
 
 Quarkus provides a novel reactive API called Mutiny, with the goal of easing the development of highly scalable, resilient, and asynchronous systems.
 
-In this chapter we're going to see some examples of how Mutiny changes the design of our Quarkus applications. 
-to https://www.fruityvice.com/ to retrieve fruit information based on their carbohydrates. 
-This API does not return all beers at once, so we'll need to navigate through the pages to fetch all the information. Then we're going to filter all the beers with an ABV greater than 15.0 and return these values in a Reactive REST endpoint.
+In this chapter we're going to see some examples of how Mutiny changes the design of our Quarkus applications.
+to online beer database (https://punkapi.com/documentation/v2) to retrieve beer information. 
+This API does not return all beers at once, so we'll need to navigate through the pages to fetch all the information. 
+Then we're going to filter all the beers with an ABV greater than 15.0 and return all these beers in a Reactive REST endpoint.
 
 == Add the RestEasy Mutiny extension
 

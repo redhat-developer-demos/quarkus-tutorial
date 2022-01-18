@@ -26,7 +26,8 @@ Simply go to http://localhost:8080/q/dev/[Dev UI] and select the OpenId Connect 
 
 Click on the http://localhost:8080/q/dev/io.quarkus.quarkus-oidc/provider[Provider: Keycloak link] and you will see a Keycloak page which will be presented slightly differently depending on how Dev Services for Keycloak feature has been configured.
 
-TIP: By default, `alice` and `bob` users (with the passwords matching the names), and user and admin roles are created. `alice` has both admin and user roles and `bob` - the user role.
+TIP: By default, `alice` and `bob` users (with the passwords matching the names), and user and admin roles are created. 
+`alice` has both admin and user roles, and `bob` has just the user role.
 
 However, we can add our own user, role and group by following these steps:
 

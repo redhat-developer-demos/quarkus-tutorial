@@ -33,7 +33,7 @@ mvn quarkus:add-extension -Dextensions=quarkus-spring-web,quarkus-spring-data-jp
 ----
 
 IMPORTANT: The extensions above require `quarkus-resteasy-jackson` or `quarkus-resteasy-reactive-jackson`.
-In order to be conservative with our dependencies, please change in `pom.xml` the extension `quarkus-reasteasy` 
+In order to be conservative with the amount of dependencies, please change in `pom.xml` the extension `quarkus-reasteasy` 
 to `quarkus-resteasy-jackson`.
 
 

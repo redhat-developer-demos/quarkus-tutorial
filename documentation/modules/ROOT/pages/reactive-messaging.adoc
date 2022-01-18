@@ -184,6 +184,7 @@ public class BeerGenerator {
 
 Invoking a blocking operation/service can take longer time. In such cases you can protect your implementation
 by using `@Blocking` annotation. 
+
 Let's modify the `BeerGenerator` Java class in `src/main/java` in the `com.redhat.developers` package 
 by adding the `@Blocking` annotation to the `processGroup` method:
 
