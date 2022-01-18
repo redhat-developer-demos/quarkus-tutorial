@@ -61,7 +61,7 @@ public interface SpringFruitRepository extends JpaRepository<Fruit, Long> {
 
 == Create a Spring REST Controller
 
-Now let's create another REST endpoing for `Fruit`, but now using the Spring Web APIs. Create the `FruitController` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Now let's create another REST endpoint for `Fruit`, but now using the Spring Web APIs. Create the `FruitController` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
@@ -126,4 +126,4 @@ curl localhost:8080/spring-fruit?season=Summer
 ]
 ----
 
-You'll see that the behavior is the same by the one provided with JAX-RS and Hibernate with Panache.
+You'll see that the behavior is the same as the one provided with JAX-RS and Hibernate with Panache.

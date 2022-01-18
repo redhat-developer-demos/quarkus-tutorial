@@ -8,7 +8,7 @@ Our examples will be using the `quay.io` container registry and the `myrepo` org
 
 You need a container registry that is accessible from your Kubernetes cluster to deploy the application container image in it.
 
-In this chapter we'll be using the Quarkus Kubernetes Extension to create the Kubernetes deployment file, and the Quarkus Jib Extension to create and push the container image to your container registry without the need of running local docker daemon.
+In this chapter we'll be using the Quarkus Kubernetes Extension to create the Kubernetes deployment file, and the Quarkus Jib Extension to create and push the container image to your container registry without the need of a running local docker daemon.
 
 Let's add the required extensions:
 
@@ -20,7 +20,7 @@ mvn quarkus:add-extension -Dextensions=quarkus-kubernetes,quarkus-container-imag
 
 == Adding the configuration properties
 
-Add the following properties to your `application.properties` so that can push the container to correct location:
+Add the following properties to your `application.properties` so that you can push the container to the correct location:
 
 [.console-input]
 [source,properties]
@@ -39,8 +39,8 @@ quarkus.container-image.name=tutorial-app # <3>
 quarkus.container-image.tag=1.0-SNAPSHOT # <4>
 quarkus.kubernetes.service-type=load-balancer
 ----
-<1> Registry where image is pushed. By default is docker hub.
-<2> Group name of the conatiner image.
+<1> Registry where image is pushed. By default is Docker Hub.
+<2> Group name of the container image.
 <3> Container name. By default is the `artifactId` element of `pom.xml`.
 <4> Tag of the container image. By default is the `version` element of `pom.xml`.
 
@@ -83,7 +83,7 @@ mvn clean package -DskipTests -Dquarkus.container-image.push=true
 
 == Deploy your application to your Kubernetes cluster
 
-When Kubernetes extension is present in the classpath, a Kubernetes deployment file is scaffolded for you during package phase.
+When a Kubernetes extension is present in the classpath, a Kubernetes deployment file is scaffolded for you during the package phase.
 
 [.console-input]
 [source,bash]
