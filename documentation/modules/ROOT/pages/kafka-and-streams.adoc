@@ -226,9 +226,6 @@ Add the following properties to your `application.properties` in `src/main/resou
 [.console-input]
 [source,properties]
 ----
-# when the consumer application is initialized the first time or binds to a topic 
-# and wants to consume the historical messages present in a topic
-kafka.auto.offset.reset=earliest
 kafka.bootstrap.servers=localhost:9092
 ----
 
