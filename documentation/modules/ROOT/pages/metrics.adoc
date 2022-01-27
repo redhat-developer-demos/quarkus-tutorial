@@ -11,7 +11,7 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 [.console-input]
 [source,bash]
 ----
-./mvnw quarkus:add-extension -Dextension=quarkus-micrometer
+mvn quarkus:add-extension -Dextension=quarkus-micrometer
 ----
 
 You should also add the `quarkus-micrometer-registry-prometheus` extension : 
@@ -19,7 +19,7 @@ You should also add the `quarkus-micrometer-registry-prometheus` extension :
 [.console-input]
 [source,bash]
 ----
-./mvnw quarkus:add-extension -Dextensions="io.quarkus:quarkus-micrometer-registry-prometheus"
+mvn quarkus:add-extension -Dextensions="io.quarkus:quarkus-micrometer-registry-prometheus"
 ----
 
 == Create TimeResource

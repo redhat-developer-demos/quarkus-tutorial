@@ -36,7 +36,7 @@ Just open a new terminal window, and make sure you're at the root of your `{proj
 [.console-input]
 [source,bash]
 ----
-./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-jdbc-h2, quarkus-hibernate-orm-panache, quarkus-smallrye-openapi"
+mvn quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-jdbc-h2, quarkus-hibernate-orm-panache, quarkus-smallrye-openapi"
 ----
 
 [.console-output]
@@ -246,6 +246,15 @@ INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Apple',
 INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Pear','Fall');
 ----
 
+And append the following configuration in `application.properties`:
+
+[#quarkuspdb-update-props]
+[.console-input]
+[source,config,subs="+macros,+attributes"]
+----
+quarkus.hibernate-orm.sql-load-script=import.sql
+----
+
 Now if you refresh your browser pointing to http://localhost:8080/fruit[window=_blank], you should see a response like:
 
 [.console-output]
@@ -299,6 +308,16 @@ Now if you refresh your browser pointing to http://localhost:8080/fruit[window=_
   }
 ]
 ----
+
+
+[TIP]
+====
+You can add different `import.sql` files based on the application profile. 
+
+For example: in dev mode, you 
+can use the configuration `quarkus.hibernate-orm.sql-load-script=import-dev.sql`, 
+while in production mode you can use `quarkus.hibernate-orm.sql-load-script=import-prod.sql`.
+====
 
 == Adding a custom finder to the `Fruit` Entity
 
@@ -448,6 +467,7 @@ package com.redhat.developers;
 import java.util.List;
 
 import javax.transaction.Transactional;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -480,7 +500,7 @@ public class FruitResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response newFruit(Fruit fruit) {
+    public Response create(Fruit fruit) {
         fruit.id = null;
         fruit.persist();
         return Response.status(Status.CREATED).entity(fruit).build();

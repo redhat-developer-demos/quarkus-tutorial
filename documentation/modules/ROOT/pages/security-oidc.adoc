@@ -14,7 +14,7 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:add-extension -Dextensions="io.quarkus:quarkus-oidc,io.quarkus:quarkus-keycloak-authorization"
+mvn quarkus:add-extension -Dextensions="io.quarkus:quarkus-oidc,io.quarkus:quarkus-keycloak-authorization"
 ----
 
 == Working with DevServices for KeyCloak
@@ -26,18 +26,20 @@ Simply go to http://localhost:8080/q/dev/[Dev UI] and select the OpenId Connect 
 
 Click on the http://localhost:8080/q/dev/io.quarkus.quarkus-oidc/provider[Provider: Keycloak link] and you will see a Keycloak page which will be presented slightly differently depending on how Dev Services for Keycloak feature has been configured.
 
-TIP: By default, `alice` and `bob` users (with the passwords matching the names), and user and admin roles are created. `alice` has both admin and user roles and `bob` has the user role.
+TIP: By default, `alice` and `bob` users (with the passwords matching the names), and user and admin roles are created. 
+`alice` has both admin and user roles, and `bob` has just the user role.
 
 However, we can add our own user, role and group by following these steps:
 
 . Click on http://localhost:55105/auth[KeyCloak Admin link] in the left corner.
-. Login using `admin` as user and password.
+. Login using `admin' as user and password.
 . Go to https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus-realm.json and save it on your local machine.
 . Go to http://localhost:55105/auth/admin/master/console/#/realms/quarkus/partial-import[Import] in the KeyCloak Administration console and import `quarkus-realm.json`.
 After this step you should have `Subscriber` Role and Group.
-. Go to http://localhost:55105/auth/admin/master/console/#/realms/quarkus/users[Users] and check that `jdoe` user is mapped to the `Subscriber` role and group.
+. Go to http://localhost:55105/auth/admin/master/console/#/realms/quarkus/users[Users] and check that `jdoe` user is mapped to the `Subscriber` role and group. 
+. Setup a password for `jdoe` user.
 
-Congratulations! Now you can run this section in Dev Mode without starting the KeyCloak Docker container nor adding the KeyCloak setup in `application.properties`.
+Congratulations! Now you can run this section in Dev Mode without starting the KeyCloak docker container nor adding the KeyCloak setup in `application.properties`.
 [WARNING]
 ====
 *Dev Services For Keycloak* will not be activated if either `quarkus.oidc.auth-server-url` is already initialized or the default OIDC tenant is disabled with `quarkus.oidc.tenant.enabled=false`, regardless if you work with Keycloak or not.
@@ -65,15 +67,15 @@ import javax.ws.rs.core.MediaType;
 
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
-@Path("/api/users")
+@Path("api/users")
 public class UserResource {
 
     @Inject
     JsonWebToken jwt;
 
     @GET
-    @Path("/info")
-    @RolesAllowed("Subscriber")<1>
+    @Path("info")
+    @RolesAllowed("Subscriber") //<1>
     public String getInfo() {
         return "Access for subject " + jwt.getName() + " is granted";
     }
@@ -84,12 +86,41 @@ public class UserResource {
 
 == Invoke the /api/users/info endpoint with RBAC
 
-Run the following command:
+First you need a token valid to authenticate. Run the following command to obtain an access token:
 
 [.console-input]
 [source,bash]
 ----
-token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.keycloak.jwt.token -s)
+curl -X POST 'http://localhost:56006/auth/realms/quarkus/protocol/openid-connect/token' \ #<1>
+ -H "Content-Type: application/x-www-form-urlencoded" \  
+ -d "username=jdoe" \
+ -d 'password=the_pass_you_set' \ #<2>
+ -d 'grant_type=password' \ 
+ -d 'client_id=admin-cli'
+----
+<1> If you are using KeyCloak Dev Services, you can get the KeyCloak port from Quarkus logs.
+<2> Consider to replace the password here with the one you set in the beginning.
+
+You should see an output similar to:
+
+[source,bash]
+----
+{"access_token":"eyJhbGciOiJSUzI......","token_type":"Bearer","not-before-policy":0,"session_state":"84349a48-55ea-4c25-88cd-d26a775c8c67","scope":"email profile"}
+----
+
+You can store the access token in a variable and use it further for querying. 
+Below you can find details on how to do that using `curl` and `jq`:
+
+[.console-input]
+[source,bash]
+----
+token=$(curl -X POST 'http://localhost:56006/auth/realms/quarkus/protocol/openid-connect/token' \
+ -H "Content-Type: application/x-www-form-urlencoded" \
+ -d "username=jdoe" \
+ -d 'password=jdoe' \
+ -d 'grant_type=password' \
+ -d 'client_id=admin-cli' | jq -r '.access_token')
+
 curl -H "Authorization: Bearer $token" localhost:8080/api/users/info
 ----
 
@@ -241,6 +272,4 @@ We will add our own user, role and group by following these steps:
 
 . Click on http://localhost:8180/auth/admin/master/console/#/realms/master/partial-import[Import].
 . Import the realm from https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus-realm.json.
-After this step you should have `Subscriber` Role and Group, together with `jdoe` user, correctly configured.
-
-
+After this step you should have `Subscriber` Role and Group, together with `jdoe` user correctly configured.

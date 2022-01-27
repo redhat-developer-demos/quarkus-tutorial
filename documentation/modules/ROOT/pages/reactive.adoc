@@ -2,7 +2,10 @@
 
 Quarkus provides a novel reactive API called Mutiny, with the goal of easing the development of highly scalable, resilient, and asynchronous systems.
 
-In this chapter we're going to see some examples of how Mutiny changes the design of our Quarkus applications. We're going to develop an asynchronous REST client that connects to an online beer database (https://punkapi.com/documentation/v2) to retrieve beer information. This API does not return all beers at once, so we'll need to navigate through the pages to fetch all the information. Then we're going to filter all the beers with an ABV greater than 15.0 and return these values in a Reactive REST endpoint.
+In this chapter we're going to see some examples of how Mutiny changes the design of our Quarkus applications.
+to online beer database (https://punkapi.com/documentation/v2) to retrieve beer information. 
+This API does not return all beers at once, so we'll need to navigate through the pages to fetch all the information. 
+Then we're going to filter all the beers with an ABV greater than 15.0 and return all these beers in a Reactive REST endpoint.
 
 == Add the RestEasy Mutiny extension
 
@@ -11,52 +14,7 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 [.console-input]
 [source,bash]
 ----
-./mvnw quarkus:add-extension -Dextensions=io.quarkus:quarkus-resteasy-mutiny
-----
-
-== Create Beer POJO
-
-Create a new `Beer` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
-
-[.console-input]
-[source,java]
-----
-package com.redhat.developers;
-
-import javax.json.bind.annotation.JsonbCreator;
-
-public class Beer {
-
-    private String name;
-
-    private String tagline;
-
-    private double abv;
-
-    private Beer(String name, String tagline, double abv) {
-      this.name = name;
-      this.tagline = tagline;
-      this.abv = abv;
-    }
-
-    @JsonbCreator
-    public static Beer of(String name, String tagline, double abv) {
-        return new Beer(name, tagline, abv);
-     }
-
-     public String getName() {
-         return name;
-     }
-
-     public String getTagline() {
-         return tagline;
-     }
-
-     public double getAbv() {
-         return abv;
-     }
-
-}
+mvn quarkus:add-extension -Dextensions=io.quarkus:quarkus-resteasy-mutiny
 ----
 
 == Create BeerService

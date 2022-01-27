@@ -134,7 +134,7 @@ Now run your tests to check if everything is ok:
 [.console-input]
 [source,bash]
 ----
-./mvnw clean test
+mvn clean test
 ----
 
 [.console-output]
@@ -158,5 +158,5 @@ Now run your tests to check if everything is ok:
 [.console-input]
 [source,bash]
 ----
-./mvnw quarkus:dev
+mvn quarkus:dev
 ----

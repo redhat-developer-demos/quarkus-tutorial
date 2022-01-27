@@ -32,7 +32,7 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 [.console-input]
 [source,bash]
 ----
-./mvnw quarkus:add-extension -Dextensions="io.quarkus:quarkus-rest-client"
+mvn quarkus:add-extension -Dextensions="io.quarkus:quarkus-rest-client"
 ----
 
 [.console-output]
@@ -146,7 +146,7 @@ public interface FruityViceService {
     @GET
     @Path("/{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public FruityVice getFruitByName(@PathParam("name") String name);
+    FruityVice getFruitByName(@PathParam("name") String name);
     
 }
 ----
@@ -227,6 +227,8 @@ Change the `FruitResource` Java class in `src/main/java` in the `com.redhat.deve
 ----
 package com.redhat.developers;
 
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -242,26 +244,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.eclipse.microprofile.rest.client.inject.RestClient;
-
 @Path("/fruit")
 public class FruitResource {
 
+
+
     @RestClient
     FruityViceService fruityViceService;
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<FruitDTO> fruits(@QueryParam("season") String season) {
-        if (season != null) {
-            return Fruit.findBySeason(season).stream()
-                .map(fruit -> FruitDTO.of(fruit, fruityViceService.getFruitByName(fruit.name)))
-                .collect(Collectors.toList());
-        }
-        return Fruit.<Fruit>listAll().stream()
-                .map(fruit -> FruitDTO.of(fruit, fruityViceService.getFruitByName(fruit.name)))
-                .collect(Collectors.toList());
-    }
 
     @Transactional
     @POST
@@ -271,6 +260,20 @@ public class FruitResource {
         fruit.id = null;
         fruit.persist();
         return Response.status(Status.CREATED).entity(fruit).build();
+    }
+
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<FruitDTO> fruits(@QueryParam("season") String season) {
+        if (season != null) {
+            return Fruit.findBySeason(season).stream()
+                    .map(fruit -> FruitDTO.of(fruit, fruityViceService.getFruitByName(fruit.name)))
+                    .collect(Collectors.toList());
+        }
+        return Fruit.<Fruit>listAll().stream()
+                .map(fruit -> FruitDTO.of(fruit, fruityViceService.getFruitByName(fruit.name)))
+                .collect(Collectors.toList());
     }
 
 }

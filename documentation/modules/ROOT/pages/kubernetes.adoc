@@ -15,7 +15,7 @@ Let's add the required extensions:
 [.console-input]
 [source,bash]
 ----
-./mvnw quarkus:add-extension -Dextensions=quarkus-kubernetes,quarkus-container-image-jib
+mvn quarkus:add-extension -Dextensions=quarkus-kubernetes,quarkus-container-image-jib
 ----
 
 == Adding the configuration properties
@@ -62,7 +62,7 @@ Now create and push your container image using jib:
 [.console-input]
 [source,bash]
 ----
-./mvnw clean package -DskipTests -Dquarkus.container-image.push=true
+mvn clean package -DskipTests -Dquarkus.container-image.push=true
 ----
 
 [.console-output]

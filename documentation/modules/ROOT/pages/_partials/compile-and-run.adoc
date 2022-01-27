@@ -7,7 +7,7 @@ JVM mode::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw package
+mvn package
 ----
 
 To run the application in jvm mode
@@ -27,7 +27,7 @@ Native mode::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw -DskipTests clean package -Pnative
+mvn -DskipTests clean package -Pnative
 ----
 
 NOTE: Native compilation will take few minutes to complete.
@@ -49,7 +49,7 @@ Native container-build mode::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw package -DskipTests -Pnative -Dquarkus.native.container-build=true
+mvn package -DskipTests -Pnative -Dquarkus.native.container-build=true
 ----
 
 NOTE: Native compilation will take few minutes to complete.
