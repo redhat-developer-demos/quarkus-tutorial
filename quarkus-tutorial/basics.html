@@ -98,22 +98,25 @@
     <a class="nav-link" href="metrics.html">Metrics</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
+    <a class="nav-link" href="security.html">Security with JWT RBAC</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
+    <a class="nav-link" href="security-oidc.html">Security using OpenID Connect</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Advanced Topics</span>
+    <span class="nav-text">Reactive</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="security.html">Security with JWT RBAC</a>
+    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="security-oidc.html">Security using OpenID Connect</a>
+    <a class="nav-link" href="reactive-messaging.html">Streaming reactive messages</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
   </li>
 </ul>
   </li>
@@ -146,7 +149,7 @@
 <div class="sectionbody">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn "io.quarkus:quarkus-maven-plugin:2.1.3.Final:create" \
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn "io.quarkus:quarkus-maven-plugin:create" \
   -DprojectGroupId="com.redhat.developers" \
   -DprojectArtifactId="tutorial-app" \
   -DprojectVersion="1.0-SNAPSHOT" \
@@ -190,7 +193,7 @@ All the remaining parts of this tutorial assume that you&#8217;ll be working ins
 <div class="tab-pane" aria-labelledby="tabset1_jvm-mode">
 <div id="basics-build-quarkus-jvm-app" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw package</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn package</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -205,7 +208,7 @@ All the remaining parts of this tutorial assume that you&#8217;ll be working ins
 <div class="tab-pane" aria-labelledby="tabset1_native-mode">
 <div id="basics-build-quarkus-native-app" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw -DskipTests clean package -Pnative</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn -DskipTests clean package -Pnative</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -232,7 +235,7 @@ Native compilation will take few minutes to complete.
 <div class="tab-pane" aria-labelledby="tabset1_native-container-build-mode">
 <div id="basics-build-quarkus-native-docker-app" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw package -DskipTests -Pnative -Dquarkus.native.container-build=true</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn package -DskipTests -Pnative -Dquarkus.native.container-build=true</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -336,7 +339,7 @@ It allows you to quickly visualize all the extensions currently loaded, see thei
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw clean test</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn clean test</code></pre>
 </div>
 </div>
 </div>
@@ -386,7 +389,7 @@ If you use <code>tutorial-tools</code>, your host <code>quarkus-tutorial/work</c
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:dev</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn quarkus:dev</code></pre>
 </div>
 </div>
 </div>

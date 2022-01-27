@@ -98,22 +98,25 @@
     <a class="nav-link" href="metrics.html">Metrics</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
+    <a class="nav-link" href="security.html">Security with JWT RBAC</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
+    <a class="nav-link" href="security-oidc.html">Security using OpenID Connect</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Advanced Topics</span>
+    <span class="nav-text">Reactive</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="security.html">Security with JWT RBAC</a>
+    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="security-oidc.html">Security using OpenID Connect</a>
+    <a class="nav-link" href="reactive-messaging.html">Streaming reactive messages</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
   </li>
 </ul>
   </li>
@@ -156,7 +159,7 @@
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension=quarkus-smallrye-fault-tolerance</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn quarkus:add-extension -Dextension=quarkus-smallrye-fault-tolerance</code></pre>
 </div>
 </div>
 </div>
@@ -191,7 +194,7 @@ public interface FruityViceService {
     @Path("/{name}")
     @Produces(MediaType.APPLICATION_JSON)
     @Retry(maxRetries = 3, delay = 2000)
-    public FruityVice getFruitByName(@PathParam("name") String name);
+    FruityVice getFruitByName(@PathParam("name") String name);
 
 }</code></pre>
 </div>
@@ -288,7 +291,7 @@ public interface FruityViceService {
     @Produces(MediaType.APPLICATION_JSON)
     @Retry(maxRetries = 3, delay = 2000)
     @Fallback(FruityViceFallback.class)
-    public FruityVice getFruitByName(@PathParam("name") String name);
+    FruityVice getFruitByName(@PathParam("name") String name);
 
     public static class FruityViceFallback implements FallbackHandler&lt;FruityVice&gt; {
 
@@ -383,7 +386,7 @@ public interface FruityViceService {
     @Produces(MediaType.APPLICATION_JSON)
     @Retry(maxRetries = 3, delay = 2000)
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.75, delay = 5000)
-    public FruityVice getFruitByName(@PathParam("name") String name);
+    FruityVice getFruitByName(@PathParam("name") String name);
 
 }</code></pre>
 </div>

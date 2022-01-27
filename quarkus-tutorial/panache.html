@@ -98,22 +98,25 @@
     <a class="nav-link" href="metrics.html">Metrics</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
+    <a class="nav-link" href="security.html">Security with JWT RBAC</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
+    <a class="nav-link" href="security-oidc.html">Security using OpenID Connect</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Advanced Topics</span>
+    <span class="nav-text">Reactive</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="security.html">Security with JWT RBAC</a>
+    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="security-oidc.html">Security using OpenID Connect</a>
+    <a class="nav-link" href="reactive-messaging.html">Streaming reactive messages</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
   </li>
 </ul>
   </li>
@@ -207,7 +210,7 @@ Dev Services are enabled by default, but you can disable them by going to <code>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-jdbc-h2, quarkus-hibernate-orm-panache, quarkus-smallrye-openapi"</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-jdbc-h2, quarkus-hibernate-orm-panache, quarkus-smallrye-openapi"</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -445,6 +448,14 @@ INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Pear','
 </div>
 </div>
 <div class="paragraph">
+<p>And append the following configuration in <code>application.properties</code>:</p>
+</div>
+<div id="quarkuspdb-update-props" class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.hibernate-orm.sql-load-script=import.sql</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>Now if you refresh your browser pointing to <a href="http://localhost:8080/fruit" class="bare" target="_blank" rel="noopener">http://localhost:8080/fruit</a>, you should see a response like:</p>
 </div>
 <div class="listingblock console-output">
@@ -497,6 +508,25 @@ INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Pear','
   }
 ]</code></pre>
 </div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You can add different <code>import.sql</code> files based on the application profile.</p>
+</div>
+<div class="paragraph">
+<p>For example: in dev mode, you
+can use the configuration <code>quarkus.hibernate-orm.sql-load-script=import-dev.sql</code>,
+while in production mode you can use <code>quarkus.hibernate-orm.sql-load-script=import-prod.sql</code>.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -658,6 +688,7 @@ public class FruitRepository implements PanacheRepository&lt;Fruit&gt; {
 import java.util.List;
 
 import javax.transaction.Transactional;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -690,7 +721,7 @@ public class FruitResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response newFruit(Fruit fruit) {
+    public Response create(Fruit fruit) {
         fruit.id = null;
         fruit.persist();
         return Response.status(Status.CREATED).entity(fruit).build();

@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Reactive with Mutiny :: Quarkus Tutorial</title>
     <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/reactive.html">
-    <link rel="prev" href="metrics.html">
-    <link rel="next" href="kafka-and-streams.html">
+    <link rel="prev" href="security-oidc.html">
+    <link rel="next" href="reactive-messaging.html">
     <meta name="generator" content="Antora 2.3.1">
     <link rel="stylesheet" href="../_/css/site.css">
   </head>
@@ -97,23 +97,26 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="metrics.html">Metrics</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="2">
-    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">Advanced Topics</span>
-<ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="security.html">Security with JWT RBAC</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="security-oidc.html">Security using OpenID Connect</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Reactive</span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="reactive-messaging.html">Streaming reactive messages</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
   </li>
 </ul>
   </li>
@@ -132,7 +135,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">quarkus-tutorial</a></li>
-    <li>Cloud Native</li>
+    <li>Reactive</li>
     <li><a href="reactive.html">Reactive with Mutiny</a></li>
   </ul>
 </nav>
@@ -147,7 +150,10 @@
 <p>Quarkus provides a novel reactive API called Mutiny, with the goal of easing the development of highly scalable, resilient, and asynchronous systems.</p>
 </div>
 <div class="paragraph">
-<p>In this chapter we&#8217;re going to see some examples of how Mutiny changes the design of our Quarkus applications. We&#8217;re going to develop an asynchronous REST client that connects to an online beer database (<a href="https://punkapi.com/documentation/v2" class="bare">https://punkapi.com/documentation/v2</a>) to retrieve beer information. This API does not return all beers at once, so we&#8217;ll need to navigate through the pages to fetch all the information. Then we&#8217;re going to filter all the beers with an ABV greater than 15.0 and return these values in a Reactive REST endpoint.</p>
+<p>In this chapter we&#8217;re going to see some examples of how Mutiny changes the design of our Quarkus applications.
+to online beer database (<a href="https://punkapi.com/documentation/v2" class="bare">https://punkapi.com/documentation/v2</a>) to retrieve beer information.
+This API does not return all beers at once, so we&#8217;ll need to navigate through the pages to fetch all the information.
+Then we&#8217;re going to filter all the beers with an ABV greater than 15.0 and return all these beers in a Reactive REST endpoint.</p>
 </div>
 </div>
 </div>
@@ -159,55 +165,7 @@
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextensions=io.quarkus:quarkus-resteasy-mutiny</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_create_beer_pojo"><a class="anchor" href="#_create_beer_pojo"></a>Create Beer POJO</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Create a new <code>Beer</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
-
-import javax.json.bind.annotation.JsonbCreator;
-
-public class Beer {
-
-    private String name;
-
-    private String tagline;
-
-    private double abv;
-
-    private Beer(String name, String tagline, double abv) {
-      this.name = name;
-      this.tagline = tagline;
-      this.abv = abv;
-    }
-
-    @JsonbCreator
-    public static Beer of(String name, String tagline, double abv) {
-        return new Beer(name, tagline, abv);
-     }
-
-     public String getName() {
-         return name;
-     }
-
-     public String getTagline() {
-         return tagline;
-     }
-
-     public double getAbv() {
-         return abv;
-     }
-
-}</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn quarkus:add-extension -Dextensions=io.quarkus:quarkus-resteasy-mutiny</code></pre>
 </div>
 </div>
 </div>
@@ -415,8 +373,8 @@ public class BeerResource {
 </div>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="metrics.html">Metrics</a></span>
-  <span class="next"><a href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a></span>
+  <span class="prev"><a href="security-oidc.html">Security using OpenID Connect</a></span>
+  <span class="next"><a href="reactive-messaging.html">Streaming reactive messages</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">

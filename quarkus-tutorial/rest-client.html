@@ -98,22 +98,25 @@
     <a class="nav-link" href="metrics.html">Metrics</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
+    <a class="nav-link" href="security.html">Security with JWT RBAC</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
+    <a class="nav-link" href="security-oidc.html">Security using OpenID Connect</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Advanced Topics</span>
+    <span class="nav-text">Reactive</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="security.html">Security with JWT RBAC</a>
+    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="security-oidc.html">Security using OpenID Connect</a>
+    <a class="nav-link" href="reactive-messaging.html">Streaming reactive messages</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
   </li>
 </ul>
   </li>
@@ -184,7 +187,7 @@
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextensions="io.quarkus:quarkus-rest-client"</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn quarkus:add-extension -Dextensions="io.quarkus:quarkus-rest-client"</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -302,7 +305,7 @@ public interface FruityViceService {
     @GET
     @Path("/{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public FruityVice getFruitByName(@PathParam("name") String name);
+    FruityVice getFruitByName(@PathParam("name") String name);
 
 }</code></pre>
 </div>
@@ -395,6 +398,8 @@ public class FruitDTO {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -410,26 +415,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.eclipse.microprofile.rest.client.inject.RestClient;
-
 @Path("/fruit")
 public class FruitResource {
 
+
+
     @RestClient
     FruityViceService fruityViceService;
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List&lt;FruitDTO&gt; fruits(@QueryParam("season") String season) {
-        if (season != null) {
-            return Fruit.findBySeason(season).stream()
-                .map(fruit -&gt; FruitDTO.of(fruit, fruityViceService.getFruitByName(fruit.name)))
-                .collect(Collectors.toList());
-        }
-        return Fruit.&lt;Fruit&gt;listAll().stream()
-                .map(fruit -&gt; FruitDTO.of(fruit, fruityViceService.getFruitByName(fruit.name)))
-                .collect(Collectors.toList());
-    }
 
     @Transactional
     @POST
@@ -439,6 +431,20 @@ public class FruitResource {
         fruit.id = null;
         fruit.persist();
         return Response.status(Status.CREATED).entity(fruit).build();
+    }
+
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List&lt;FruitDTO&gt; fruits(@QueryParam("season") String season) {
+        if (season != null) {
+            return Fruit.findBySeason(season).stream()
+                    .map(fruit -&gt; FruitDTO.of(fruit, fruityViceService.getFruitByName(fruit.name)))
+                    .collect(Collectors.toList());
+        }
+        return Fruit.&lt;Fruit&gt;listAll().stream()
+                .map(fruit -&gt; FruitDTO.of(fruit, fruityViceService.getFruitByName(fruit.name)))
+                .collect(Collectors.toList());
     }
 
 }</code></pre>

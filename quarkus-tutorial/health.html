@@ -98,22 +98,25 @@
     <a class="nav-link" href="metrics.html">Metrics</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
+    <a class="nav-link" href="security.html">Security with JWT RBAC</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
+    <a class="nav-link" href="security-oidc.html">Security using OpenID Connect</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Advanced Topics</span>
+    <span class="nav-text">Reactive</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="security.html">Security with JWT RBAC</a>
+    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="security-oidc.html">Security using OpenID Connect</a>
+    <a class="nav-link" href="reactive-messaging.html">Streaming reactive messages</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
   </li>
 </ul>
   </li>
@@ -169,7 +172,7 @@
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension=quarkus-smallrye-health</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn quarkus:add-extension -Dextension=quarkus-smallrye-health</code></pre>
 </div>
 </div>
 </div>
@@ -253,26 +256,41 @@ public class LivenessProbe implements HealthCheck {
 <h2 id="_add_a_custom_readiness_probe"><a class="anchor" href="#_add_a_custom_readiness_probe"></a>Add a custom readiness probe</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Create a new <code>ReadinessProbe</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+<p>In dev mode, all your heath checks are visible in health UI: <a href="http://localhost:8080/q/health-ui/" class="bare">http://localhost:8080/q/health-ui/</a>.</p>
+</div>
+<div class="paragraph">
+<p>Some extensions may provide default health checks, including that the extension will automatically register its health checks.
+For example, quarkus-agroal (that is used to manage Quarkus datasources) automatically registers a readiness health check that will validate each datasource.</p>
+</div>
+<div class="paragraph">
+<p>Since the readiness of the database is already assessed just by adding those extensions, we should look into defining health checks for other dependencies that we have.
+As we depend on the availability of <a href="https://www.fruityvice.com" class="bare">https://www.fruityvice.com</a>, let&#8217;s create a new <code>ReadinessProbe</code> to assess its availability prior to using it.</p>
+</div>
+<div class="paragraph">
+<p>We will define a new Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
+import io.smallrye.health.checks.UrlHealthCheck;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.health.HealthCheck;
-import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Readiness;
 
-@Readiness
-public class ReadinessProbe implements HealthCheck{
+import javax.enterprise.context.ApplicationScoped;
+import javax.ws.rs.HttpMethod;
 
-    @Override
-    public HealthCheckResponse call() {
-        return HealthCheckResponse.builder()
-            .name("database")
-            .withData("connections", "10") <i class="conum" data-value="1"></i><b>(1)</b>
-            .up()
-            .build();
+@ApplicationScoped
+public class CustomHealthCheck {
+
+    @ConfigProperty(name = "com.redhat.developers.FruityViceService/mp-rest/url")
+    String externalURL;
+
+    @Readiness <i class="conum" data-value="1"></i><b>(1)</b>
+    HealthCheck checkURL() {
+        return new UrlHealthCheck(externalURL+"/api/fruit/banana") <i class="conum" data-value="2"></i><b>(2)</b>
+                .name("ExternalURL health check").requestMethod(HttpMethod.GET).statusCode(200);
     }
 
 }</code></pre>
@@ -282,7 +300,11 @@ public class ReadinessProbe implements HealthCheck{
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>You can use a <code>HealthCheckResponse</code> builder to add custom information to your health checks.</td>
+<td>Annotate the method with <code>org.eclipse.microprofile.health.Readiness</code> to signal its implementation.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>UrlHealthCheck</code> checks if host is reachable using a Http URL connection.</td>
 </tr>
 </table>
 </div>
@@ -309,10 +331,10 @@ public class ReadinessProbe implements HealthCheck{
             "status": "UP"
         },
         {
-            "name": "database",
+            "name": "ExternalURL health check",
             "status": "UP",
             "data": {
-                "connections": "10"
+                "host": "GET https://www.fruityvice.com/api/fruit/banana"
             }
         },
         {
@@ -374,10 +396,10 @@ public class ReadinessProbe implements HealthCheck{
     "status": "UP",
     "checks": [
         {
-            "name": "database",
+            "name": "ExternalURL health check",
             "status": "UP",
             "data": {
-                "connections": "10"
+                "host": "GET https://www.fruityvice.com/api/fruit/banana"
             }
         },
         {

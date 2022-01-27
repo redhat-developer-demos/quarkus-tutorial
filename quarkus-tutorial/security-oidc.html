@@ -6,6 +6,7 @@
     <title>Security using OpenID Connect :: Quarkus Tutorial</title>
     <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/security-oidc.html">
     <link rel="prev" href="security.html">
+    <link rel="next" href="reactive.html">
     <meta name="generator" content="Antora 2.3.1">
     <link rel="stylesheet" href="../_/css/site.css">
   </head>
@@ -97,22 +98,25 @@
     <a class="nav-link" href="metrics.html">Metrics</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
+    <a class="nav-link" href="security.html">Security with JWT RBAC</a>
   </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="security-oidc.html">Security using OpenID Connect</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Advanced Topics</span>
+    <span class="nav-text">Reactive</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="security.html">Security with JWT RBAC</a>
+    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="2">
-    <a class="nav-link" href="security-oidc.html">Security using OpenID Connect</a>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="reactive-messaging.html">Streaming reactive messages</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
   </li>
 </ul>
   </li>
@@ -131,7 +135,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">quarkus-tutorial</a></li>
-    <li>Advanced Topics</li>
+    <li>Cloud Native</li>
     <li><a href="security-oidc.html">Security using OpenID Connect</a></li>
   </ul>
 </nav>
@@ -159,7 +163,7 @@
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextensions="io.quarkus:quarkus-oidc,io.quarkus:quarkus-keycloak-authorization"</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn quarkus:add-extension -Dextensions="io.quarkus:quarkus-oidc,io.quarkus:quarkus-keycloak-authorization"</code></pre>
 </div>
 </div>
 </div>
@@ -186,7 +190,8 @@
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-By default, <code>alice</code> and <code>bob</code> users (with the passwords matching the names), and user and admin roles are created. <code>alice</code> has both admin and user roles and <code>bob</code> has the user role.
+By default, <code>alice</code> and <code>bob</code> users (with the passwords matching the names), and user and admin roles are created.
+<code>alice</code> has both admin and user roles, and <code>bob</code> has just the user role.
 </td>
 </tr>
 </table>
@@ -200,7 +205,7 @@ By default, <code>alice</code> and <code>bob</code> users (with the passwords ma
 <p>Click on <a href="http://localhost:55105/auth">KeyCloak Admin link</a> in the left corner.</p>
 </li>
 <li>
-<p>Login using <code>admin</code> as user and password.</p>
+<p>Login using `admin' as user and password.</p>
 </li>
 <li>
 <p>Go to <a href="https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus-realm.json" class="bare">https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus-realm.json</a> and save it on your local machine.</p>
@@ -212,10 +217,13 @@ After this step you should have <code>Subscriber</code> Role and Group.</p>
 <li>
 <p>Go to <a href="http://localhost:55105/auth/admin/master/console/#/realms/quarkus/users">Users</a> and check that <code>jdoe</code> user is mapped to the <code>Subscriber</code> role and group.</p>
 </li>
+<li>
+<p>Setup a password for <code>jdoe</code> user.</p>
+</li>
 </ol>
 </div>
 <div class="paragraph">
-<p>Congratulations! Now you can run this section in Dev Mode without starting the KeyCloak Docker container nor adding the KeyCloak setup in <code>application.properties</code>.</p>
+<p>Congratulations! Now you can run this section in Dev Mode without starting the KeyCloak docker container nor adding the KeyCloak setup in <code>application.properties</code>.</p>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -258,15 +266,15 @@ import javax.ws.rs.core.MediaType;
 
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
-@Path("/api/users")
+@Path("api/users")
 public class UserResource {
 
     @Inject
     JsonWebToken jwt;
 
     @GET
-    @Path("/info")
-    @RolesAllowed("Subscriber")<i class="conum" data-value="1"></i><b>(1)</b>
+    @Path("info")
+    @RolesAllowed("Subscriber") <i class="conum" data-value="1"></i><b>(1)</b>
     public String getInfo() {
         return "Access for subject " + jwt.getName() + " is granted";
     }
@@ -288,11 +296,51 @@ public class UserResource {
 <h2 id="_invoke_the_apiusersinfo_endpoint_with_rbac"><a class="anchor" href="#_invoke_the_apiusersinfo_endpoint_with_rbac"></a>Invoke the /api/users/info endpoint with RBAC</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Run the following command:</p>
+<p>First you need a token valid to authenticate. Run the following command to obtain an access token:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.keycloak.jwt.token -s)
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -X POST 'http://localhost:56006/auth/realms/quarkus/protocol/openid-connect/token' \ <i class="conum" data-value="1"></i><b>(1)</b>
+ -H "Content-Type: application/x-www-form-urlencoded" \
+ -d "username=jdoe" \
+ -d 'password=the_pass_you_set' \ <i class="conum" data-value="2"></i><b>(2)</b>
+ -d 'grant_type=password' \
+ -d 'client_id=admin-cli'</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>If you are using KeyCloak Dev Services, you can get the KeyCloak port from Quarkus logs.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Consider to replace the password here with the one you set in the beginning.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You should see an output similar to:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">{"access_token":"eyJhbGciOiJSUzI......","token_type":"Bearer","not-before-policy":0,"session_state":"84349a48-55ea-4c25-88cd-d26a775c8c67","scope":"email profile"}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can store the access token in a variable and use it further for querying.
+Below you can find details on how to do that using <code>curl</code> and <code>jq</code>:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl -X POST 'http://localhost:56006/auth/realms/quarkus/protocol/openid-connect/token' \
+ -H "Content-Type: application/x-www-form-urlencoded" \
+ -d "username=jdoe" \
+ -d 'password=jdoe' \
+ -d 'grant_type=password' \
+ -d 'client_id=admin-cli' | jq -r '.access_token')
+
 curl -H "Authorization: Bearer $token" localhost:8080/api/users/info</code></pre>
 </div>
 </div>
@@ -465,7 +513,7 @@ We will add our own user, role and group by following these steps:</p>
 </li>
 <li>
 <p>Import the realm from <a href="https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus-realm.json" class="bare">https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus-realm.json</a>.
-After this step you should have <code>Subscriber</code> Role and Group, together with <code>jdoe</code> user, correctly configured.</p>
+After this step you should have <code>Subscriber</code> Role and Group, together with <code>jdoe</code> user correctly configured.</p>
 </li>
 </ol>
 </div>
@@ -473,6 +521,7 @@ After this step you should have <code>Subscriber</code> Role and Group, together
 </div>
 <nav class="pagination">
   <span class="prev"><a href="security.html">Security with JWT RBAC</a></span>
+  <span class="next"><a href="reactive.html">Reactive with Mutiny</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">

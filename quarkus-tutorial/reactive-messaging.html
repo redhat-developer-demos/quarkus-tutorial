@@ -3,9 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Apache Kafka with Reactive Streams :: Quarkus Tutorial</title>
-    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/kafka-and-streams.html">
-    <link rel="prev" href="reactive-messaging.html">
+    <title>Reactive Messaging :: Quarkus Tutorial</title>
+    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/reactive-messaging.html">
+    <link rel="prev" href="reactive.html">
+    <link rel="next" href="kafka-and-streams.html">
     <meta name="generator" content="Antora 2.3.1">
     <link rel="stylesheet" href="../_/css/site.css">
   </head>
@@ -111,10 +112,10 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="reactive-messaging.html">Streaming reactive messages</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="2">
+  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
   </li>
 </ul>
@@ -135,34 +136,38 @@
   <ul>
     <li><a href="index.html">quarkus-tutorial</a></li>
     <li>Reactive</li>
-    <li><a href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a></li>
+    <li><a href="reactive-messaging.html">Streaming reactive messages</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/redhat-developer-demos/quarkus-tutorial/edit/master/documentation/modules/ROOT/pages/kafka-and-streams.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/redhat-developer-demos/quarkus-tutorial/edit/master/documentation/modules/ROOT/pages/reactive-messaging.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Apache Kafka with Reactive Streams</h1>
+<h1 class="page">Reactive Messaging</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Mutiny is just part of the Reactive story. To complement it, we need Reactive Streams too. And an important service that can serve as the underlying implementation for our stream is <a href="http://kafka.apache.org" target="_blank" rel="noopener">Apache Kafka</a>.</p>
+<p>As a Java developer you are aware that the JMS is the standard when comes to working with messages.
+JMS is a blocking API which blocks us from implementing the reactive principles.</p>
 </div>
 <div class="paragraph">
-<p>In this chapter we&#8217;re going to use Mutiny to create price request for beers to a remote service called <code>price-generator</code> using Kafka as the broker for our messages in a Kafka topic called <code>beer</code>. The <code>price-generator</code> will get the beer from this topic, add a tag price to it, and send the information back in a Kafka topic called <code>priced-beer</code>.
-Finally, we&#8217;ll read the priced beers from the topic and send it throught our REST endpoint using SSE (Server-Side Events).</p>
+<p>Quarkus has SmallRye Reactive Messaging which is an implementation of the Eclipse MicroProfile Reactive Messaging specification.
+Quarkus implements version 2.x of this specification but also provides many other extensions.</p>
+</div>
+<div class="paragraph">
+<p>In this chapter we&#8217;re going to use SmallRye Reactive Messaging to generate beers having a price.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_add_the_reactive_messaging_kafka_extension"><a class="anchor" href="#_add_the_reactive_messaging_kafka_extension"></a>Add the Reactive Messaging Kafka extension</h2>
+<h2 id="_add_the_reactive_messaging_extension"><a class="anchor" href="#_add_the_reactive_messaging_extension"></a>Add the Reactive Messaging extension</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Just open a new terminal window, and make sure you’re at the root of your <code>tutorial-app</code> project, then run:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn quarkus:add-extension -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging-kafka"</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn quarkus:add-extension -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging"</code></pre>
 </div>
 </div>
 </div>
@@ -306,6 +311,26 @@ public class BeerGenerator {
                 .map(tick -&gt; beers.get(ThreadLocalRandom.current().nextInt(0, beers.size()))) <i class="conum" data-value="3"></i><b>(3)</b>
                 .map(JsonbBuilder.create()::toJson); <i class="conum" data-value="4"></i><b>(4)</b>
     }
+
+    @Incoming("beers")
+    @Outgoing("groups")
+    public Multi&lt;List&lt;String&gt;&gt; skipGroup(Multi&lt;String&gt; stream) {
+        return stream.skip().first(Duration.ofMillis(10)).group().intoLists().of(5); <i class="conum" data-value="5"></i><b>(5)</b>
+    }
+
+
+    @Incoming("groups")
+    @Outgoing("messages")
+    public String processGroup(List&lt;String&gt; list) {
+        return String.join(",", list.toString()); <i class="conum" data-value="6"></i><b>(6)</b>
+    }
+
+
+    @Incoming("messages")
+    public String print(String msg) {
+        System.out.println(msg);
+        return  msg; <i class="conum" data-value="7"></i><b>(7)</b>
+    }
 }</code></pre>
 </div>
 </div>
@@ -327,70 +352,191 @@ public class BeerGenerator {
 <td><i class="conum" data-value="4"></i><b>4</b></td>
 <td>We map the <code>Beer</code> to JSON format.</td>
 </tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The method `skipGroup' skips the messages sent during the first 10 milliseconds and groups next into lists of 5.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>The <code>processGroup</code> method takes each group and does further processing.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>The <code>print</code> method is just to have a manner to observe the output.</td>
+</tr>
 </table>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_update_beerresource"><a class="anchor" href="#_update_beerresource"></a>Update BeerResource</h2>
+<h2 id="_block_processing"><a class="anchor" href="#_block_processing"></a>Block Processing</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Let&#8217;s modify the <code>BeerResource</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+<p>Invoking a blocking operation/service can take longer time. In such cases you can protect your implementation
+by using <code>@Blocking</code> annotation.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s modify the <code>BeerGenerator</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package
+by adding the <code>@Blocking</code> annotation to the <code>processGroup</code> method:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
+
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.ThreadLocalRandom;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.json.bind.JsonbBuilder;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
-import org.eclipse.microprofile.reactive.messaging.Channel;
+import io.smallrye.common.annotation.Blocking;
+import io.smallrye.mutiny.Multi;
+import org.eclipse.microprofile.reactive.messaging.Incoming;
+import org.eclipse.microprofile.reactive.messaging.Outgoing;
+
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
-import io.smallrye.mutiny.Multi;
-import org.jboss.resteasy.annotations.SseElementType;
 
-@Path("/beer")
-public class BeerResource {
+@ApplicationScoped
+public class BeerGenerator {
 
     @RestClient
-    BeerService beerService;
+    BeerService service;
 
-    @Channel("priced-beer") <i class="conum" data-value="1"></i><b>(1)</b>
-    Multi&lt;String&gt; pricedBeers;
+    @Outgoing("beers")
+    Multi&lt;String&gt; beers() {
+        List&lt;Beer&gt;  beers = service.getBeers(10);
+        return Multi.createFrom().ticks().every(Duration.ofSeconds(1))
+                .onOverflow().drop()
+                .map(tick -&gt; beers.get(ThreadLocalRandom.current().nextInt(0, beers.size())))
+                .map(JsonbBuilder.create()::toJson);
+    }
 
-
-    @GET
-    @Path("all")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Multi&lt;Beer&gt; beers() {
-        return Multi.createBy().repeating()
-                .supplier(
-                        () -&gt; new AtomicInteger(1),
-                        i -&gt; beerService.getBeers(i.getAndIncrement())
-                )
-                .until(List::isEmpty)
-                .onItem().&lt;Beer&gt;disjoint()
-                .select().where(b -&gt; b.getAbv() &gt; 15.0);
+    @Incoming("beers")
+    @Outgoing("groups")
+    public Multi&lt;List&lt;String&gt;&gt; group(Multi&lt;String&gt; stream) {
+        return stream.skip().first(Duration.ofMillis(10)).group().intoLists().of(5);
     }
 
 
-    @GET
-    @Produces(MediaType.SERVER_SENT_EVENTS)
-    @SseElementType(MediaType.APPLICATION_JSON)
-    public Multi&lt;PricedBeer&gt; pricedBeers() {
-        return pricedBeers.map(s -&gt; JsonbBuilder.create().fromJson(s, PricedBeer.class)) <i class="conum" data-value="2"></i><b>(2)</b>
-                .ifNoItem().after(Duration.ofSeconds(1)).fail(); <i class="conum" data-value="3"></i><b>(3)</b>
+    @Incoming("groups")
+    @Outgoing("messages")
+    @Blocking
+    public String processGroup(List&lt;String&gt; list) {
+        try {
+            Thread.sleep(1000);
+            System.out.println(LocalDateTime.now().toLocalTime());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return String.join(",", list.toString());
     }
 
+
+    @Incoming("messages")
+    public String print(String msg) {
+        System.out.println(msg);
+        return  msg;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>processGroup</code> method is invoked on a worker thread, but please be careful when using <code>@Blocking</code> as it impacts the
+concurrency aspect of your implementation.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_retry_processing"><a class="anchor" href="#_retry_processing"></a>Retry Processing</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Please run the following in a new terminal window, being at the root of your <code>tutorial-app</code> project:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn quarkus:add-extension -Dextensions="io.quarkus:quarkus-smallrye-fault-tolerance"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Even in the case of reactive applications you can experience faulty situations caused by unforeseen scenarios.
+Let&#8217;s assume that something not expected occurs during <code>processGroup</code> logic execution.</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.json.bind.JsonbBuilder;
+
+import io.smallrye.common.annotation.Blocking;
+import io.smallrye.mutiny.Multi;
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.reactive.messaging.Incoming;
+import org.eclipse.microprofile.reactive.messaging.Outgoing;
+
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+
+
+@ApplicationScoped
+public class BeerGenerator {
+    private final Random random = new Random();
+
+    @RestClient
+    BeerService service;
+
+    @Outgoing("beers")
+    Multi&lt;String&gt; beers() {
+        List&lt;Beer&gt;  beers = service.getBeers(10);
+        return Multi.createFrom().ticks().every(Duration.ofSeconds(1))
+                .onOverflow().drop()
+                .map(tick -&gt; beers.get(ThreadLocalRandom.current().nextInt(0, beers.size())))
+                .map(JsonbBuilder.create()::toJson);
+    }
+
+    @Incoming("beers")
+    @Outgoing("groups")
+    @Retry(maxRetries = 10, delay = 1, delayUnit = ChronoUnit.SECONDS) <i class="conum" data-value="1"></i><b>(1)</b>
+    public Multi&lt;List&lt;String&gt;&gt; group(Multi&lt;String&gt; stream) {
+        int i = random.nextInt(10);
+        System.out.println("Show retry  for random number "+i);
+        if (i &gt; 1) {
+            throw new RuntimeException("not working"); <i class="conum" data-value="2"></i><b>(2)</b>
+        }
+        return stream.skip().first(Duration.ofMillis(10)).group().intoLists().of(5);
+    }
+
+
+    @Incoming("groups")
+    @Outgoing("messages")
+    @Blocking
+    public String processGroup(List&lt;String&gt; list) {
+        try {
+            Thread.sleep(1000);
+            System.out.println(LocalDateTime.now().toLocalTime());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return String.join(",", list.toString());
+    }
+
+
+    @Incoming("messages")
+    public String print(String msg) {
+        System.out.println(msg);
+        return  msg;
+    }
 }</code></pre>
 </div>
 </div>
@@ -398,237 +544,35 @@ public class BeerResource {
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>We inject the Multi directly by using the <code>@Channel</code> annotation.</td>
+<td>In case of a <code>RuntimeException</code>, the <code>@Retry</code> annotation will attempt execution of the same logic maxium 10 times,
+at an interval of 1 second.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>We just map the <code>PricedBeer</code> to JSON format.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>If no item is retrieved after 1 second, we will assume that the call failed.</td>
+<td>Throw <code>RuntimeException</code> if the random number is greater than 1.</td>
 </tr>
 </table>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_add_the_reactive_messaging_kafka_properties"><a class="anchor" href="#_add_the_reactive_messaging_kafka_properties"></a>Add the Reactive Messaging Kafka properties</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>Add the following properties to your <code>application.properties</code> in <code>src/main/resources</code>:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">kafka.bootstrap.servers=localhost:9092</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_create_docker_compose_configuration"><a class="anchor" href="#_create_docker_compose_configuration"></a>Create docker-compose configuration</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The external dependencies required to run this chapter are:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Kafka</p>
-</li>
-<li>
-<p>Zookeeper (required by Kafka)</p>
-</li>
-<li>
-<p>The <code>price-generator</code> service</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>We&#8217;re going to use <code>docker-compose</code> to bootstrap these external services.</p>
-</div>
-<div class="paragraph">
-<p>Create a new file called <code>docker-compose.yml</code> in the root of your <code>tutorial-app</code> folder:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">version: '3'
-services:
-  zookeeper:
-    image: quay.io/strimzi/kafka:0.23.0-kafka-2.8.0
-    command: [
-        "sh", "-c",
-        "bin/zookeeper-server-start.sh config/zookeeper.properties"
-    ]
-    ports:
-      - "2181:2181"
-    environment:
-      LOG_DIR: /tmp/logs
-  kafka:
-    image: quay.io/strimzi/kafka:0.23.0-kafka-2.8.0
-    command: [
-        "sh", "-c",
-        "bin/kafka-server-start.sh config/server.properties --override listeners=$${KAFKA_LISTENERS} --override advertised.listeners=$${KAFKA_ADVERTISED_LISTENERS} --override zookeeper.connect=$${KAFKA_ZOOKEEPER_CONNECT}"
-    ]
-    depends_on:
-      - zookeeper
-    ports:
-      - "9092:9092"
-    environment:
-      LOG_DIR: "/tmp/logs"
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-  price-generator:
-    image: quay.io/rhdevelopers/quarkus-tutorial-price-generator:2.0
-    network_mode: host
-    depends_on:
-      - kafka</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_run_docker_compose"><a class="anchor" href="#_run_docker_compose"></a>Run docker-compose</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Make sure you are in the same folder that you&#8217;ve created the <code>docker-compose.yml</code> file (in our case, the root of our <code>tutorial-app</code> folder).</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker-compose up</code></pre>
-</div>
+<p>Now restart Quarkus in Dev Mode and you should observe something similar to:</p>
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">kafka_1            | [2020-05-13 01:54:53,281] INFO [ThrottledChannelReaper-Fetch]: Starting (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
-kafka_1            | [2020-05-13 01:54:53,281] INFO [ThrottledChannelReaper-Produce]: Starting (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
-kafka_1            | [2020-05-13 01:54:53,284] INFO [ThrottledChannelReaper-Request]: Starting (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
-kafka_1            | [2020-05-13 01:54:53,367] INFO Loading logs. (kafka.log.LogManager)
-kafka_1            | [2020-05-13 01:54:53,504] INFO [Log partition=__consumer_offsets-38, dir=/tmp/kafka-logs] Loading producer state till offset 15 with message format version 2 (kafka.log.Log)
-kafka_1            | [2020-05-13 01:54:53,531] INFO [ProducerStateManager partition=__consumer_offsets-38] Loading producer state from snapshot file '/tmp/kafka-logs/__consumer_offsets-38/00000000000000000015.snapshot' (kafka.log.ProducerStateManager)
-kafka_1            | [2020-05-13 01:54:53,550] INFO [Log partition=__consumer_offsets-38, dir=/tmp/kafka-logs] Completed load of log with 1 segments, log start offset 0 and log end offset 15 in 125 ms (kafka.log.Log)</code></pre>
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">[io.quarkus] (Quarkus Main Thread) tutorial-app stopped in 0.024s
+Show retry  for random number 6
+Show retry  for random number 3
+Show retry  for random number 0
+__  ____  __  _____   ___  __ ____  ______
+ --/ __ \/ / / / _ | / _ \/ //_/ / / / __/
+ -/ /_/ / /_/ / __ |/ , _/ ,&lt; / /_/ /\ \
+--\___\_\____/_/ |_/_/|_/_/|_|\____/___/</code></pre>
 </div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_invoke_the_beer_endpoint"><a class="anchor" href="#_invoke_the_beer_endpoint"></a>Invoke the /beer endpoint</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Run the following command:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -N localhost:8080/beer</code></pre>
-</div>
-</div>
-<div class="listingblock console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">data: {"name":"AB:21","price":1525.00}
-
-data: {"name":"Neon Overlord","price":1640.00}
-
-data: {"name":"Brewdog Vs Beavertown","price":1015.00}
-
-data: {"name":"Ace Of Chinook","price":1871.00}
-
-data: {"name":"Hop Shot","price":1180.00}
-
-data: {"name":"Neon Overlord","price":213.00}
-
-data: {"name":"Hop Shot","price":174.00}
-
-data: {"name":"Hello My Name Is Ingrid 2016","price":1230.00}
-
-data: {"name":"Twin Atlantic","price":1143.00}
-
-data: {"name":"AB:21","price":1372.00}
-
-data: {"name":"Self Assembly Pope","price":1667.00}
-
-data: {"name":"Kingpin","price":1954.00}
-
-data: {"name":"Crew Brew","price":460.00}
-
-data: {"name":"Ace Of Chinook","price":307.00}
-
-data: {"name":"Mango And Chili Barley Wine","price":318.00}
-
-data: {"name":"Self Assembly Pope","price":339.00}
-
-data: {"name":"Ace Of Chinook","price":1578.00}
-
-data: {"name":"Chili Hammer","price":470.00}
-
-data: {"name":"Science IPA","price":968.00}
-
-data: {"name":"Casino Rye Ale","price":1349.00}
-
-data: {"name":"Prototype Helles","price":1721.00}
-
-data: {"name":"Kingpin","price":1992.00}
-
-data: {"name":"Hello My Name Is Ingrid 2016","price":1933.00}
-
-data: {"name":"Casino Rye Ale","price":234.00}
-
-data: {"name":"Ace Of Chinook","price":1343.00}
-
-data: {"name":"Small Batch: Rye IPA","price":167.00}
-
-data: {"name":"Science IPA","price":234.00}
-
-data: {"name":"Brewdog Vs Beavertown","price":1123.00}
-
-data: {"name":"Prototype Helles","price":945.00}
-
-data: {"name":"Kingpin","price":851.00}
-
-data: {"name":"Ace Of Equinox","price":1422.00}
-
-data: {"name":"Crew Brew","price":883.00}
-
-data: {"name":"Prototype Helles","price":502.00}
-
-data: {"name":"Brewdog Vs Beavertown","price":710.00}
-
-data: {"name":"Casino Rye Ale","price":1848.00}
-
-data: {"name":"Gin Blitz","price":278.00}
-
-data: {"name":"Brewdog Vs Beavertown","price":719.00}
-
-data: {"name":"Hello My Name Is Ingrid 2016","price":113.00}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_dev_services_for_kafka"><a class="anchor" href="#_dev_services_for_kafka"></a>Dev Services for Kafka</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Because starting a Kafka broker can be long and you need to develop fast in your local environment, Dev Services for Kafka is here to help you!</p>
-</div>
-<div class="paragraph">
-<p>Since <code>quarkus-smallrye-reactive-messaging-kafka</code> extension is present, Dev Services for Kafka automatically starts a Kafka broker in dev mode and when running tests.</p>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-You can disable Dev Services for Kafka by adding <code>quarkus.kafka.devservices.enabled=false</code> or configuring <code>kafka.bootstrap.servers</code> in <code>application.properties</code>.
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="reactive-messaging.html">Streaming reactive messages</a></span>
+  <span class="prev"><a href="reactive.html">Reactive with Mutiny</a></span>
+  <span class="next"><a href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
