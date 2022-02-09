@@ -171,6 +171,55 @@ Then we&#8217;re going to filter all the beers with an ABV greater than 15.0 and
 </div>
 </div>
 <div class="sect1">
+<h2 id="_create_beer_pojo"><a class="anchor" href="#_create_beer_pojo"></a>Create Beer POJO</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Create a new <code>Beer</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+
+import javax.json.bind.annotation.JsonbCreator;
+import java.math.BigDecimal;
+
+public class Beer {
+
+    private String name;
+
+    private String tagline;
+
+    private double abv;
+
+    private Beer(String name, String tagline, double abv) {
+        this.name = name;
+        this.tagline = tagline;
+        this.abv = abv;
+    }
+
+    @JsonbCreator
+    public static Beer of(String name, String tagline, double abv) {
+        return new Beer(name, tagline, abv);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getTagline() {
+        return tagline;
+    }
+
+    public double getAbv() {
+        return abv;
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_create_beerservice"><a class="anchor" href="#_create_beerservice"></a>Create BeerService</h2>
 <div class="sectionbody">
 <div class="paragraph">
