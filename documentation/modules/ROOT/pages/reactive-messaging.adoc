@@ -20,7 +20,7 @@ mvn quarkus:add-extension -Dextensions="io.quarkus:quarkus-smallrye-reactive-mes
 
 == Modify Beer POJO
 
-Modify a new `Beer` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Modify the `Beer` Java class in `src/main/java` in the `com.redhat.developers` package to have the following contents:
 
 [.console-input]
 [source,java]

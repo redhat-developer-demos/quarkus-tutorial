@@ -17,7 +17,7 @@ mvn quarkus:add-extension -Dextensions="io.quarkus:quarkus-smallrye-reactive-mes
 
 == Modify Beer POJO
 
-Modify a new `Beer` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Make sure you have the  `Beer` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
@@ -66,9 +66,9 @@ public class Beer {
 }
 ----
 
-== Create PricedBeer POJO
+== Modify PricedBeer POJO
 
-Create a new `PricedBeer` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Make sure you have the `PricedBeer` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
@@ -110,9 +110,9 @@ public class PricedBeer {
 }
 ----
 
-== Create BeerGenerator
+== Modify the BeerGenerator
 
-Create a new `BeerGenerator` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Modify the `BeerGenerator` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
