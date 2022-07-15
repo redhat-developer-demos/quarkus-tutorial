@@ -667,11 +667,14 @@ import io.quarkus.hibernate.orm.panache.PanacheRepository;
 public class FruitRepository implements PanacheRepository&lt;Fruit&gt; {
 
     public List&lt;Fruit&gt; findBySeason(String season) {
-        return find("season", season).list();
+        return find("upper(season)", season.toUpperCase()).list();
     }
 
 }</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Now you can make an case-insensitive search for fruits belonging to a specific season.</p>
 </div>
 </div>
 </div>
@@ -688,7 +691,6 @@ public class FruitRepository implements PanacheRepository&lt;Fruit&gt; {
 import java.util.List;
 
 import javax.transaction.Transactional;
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -698,6 +700,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+
+import io.quarkus.logging.Log;
 
 @Path("/fruit")
 public class FruitResource {
@@ -712,6 +716,7 @@ public class FruitResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List&lt;Fruit&gt; fruits(@QueryParam("season") String season) {
         if (season != null) {
+            Log.infof("Searching for %s fruits", season);
             return fruitRepository.findBySeason(season);
         }
         return Fruit.listAll();
