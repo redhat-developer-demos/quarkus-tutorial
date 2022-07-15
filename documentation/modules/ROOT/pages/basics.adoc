@@ -12,7 +12,8 @@ mvn "io.quarkus:quarkus-maven-plugin:create" \
   -DprojectArtifactId="{project-name}" \
   -DprojectVersion="1.0-SNAPSHOT" \
   -DclassName="HelloResource" \
-  -Dpath="hello"
+  -Dpath="hello" \
+  -Dextensions="resteasy"
 cd {project-name}
 ----
 
