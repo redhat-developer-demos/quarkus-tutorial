@@ -9,7 +9,7 @@ In this section we will secure our endpoints with Bearer Tokens by using Dev Ser
 
 == Add the OIDC and KeyCloak extensions
 
-Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
+Open Docker or Container management software. Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -34,7 +34,7 @@ However, we can add our own user, role and group by following these steps:
 . Click on http://localhost:55105/auth[KeyCloak Admin link] in the left corner.
 . Login using `admin' as user and password.
 . Go to https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus-realm.json and save it on your local machine.
-. Go to http://localhost:55105/auth/admin/master/console/#/realms/quarkus/partial-import[Import] in the KeyCloak Administration console and import `quarkus-realm.json`.
+. Go to http://localhost:65079/admin/master/console/#/quarkus/realm-settings[Import] (port may differ on your container instance) in the KeyCloak Administration console and import `quarkus-realm.json`. Partial import can be found under Realm Settings under the drop down Actions menu.
 After this step you should have `Subscriber` Role and Group.
 . Go to http://localhost:55105/auth/admin/master/console/#/realms/quarkus/users[Users] and check that `jdoe` user is mapped to the `Subscriber` role and group. 
 . Setup a password for `jdoe` user.
@@ -264,7 +264,7 @@ You can start a Keycloak Server with Docker by running the following command:
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-docker run --name keycloak -e DB_VENDOR=H2 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -p 8180:8080 quay.io/keycloak/keycloak:15.0.2
+docker run --name keycloak -e DB_VENDOR=H2 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -p 8180:8080 quay.io/keycloak/keycloak:20.0.1
 ----
 
 Go to http://localhost:8180/auth and use `admin` for user and password.
