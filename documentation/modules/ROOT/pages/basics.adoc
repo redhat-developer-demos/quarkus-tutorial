@@ -4,6 +4,11 @@
 
 == Creating a Quarkus Application
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
@@ -16,6 +21,25 @@ mvn "io.quarkus:quarkus-maven-plugin:create" \
   -Dextensions="resteasy"
 cd {project-name}
 ----
+
+--
+Quarkus CLI::
++
+--
+The quarkus command lets you create projects, manage extensions and do essential build and dev commands using the underlying project build tool.
+
+To use it, install the Quarkus CLI: https://quarkus.io/guides/cli-tooling
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus create app \
+  -x resteasy \
+  com.redhat.developers:tutorial-app:1.0-SNAPSHOT
+cd {project-name}
+----
+
+--
+====
 
 IMPORTANT: All the remaining parts of this tutorial assume that you'll be working inside the project folder that was just created. In this case, `{project-name}`.
 
