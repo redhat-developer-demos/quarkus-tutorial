@@ -3,12 +3,32 @@
 JVM mode::
 +
 --
-[#basics-build-quarkus-jvm-app]
+
+[%header,cols="1,1"]
+|=====
+
+|Maven
+
+|Quarkus CLI
+
+a|
+[#basics-build-quarkus-jvm-app-mvn]
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn package
+mvn package 
 ----
+
+a|
+[#basics-build-quarkus-jvm-app-quarkus]
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus build
+----
+
+|=====
+
 
 To run the application in jvm mode
 
@@ -23,12 +43,30 @@ java -jar target/quarkus-app/quarkus-run.jar
 Native mode::
 +
 --
-[#basics-build-quarkus-native-app]
+[%header,cols="1,1"]
+|=====
+
+|Maven
+
+|Quarkus CLI
+
+a|
+[#basics-build-quarkus-native-app-mvn]
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn -DskipTests clean package -Pnative
+mvn clean package -Pnative
 ----
+
+a|
+[#basics-build-quarkus-native-app-quarkus]
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus build --native
+----
+|=====
+
 
 NOTE: Native compilation will take few minutes to complete.
 
@@ -45,12 +83,30 @@ To run the application in native mode
 Native container-build mode::
 +
 --
-[#basics-build-quarkus-native-docker-app]
+[%header,cols="1,1"]
+|=====
+
+|Maven
+
+|Quarkus CLI
+
+a|
+[#basics-build-quarkus-native-docker-app-mvn]
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn package -DskipTests -Pnative -Dquarkus.native.container-build=true
+mvn package -Pnative \
+-Dquarkus.native.container-build=true 
 ----
+a|
+[#basics-build-quarkus-native-docker-app-quarkus]
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus build --native \
+ -Dquarkus.native.container-build=true
+----
+|=====
 
 NOTE: Native compilation will take few minutes to complete.
 

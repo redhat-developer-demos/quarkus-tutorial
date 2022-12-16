@@ -140,7 +140,7 @@ If using a hosted Kubernetes cluster like OpenShift then use curl and the EXTERN
 
 :tmp-service-exposed: tutorial-app
 
-[#{section-k8s}-ip-port-openshift]
+[#{section-k8s}-ip-port-service]
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----

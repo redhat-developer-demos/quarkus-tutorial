@@ -28,7 +28,9 @@ Quarkus CLI::
 --
 The quarkus command lets you create projects, manage extensions and do essential build and dev commands using the underlying project build tool.
 
-To use it, install the Quarkus CLI: https://quarkus.io/guides/cli-tooling
+Follow these instructions to install Quarkus CLI: https://quarkus.io/guides/cli-tooling
+
+Then create the application: 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
