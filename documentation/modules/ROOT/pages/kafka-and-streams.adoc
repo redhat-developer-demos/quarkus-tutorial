@@ -139,7 +139,7 @@ public class BeerGenerator {
     @RestClient
     BeerService service;
 
-    @Outgoing("beers")
+    @Outgoing("beer")
     Multi<String> beers() {
         List<Beer>  beers = service.getBeers(10);
         return Multi.createFrom().ticks().every(Duration.ofSeconds(1)) //<1>
