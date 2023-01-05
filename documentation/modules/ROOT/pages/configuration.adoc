@@ -7,7 +7,7 @@ Quarkus relies on the MicroProfile Config specification and the main configurati
 
 == Using a config property in your code
 
-Let's change our `HelloResource` class to use a configuration property. Change its content to:
+Let's change our `GreetingResource` class to use a configuration property. Change its content to:
 
 [.console-input]
 [source,java]
@@ -22,7 +22,7 @@ import javax.ws.rs.core.MediaType;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @Path("/hello")
-public class HelloResource {
+public class GreetingResource {
 
     @ConfigProperty(name = "greeting")
     String greeting;
@@ -93,7 +93,7 @@ Hello y'all!
 
 Since we changed the output of our `/hello` endpoint, our integration test doesn't pass anymore.
 
-Let's update `HelloResourceTest` to reflect our recent changes:
+Let's update `GreetingResourceTest` to reflect our recent changes:
 
 [.console-input]
 [source,java]
@@ -107,10 +107,10 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 
 @QuarkusTest
-public class HelloResourceTest {
+public class GreetingResourceTest {
 
     @Test
-    public void testHelloEndpoint() {
+    public void testGreetingEndpoint() {
         given()
           .when().get("/hello")
           .then()

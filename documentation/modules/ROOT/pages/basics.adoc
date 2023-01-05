@@ -16,7 +16,7 @@ mvn "io.quarkus:quarkus-maven-plugin:create" \
   -DprojectGroupId="com.redhat.developers" \
   -DprojectArtifactId="{project-name}" \
   -DprojectVersion="1.0-SNAPSHOT" \
-  -DclassName="HelloResource" \
+  -DclassName="GreetingResource" \
   -Dpath="hello" \
   -Dextensions="resteasy"
 cd {project-name}
@@ -88,7 +88,7 @@ Quarkus was able to stop in just *0.007s*. Fast to start, fast to stop. Fast alw
 
 The scaffolding process also creates a test case for the example endpoint.
 
-Check the file `HelloResourceTest.java` in the folder `src/test/java` to see how a Quarkus integration test looks like.
+Check the file `GreetingResourceTest.java` in the folder `src/test/java` to see how a Quarkus integration test looks like.
 
 When running this test, the application is started once, then all tests are executed, and finally, the application stops. Although it is not mandatory, by default RestAssured project is used to test Rest endpoints but it is up to you to change that.
 
