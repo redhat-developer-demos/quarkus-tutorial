@@ -92,13 +92,30 @@ Check the file `HelloResourceTest.java` in the folder `src/test/java` to see how
 
 When running this test, the application is started once, then all tests are executed, and finally, the application stops. Although it is not mandatory, by default RestAssured project is used to test Rest endpoints but it is up to you to change that.
 
-You can run the test in your IDE or by running Maven:
+You can run the test in your IDE or by running the following:
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
 mvn clean test
 ----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus test
+----
+--
+====
 
 == Open the Project in your IDE
 
@@ -124,22 +141,56 @@ This is probably one of the best features of Quarkus: enabling a very fast and p
 
 Let's start the _Live Coding_ mode by invoking `mvn`. You probably won't need to stop/start Quarkus again during this tutorial:
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
 mvn quarkus:dev
 ----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus dev
+----
+--
+====
 
 == Continuous Testing (Development mode)
 
 Quarkus supports continuous testing, meaning that your tests will run immediately after code changes were saved.
-Let's start again in _Live Coding_ mode by invoking `mvn`:
+Let's start again in _Live Coding_ mode by invoking quarkus dev mode:
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
 mvn quarkus:dev
 ----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus dev
+----
+--
+====
 
 Quarkus will start in development mode as normal, but down the bottom of the screen you should see the following:
 [.console-input]

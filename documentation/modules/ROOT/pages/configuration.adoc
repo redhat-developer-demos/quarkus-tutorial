@@ -131,11 +131,28 @@ Stop your current Live Coding session of Quarkus in the terminal by sending a `C
 
 Now run your tests to check if everything is ok:
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
 mvn clean test
 ----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus test
+----
+--
+====
 
 [.console-output]
 [source,text]
@@ -155,8 +172,25 @@ mvn clean test
 
 `BUILD SUCCESS`! You can now go back to the amazing _Live Coding_ mode of Quarkus:
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
 mvn quarkus:dev
 ----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus dev
+----
+--
+====
