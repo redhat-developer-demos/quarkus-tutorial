@@ -67,11 +67,6 @@ curl localhost:8080/hello
 hello
 ----
 
-== Dev UI
-
-Quarkus now ships with a new experimental Dev UI, which is available in dev mode at http://localhost:8080/q/dev[/q/dev] by default.
-It allows you to quickly visualize all the extensions currently loaded, see their status and go directly to their documentation.
-
 == Stopping the application
 
 You can stop your running application by issuing a `CTRL+C` in your terminal.
@@ -88,9 +83,9 @@ Quarkus was able to stop in just *0.007s*. Fast to start, fast to stop. Fast alw
 
 The scaffolding process also creates a test case for the example endpoint.
 
-Check the file `GreetingResourceTest.java` in the folder `src/test/java` to see how a Quarkus integration test looks like.
+Check the file `GreetingResourceTest.java` in the folder `src/test/java` to see what a Quarkus integration test looks like.
 
-When running this test, the application is started once, then all tests are executed, and finally, the application stops. Although it is not mandatory, by default RestAssured project is used to test Rest endpoints but it is up to you to change that.
+When running this test, the application is started once, then all tests are executed, and finally, the application stops. Although it is not mandatory, by default the RestAssured project is used to test Rest endpoints but it is up to you to change that.
 
 You can run the test in your IDE or by running the following:
 
@@ -114,6 +109,8 @@ Quarkus CLI::
 ----
 quarkus test
 ----
+
+NOTE: `quarkus test` starts tests in continuous testing mode (more about this below) so to return to the command line you will need to press (q)
 --
 ====
 
@@ -163,6 +160,14 @@ quarkus dev
 ----
 --
 ====
+
+== Dev UI
+
+Quarkus ships with a Dev UI, which is available in dev mode at http://localhost:8080/q/dev[/q/dev] by default.
+It allows you to quickly visualize all the extensions currently loaded, see their status and go directly to their documentation.
+
+[.mt-4.center]
+image::Dev_UI.png[Dev UI,800,600,align="center"]
 
 == Continuous Testing (Development mode)
 

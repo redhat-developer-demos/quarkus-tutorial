@@ -121,7 +121,11 @@ public class GreetingResourceTest {
 }
 ----
 
+NOTE: If you're still running in live testing mode you will already see that the tests pass again and you can ignore the rest of this page and move on to the next step.
+
 Stop your current Live Coding session of Quarkus in the terminal by sending a `CTRL+C`:
+
+
 
 [.console-output]
 [source,text]

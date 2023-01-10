@@ -29,11 +29,29 @@ Let's create a REST client that accesses https://www.fruityvice.com[window=_blan
 
 Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
-mvn quarkus:add-extension -Dextensions="io.quarkus:quarkus-rest-client"
+mvn quarkus:add-extension -Dextensions=quarkus-rest-client
 ----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus extension add quarkus-rest-client
+----
+--
+====
+
 
 [.console-output]
 [source,text]
