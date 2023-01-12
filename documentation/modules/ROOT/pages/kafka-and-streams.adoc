@@ -3,17 +3,34 @@
 Mutiny is just part of the Reactive story. To complement it, we need Reactive Streams too. And an important service that can serve as the underlying implementation for our stream is http://kafka.apache.org[Apache Kafka,window=_blank].
 
 In this chapter we're going to use Mutiny to create price request for beers to a remote service called `price-generator` using Kafka as the broker for our messages in a Kafka topic called `beer`. The `price-generator` will get the beer from this topic, add a tag price to it, and send the information back in a Kafka topic called `priced-beer`. 
-Finally, we'll read the priced beers from the topic and send it throught our REST endpoint using SSE (Server-Side Events).
+Finally, we'll read the priced beers from the topic and send it through our REST endpoint using SSE (Server-Side Events).
 
 == Add the Reactive Messaging Kafka extension
 
 Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
-mvn quarkus:add-extension -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging-kafka"
+mvn quarkus:add-extension -Dextensions=quarkus-smallrye-reactive-messaging-kafka
 ----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus extension add quarkus-smallrye-reactive-messaging-kafka
+----
+--
+====
 
 == Modify Beer POJO
 
