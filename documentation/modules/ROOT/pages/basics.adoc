@@ -4,6 +4,11 @@
 
 == Creating a Quarkus Application
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
@@ -11,11 +16,32 @@ mvn "io.quarkus:quarkus-maven-plugin:create" \
   -DprojectGroupId="com.redhat.developers" \
   -DprojectArtifactId="{project-name}" \
   -DprojectVersion="1.0-SNAPSHOT" \
-  -DclassName="HelloResource" \
+  -DclassName="GreetingResource" \
   -Dpath="hello" \
   -Dextensions="resteasy"
 cd {project-name}
 ----
+
+--
+Quarkus CLI::
++
+--
+The quarkus command lets you create projects, manage extensions and do essential build and dev commands using the underlying project build tool.
+
+Follow these instructions to install Quarkus CLI: https://quarkus.io/guides/cli-tooling
+
+Then create the application: 
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus create app \
+  -x resteasy \
+  com.redhat.developers:tutorial-app:1.0-SNAPSHOT
+cd {project-name}
+----
+
+--
+====
 
 IMPORTANT: All the remaining parts of this tutorial assume that you'll be working inside the project folder that was just created. In this case, `{project-name}`.
 
@@ -41,11 +67,6 @@ curl localhost:8080/hello
 hello
 ----
 
-== Dev UI
-
-Quarkus now ships with a new experimental Dev UI, which is available in dev mode at http://localhost:8080/q/dev[/q/dev] by default.
-It allows you to quickly visualize all the extensions currently loaded, see their status and go directly to their documentation.
-
 == Stopping the application
 
 You can stop your running application by issuing a `CTRL+C` in your terminal.
@@ -62,17 +83,36 @@ Quarkus was able to stop in just *0.007s*. Fast to start, fast to stop. Fast alw
 
 The scaffolding process also creates a test case for the example endpoint.
 
-Check the file `HelloResourceTest.java` in the folder `src/test/java` to see how a Quarkus integration test looks like.
+Check the file `GreetingResourceTest.java` in the folder `src/test/java` to see what a Quarkus integration test looks like.
 
-When running this test, the application is started once, then all tests are executed, and finally, the application stops. Although it is not mandatory, by default RestAssured project is used to test Rest endpoints but it is up to you to change that.
+When running this test, the application is started once, then all tests are executed, and finally, the application stops. Although it is not mandatory, by default the RestAssured project is used to test Rest endpoints but it is up to you to change that.
 
-You can run the test in your IDE or by running Maven:
+You can run the test in your IDE or by running the following:
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
 mvn clean test
 ----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus test
+----
+
+NOTE: `quarkus test` starts tests in continuous testing mode (more about this below) so to return to the command line you will need to press (q)
+--
+====
 
 == Open the Project in your IDE
 
@@ -98,22 +138,64 @@ This is probably one of the best features of Quarkus: enabling a very fast and p
 
 Let's start the _Live Coding_ mode by invoking `mvn`. You probably won't need to stop/start Quarkus again during this tutorial:
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
 mvn quarkus:dev
 ----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus dev
+----
+--
+====
+
+== Dev UI
+
+Quarkus ships with a Dev UI, which is available in dev mode at http://localhost:8080/q/dev[/q/dev] by default.
+It allows you to quickly visualize all the extensions currently loaded, see their status and go directly to their documentation.
+
+[.mt-4.center]
+image::Dev_UI.png[Dev UI,800,600,align="center"]
 
 == Continuous Testing (Development mode)
 
 Quarkus supports continuous testing, meaning that your tests will run immediately after code changes were saved.
-Let's start again in _Live Coding_ mode by invoking `mvn`:
+Let's start again in _Live Coding_ mode by invoking quarkus dev mode:
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
 mvn quarkus:dev
 ----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus dev
+----
+--
+====
 
 Quarkus will start in development mode as normal, but down the bottom of the screen you should see the following:
 [.console-input]

@@ -12,11 +12,28 @@ In this chapter we're going to use SmallRye Reactive Messaging to generate beers
 
 Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
-mvn quarkus:add-extension -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging"
+mvn quarkus:add-extension -Dextension=quarkus-smallrye-reactive-messaging
 ----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus extension add quarkus-smallrye-reactive-messaging
+----
+--
+====
 
 == Modify Beer POJO
 
@@ -261,11 +278,28 @@ concurrency aspect of your implementation.
 
 Please run the following in a new terminal window, being at the root of your `{project-name}` project:
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
-mvn quarkus:add-extension -Dextensions="io.quarkus:quarkus-smallrye-fault-tolerance"
+mvn quarkus:add-extension -Dextension=quarkus-smallrye-fault-tolerance
 ----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus extension add quarkus-smallrye-fault-tolerance
+----
+--
+====
 
 Even in the case of reactive applications you can experience faulty situations caused by unforeseen scenarios.
 Let's assume that something not expected occurs during `processGroup` logic execution.

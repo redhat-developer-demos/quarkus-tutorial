@@ -12,11 +12,29 @@ There are two different types of health checks:
 
 Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 mvn quarkus:add-extension -Dextension=quarkus-smallrye-health
 ----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus extension add quarkus-smallrye-health
+----
+--
+====
+
 
 == Invoke the /health endpoint
 

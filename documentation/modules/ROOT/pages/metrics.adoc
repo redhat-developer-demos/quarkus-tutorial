@@ -8,19 +8,53 @@ Quarkus provides JVM and other statistics out-of-box with the Metrics extension,
 
 Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
-mvn quarkus:add-extension -Dextension=quarkus-micrometer
+mvn quarkus:add-extension -Dextensions=quarkus-micrometer
 ----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus extension add quarkus-micrometer
+----
+--
+====
 
 You should also add the `quarkus-micrometer-registry-prometheus` extension : 
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
-mvn quarkus:add-extension -Dextensions="io.quarkus:quarkus-micrometer-registry-prometheus"
+mvn quarkus:add-extension -Dextensions=quarkus-micrometer-registry-prometheus
 ----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus extension add quarkus-micrometer-registry-prometheus
+----
+--
+====
 
 == Create TimeResource
 

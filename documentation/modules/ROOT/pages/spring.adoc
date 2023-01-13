@@ -6,11 +6,28 @@ Are you a Spring Framework user? Wouldn't it be wonderful if you could reuse you
 
 Quarkus supports many of your favorite Spring Framework projects. In this chapter, we're going to use the Spring DI, Spring Web, and Spring Data APIs. Let's add the required extensions:
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
-mvn quarkus:add-extension -Dextensions=quarkus-spring-web,quarkus-spring-data-jpa
+mvn quarkus:add-extension -Dextensions=quarkus-spring-web,quarkus-spring-data-jpa quarkus-resteasy-jackson
 ----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus extension add quarkus-spring-web quarkus-spring-data-jpa quarkus-resteasy-jackson
+----
+--
+====
 
 [.console-output]
 [source,text]

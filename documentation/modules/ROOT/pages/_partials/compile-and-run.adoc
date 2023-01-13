@@ -3,12 +3,32 @@
 JVM mode::
 +
 --
-[#basics-build-quarkus-jvm-app]
+
+[%header,cols="1,1"]
+|=====
+
+|Maven
+
+|Quarkus CLI
+
+a|
+[#basics-build-quarkus-jvm-app-mvn]
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn package
+ mvn package 
 ----
+
+a|
+[#basics-build-quarkus-jvm-app-quarkus]
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus build
+----
+
+|=====
+
 
 To run the application in jvm mode
 
@@ -23,12 +43,30 @@ java -jar target/quarkus-app/quarkus-run.jar
 Native mode::
 +
 --
-[#basics-build-quarkus-native-app]
+[%header,cols="1,1"]
+|=====
+
+|Maven
+
+|Quarkus CLI
+
+a|
+[#basics-build-quarkus-native-app-mvn]
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn -DskipTests clean package -Pnative
+ mvn package -Dnative
 ----
+
+a|
+[#basics-build-quarkus-native-app-quarkus]
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus build --native
+----
+|=====
+
 
 NOTE: Native compilation will take few minutes to complete.
 
@@ -45,23 +83,40 @@ To run the application in native mode
 Native container-build mode::
 +
 --
-[#basics-build-quarkus-native-docker-app]
+
+[%header,cols="1,1"]
+|=====
+|Maven
+
+|Quarkus CLI
+
+a|
+[#basics-build-quarkus-native-docker-app-mvn]
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn package -DskipTests -Pnative -Dquarkus.native.container-build=true
+ mvn quarkus:image-build \
+  -Dnative
 ----
+a|
+[#basics-build-quarkus-native-docker-app-quarkus]
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus image build --native 
+----
+|=====
 
 NOTE: Native compilation will take few minutes to complete.
 
-To run the application in native mode you need to build a Docker image using the native file generated in previous step:
+The above command built a native binary of the Java code and also built it into a container image.
+To run the application (in native mode) you will need to start up a container:
 
 [#basics-build-run-native-docker-app]
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-docker build -f src/main/docker/Dockerfile.native -t example/{project-name}:1.0-SNAPSHOT .
-docker run -it --rm -p 8080:8080 example/{project-name}:1.0-SNAPSHOT
+docker run -it --rm -p 8080:8080 {project-name}:1.0-SNAPSHOT
 ----
 
 --

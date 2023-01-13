@@ -6,11 +6,29 @@ When trying to achieve the goal of resilience in our distributed systems, someti
 
 Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
-mvn quarkus:add-extension -Dextension=quarkus-smallrye-fault-tolerance
+mvn quarkus:add-extension -Dextensions=quarkus-smallrye-fault-tolerance
 ----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus extension add quarkus-smallrye-fault-tolerance
+----
+--
+====
+
 
 == Add Retry to FruityViceService
 

@@ -11,11 +11,28 @@ Then we're going to filter all the beers with an ABV greater than 15.0 and retur
 
 Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
-mvn quarkus:add-extension -Dextensions=io.quarkus:quarkus-resteasy-mutiny
+mvn quarkus:add-extension -Dextension=quarkus-resteasy-mutiny
 ----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus extension add quarkus-resteasy-mutiny
+----
+--
+====
 
 == Create Beer POJO
 

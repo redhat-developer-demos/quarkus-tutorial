@@ -33,11 +33,29 @@ You probably still have `mvn quarkus:dev` running in your terminal. And that's p
 
 Just open a new terminal window, and make sure you're at the root of your `{project-name}` project, then run:
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
 mvn quarkus:add-extension -Dextension="quarkus-resteasy-jsonb, quarkus-jdbc-h2, quarkus-hibernate-orm-panache, quarkus-smallrye-openapi"
 ----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus extension add quarkus-resteasy-jsonb quarkus-jdbc-h2 quarkus-hibernate-orm-panache quarkus-smallrye-openapi
+----
+--
+====
+
 
 [.console-output]
 [source,text]

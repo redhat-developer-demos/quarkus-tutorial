@@ -1,6 +1,6 @@
 [[requirements]]
 = Setup
-include::../_attributes.adoc[]
+include::../_attributes.adoc
 
 == IDE
 

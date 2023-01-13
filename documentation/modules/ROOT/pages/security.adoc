@@ -11,11 +11,28 @@ So let's see how you can start using JWT for _Role Based Access Control_ (RBAC) 
 
 Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 mvn quarkus:add-extension -Dextension=quarkus-smallrye-jwt
 ----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus extension add quarkus-smallrye-jwt
+----
+--
+====
 
 == Add the JWT properties
 

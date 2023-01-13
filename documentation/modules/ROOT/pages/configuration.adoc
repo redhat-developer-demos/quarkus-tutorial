@@ -7,7 +7,7 @@ Quarkus relies on the MicroProfile Config specification and the main configurati
 
 == Using a config property in your code
 
-Let's change our `HelloResource` class to use a configuration property. Change its content to:
+Let's change our `GreetingResource` class to use a configuration property. Change its content to:
 
 [.console-input]
 [source,java]
@@ -22,7 +22,7 @@ import javax.ws.rs.core.MediaType;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @Path("/hello")
-public class HelloResource {
+public class GreetingResource {
 
     @ConfigProperty(name = "greeting")
     String greeting;
@@ -93,7 +93,7 @@ Hello y'all!
 
 Since we changed the output of our `/hello` endpoint, our integration test doesn't pass anymore.
 
-Let's update `HelloResourceTest` to reflect our recent changes:
+Let's update `GreetingResourceTest` to reflect our recent changes:
 
 [.console-input]
 [source,java]
@@ -107,10 +107,10 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 
 @QuarkusTest
-public class HelloResourceTest {
+public class GreetingResourceTest {
 
     @Test
-    public void testHelloEndpoint() {
+    public void testGreetingEndpoint() {
         given()
           .when().get("/hello")
           .then()
@@ -121,7 +121,11 @@ public class HelloResourceTest {
 }
 ----
 
+NOTE: If you're still running in live testing mode you will already see that the tests pass again and you can ignore the rest of this page and move on to the next step.
+
 Stop your current Live Coding session of Quarkus in the terminal by sending a `CTRL+C`:
+
+
 
 [.console-output]
 [source,text]
@@ -131,11 +135,28 @@ Stop your current Live Coding session of Quarkus in the terminal by sending a `C
 
 Now run your tests to check if everything is ok:
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
 mvn clean test
 ----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus test
+----
+--
+====
 
 [.console-output]
 [source,text]
@@ -155,8 +176,25 @@ mvn clean test
 
 `BUILD SUCCESS`! You can now go back to the amazing _Live Coding_ mode of Quarkus:
 
+[tabs]
+====
+Maven::
++ 
+--
 [.console-input]
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
 mvn quarkus:dev
 ----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus dev
+----
+--
+====
