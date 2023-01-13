@@ -24,7 +24,7 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn quarkus extension add quarkus-spring-web quarkus-spring-data-jpa quarkus-resteasy-jackson
+quarkus extension add quarkus-spring-web quarkus-spring-data-jpa quarkus-resteasy-jackson
 ----
 --
 ====
