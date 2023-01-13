@@ -175,9 +175,32 @@ You will need a public container registry to store your image. If you don&#8217;
 <div class="paragraph">
 <p>Let&#8217;s add the required extensions:</p>
 </div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset1_maven"></a>Maven</p>
+</li>
+<li>
+<p><a id="tabset1_quarkus-cli"></a>Quarkus CLI</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset1_maven">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn quarkus:add-extension -Dextensions=quarkus-kubernetes,quarkus-container-image-jib</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_quarkus-cli">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus extension add quarkus-kubernetes quarkus-container-image-jib</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -198,10 +221,10 @@ quarkus.datasource.db-kind=h2
 quarkus.hibernate-orm.database.generation=drop-and-create
 quarkus.hibernate-orm.sql-load-script=import.sql
 
-quarkus.container-image.registry=quay.io <i class="conum" data-value="1"></i><b>(1)</b>
-quarkus.container-image.group=myrepo <i class="conum" data-value="2"></i><b>(2)</b>
-quarkus.container-image.name=tutorial-app <i class="conum" data-value="3"></i><b>(3)</b>
-quarkus.container-image.tag=1.0-SNAPSHOT <i class="conum" data-value="4"></i><b>(4)</b>
+quarkus.container-image.registry=quay.io<i class="conum" data-value="1"></i><b>(1)</b>
+quarkus.container-image.group=myrepo<i class="conum" data-value="2"></i><b>(2)</b>
+quarkus.container-image.name=tutorial-app<i class="conum" data-value="3"></i><b>(3)</b>
+quarkus.container-image.tag=1.0-SNAPSHOT<i class="conum" data-value="4"></i><b>(4)</b>
 quarkus.kubernetes.service-type=load-balancer</code></pre>
 </div>
 </div>
@@ -254,9 +277,32 @@ If you don&#8217;t, your push <strong>will</strong> fail.
 <div class="paragraph">
 <p>Now create and push your container image using jib:</p>
 </div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset2_maven"></a>Maven</p>
+</li>
+<li>
+<p><a id="tabset2_quarkus-cli"></a>Quarkus CLI</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset2_maven">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn clean package -DskipTests -Dquarkus.container-image.push=true</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset2_quarkus-cli">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus image push --also-build --no-tests</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -301,18 +347,18 @@ deployment.apps/tutorial-app created</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset1_minikube"></a>Minikube</p>
+<p><a id="tabset3_minikube"></a>Minikube</p>
 </li>
 <li>
-<p><a id="tabset1_hosted"></a>Hosted</p>
+<p><a id="tabset3_hosted"></a>Hosted</p>
 </li>
 <li>
-<p><a id="tabset1_hosted-on-aws"></a>Hosted on AWS</p>
+<p><a id="tabset3_hosted-on-aws"></a>Hosted on AWS</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset1_minikube">
+<div class="tab-pane" aria-labelledby="tabset3_minikube">
 <div id="{section-k8s}-ip-port-minikube" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">IP=$(minikube ip)
@@ -321,7 +367,7 @@ echo $IP:$PORT</code></pre>
 </div>
 </div>
 </div>
-<div class="tab-pane" aria-labelledby="tabset1_hosted">
+<div class="tab-pane" aria-labelledby="tabset3_hosted">
 <div class="paragraph">
 <p>If using a hosted Kubernetes cluster like OpenShift then use curl and the EXTERNAL-IP address with port <code>8080</code> or get it using <code>kubectl</code>:</p>
 </div>
@@ -333,11 +379,11 @@ echo $IP:$PORT</code></pre>
 </div>
 </div>
 </div>
-<div class="tab-pane" aria-labelledby="tabset1_hosted-on-aws">
+<div class="tab-pane" aria-labelledby="tabset3_hosted-on-aws">
 <div class="paragraph">
 <p>If using a hosted Kubernetes cluster like OpenShift then use curl and the EXTERNAL-IP address with port <code>8080</code> or get it using <code>kubectl</code>:</p>
 </div>
-<div id="{section-k8s}-ip-port-openshift" class="listingblock console-input">
+<div id="{section-k8s}-ip-port-service" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">IP=$(kubectl get service tutorial-app -o jsonpath="{.status.loadBalancer.ingress[0].hostname}")
 PORT=$(kubectl get service tutorial-app -o jsonpath="{.spec.ports[*].port}")

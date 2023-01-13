@@ -150,7 +150,7 @@
 </div>
 <div class="paragraph">
 <p>In this chapter we&#8217;re going to use Mutiny to create price request for beers to a remote service called <code>price-generator</code> using Kafka as the broker for our messages in a Kafka topic called <code>beer</code>. The <code>price-generator</code> will get the beer from this topic, add a tag price to it, and send the information back in a Kafka topic called <code>priced-beer</code>.
-Finally, we&#8217;ll read the priced beers from the topic and send it throught our REST endpoint using SSE (Server-Side Events).</p>
+Finally, we&#8217;ll read the priced beers from the topic and send it through our REST endpoint using SSE (Server-Side Events).</p>
 </div>
 </div>
 </div>
@@ -160,9 +160,32 @@ Finally, we&#8217;ll read the priced beers from the topic and send it throught o
 <div class="paragraph">
 <p>Just open a new terminal window, and make sure you’re at the root of your <code>tutorial-app</code> project, then run:</p>
 </div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset1_maven"></a>Maven</p>
+</li>
+<li>
+<p><a id="tabset1_quarkus-cli"></a>Quarkus CLI</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset1_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn quarkus:add-extension -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging-kafka"</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn quarkus:add-extension -Dextensions=quarkus-smallrye-reactive-messaging-kafka</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_quarkus-cli">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus extension add quarkus-smallrye-reactive-messaging-kafka</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>

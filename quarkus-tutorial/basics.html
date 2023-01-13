@@ -147,16 +147,51 @@
 <div class="sect1">
 <h2 id="_creating_a_quarkus_application"><a class="anchor" href="#_creating_a_quarkus_application"></a>Creating a Quarkus Application</h2>
 <div class="sectionbody">
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset1_maven"></a>Maven</p>
+</li>
+<li>
+<p><a id="tabset1_quarkus-cli"></a>Quarkus CLI</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset1_maven">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn "io.quarkus:quarkus-maven-plugin:create" \
   -DprojectGroupId="com.redhat.developers" \
   -DprojectArtifactId="tutorial-app" \
   -DprojectVersion="1.0-SNAPSHOT" \
-  -DclassName="HelloResource" \
+  -DclassName="GreetingResource" \
   -Dpath="hello" \
   -Dextensions="resteasy"
 cd tutorial-app</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_quarkus-cli">
+<div class="paragraph">
+<p>The quarkus command lets you create projects, manage extensions and do essential build and dev commands using the underlying project build tool.</p>
+</div>
+<div class="paragraph">
+<p>Follow these instructions to install Quarkus CLI: <a href="https://quarkus.io/guides/cli-tooling" class="bare">https://quarkus.io/guides/cli-tooling</a></p>
+</div>
+<div class="paragraph">
+<p>Then create the application:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus create app \
+  -x resteasy \
+  com.redhat.developers:tutorial-app:1.0-SNAPSHOT
+cd tutorial-app</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="admonitionblock important">
@@ -180,23 +215,44 @@ All the remaining parts of this tutorial assume that you&#8217;ll be working ins
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset1_jvm-mode"></a>JVM mode</p>
+<p><a id="tabset2_jvm-mode"></a>JVM mode</p>
 </li>
 <li>
-<p><a id="tabset1_native-mode"></a>Native mode</p>
+<p><a id="tabset2_native-mode"></a>Native mode</p>
 </li>
 <li>
-<p><a id="tabset1_native-container-build-mode"></a>Native container-build mode</p>
+<p><a id="tabset2_native-container-build-mode"></a>Native container-build mode</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset1_jvm-mode">
-<div id="basics-build-quarkus-jvm-app" class="listingblock console-input">
+<div class="tab-pane" aria-labelledby="tabset2_jvm-mode">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Maven</th>
+<th class="tableblock halign-left valign-top">Quarkus CLI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div id="basics-build-quarkus-jvm-app-mvn" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn package</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"> mvn package</code></pre>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div id="basics-build-quarkus-jvm-app-quarkus" class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus build</code></pre>
 </div>
+</div></div></td>
+</tr>
+</tbody>
+</table>
 <div class="paragraph">
 <p>To run the application in jvm mode</p>
 </div>
@@ -206,12 +262,33 @@ All the remaining parts of this tutorial assume that you&#8217;ll be working ins
 </div>
 </div>
 </div>
-<div class="tab-pane" aria-labelledby="tabset1_native-mode">
-<div id="basics-build-quarkus-native-app" class="listingblock console-input">
+<div class="tab-pane" aria-labelledby="tabset2_native-mode">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Maven</th>
+<th class="tableblock halign-left valign-top">Quarkus CLI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div id="basics-build-quarkus-native-app-mvn" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn -DskipTests clean package -Pnative</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"> mvn package -Dnative</code></pre>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div id="basics-build-quarkus-native-app-quarkus" class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus build --native</code></pre>
 </div>
+</div></div></td>
+</tr>
+</tbody>
+</table>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -233,12 +310,34 @@ Native compilation will take few minutes to complete.
 </div>
 </div>
 </div>
-<div class="tab-pane" aria-labelledby="tabset1_native-container-build-mode">
-<div id="basics-build-quarkus-native-docker-app" class="listingblock console-input">
+<div class="tab-pane" aria-labelledby="tabset2_native-container-build-mode">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Maven</th>
+<th class="tableblock halign-left valign-top">Quarkus CLI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div id="basics-build-quarkus-native-docker-app-mvn" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn package -DskipTests -Pnative -Dquarkus.native.container-build=true</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"> mvn quarkus:image-build \
+  -Dnative</code></pre>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div id="basics-build-quarkus-native-docker-app-quarkus" class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus image build --native</code></pre>
 </div>
+</div></div></td>
+</tr>
+</tbody>
+</table>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -252,12 +351,12 @@ Native compilation will take few minutes to complete.
 </table>
 </div>
 <div class="paragraph">
-<p>To run the application in native mode you need to build a Docker image using the native file generated in previous step:</p>
+<p>The above command built a native binary of the Java code and also built it into a container image.
+To run the application (in native mode) you will need to start up a container:</p>
 </div>
 <div id="basics-build-run-native-docker-app" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker build -f src/main/docker/Dockerfile.native -t example/tutorial-app:1.0-SNAPSHOT .
-docker run -it --rm -p 8080:8080 example/tutorial-app:1.0-SNAPSHOT</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run -it --rm -p 8080:8080 tutorial-app:1.0-SNAPSHOT</code></pre>
 </div>
 </div>
 </div>
@@ -299,15 +398,6 @@ docker run -it --rm -p 8080:8080 example/tutorial-app:1.0-SNAPSHOT</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_dev_ui"><a class="anchor" href="#_dev_ui"></a>Dev UI</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Quarkus now ships with a new experimental Dev UI, which is available in dev mode at <a href="http://localhost:8080/q/dev">/q/dev</a> by default.
-It allows you to quickly visualize all the extensions currently loaded, see their status and go directly to their documentation.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
 <h2 id="_stopping_the_application"><a class="anchor" href="#_stopping_the_application"></a>Stopping the application</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -330,17 +420,52 @@ It allows you to quickly visualize all the extensions currently loaded, see thei
 <p>The scaffolding process also creates a test case for the example endpoint.</p>
 </div>
 <div class="paragraph">
-<p>Check the file <code>HelloResourceTest.java</code> in the folder <code>src/test/java</code> to see how a Quarkus integration test looks like.</p>
+<p>Check the file <code>GreetingResourceTest.java</code> in the folder <code>src/test/java</code> to see what a Quarkus integration test looks like.</p>
 </div>
 <div class="paragraph">
-<p>When running this test, the application is started once, then all tests are executed, and finally, the application stops. Although it is not mandatory, by default RestAssured project is used to test Rest endpoints but it is up to you to change that.</p>
+<p>When running this test, the application is started once, then all tests are executed, and finally, the application stops. Although it is not mandatory, by default the RestAssured project is used to test Rest endpoints but it is up to you to change that.</p>
 </div>
 <div class="paragraph">
-<p>You can run the test in your IDE or by running Maven:</p>
+<p>You can run the test in your IDE or by running the following:</p>
 </div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset3_maven"></a>Maven</p>
+</li>
+<li>
+<p><a id="tabset3_quarkus-cli"></a>Quarkus CLI</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset3_maven">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn clean test</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset3_quarkus-cli">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus test</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>quarkus test</code> starts tests in continuous testing mode (more about this below) so to return to the command line you will need to press (q)
+</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -388,9 +513,46 @@ If you use <code>tutorial-tools</code>, your host <code>quarkus-tutorial/work</c
 <div class="paragraph">
 <p>Let&#8217;s start the <em>Live Coding</em> mode by invoking <code>mvn</code>. You probably won&#8217;t need to stop/start Quarkus again during this tutorial:</p>
 </div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset4_maven"></a>Maven</p>
+</li>
+<li>
+<p><a id="tabset4_quarkus-cli"></a>Quarkus CLI</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset4_maven">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn quarkus:dev</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset4_quarkus-cli">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus dev</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_dev_ui"><a class="anchor" href="#_dev_ui"></a>Dev UI</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus ships with a Dev UI, which is available in dev mode at <a href="http://localhost:8080/q/dev">/q/dev</a> by default.
+It allows you to quickly visualize all the extensions currently loaded, see their status and go directly to their documentation.</p>
+</div>
+<div class="imageblock text-center mt-4 center">
+<div class="content">
+<img src="_images/Dev_UI.png" alt="Dev UI" width="800" height="600">
 </div>
 </div>
 </div>
@@ -400,11 +562,34 @@ If you use <code>tutorial-tools</code>, your host <code>quarkus-tutorial/work</c
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus supports continuous testing, meaning that your tests will run immediately after code changes were saved.
-Let&#8217;s start again in <em>Live Coding</em> mode by invoking <code>mvn</code>:</p>
+Let&#8217;s start again in <em>Live Coding</em> mode by invoking quarkus dev mode:</p>
 </div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset5_maven"></a>Maven</p>
+</li>
+<li>
+<p><a id="tabset5_quarkus-cli"></a>Quarkus CLI</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset5_maven">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn quarkus:dev</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset5_quarkus-cli">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus dev</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="paragraph">
