@@ -43,9 +43,9 @@ Please have them installed and configured before you get started with any of the
 | `dnf install docker`
 | https://www.docker.com/products/docker-desktop[Docker Desktop for Windows, window="_blank"]
 
-| **Java 11**
-| `brew tap AdoptOpenJDK/openjdk && brew cask install adoptopenjdk11`
-| `dnf install java-11-openjdk.x86_64`
+| **Java 17**
+| `brew tap AdoptOpenJDK/openjdk && brew cask install adoptopenjdk17`
+| `dnf install java-17-openjdk.x86_64`
 | https://adoptopenjdk.net[Windows] (Make sure you set the `JAVA_HOME` environment variable and add `%JAVA_HOME%\bin` to your `PATH`)
 
 | **Apache Maven 3.8.1+**
@@ -54,9 +54,9 @@ Please have them installed and configured before you get started with any of the
 | https://maven.apache.org/download.cgi[Windows] (Make sure you set the `MAVEN_HOME` environment variable and add `%MAVEN_HOME%\bin` to your `PATH`)
 
 | **Graal VM**
-| https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-{graalvm-version}/graalvm-ce-java11-darwin-amd64-{graalvm-version}.tar.gz[GraalVM Community Edition {graalvm-version}]
-| https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-{graalvm-version}/graalvm-ce-java11-linux-amd64-{graalvm-version}.tar.gz[GraalVM Community Edition {graalvm-version}]
-| https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-{graalvm-version}/graalvm-ce-java11-windows-amd64-{graalvm-version}.zip[GraalVM Community Edition {graalvm-version}]
+| https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-{graalvm-version}/graalvm-ce-java17-darwin-amd64-{graalvm-version}.tar.gz[GraalVM Community Edition {graalvm-version}]
+| https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-{graalvm-version}/graalvm-ce-java17-linux-amd64-{graalvm-version}.tar.gz[GraalVM Community Edition {graalvm-version}]
+| https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-{graalvm-version}/graalvm-ce-java17-windows-amd64-{graalvm-version}.zip[GraalVM Community Edition {graalvm-version}]
 
 |===
 --
@@ -68,7 +68,7 @@ https://quay.io/repository/rhdevelopers/tutorial-tools?tab=tags[tutorial tools] 
 [#docker-pull-tutorials-cli]
 [source,bash]
 -----
-docker pull quay.io/rhdevelopers/tutorial-tools:0.0.4
+docker pull quay.io/rhdevelopers/tutorial-tools:0.0.6
 mkdir quarkus-tutorial
 cd quarkus-tutorial
 mkdir work
