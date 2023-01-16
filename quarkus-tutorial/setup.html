@@ -226,9 +226,9 @@ which allows you to run this entire tutorial within a container that will have a
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.docker.com/products/docker-desktop" target="_blank" rel="noopener">Docker Desktop for Windows</a></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Java 11</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>brew tap AdoptOpenJDK/openjdk &amp;&amp; brew cask install adoptopenjdk11</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dnf install java-11-openjdk.x86_64</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Java 17</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>brew tap AdoptOpenJDK/openjdk &amp;&amp; brew cask install adoptopenjdk17</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dnf install java-17-openjdk.x86_64</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://adoptopenjdk.net">Windows</a> (Make sure you set the <code>JAVA_HOME</code> environment variable and add <code>%JAVA_HOME%\bin</code> to your <code>PATH</code>)</p></td>
 </tr>
 <tr>
@@ -239,9 +239,9 @@ which allows you to run this entire tutorial within a container that will have a
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Graal VM</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java11-darwin-amd64-22.1.0.tar.gz">GraalVM Community Edition 22.1.0</a></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java11-linux-amd64-22.1.0.tar.gz">GraalVM Community Edition 22.1.0</a></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java11-windows-amd64-22.1.0.zip">GraalVM Community Edition 22.1.0</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java17-darwin-amd64-22.3.0.tar.gz">GraalVM Community Edition 22.3.0</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java17-linux-amd64-22.3.0.tar.gz">GraalVM Community Edition 22.3.0</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java17-windows-amd64-22.3.0.zip">GraalVM Community Edition 22.3.0</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -253,7 +253,7 @@ which allows you to run this entire tutorial within a container that will have a
 </div>
 <div id="docker-pull-tutorials-cli" class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker pull quay.io/rhdevelopers/tutorial-tools:0.0.4
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker pull quay.io/rhdevelopers/tutorial-tools:0.0.6
 mkdir quarkus-tutorial
 cd quarkus-tutorial
 mkdir work
