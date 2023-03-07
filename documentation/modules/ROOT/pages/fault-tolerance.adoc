@@ -100,7 +100,7 @@ curl localhost:8080/fruit?season=Summer
 ]
 ----
 
-No change from calls done previously, but now switch off your network so you do not have access to http://www.fruityvice.com.
+No change from calls done previously, but now switch off your network so you do not have access to http://fruityvice.com.  
 
 Run the following command again:
 
@@ -110,7 +110,7 @@ Run the following command again:
 curl localhost:8080/fruit?season=Summer
 ----
 
-Now after waiting 6 seconds (3 retries x 2 seconds), the next exception is thrown `java.net.UnknownHostException: www.fruityvice.com`.
+Now after waiting 6 seconds (3 retries x 2 seconds), the next exception is thrown `java.net.UnknownHostException: fruityvice.com`.
 
 == Add Fallback to Fruity Vice Service
 
@@ -248,7 +248,7 @@ Run the following command at least 5 times:
 curl localhost:8080/fruit?season=Summer
 ----
 
-The output changes from `java.net.UnknownHostException: www.fruityvice.com` (or any other network exception) in the first calls to `org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getFruitByName` when the circuit is opened.
+The output changes from `java.net.UnknownHostException: fruityvice.com` (or any other network exception) in the first calls to `org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getFruitByName` when the circuit is opened.
 
 The big difference between the first exception and the second one is that the first one occurs because the circuit is closed while the system is trying to reach the host, while in the second one, the circuit is closed and the exception is thrown automatically without trying to reach the host.
 

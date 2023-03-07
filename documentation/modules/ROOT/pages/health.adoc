@@ -102,7 +102,7 @@ Some extensions may provide default health checks, including that the extension 
 For example, quarkus-agroal (that is used to manage Quarkus datasources) automatically registers a readiness health check that will validate each datasource.
 
 Since the readiness of the database is already assessed just by adding those extensions, we should look into defining health checks for other dependencies that we have.
-As we depend on the availability of https://www.fruityvice.com, let's create a new `ReadinessProbe` to assess its availability prior to using it.
+As we depend on the availability of https://fruityvice.com, let's create a new `ReadinessProbe` to assess its availability prior to using it.
 
 We will define a new Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
@@ -161,7 +161,7 @@ curl localhost:8080/health
             "name": "ExternalURL health check",
             "status": "UP",
             "data": {
-                "host": "GET https://www.fruityvice.com/api/fruit/banana"
+                "host": "GET https://fruityvice.com/api/fruit/banana"
             }
         },
         {
@@ -220,7 +220,7 @@ curl localhost:8080/health/ready
             "name": "ExternalURL health check",
             "status": "UP",
             "data": {
-                "host": "GET https://www.fruityvice.com/api/fruit/banana"
+                "host": "GET https://fruityvice.com/api/fruit/banana"
             }
         },
         {
