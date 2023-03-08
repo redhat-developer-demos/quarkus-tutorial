@@ -287,7 +287,7 @@ For example, quarkus-agroal (that is used to manage Quarkus datasources) automat
 </div>
 <div class="paragraph">
 <p>Since the readiness of the database is already assessed just by adding those extensions, we should look into defining health checks for other dependencies that we have.
-As we depend on the availability of <a href="https://www.fruityvice.com" class="bare">https://www.fruityvice.com</a>, let&#8217;s create a new <code>ReadinessProbe</code> to assess its availability prior to using it.</p>
+As we depend on the availability of <a href="https://fruityvice.com" class="bare">https://fruityvice.com</a>, let&#8217;s create a new <code>ReadinessProbe</code> to assess its availability prior to using it.</p>
 </div>
 <div class="paragraph">
 <p>We will define a new Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
@@ -357,7 +357,7 @@ public class CustomHealthCheck {
             "name": "ExternalURL health check",
             "status": "UP",
             "data": {
-                "host": "GET https://www.fruityvice.com/api/fruit/banana"
+                "host": "GET https://fruityvice.com/api/fruit/banana"
             }
         },
         {
@@ -422,7 +422,7 @@ public class CustomHealthCheck {
             "name": "ExternalURL health check",
             "status": "UP",
             "data": {
-                "host": "GET https://www.fruityvice.com/api/fruit/banana"
+                "host": "GET https://fruityvice.com/api/fruit/banana"
             }
         },
         {

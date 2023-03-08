@@ -150,7 +150,7 @@
 <p>An atypical scenario in a Microservices architecture is the remote invocation of remote REST HTTP endpoints. Quarkus provides a typed REST client that follows the  <a href="https://github.com/eclipse/microprofile-rest-client" target="_blank" rel="noopener">MicroProfile REST Client</a> specification.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s create a REST client that accesses <a href="https://www.fruityvice.com" class="bare" target="_blank" rel="noopener">https://www.fruityvice.com</a> to get nutrition information about our fruits. The endpoint we&#8217;re interested in is this one:</p>
+<p>Let&#8217;s create a REST client that accesses <a href="https://fruityvice.com" class="bare" target="_blank" rel="noopener">https://fruityvice.com</a> to get nutrition information about our fruits. The endpoint we&#8217;re interested in is this one:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -237,7 +237,7 @@
 <h2 id="_create_fruityvice_pojo"><a class="anchor" href="#_create_fruityvice_pojo"></a>Create FruityVice POJO</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We need to create a POJO object that is used to unmarshal a JSON message from <a href="http://www.fruityvice.com" class="bare" target="_blank" rel="noopener">http://www.fruityvice.com</a>.</p>
+<p>We need to create a POJO object that is used to unmarshal a JSON message from <a href="http://fruityvice.com" class="bare" target="_blank" rel="noopener">http://fruityvice.com</a>.</p>
 </div>
 <div class="paragraph">
 <p>Create a new <code>FruityVice</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
@@ -344,7 +344,7 @@ public interface FruityViceService {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">com.redhat.developers.FruityViceService/mp-rest/url=https://www.fruityvice.com</code></pre>
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">com.redhat.developers.FruityViceService/mp-rest/url=https://fruityvice.com</code></pre>
 </div>
 </div>
 </div>

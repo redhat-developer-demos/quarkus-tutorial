@@ -263,7 +263,7 @@ public interface FruityViceService {
 </div>
 </div>
 <div class="paragraph">
-<p>No change from calls done previously, but now switch off your network so you do not have access to <a href="http://www.fruityvice.com" class="bare">http://www.fruityvice.com</a>.</p>
+<p>No change from calls done previously, but now switch off your network so you do not have access to <a href="http://fruityvice.com" class="bare">http://fruityvice.com</a>.</p>
 </div>
 <div class="paragraph">
 <p>Run the following command again:</p>
@@ -274,7 +274,7 @@ public interface FruityViceService {
 </div>
 </div>
 <div class="paragraph">
-<p>Now after waiting 6 seconds (3 retries x 2 seconds), the next exception is thrown <code>java.net.UnknownHostException: www.fruityvice.com</code>.</p>
+<p>Now after waiting 6 seconds (3 retries x 2 seconds), the next exception is thrown <code>java.net.UnknownHostException: fruityvice.com</code>.</p>
 </div>
 </div>
 </div>
@@ -427,7 +427,7 @@ If the invocation succeeds, then the circuit is back to closed again.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The output changes from <code>java.net.UnknownHostException: www.fruityvice.com</code> (or any other network exception) in the first calls to <code>org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getFruitByName</code> when the circuit is opened.</p>
+<p>The output changes from <code>java.net.UnknownHostException: fruityvice.com</code> (or any other network exception) in the first calls to <code>org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getFruitByName</code> when the circuit is opened.</p>
 </div>
 <div class="paragraph">
 <p>The big difference between the first exception and the second one is that the first one occurs because the circuit is closed while the system is trying to reach the host, while in the second one, the circuit is closed and the exception is thrown automatically without trying to reach the host.</p>
