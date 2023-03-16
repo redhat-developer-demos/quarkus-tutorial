@@ -22,6 +22,8 @@ Kubernetes/OpenShift are required only in case you want to deploy the applicatio
 endif::workshop[]
 ////
 
+TIP: You can also use https://podman-desktop.io/[Podman] instead of Docker. The advantage of Podman is that it is 100% Free Open Source and does not need to run with elevated privileges. Just use 'podman' instead of 'docker' throughout the tutorial's instructions, or `alias docker=podman`.
+
 [WARNING]
 ====
 GraalVM is only required if you intend to build a native image for your local operating system. If you want to create a container using a native image, you can use the Quarkus feature for this and don't need to install GraalVM locally.

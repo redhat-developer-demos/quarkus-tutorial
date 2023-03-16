@@ -1,0 +1,221 @@
+= Dev Services
+
+Quarkus supports the automatic provisioning of unconfigured services in *development and test* mode. 
+We refer to this capability as Dev Services. From a developer's perspective this means that if you include an extension and don't configure it then Quarkus will automatically start the relevant service (usually using https://www.testcontainers.org/[Testcontainers] behind the scenes) and wire up your application to use this service, even pre-configuring access credentials.
+
+NOTE: Dev Services will only be enabled in dev/test mode, so it will not affect the application running in production.  If you want to disable all Dev Services you can use the quarkus.devservices.enabled=false config property, or you can simply configure the service in which case it will result in the Dev Service being disabled automatically.
+
+TIP: If you are using a proprietary database such as `DB2` or `MSSQL` you will need to accept the license agreement. To do this, create a `src/main/resources/container-license-acceptance.txt` file in your project and add a line with the image name and tag of the database. 
+
+More on zero config setup of datasources can be found https://quarkus.io/guides/datasource#dev-services[here].
+
+== Replace Database Extensions 
+
+Instead of the built-in h2 database, we're now going to use an external database.  Swapping out from one database provider to another is fairly trivial with Quarkus.  We just remove the h2 extension and add the postgresql extension instead:
+
+
+[tabs]
+====
+Maven::
++ 
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+mvn quarkus:remove-extension -Dextension=quarkus-jdbc-h2
+mvn quarkus:add-extension -Dextension=quarkus-jdbc-postgresql
+----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus extension remove quarkus-jdbc-h2
+quarkus extension add quarkus-jdbc-postgresql
+----
+--
+====
+
+
+== Update configuration
+
+We'll also need to update the configuration and change h2 to postgresql:
+
+[#quarkuspdb-update-props]
+[.console-input]
+[source,config,subs="+macros,+attributes"]
+----
+# Configuration file
+# key = value
+greeting=Hello y'all!
+quarkus.datasource.db-kind=postgresql
+quarkus.hibernate-orm.database.generation=drop-and-create
+----
+
+
+
+
+You will now see that Quarkus has reloaded and started up a Postgresql database dev service:
+
+[.console-output]
+[source,text]
+----
+
+--
+Checking Docker Environment
+2023-03-16 08:06:56,882 INFO  [io.qua.dat.dep.dev.DevServicesDatasourceProcessor] (build-13) Dev Services for the default datasource (postgresql) started - container ID is c7c9a6ccf029
+----
+
+== Verify Postgresql testcontainer is running
+
+You can now also verify/access the dev services container via Docker or Podman:
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+docker ps 
+----
+
+[.mt-4.center]
+image::Dev_Services_Podman_ps.png[Dev Services Container,800,100,align="left"]
+
+You can check to see that the fruit endpoint is still working, but in this case the data is coming from the postgresql database. 
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+curl localhost:8080/fruit?season=Spring
+----
+
+[.console-output]
+[source,json]
+----
+[
+  {
+    "id": 1,
+    "name": "Mango",
+    "season": "Spring"
+  },
+  {
+    "id": 2,
+    "name": "Strawberry",
+    "season": "Spring"
+  }
+]
+----
+
+
+== [Optional] Re-deploy to Kubernetes
+
+If you would like to redeploy to Kubernetes, this time you will need to provision a Postgresql database because as mentioned before, Dev Services are only enabled in dev/test mode.
+
+We will also need to add credentials to connect to the external database. Make sure you have the following properties set:
+
+[#quarkus-pgsql-config]
+[.console-input]
+[source,config,subs="+macros,+attributes"]
+----
+%prod.quarkus.datasource.password=quarkus
+%prod.quarkus.datasource.username=quarkus
+%prod.quarkus.datasource.db-kind=postgresql
+%prod.quarkus.datasource.jdbc.url=jdbc:postgresql://postgresql/quarkus
+quarkus.hibernate-orm.database.generation=drop-and-create
+quarkus.hibernate-orm.sql-load-script=import.sql
+----
+
+NOTE: We added a %prod. prefix to some of the properties.  This prefix makes it so these property will only be evaluated with the (default) prod profile.  In dev mode these values will be ignored, thus triggering the Dev Services creation.
+
+=== Create a postgresql database
+
+There are several ways to deploy a Postgresql Database to Kubernetes.  If you're using Openshift, you could create one easily through the UI (Developer Perspective > +Add > Database > PostgreSQL).  Just make sure your database name, username and password match up with what you have configured in your application.properties or secrets.  
+
+You can also apply the following Kubernetes manifest to deploy a simple ephemeral instance:
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+cat <<EOF | kubectl apply -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresql
+spec:
+  selector:
+    matchLabels:
+      app: postgresql
+  template:
+    metadata:
+      labels:
+        app: postgresql
+    spec:
+      containers:
+        - name: postgresql
+          image: quay.io/redhatdemo/openshift-pgsql12-primary:centos7
+          imagePullPolicy: Always
+          ports:
+            - name: tcp
+              containerPort: 5432
+          env:
+            - name: PG_USER_PASSWORD
+              value: quarkus
+            - name: PG_USER_NAME
+              value: quarkus
+            - name: PG_DATABASE
+              value: quarkus
+            - name: PG_NETWORK_MASK
+              value: all
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: postgresql
+spec:
+  ports:
+    - name: pgsql
+      protocol: TCP
+      port: 5432
+      targetPort: 5432
+  type: ClusterIP
+  selector:
+    app: postgresql
+EOF
+----
+
+=== Rebuild and deploy your application
+
+Rebuild the application and container, and push to your registry again: 
+
+[tabs]
+====
+Maven::
++ 
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+mvn clean package -DskipTests -Dquarkus.container-image.push=true
+----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus image push --also-build --no-tests
+----
+--
+====
+
+
+And finally, redeploy the application:
+
+[.console-input]
+[source,bash]
+----
+kubectl apply -f target/kubernetes/kubernetes.yml
+----
