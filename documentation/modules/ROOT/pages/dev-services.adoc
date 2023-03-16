@@ -134,12 +134,12 @@ NOTE: We added a %prod. prefix to some of the properties.  This prefix makes it 
 
 There are several ways to deploy a Postgresql Database to Kubernetes.  If you're using Openshift, you could create one easily through the UI (Developer Perspective > +Add > Database > PostgreSQL).  Just make sure your database name, username and password match up with what you have configured in your application.properties or secrets.  
 
-You can also apply the following Kubernetes manifest to deploy a simple ephemeral instance:
+You can also create the following Kubernetes manifest for a simple ephemeral instance:
 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-cat <<EOF | kubectl apply -f -
+cat > postgres.yaml << EOF
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -184,6 +184,14 @@ spec:
   selector:
     app: postgresql
 EOF
+----
+
+And deploy it to Kubernetes:
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+kubectl apply -f postgres.yaml
 ----
 
 === Rebuild and deploy your application
