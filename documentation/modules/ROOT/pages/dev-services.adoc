@@ -44,6 +44,8 @@ quarkus extension add quarkus-jdbc-postgresql
 
 We'll also need to update the configuration and change h2 to postgresql:
 
+TIP: Technically you don't need to add the db-kind property since there is only one jdbc driver in this case.  We added it for clarity's sake.
+
 [#quarkuspdb-update-props]
 [.console-input]
 [source,config,subs="+macros,+attributes"]
