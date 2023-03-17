@@ -5,8 +5,9 @@
 ** xref:basics.adoc[Basics and Fundamentals]
 ** xref:configuration.adoc[Configuration]
 ** xref:panache.adoc[Hibernate with Panache]
-** xref:spring.adoc[Spring Compatibility]
 ** xref:kubernetes.adoc[Deploy to Kubernetes]
+** xref:dev-services.adoc[Dev Services]
+** xref:spring.adoc[Spring Compatibility]
 
 * Cloud Native
 ** xref:rest-client.adoc[REST Client]

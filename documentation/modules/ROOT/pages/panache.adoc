@@ -7,23 +7,8 @@
 
 You'll learn how easy and productive is Quarkus with Hibernate with Panache. For this, we'll develop a simple CRUD REST API that handles information about fruits.
 
-We'll use http://www.h2database.com[H2,window="_blank"] as our backing database, but it's very easy to use other database engines with Quarkus. As an exercise for later, we suggest you to try your favorite database engine with the documentation found https://quarkus.io/guides/datasource[here,window="_blank"].
+We'll use http://www.h2database.com[H2,window="_blank"] as our backing database in this section, but it's very easy to use other database engines with Quarkus as you will see in the Dev Services chapter. As an exercise for later, we suggest to try your favorite database engine with the documentation found https://quarkus.io/guides/datasource[here,window="_blank"].
 
-[reftext="Dev Services"]
-== Zero Config Database Setup
-
-Quarkus can even provide you with a zero-config database out of the box when testing or running in dev mode, a feature we refer to as Dev Services. Depending on your database type, you may need Docker installed to use this feature.
-
-
-To use Dev Services, all you need to do is include the relevant extension for the type of database you want (either reactive or JDBC, or both), without configuring any database URL, username, and password. 
-
-Quarkus will provide the database. You can just start coding without worrying about config.
-
-TIP: If you are using a proprietary database such as `DB2` or `MSSQL` you will need to accept the license agreement. To do this create a `src/main/resources/container-license-acceptance.txt` file in your project and add a line with the image name and tag of the database. 
-
-More on zero config setup of datasources can be found https://quarkus.io/guides/datasource#dev-services[here].
-
-NOTE: Dev Services are enabled by default, but you can disable them by going to `application.properties` and setting `quarkus.datasource.devservices.enabled` to `false`.
 
 == Adding Extensions
 
