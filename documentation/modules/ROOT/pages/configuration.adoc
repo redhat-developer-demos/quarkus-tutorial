@@ -14,12 +14,12 @@ Let's change our `GreetingResource` class to use a configuration property. Chang
 ----
 package com.redhat.developers;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 @Path("/hello")
 public class GreetingResource {
@@ -40,7 +40,7 @@ If you refresh your browser pointing to http://localhost:8080/hello[window="_bla
 [.console-output]
 [source,text]
 ----
-javax.enterprise.inject.spi.DeploymentException: No config value of type [java.lang.String] exists for: greeting
+jakarta.enterprise.inject.spi.DeploymentException: No config value of type [java.lang.String] exists for: greeting
 	at io.quarkus.arc.runtime.ConfigRecorder.validateConfigProperties(ConfigRecorder.java:37)
 	at io.quarkus.deployment.steps.ConfigBuildStep$validateConfigProperties61.deploy_0(ConfigBuildStep$validateConfigProperties61.zig:120)
 	at io.quarkus.deployment.steps.ConfigBuildStep$validateConfigProperties61.deploy(ConfigBuildStep$validateConfigProperties61.zig:36)
@@ -110,7 +110,7 @@ import static org.hamcrest.CoreMatchers.is;
 public class GreetingResourceTest {
 
     @Test
-    public void testGreetingEndpoint() {
+    public void testHelloEndpoint() {
         given()
           .when().get("/hello")
           .then()

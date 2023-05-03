@@ -44,7 +44,7 @@ Modify the `Beer` Java class in `src/main/java` in the `com.redhat.developers` p
 ----
 package com.redhat.developers;
 
-import javax.json.bind.annotation.JsonbCreator;
+import jakarta.json.bind.annotation.JsonbCreator;
 import java.math.BigDecimal;
 
 public class Beer {
@@ -97,7 +97,7 @@ package com.redhat.developers;
 
 import java.math.BigDecimal;
 
-import javax.json.bind.annotation.JsonbCreator;
+import jakarta.json.bind.annotation.JsonbCreator;
 
 public class PricedBeer {
 
@@ -144,8 +144,8 @@ import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.json.bind.JsonbBuilder;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.json.bind.JsonbBuilder;
 
 import io.smallrye.mutiny.Multi;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
@@ -216,8 +216,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.json.bind.JsonbBuilder;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.json.bind.JsonbBuilder;
 
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Multi;
@@ -317,8 +317,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.json.bind.JsonbBuilder;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.json.bind.JsonbBuilder;
 
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Multi;
