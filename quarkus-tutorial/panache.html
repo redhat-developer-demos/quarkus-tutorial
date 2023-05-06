@@ -257,9 +257,8 @@ With <a href="#Dev Services">[Dev Services]</a> enabled, no JDBC URL needs to be
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
-import javax.persistence.Entity;
-
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import jakarta.persistence.Entity;
 
 @Entity
 public class Fruit extends PanacheEntity {
@@ -301,10 +300,10 @@ public class Fruit extends PanacheEntity {
 
 import java.util.List;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 @Path("/fruit")
 public class FruitResource {
@@ -345,15 +344,15 @@ public class FruitResource {
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 @Path("/fruit")
 public class FruitResource {
@@ -421,15 +420,16 @@ public class FruitResource {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Mango','Spring');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Strawberry','Spring');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Orange','Winter');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Lemon','Winter');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Blueberry','Summer');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Banana','Summer');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Watermelon','Summer');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Apple','Fall');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('hibernate_sequence'),'Pear','Fall');</code></pre>
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">create sequence fruit_sequence start with 1 increment by 1;
+INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Mango','Spring');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Strawberry','Spring');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Orange','Winter');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Lemon','Winter');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Blueberry','Summer');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Banana','Summer');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Watermelon','Summer');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Apple','Fall');
+INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Pear','Fall');</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -527,9 +527,8 @@ while in production mode you can use <code>quarkus.hibernate-orm.sql-load-script
 
 import java.util.List;
 
-import javax.persistence.Entity;
-
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import jakarta.persistence.Entity;
 
 @Entity
 public class Fruit extends PanacheEntity {
@@ -559,16 +558,16 @@ public class Fruit extends PanacheEntity {
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 @Path("/fruit")
 public class FruitResource {
@@ -644,9 +643,8 @@ public class FruitResource {
 
 import java.util.List;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class FruitRepository implements PanacheRepository&lt;Fruit&gt; {
@@ -675,18 +673,17 @@ public class FruitRepository implements PanacheRepository&lt;Fruit&gt; {
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
 import io.quarkus.logging.Log;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 @Path("/fruit")
 public class FruitResource {
