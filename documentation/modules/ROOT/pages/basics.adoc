@@ -171,33 +171,9 @@ image::Dev_UI.png[Dev UI,800,600,align="center"]
 
 == Continuous Testing (Development mode)
 
-Quarkus supports continuous testing, meaning that your tests will run immediately after code changes were saved.
-Let's start again in _Live Coding_ mode by invoking quarkus dev mode:
+Quarkus supports continuous testing, meaning that your tests will run immediately after code changes were saved. Your application should already be running in dev mode.
 
-[tabs]
-====
-Maven::
-+ 
---
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-mvn quarkus:dev
-----
-
---
-Quarkus CLI::
-+
---
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-quarkus dev
-----
---
-====
-
-Quarkus will start in development mode as normal, but down the bottom of the screen you should see the following:
+At the bottom of the screen you should see the following:
 [.console-input]
 [source,bash]
 ----
