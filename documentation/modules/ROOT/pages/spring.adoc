@@ -14,7 +14,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn quarkus:add-extension -Dextensions=quarkus-spring-web,quarkus-spring-data-jpa,quarkus-resteasy-jackson
+mvn quarkus:add-extension -Dextensions=quarkus-spring-web,quarkus-spring-data-jpa,quarkus-resteasy-reactive-jackson
 ----
 
 --
@@ -24,7 +24,7 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus extension add quarkus-spring-web quarkus-spring-data-jpa quarkus-resteasy-jackson
+quarkus extension add quarkus-spring-web quarkus-spring-data-jpa quarkus-resteasy-reactive-jackson
 ----
 --
 ====
@@ -50,8 +50,8 @@ quarkus extension add quarkus-spring-web quarkus-spring-data-jpa quarkus-resteas
 ----
 
 IMPORTANT: The `quarkus-spring-web` extension requires `quarkus-resteasy-jackson` or `quarkus-resteasy-reactive-jackson`.
-In order to be conservative with the amount of dependencies, please change in `pom.xml` the extension `quarkus-reasteasy` 
-to `quarkus-resteasy-jackson`.
+In order to be conservative with the amount of dependencies, please change in `pom.xml` the extension `quarkus-reasteasy-reactive` 
+to `quarkus-resteasy-reactive-jackson`.
 
 
 == Create a Spring Data Repository for Fruit

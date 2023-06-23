@@ -134,5 +134,5 @@ __  ____  __  _____   ___  __ ____  ______
 2023-05-03 18:17:48,400 INFO  [io.quarkus] (Quarkus Main Thread) tutorial-app 1.0-SNAPSHOT on JVM (powered by Quarkus 3.0.1.Final) started in 1.416s. Listening on: http://localhost:8080
 
 2023-05-03 18:17:48,403 INFO  [io.quarkus] (Quarkus Main Thread) Profile dev activated. Live Coding activated.
-2023-05-03 18:17:48,404 INFO  [io.quarkus] (Quarkus Main Thread) Installed features: [cdi, resteasy, smallrye-context-propagation, vertx]
+2023-05-03 18:17:48,404 INFO  [io.quarkus] (Quarkus Main Thread) Installed features: [cdi, resteasy-reactive, smallrye-context-propagation, vertx]
 ----

@@ -18,7 +18,7 @@ mvn "io.quarkus:quarkus-maven-plugin:create" \
   -DprojectVersion="1.0-SNAPSHOT" \
   -DclassName="GreetingResource" \
   -Dpath="hello" \
-  -Dextensions="resteasy"
+  -Dextensions="resteasy-reactive"
 cd {project-name}
 ----
 
@@ -35,7 +35,7 @@ Then create the application:
 [source,bash,subs="+macros,+attributes"]
 ----
 quarkus create app \
-  -x resteasy \
+  -x resteasy-reactive \
   com.redhat.developers:tutorial-app:1.0-SNAPSHOT
 cd {project-name}
 ----
