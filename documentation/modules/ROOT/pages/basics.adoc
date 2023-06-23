@@ -74,7 +74,7 @@ You can stop your running application by issuing a `CTRL+C` in your terminal.
 [.console-output]
 [source,bash]
 ----
-^C2020-05-10 23:11:03,419 INFO  [io.quarkus] (main) tutorial-app stopped in 0.035s
+INFO  [io.quarkus] (main) tutorial-app stopped in 0.035s
 ----
 
 Quarkus was able to stop in just *0.035s*. Fast to start, fast to stop. Fast always!
