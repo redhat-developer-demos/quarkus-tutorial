@@ -195,7 +195,6 @@ import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import io.smallrye.mutiny.Multi;
-import org.jboss.resteasy.annotations.SseElementType;
 
 @Path("/beer")
 public class BeerResource {
@@ -224,7 +223,6 @@ public class BeerResource {
 
     @GET
     @Produces(MediaType.SERVER_SENT_EVENTS)
-    @SseElementType(MediaType.APPLICATION_JSON)
     public Multi<PricedBeer> pricedBeers() {
         return pricedBeers.map(s -> JsonbBuilder.create().fromJson(s, PricedBeer.class)) //<2>
                 .ifNoItem().after(Duration.ofSeconds(1)).fail(); //<3>

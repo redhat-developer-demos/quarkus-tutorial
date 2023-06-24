@@ -7,7 +7,7 @@ to online beer database (https://punkapi.com/documentation/v2) to retrieve beer 
 This API does not return all beers at once, so we'll need to navigate through the pages to fetch all the information. 
 Then we're going to filter all the beers with an ABV greater than 15.0 and return all these beers in a Reactive REST endpoint.
 
-== Add the RestEasy Mutiny extension
+== Add the Mutiny extension
 
 Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
 
@@ -19,7 +19,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn quarkus:add-extension -Dextension=quarkus-resteasy-mutiny
+mvn quarkus:add-extension -Dextension=quarkus-mutiny
 ----
 
 --
@@ -29,7 +29,7 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus extension add quarkus-resteasy-mutiny
+quarkus extension add quarkus-mutiny
 ----
 --
 ====

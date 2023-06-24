@@ -18,7 +18,7 @@ mvn "io.quarkus:quarkus-maven-plugin:create" \
   -DprojectVersion="1.0-SNAPSHOT" \
   -DclassName="GreetingResource" \
   -Dpath="hello" \
-  -Dextensions="resteasy"
+  -Dextensions="resteasy-reactive"
 cd {project-name}
 ----
 
@@ -35,7 +35,7 @@ Then create the application:
 [source,bash,subs="+macros,+attributes"]
 ----
 quarkus create app \
-  -x resteasy \
+  -x resteasy-reactive \
   com.redhat.developers:tutorial-app:1.0-SNAPSHOT
 cd {project-name}
 ----
@@ -49,7 +49,7 @@ IMPORTANT: All the remaining parts of this tutorial assume that you'll be workin
 
 include::ROOT:partial$compile-and-run.adoc[]
 
-Notice how *fast* Quarkus was ready to serve your requests. In this particular example Quarkus only required *0.016s* to start.
+Notice how *fast* Quarkus was ready to serve your requests. In this particular example Quarkus only required *0.394s* to start.
 
 You can open your browser with the url `http://localhost:8080/hello[window="_blank"]` and you should see a response like `hello`.
 
@@ -64,7 +64,7 @@ curl localhost:8080/hello
 [.console-output]
 [source,bash]
 ----
-hello
+Hello from RESTEasy Reactive
 ----
 
 == Stopping the application
@@ -74,10 +74,10 @@ You can stop your running application by issuing a `CTRL+C` in your terminal.
 [.console-output]
 [source,bash]
 ----
-^C2020-05-10 23:11:03,419 INFO  [io.quarkus] (main) tutorial-app stopped in 0.007s
+INFO  [io.quarkus] (main) tutorial-app stopped in 0.035s
 ----
 
-Quarkus was able to stop in just *0.007s*. Fast to start, fast to stop. Fast always!
+Quarkus was able to stop in just *0.035s*. Fast to start, fast to stop. Fast always!
 
 == Testing your application
 
