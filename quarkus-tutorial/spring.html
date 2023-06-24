@@ -175,14 +175,14 @@
 <div class="tab-pane" aria-labelledby="tabset1_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn quarkus:add-extension -Dextensions=quarkus-spring-web,quarkus-spring-data-jpa,quarkus-resteasy-jackson</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn quarkus:add-extension -Dextensions=quarkus-spring-web,quarkus-spring-data-jpa,quarkus-resteasy-reactive-jackson</code></pre>
 </div>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_quarkus-cli">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus extension add quarkus-spring-web quarkus-spring-data-jpa quarkus-resteasy-jackson</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus extension add quarkus-spring-web quarkus-spring-data-jpa quarkus-resteasy-reactive-jackson</code></pre>
 </div>
 </div>
 </div>
@@ -215,8 +215,8 @@
 </td>
 <td class="content">
 The <code>quarkus-spring-web</code> extension requires <code>quarkus-resteasy-jackson</code> or <code>quarkus-resteasy-reactive-jackson</code>.
-In order to be conservative with the amount of dependencies, please change in <code>pom.xml</code> the extension <code>quarkus-reasteasy</code>
-to <code>quarkus-resteasy-jackson</code>.
+In order to be conservative with the amount of dependencies, please change in <code>pom.xml</code> the extension <code>quarkus-reasteasy-reactive</code>
+to <code>quarkus-resteasy-reactive-jackson</code>.
 </td>
 </tr>
 </table>

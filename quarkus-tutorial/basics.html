@@ -171,7 +171,7 @@
   -DprojectVersion="1.0-SNAPSHOT" \
   -DclassName="GreetingResource" \
   -Dpath="hello" \
-  -Dextensions="resteasy"
+  -Dextensions="resteasy-reactive"
 cd tutorial-app</code></pre>
 </div>
 </div>
@@ -189,7 +189,7 @@ cd tutorial-app</code></pre>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus create app \
-  -x resteasy \
+  -x resteasy-reactive \
   com.redhat.developers:tutorial-app:1.0-SNAPSHOT
 cd tutorial-app</code></pre>
 </div>
@@ -374,14 +374,14 @@ To run the application (in native mode) you will need to start up a container:</
  --/ __ \/ / / / _ | / _ \/ //_/ / / / __/
  -/ /_/ / /_/ / __ |/ , _/ ,&lt; / /_/ /\ \
 --\___\_\____/_/ |_/_/|_/_/|_|\____/___/
-2023-05-03 18:17:48,400 INFO  [io.quarkus] (Quarkus Main Thread) tutorial-app 1.0-SNAPSHOT on JVM (powered by Quarkus 3.0.1.Final) started in 1.416s. Listening on: http://localhost:8080
+INFO  [io.quarkus] (Quarkus Main Thread) tutorial-app 1.0-SNAPSHOT on JVM (powered by Quarkus 3.1.2.Final) started in 0.394s. Listening on: http://localhost:8080
 
-2023-05-03 18:17:48,403 INFO  [io.quarkus] (Quarkus Main Thread) Profile dev activated. Live Coding activated.
-2023-05-03 18:17:48,404 INFO  [io.quarkus] (Quarkus Main Thread) Installed features: [cdi, resteasy, smallrye-context-propagation, vertx]</code></pre>
+INFO  [io.quarkus] (Quarkus Main Thread) Profile dev activated. Live Coding activated.
+INFO  [io.quarkus] (Quarkus Main Thread) Installed features: [cdi, resteasy-reactive, smallrye-context-propagation, vertx]</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Notice how <strong>fast</strong> Quarkus was ready to serve your requests. In this particular example Quarkus only required <strong>0.016s</strong> to start.</p>
+<p>Notice how <strong>fast</strong> Quarkus was ready to serve your requests. In this particular example Quarkus only required <strong>0.394s</strong> to start.</p>
 </div>
 <div class="paragraph">
 <p>You can open your browser with the url <code><a href="http://localhost:8080/hello" class="bare" target="_blank" rel="noopener">http://localhost:8080/hello</a></code> and you should see a response like <code>hello</code>.</p>
@@ -396,7 +396,7 @@ To run the application (in native mode) you will need to start up a container:</
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">hello</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Hello from RESTEasy Reactive</code></pre>
 </div>
 </div>
 </div>
@@ -409,11 +409,11 @@ To run the application (in native mode) you will need to start up a container:</
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">^C2020-05-10 23:11:03,419 INFO  [io.quarkus] (main) tutorial-app stopped in 0.007s</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">INFO  [io.quarkus] (main) tutorial-app stopped in 0.035s</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Quarkus was able to stop in just <strong>0.007s</strong>. Fast to start, fast to stop. Fast always!</p>
+<p>Quarkus was able to stop in just <strong>0.035s</strong>. Fast to start, fast to stop. Fast always!</p>
 </div>
 </div>
 </div>
