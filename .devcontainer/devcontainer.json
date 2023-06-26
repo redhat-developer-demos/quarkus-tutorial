@@ -3,7 +3,7 @@
 	"dockerFile": "Dockerfile",
 	"runArgs": [
 		"-e","TUTORIAL_HOME=/workspaces/quarkus-tutorial",
-		"-e","QUARKUS_VERSION=0.21.2"
+		"-e","QUARKUS_VERSION=3.1.2"
 	],
 
 	// Use 'settings' to set *default* container specific settings.json values on container create. 

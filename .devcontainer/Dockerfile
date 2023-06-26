@@ -1,11 +1,9 @@
-FROM quay.io/rhdevelopers/quarkus-maven-repo-cache:0.21.2 as cachier
+FROM quay.io/rhdevelopers/quarkus-maven-repo-cache as cachier
 
 
-FROM quay.io/rhdevelopers/tutorial-tools:0.0.1 
+FROM quay.io/rhdevelopers/tutorial-tools:0.0.6 
 
-USER developer
-
-COPY --from=cachier /data/m2/repository/ $DEVELOPER_HOME/.m2/repository
+COPY --from=cachier /work/m2repo $DEVELOPER_HOME/.m2/repository
 
 RUN /usr/local/bin/run.sh 
 
