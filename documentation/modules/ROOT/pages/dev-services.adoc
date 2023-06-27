@@ -78,7 +78,7 @@ You can now also verify/access the dev services container via Podman:
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-podman ps 
+docker ps 
 ----
 
 [.mt-4.center]

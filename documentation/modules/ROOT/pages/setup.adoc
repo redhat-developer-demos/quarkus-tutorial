@@ -27,7 +27,7 @@ endif::workshop[]
 GraalVM is only required if you intend to build a native image for your local operating system. If you want to create a container using a native image, you can use the Quarkus feature for this and don't need to install GraalVM locally.
 ====
 
-NOTE: You can also use Docker instead of Podman. The advantage of Podman is that it is 100% Free Open Source and does not need to run with elevated privileges. Just use 'docker' instead of 'podman' throughout the tutorial's instructions.
+NOTE: You can also use Docker instead of Podman. The advantage of Podman is that it is 100% Free Open Source and does not need to run with elevated privileges. Just use 'podman' instead of 'docker' throughout the tutorial's instructions, or easier yet, alias docker=podman to automatically use podman under the hood for docker commands.
 
 [tabs]
 ====
@@ -67,14 +67,14 @@ Container Image::
 --
 If you have https://podman-desktop.io/downloads[Podman Desktop for Linux, window="_blank"]  then you can pull the Linux container image 
 https://quay.io/repository/rhdevelopers/tutorial-tools?tab=tags[tutorial tools] which has all the tools listed below installed and pre-configured.
-[#podman-pull-tutorials-cli]
+[#docker-pull-tutorials-cli]
 [source,bash]
 -----
-podman pull quay.io/rhdevelopers/tutorial-tools
+docker pull quay.io/rhdevelopers/tutorial-tools
 mkdir quarkus-tutorial
 cd quarkus-tutorial
 mkdir work
-podman run -ti -p 8080:8080 -v `pwd`/work:/work \
+docker run -ti -p 8080:8080 -v `pwd`/work:/work \
   -v `mvn help:evaluate -Dexpression=settings.localRepository | grep \
   -v '\[INFO\]' | grep -v '\[WARNING\]'`:/opt/developer/.m2/repository \
   --rm quay.io/rhdevelopers/tutorial-tools bash
@@ -88,7 +88,7 @@ podman run -ti -p 8080:8080 -v `pwd`/work:/work \
 
 ////
 ifndef::workshop[]
-[#remote-podman-repository]
+[#remote-repository]
 == Remote Repository
 For some parts of the tutorial, you will be pushing and pulling container images to and from a remote image repository. You will need an account with push rights. You can create a free account on https://quay.io[Red Hat Quay.io].
 endif::workshop[]

@@ -281,7 +281,7 @@ You can start a Keycloak Server with Docker by running the following command:
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-podman run --name keycloak -e DB_VENDOR=H2 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -p 8180:8080 quay.io/keycloak/keycloak:15.0.2
+docker run --name keycloak -e DB_VENDOR=H2 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -p 8180:8080 quay.io/keycloak/keycloak:15.0.2
 ----
 
 Go to http://localhost:8180/auth and use `admin` for user and password.

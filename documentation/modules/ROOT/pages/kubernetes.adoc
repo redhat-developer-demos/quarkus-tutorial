@@ -71,7 +71,7 @@ In order to push the container image, you need to authenticate to your container
 [.console-input]
 [source,bash]
 ----
-podman login quay.io
+docker login quay.io
 ----
 
 Now create and push your container image using jib:
