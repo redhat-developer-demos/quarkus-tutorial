@@ -22,12 +22,12 @@ Kubernetes/OpenShift are required only in case you want to deploy the applicatio
 endif::workshop[]
 ////
 
-TIP: You can also use https://podman-desktop.io/[Podman] instead of Docker. The advantage of Podman is that it is 100% Free Open Source and does not need to run with elevated privileges. Just use 'podman' instead of 'docker' throughout the tutorial's instructions, or `alias docker=podman`.
-
-[WARNING]
+[TIP]
 ====
 GraalVM is only required if you intend to build a native image for your local operating system. If you want to create a container using a native image, you can use the Quarkus feature for this and don't need to install GraalVM locally.
 ====
+
+TIP: You can also use Docker instead of Podman. The advantage of Podman is that it is 100% Free Open Source and does not need to run with elevated privileges. Just use 'docker' instead of 'podman' throughout the tutorial's instructions.
 
 [tabs]
 ====
@@ -40,10 +40,10 @@ Please have them installed and configured before you get started with any of the
 |===
 |**Tool**|**macOS**|**Fedora**|**Windows**
 
-| **Docker**
-| https://www.docker.com/products/docker-desktop[Docker Desktop for Mac, window="_blank"]
-| `dnf install docker`
-| https://www.docker.com/products/docker-desktop[Docker Desktop for Windows, window="_blank"]
+| **Podman Desktop**
+| https://podman-desktop.io/downloads[Podman Desktop for Mac, window="_blank"]
+| https://podman-desktop.io/downloads[Podman Desktop for Linux, window="_blank"]
+| https://podman-desktop.io/downloads[Podman Desktop for Windows, window="_blank"]
 
 | **Java 17**
 | `brew tap AdoptOpenJDK/openjdk && brew cask install adoptopenjdk17`
@@ -65,16 +65,16 @@ Please have them installed and configured before you get started with any of the
 Container Image::
 +
 --
-If you have https://www.docker.com/products/docker-desktop[Docker for Mac or Windows or Linux]  then you can pull the Linux container image 
+If you have https://podman-desktop.io/downloads[Podman Desktop for Linux, window="_blank"]  then you can pull the Linux container image 
 https://quay.io/repository/rhdevelopers/tutorial-tools?tab=tags[tutorial tools] which has all the tools listed below installed and pre-configured.
-[#docker-pull-tutorials-cli]
+[#podman-pull-tutorials-cli]
 [source,bash]
 -----
-docker pull quay.io/rhdevelopers/tutorial-tools
+podman pull quay.io/rhdevelopers/tutorial-tools
 mkdir quarkus-tutorial
 cd quarkus-tutorial
 mkdir work
-docker run -ti -p 8080:8080 -v `pwd`/work:/work \
+podman run -ti -p 8080:8080 -v `pwd`/work:/work \
   -v `mvn help:evaluate -Dexpression=settings.localRepository | grep \
   -v '\[INFO\]' | grep -v '\[WARNING\]'`:/opt/developer/.m2/repository \
   --rm quay.io/rhdevelopers/tutorial-tools bash
@@ -88,7 +88,7 @@ docker run -ti -p 8080:8080 -v `pwd`/work:/work \
 
 ////
 ifndef::workshop[]
-[#remote-docker-repository]
+[#remote-podman-repository]
 == Remote Repository
 For some parts of the tutorial, you will be pushing and pulling container images to and from a remote image repository. You will need an account with push rights. You can create a free account on https://quay.io[Red Hat Quay.io].
 endif::workshop[]
@@ -169,8 +169,8 @@ export GRAALVM_HOME='PUT THE LOCATION  WHERE YOU HAVE EXTRACTED GRAAL VM'
 
 Prepare your shell environment:
 
-It is not necessary to install GraalVM as the native compilation can be done within a Docker container.
-The only limitation, in this case, is to have Docker installed and the produced native executable will only be runnable inside a container.
+It is not necessary to install GraalVM as the native compilation can be done within a container.
+The only limitation, in this case, is to have Podman/Docker installed and the produced native executable will only be runnable inside a container.
 GraalVM is already installed in `tutorial-tools`.
 
 If you installed GraalVM, make sure to also install `native-image` 

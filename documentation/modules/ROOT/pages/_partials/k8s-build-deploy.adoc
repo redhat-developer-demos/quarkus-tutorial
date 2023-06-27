@@ -13,7 +13,7 @@ If you have not deployed the application previously, you need to add Quarkus Kub
 ./mvnw quarkus:add-extension -Dextensions="quarkus-kubernetes"
 ----
 
-You need to configure group and name of the Docker container used to deploy into Kubernetes.
+You need to configure group and name of the container used to deploy into Kubernetes.
 
 Add the following properties (if you haven't already done it before) to pass:[$PROJECT_HOME]/src/main/resources/application.properties:
 

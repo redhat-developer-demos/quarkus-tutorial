@@ -18,10 +18,10 @@ image::./documentation/modules/ROOT/assets/images/Developer_Joy.png[Developer Jo
 
 ## Building the HTML locally
 
-In the root of your git repository, run:
+In the root of your git repository, run (as root):
 
 ```
-bin/build-site.sh
+# bin/build-site.sh
 ```
 
 And then open your `gh-pages/index.html` file:
@@ -38,14 +38,14 @@ First, install the `yarn` dependencies:
 
 [source,bash]
 ----
-yarn install
+$ yarn install
 ----
 
-And now start `gulp`. It will create the website and open your browser connected with `browser-sync`. Everytime it detects a change, it will automatically refresh your browser page.
+And now start `gulp` (as root). It will create the website and open your browser connected with `browser-sync`. Every time it detects a change, it will automatically refresh your browser page.
 
 [source,bash]
 ----
-gulp
+# gulp
 ----
 
 You can clean the local cache using:

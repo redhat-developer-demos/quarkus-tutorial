@@ -14,13 +14,13 @@ JVM mode::
 ./mvnw -DskipTests clean package
 ----
 
-After successful maven build, run the following command to build the container - choose the terminal of the target environment you wish to use (docker, minishift or minokube) as you want to build and publish the image in the right registry:
+After successful maven build, run the following command to build the container - choose the terminal of the target environment you wish to use (podman, minishift or minokube) as you want to build and publish the image in the right registry:
 
 [#{section-k8s}-build-quarkus-jvm-app-container]
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-docker build -f src/main/docker/Dockerfile.jvm -t example/{quarkus-project-name}:1.0-SNAPSHOT .
+podman build -f src/main/docker/Dockerfile.jvm -t example/{quarkus-project-name}:1.0-SNAPSHOT .
 ----
 
 --
@@ -37,13 +37,13 @@ Native mode::
 
 NOTE: Native compilation will take few minutes to complete.
 
-After successful maven build, run the following command to build the container - choose the terminal of the target environment you wish to use (docker, minishift or minokube) as you want to build and publish the image in the right registry:
+After successful maven build, run the following command to build the container - choose the terminal of the target environment you wish to use (podman, minishift or minokube) as you want to build and publish the image in the right registry:
 
 [#{section-k8s}-build-quarkus-native-app-container]
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-docker build -f src/main/docker/Dockerfile.native -t example/{quarkus-project-name}:1.0-SNAPSHOT .
+podman build -f src/main/docker/Dockerfile.native -t example/{quarkus-project-name}:1.0-SNAPSHOT .
 ----
 
 --
@@ -60,7 +60,7 @@ NOTE: For sake of simplicity the container name in both native and jvm mode are 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-docker run -it --rm -p 8080:8080 example/{quarkus-project-name}:1.0-SNAPSHOT
+podman run -it --rm -p 8080:8080 example/{quarkus-project-name}:1.0-SNAPSHOT
 ----
 
 #end::run[]
@@ -71,7 +71,7 @@ docker run -it --rm -p 8080:8080 example/{quarkus-project-name}:1.0-SNAPSHOT
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-docker push example/{quarkus-project-name}:1.0-SNAPSHOT
+podman push example/{quarkus-project-name}:1.0-SNAPSHOT
 ----
 
 #end::tag-push[]

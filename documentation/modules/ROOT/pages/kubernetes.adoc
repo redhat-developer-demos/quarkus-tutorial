@@ -8,7 +8,7 @@ Our examples will be using the `quay.io` container registry and the `myrepo` org
 
 You need a container registry that is accessible from your Kubernetes cluster to deploy the application container image in it.
 
-In this chapter we'll be using the Quarkus Kubernetes Extension to create the Kubernetes deployment file, and the Quarkus Jib Extension to create and push the container image to your container registry without the need of a running local docker daemon.
+In this chapter we'll be using the Quarkus Kubernetes Extension to create the Kubernetes deployment file, and the Quarkus Jib Extension to create and push the container image to your container registry without the need of a local podman/docker instance.
 
 Let's add the required extensions:
 
@@ -56,7 +56,7 @@ quarkus.container-image.name=tutorial-app#<3>
 quarkus.container-image.tag=1.0-SNAPSHOT#<4>
 quarkus.kubernetes.service-type=load-balancer
 ----
-<1> Registry where image is pushed. By default is Docker Hub.
+<1> Registry where image is pushed. By default this is Docker Hub.
 <2> Group name of the container image.
 <3> Container name. By default is the `artifactId` element of `pom.xml`.
 <4> Tag of the container image. By default is the `version` element of `pom.xml`.
@@ -71,7 +71,7 @@ In order to push the container image, you need to authenticate to your container
 [.console-input]
 [source,bash]
 ----
-docker login quay.io
+podman login quay.io
 ----
 
 Now create and push your container image using jib:
