@@ -91,7 +91,7 @@ Native container-build mode::
 |Quarkus CLI
 
 a|
-[#basics-build-quarkus-native-docker-app-mvn]
+[#basics-build-quarkus-native-container-app-mvn]
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
@@ -99,7 +99,7 @@ a|
   -Dnative
 ----
 a|
-[#basics-build-quarkus-native-docker-app-quarkus]
+[#basics-build-quarkus-native-container-app-quarkus]
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----

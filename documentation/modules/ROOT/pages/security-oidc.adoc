@@ -56,7 +56,7 @@ After this step you should have `Subscriber` Role and Group.
 . Go to http://localhost:55105/auth/admin/master/console/#/realms/quarkus/users[Users] and check that `jdoe` user is mapped to the `Subscriber` role and group. 
 . Setup a password for `jdoe` user.
 
-Congratulations! Now you can run this section in Dev Mode without starting the KeyCloak docker container nor adding the KeyCloak setup in `application.properties`.
+Congratulations! Now you can run this section in Dev Mode without starting the KeyCloak container nor adding the KeyCloak setup in `application.properties`.
 [WARNING]
 ====
 *Dev Services For Keycloak* will not be activated if either `quarkus.oidc.auth-server-url` is already initialized or the default OIDC tenant is disabled with `quarkus.oidc.tenant.enabled=false`, regardless if you work with Keycloak or not.

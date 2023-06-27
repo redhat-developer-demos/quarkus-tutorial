@@ -14,7 +14,7 @@ JVM mode::
 ./mvnw -DskipTests clean package
 ----
 
-After successful maven build, run the following command to build the container - choose the terminal of the target environment you wish to use (docker, minishift or minokube) as you want to build and publish the image in the right registry:
+After successful maven build, run the following command to build the container - choose the terminal of the target environment you wish to use (podman, minishift or minokube) as you want to build and publish the image in the right registry:
 
 [#{section-k8s}-build-quarkus-jvm-app-container]
 [.console-input]
@@ -37,7 +37,7 @@ Native mode::
 
 NOTE: Native compilation will take few minutes to complete.
 
-After successful maven build, run the following command to build the container - choose the terminal of the target environment you wish to use (docker, minishift or minokube) as you want to build and publish the image in the right registry:
+After successful maven build, run the following command to build the container - choose the terminal of the target environment you wish to use (podman, minishift or minokube) as you want to build and publish the image in the right registry:
 
 [#{section-k8s}-build-quarkus-native-app-container]
 [.console-input]

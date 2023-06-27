@@ -244,7 +244,7 @@ Add the following properties to your `application.properties` in `src/main/resou
 kafka.bootstrap.servers=localhost:9092
 ----
 
-== Create docker-compose configuration
+== Create compose configuration
 
 The external dependencies required to run this chapter are:
 
@@ -254,7 +254,7 @@ The external dependencies required to run this chapter are:
 
 We're going to use `docker-compose` to bootstrap these external services.
 
-Create a new file called `docker-compose.yml` in the root of your `{project-name}` folder:
+Create a new file called `compose.yml` in the root of your `{project-name}` folder:
 
 [.console-input]
 [source,yaml]
@@ -293,9 +293,9 @@ services:
       - kafka
 ----
 
-== Run docker-compose
+== Run compose
 
-Make sure you are in the same folder that you've created the `docker-compose.yml` file (in our case, the root of our `{project-name}` folder).
+Make sure you are in the same folder that you've created the `compose.yml` file (in our case, the root of our `{project-name}` folder).
 [.console-input]
 [source,bash]
 ----

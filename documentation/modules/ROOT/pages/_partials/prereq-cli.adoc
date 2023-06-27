@@ -1,7 +1,7 @@
 
 The following checks ensure that each chapter exercises are done with the right environment settings.
 
-INFO: Make sure to use separate terminal windows or tabs between commands you run to target Docker for Mac/Windows and commands for Minikube/minishift as both will point to different docker engines.
+INFO: Make sure to use separate terminal windows or tabs between commands you run to target Podman for Mac/Windows and commands for Minikube/minishift as both will point to different container engines.
 
 ifdef::workshop[]
 
@@ -16,7 +16,7 @@ ifndef::workshop[]
 Minikube::
 +
 --
-* Set your local docker to use minikube docker daemon
+* Set your local podman to use minikube container daemon
 
 [#minikube-set-env]
 [source,bash,subs="+macros,+attributes"]
@@ -35,7 +35,7 @@ kubectl version
 Minishift::
 +
 --
-* Set your local docker to use minishift docker daemon 
+* Set your local podman to use the minishift container daemon 
 
 [#minishift-set-env]
 [source,bash,subs="+macros,+attributes"]

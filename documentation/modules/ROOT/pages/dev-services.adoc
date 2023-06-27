@@ -67,13 +67,13 @@ You will now see that Quarkus has reloaded and started up a Postgresql database 
 ----
 
 --
-Checking Docker Environment
+Checking Podman Environment
 2023-03-16 08:06:56,882 INFO  [io.qua.dat.dep.dev.DevServicesDatasourceProcessor] (build-13) Dev Services for the default datasource (postgresql) started - container ID is c7c9a6ccf029
 ----
 
 == Verify Postgresql testcontainer is running
 
-You can now also verify/access the dev services container via Docker or Podman:
+You can now also verify/access the dev services container via Podman:
 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
