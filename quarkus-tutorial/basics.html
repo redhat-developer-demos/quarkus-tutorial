@@ -165,13 +165,11 @@
 <div class="tab-pane" aria-labelledby="tabset1_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn "io.quarkus:quarkus-maven-plugin:create" \
-  -DprojectGroupId="com.redhat.developers" \
-  -DprojectArtifactId="tutorial-app" \
-  -DprojectVersion="1.0-SNAPSHOT" \
-  -DclassName="GreetingResource" \
-  -Dpath="hello" \
-  -Dextensions="resteasy-reactive"
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn "io.quarkus.platform:quarkus-maven-plugin:create" \
+-DprojectGroupId="com.redhat.developers" \
+-DprojectArtifactId="tutorial-app" \
+-DprojectVersion="1.0-SNAPSHOT" \
+-Dextensions='resteasy-reactive'
 cd tutorial-app</code></pre>
 </div>
 </div>
