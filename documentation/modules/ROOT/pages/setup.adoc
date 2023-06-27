@@ -27,7 +27,7 @@ endif::workshop[]
 GraalVM is only required if you intend to build a native image for your local operating system. If you want to create a container using a native image, you can use the Quarkus feature for this and don't need to install GraalVM locally.
 ====
 
-TIP: You can also use Docker instead of Podman. The advantage of Podman is that it is 100% Free Open Source and does not need to run with elevated privileges. Just use 'docker' instead of 'podman' throughout the tutorial's instructions.
+NOTE: You can also use Docker instead of Podman. The advantage of Podman is that it is 100% Free Open Source and does not need to run with elevated privileges. Just use 'docker' instead of 'podman' throughout the tutorial's instructions.
 
 [tabs]
 ====
