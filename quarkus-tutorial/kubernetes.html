@@ -173,7 +173,7 @@ You will need a public container registry to store your image. If you don&#8217;
 <p>You need a container registry that is accessible from your Kubernetes cluster to deploy the application container image in it.</p>
 </div>
 <div class="paragraph">
-<p>In this chapter we&#8217;ll be using the Quarkus Kubernetes Extension to create the Kubernetes deployment file, and the Quarkus Jib Extension to create and push the container image to your container registry without the need of a running local docker daemon.</p>
+<p>In this chapter we&#8217;ll be using the Quarkus Kubernetes Extension to create the Kubernetes deployment file, and the Quarkus Jib Extension to create and push the container image to your container registry without the need of a local podman/docker instance.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s add the required extensions:</p>
@@ -235,7 +235,7 @@ quarkus.kubernetes.service-type=load-balancer</code></pre>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Registry where image is pushed. By default is Docker Hub.</td>
+<td>Registry where image is pushed. By default this is Docker Hub.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
