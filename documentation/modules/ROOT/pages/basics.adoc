@@ -4,8 +4,9 @@
 
 == Creating a Quarkus Application
 
-[tabs]
+[tabs%sync]
 ====
+
 Maven::
 + 
 --
@@ -21,12 +22,11 @@ mvn "io.quarkus:quarkus-maven-plugin:create" \
   -Dextensions="resteasy-reactive"
 cd {project-name}
 ----
-
 --
 Quarkus CLI::
 +
 --
-The quarkus command lets you create projects, manage extensions and do essential build and dev commands using the underlying project build tool.
+The quarkus CLI tool lets you create projects, manage extensions and do essential dev, build and deploy commands using the underlying project build tool in a simplified way. 
 
 Follow these instructions to install Quarkus CLI: https://quarkus.io/guides/cli-tooling
 
@@ -39,7 +39,6 @@ quarkus create app \
   com.redhat.developers:tutorial-app:1.0-SNAPSHOT
 cd {project-name}
 ----
-
 --
 ====
 
@@ -89,7 +88,7 @@ When running this test, the application is started once, then all tests are exec
 
 You can run the test in your IDE or by running the following:
 
-[tabs]
+[tabs%sync]
 ====
 Maven::
 + 
@@ -138,7 +137,7 @@ This is probably one of the best features of Quarkus: enabling a very fast and p
 
 Let's start the _Live Coding_ mode by invoking `mvn`. You probably won't need to stop/start Quarkus again during this tutorial:
 
-[tabs]
+[tabs%sync]
 ====
 Maven::
 + 

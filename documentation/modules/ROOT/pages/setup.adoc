@@ -4,7 +4,7 @@ include::../_attributes.adoc
 
 == IDE
 
-You can use any Java IDE for this tutorial but if you didn't try it before, we recommend https://code.visualstudio.com/download[VS Code, window="_blank"] with the https://marketplace.visualstudio.com/items?itemName=redhat.java[Language Support for Java(TM) by Red Hat, window="_blank"] and the https://marketplace.visualstudio.com/items?itemName=redhat.vscode-quarkus[Quarkus, window="_blank"] extensions.
+You can use any Java IDE for this tutorial but if you haven't tried it before, we recommend https://code.visualstudio.com/download[VS Code, window="_blank"] with the https://marketplace.visualstudio.com/items?itemName=redhat.java[Language Support for Java(TM) by Red Hat, window="_blank"] and the https://marketplace.visualstudio.com/items?itemName=redhat.vscode-quarkus[Quarkus, window="_blank"] extensions.
 
 [TIP]
 ====
@@ -14,7 +14,7 @@ which allows you to run this entire tutorial within a container that will have a
 
 == CLI Tools
 
-The following CLI tools are required for running the exercises in this tutorial.
+The following CLI tools are recommended for running the exercises in this tutorial.
 
 ////
 ifndef::workshop[]
@@ -27,7 +27,7 @@ endif::workshop[]
 GraalVM is only required if you intend to build a native image for your local operating system. If you want to create a container using a native image, you can use the Quarkus feature for this and don't need to install GraalVM locally.
 ====
 
-NOTE: You can also use Docker instead of Podman. The advantage of Podman is that it is 100% Free Open Source and does not need to run with elevated privileges. Just use 'podman' instead of 'docker' throughout the tutorial's instructions, or easier yet, alias docker=podman to automatically use podman under the hood for docker commands.
+NOTE: * You can also use Docker instead of Podman. The advantage of Podman is that it is 100% Free Open Source and does not need to run with elevated privileges. Just use 'podman' instead of 'docker' throughout the tutorial's instructions, or easier yet, alias docker=podman to automatically use podman under the hood for docker commands.
 
 [tabs]
 ====
@@ -36,11 +36,12 @@ Local  Installation::
 --
 Please have them installed and configured before you get started with any of the tutorial chapters.
 
+
 [options="header"]
 |===
 |**Tool**|**macOS**|**Fedora**|**Windows**
 
-| **Podman Desktop**
+| **Podman Desktop* **
 | https://podman-desktop.io/downloads[Podman Desktop for Mac, window="_blank"]
 | https://podman-desktop.io/downloads[Podman Desktop for Linux, window="_blank"]
 | https://podman-desktop.io/downloads[Podman Desktop for Windows, window="_blank"]
@@ -61,6 +62,21 @@ Please have them installed and configured before you get started with any of the
 | https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-{graalvm-version}/graalvm-ce-java17-windows-amd64-{graalvm-version}.zip[GraalVM Community Edition {graalvm-version}]
 
 |===
+
+[TIP]
+=====
+You can also install Java and Maven using https://sdkman.io[SDKMAN!]. This allows easy version/distribution switching (and you can install the Quarkus CLI with it as well)
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+  curl -s "https://get.sdkman.io" | bash
+  source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+  sdk install java 
+  sdk install maven
+  sdk install quarkus
+----
+=====
 --
 Container Image::
 +
@@ -77,12 +93,25 @@ mkdir work
 docker run -ti -p 8080:8080 -v `pwd`/work:/work \
   -v `mvn help:evaluate -Dexpression=settings.localRepository | grep \
   -v '\[INFO\]' | grep -v '\[WARNING\]'`:/opt/developer/.m2/repository \
-  --rm quay.io/rhdevelopers/tutorial-tools bash
+  --rm quay.io/rhdevelopers/tutorial-tools:0.0.7 bash
 
 # -p will map Quarkus running in the container to your host port
 # -v `pwd`... will map the host work subdirectory to the container /work directory, this is where you will create your application
 # -v `mvn ...` will map your ~/.m2/repository of your host to the container repository to save downloading again between image runs
 -----
+
+[TIP]
+=====
+Installing https://sdkman.io[SDKMAN!] in the container will allow you to install the Quarkus CLI very easily:
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+  curl -s "https://get.sdkman.io" | bash
+  source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+  sdk install quarkus
+----
+=====
 --
 ====
 
