@@ -151,7 +151,7 @@
 <h2 id="_ide"><a class="anchor" href="#_ide"></a>IDE</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can use any Java IDE for this tutorial but if you didn&#8217;t try it before, we recommend <a href="https://code.visualstudio.com/download" target="_blank" rel="noopener">VS Code</a> with the <a href="https://marketplace.visualstudio.com/items?itemName=redhat.java" target="_blank" rel="noopener">Language Support for Java&#8482; by Red Hat</a> and the <a href="https://marketplace.visualstudio.com/items?itemName=redhat.vscode-quarkus" target="_blank" rel="noopener">Quarkus</a> extensions.</p>
+<p>You can use any Java IDE for this tutorial but if you haven&#8217;t tried it before, we recommend <a href="https://code.visualstudio.com/download" target="_blank" rel="noopener">VS Code</a> with the <a href="https://marketplace.visualstudio.com/items?itemName=redhat.java" target="_blank" rel="noopener">Language Support for Java&#8482; by Red Hat</a> and the <a href="https://marketplace.visualstudio.com/items?itemName=redhat.vscode-quarkus" target="_blank" rel="noopener">Quarkus</a> extensions.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -174,7 +174,7 @@ which allows you to run this entire tutorial within a container that will have a
 <h2 id="_cli_tools"><a class="anchor" href="#_cli_tools"></a>CLI Tools</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The following CLI tools are required for running the exercises in this tutorial.</p>
+<p>The following CLI tools are recommended for running the exercises in this tutorial.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -197,7 +197,7 @@ which allows you to run this entire tutorial within a container that will have a
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-You can also use Docker instead of Podman. The advantage of Podman is that it is 100% Free Open Source and does not need to run with elevated privileges. Just use 'podman' instead of 'docker' throughout the tutorial&#8217;s instructions, or easier yet, alias docker=podman to automatically use podman under the hood for docker commands.
+* You can also use Docker instead of Podman. The advantage of Podman is that it is 100% Free Open Source and does not need to run with elevated privileges. Just use 'podman' instead of 'docker' throughout the tutorial&#8217;s instructions, or easier yet, alias docker=podman to automatically use podman under the hood for docker commands.
 </td>
 </tr>
 </table>
@@ -235,7 +235,7 @@ You can also use Docker instead of Podman. The advantage of Podman is that it is
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Podman Desktop</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Podman Desktop* </strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://podman-desktop.io/downloads" target="_blank" rel="noopener">Podman Desktop for Mac</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://podman-desktop.io/downloads" target="_blank" rel="noopener">Podman Desktop for Linux</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://podman-desktop.io/downloads" target="_blank" rel="noopener">Podman Desktop for Windows</a></p></td>
@@ -260,6 +260,30 @@ You can also use Docker instead of Podman. The advantage of Podman is that it is
 </tr>
 </tbody>
 </table>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You can also install Java and Maven using <a href="https://sdkman.io">SDKMAN!</a>. This allows easy version/distribution switching (and you can install the Quarkus CLI with it as well)</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">  curl -s "https://get.sdkman.io" | bash
+  source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+  sdk install java
+  sdk install maven
+  sdk install quarkus</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_container-image">
 <div class="paragraph">
@@ -275,12 +299,34 @@ mkdir work
 docker run -ti -p 8080:8080 -v `pwd`/work:/work \
   -v `mvn help:evaluate -Dexpression=settings.localRepository | grep \
   -v '\[INFO\]' | grep -v '\[WARNING\]'`:/opt/developer/.m2/repository \
-  --rm quay.io/rhdevelopers/tutorial-tools bash
+  --rm quay.io/rhdevelopers/tutorial-tools:0.0.7 bash
 
 # -p will map Quarkus running in the container to your host port
 # -v `pwd`... will map the host work subdirectory to the container /work directory, this is where you will create your application
 # -v `mvn ...` will map your ~/.m2/repository of your host to the container repository to save downloading again between image runs</code></pre>
 </div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Installing <a href="https://sdkman.io">SDKMAN!</a> in the container will allow you to install the Quarkus CLI very easily:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">  curl -s "https://get.sdkman.io" | bash
+  source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+  sdk install quarkus</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
