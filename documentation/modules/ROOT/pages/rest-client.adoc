@@ -37,7 +37,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn quarkus:add-extension -Dextensions=quarkus-rest-client
+mvn quarkus:add-extension -Dextensions=quarkus-rest-client-reactive
 ----
 
 --
@@ -47,7 +47,7 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus extension add quarkus-rest-client
+quarkus extension add quarkus-rest-client-reactive
 ----
 --
 ====
