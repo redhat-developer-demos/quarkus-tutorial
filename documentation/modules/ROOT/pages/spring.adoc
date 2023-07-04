@@ -14,6 +14,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
+mvn quarkus:remove-extension -Dextensions=quarkus-resteasy-reactive
 mvn quarkus:add-extension -Dextensions=quarkus-spring-web,quarkus-spring-data-jpa,quarkus-resteasy-reactive-jackson
 ----
 
@@ -24,7 +25,8 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus extension add quarkus-spring-web quarkus-spring-data-jpa quarkus-resteasy-reactive-jackson
+quarkus ext remove quarkus-resteasy-reactive
+quarkus ext add quarkus-spring-web quarkus-spring-data-jpa quarkus-resteasy-reactive-jackson
 ----
 --
 ====
@@ -49,10 +51,11 @@ quarkus extension add quarkus-spring-web quarkus-spring-data-jpa quarkus-resteas
 [INFO] ------------------------------------------------------------------------
 ----
 
-IMPORTANT: The `quarkus-spring-web` extension requires `quarkus-resteasy-jackson` or `quarkus-resteasy-reactive-jackson`.
-In order to be conservative with the amount of dependencies, please change in `pom.xml` the extension `quarkus-reasteasy-reactive` 
-to `quarkus-resteasy-reactive-jackson`.
-
+[NOTE]
+--
+The `quarkus-spring-web` extension requires `quarkus-resteasy-reactive-jackson`.
+In order to be conservative with the amount of dependencies, the `quarkus-resteasy-reactive` was removed in favor of `quarkus-resteasy-reactive-jackson`.
+--
 
 == Create a Spring Data Repository for Fruit
 
@@ -113,7 +116,7 @@ public class FruitController {
 }
 ----
 
-Let's try to filter only the fruits with the *Summer* season:
+Let's try to filter only the fruits with the *Summer* season.  Don't forget to start quarkus dev mode again if you stopped it.
 
 [.console-input]
 [source,bash]

@@ -1,12 +1,17 @@
 =  Deploying to Kubernetes
 
-IMPORTANT: You will need a public container registry to store your image. If you don't have an account, we recommend you to create a free account at http://quay.io[window=_blank]. 
+[.mt-4.right]
+image::openshift_sandbox.png[Openshift Sandbox,250,250,align="right",link="https://developers.redhat.com/developer-sandbox"]
+
+In this chapter we will push our newly built application to Kubernetes. If you don't have a Kubernetes instance at your disposal, you can create a free Openshift Sandbox instance on https://developers.redhat.com/developer-sandbox[developers.redhat.com/sandbox].
+
+
+ 
+IMPORTANT: You will need a public container registry to store your image. If you don't have an account, we recommend to create a free account at http://quay.io[window=_blank]. 
 
 Our examples will be using the `quay.io` container registry and the `myrepo` organization, but you should change it to match your configuration.
 
 == Adding the Kubernetes and Jib extensions
-
-You need a container registry that is accessible from your Kubernetes cluster to deploy the application container image in it.
 
 In this chapter we'll be using the Quarkus Kubernetes Extension to create the Kubernetes deployment file, and the Quarkus Jib Extension to create and push the container image to your container registry without the need of a local podman/docker instance.
 
@@ -54,12 +59,13 @@ quarkus.container-image.registry=quay.io#<1>
 quarkus.container-image.group=myrepo#<2>
 quarkus.container-image.name=tutorial-app#<3>
 quarkus.container-image.tag=1.0-SNAPSHOT#<4>
-quarkus.kubernetes.service-type=load-balancer
+quarkus.kubernetes.service-type=load-balancer<5>
 ----
 <1> Registry where image is pushed. By default this is Docker Hub.
 <2> Group name of the container image.
 <3> Container name. By default is the `artifactId` element of `pom.xml`.
 <4> Tag of the container image. By default is the `version` element of `pom.xml`.
+<5> Create an external ip for the service.
 
 IMPORTANT: Change `quay.io` to your container registry and `myrepo` to your organization. 
 If you don't, your push *will* fail.
@@ -74,7 +80,7 @@ In order to push the container image, you need to authenticate to your container
 docker login quay.io
 ----
 
-Now create and push your container image using jib:
+Now we're going to create the artifact, build a container and push it to our registry in one go using jib.
 
 [tabs]
 ====
@@ -84,7 +90,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn clean package -DskipTests -Dquarkus.container-image.push=true
+mvn clean package -DskipTests -Dquarkus.container-image.push=true -Dquarkus.container-image.builder=jib
 ----
 
 --
@@ -94,10 +100,12 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus image push --also-build --no-tests
+quarkus image build jib --no-tests -Dquarkus.container-image.push=true
 ----
 --
 ====
+
+NOTE: You can also use Docker/Podman to build & push.  To do so, just omit 'jib' from the command.
 
 [.console-output]
 [source,text]
@@ -115,15 +123,35 @@ quarkus image push --also-build --no-tests
 [INFO] ------------------------------------------------------------------------
 ----
 
+
+
 == Deploy your application to your Kubernetes cluster
 
-When a Kubernetes extension is present in the classpath, a Kubernetes deployment file is scaffolded for you during the package phase.
+When a Kubernetes extension is present in the classpath, Quarkus will scaffold a Kubernetes deployment file in your target folder during the package phase.  We can apply it to deploy the application to our Kubernetes cluster:  
 
+NOTE: You will need the https://kubernetes.io/docs/tasks/tools/[kubectl] or oc cli tool installed locally for the apply command below. https://developers.redhat.com/blog/2021/04/21/access-your-developer-sandbox-for-red-hat-openshift-from-the-command-line#[Here are instructions] to install the oc tool and log in to your Openshift Sandbox.
+
+[tabs]
+====
+kubectl::
++
+--
 [.console-input]
 [source,bash]
 ----
 kubectl apply -f target/kubernetes/kubernetes.yml
 ----
+--
+oc::
++
+--
+[.console-input]
+[source,bash]
+----
+oc apply -f target/kubernetes/kubernetes.yml
+----
+--
+====
 
 [.console-output]
 [source,text]
@@ -133,10 +161,37 @@ service/tutorial-app created
 deployment.apps/tutorial-app created
 ----
 
-You might need to wait for some seconds until your application is up and running.
+[TIP]
+=====
+With the Quarkus CLI tool deploying is even easier.  Instead of the above `kubectl apply` command, you can simply run `quarkus deploy` to deploy the application to your cluster:
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus deploy
+----
+=====
+
+You might need to wait a few seconds until your application is up and running.  Once it is, let's get the url to test:
+
 
 [tabs]
 ====
+Openshift Sandbox / Kubernetes on AWS::
++
+--
+If using a hosted Kubernetes cluster like OpenShift (Sandbox) on AWS then use curl and the EXTERNAL-IP address with port `8080` or get it using `kubectl`:
+
+:tmp-service-exposed: tutorial-app
+
+[#{section-k8s}-ip-port-service]
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+IP=$(kubectl get service {tmp-service-exposed} -o jsonpath="{.status.loadBalancer.ingress[0].hostname}")
+PORT=$(kubectl get service {tmp-service-exposed} -o jsonpath="{.spec.ports[0].port}")
+echo $IP:$PORT
+----
+--
 Minikube::
 +
 --
@@ -167,22 +222,6 @@ PORT=$(kubectl get service {tmp-service-exposed} -o jsonpath="{.spec.ports[*].po
 echo $IP:$PORT
 ----
 --
-Hosted on AWS::
-+
---
-If using a hosted Kubernetes cluster like OpenShift then use curl and the EXTERNAL-IP address with port `8080` or get it using `kubectl`:
-
-:tmp-service-exposed: tutorial-app
-
-[#{section-k8s}-ip-port-service]
-[.console-input]
-[source,bash,subs="+macros,+attributes"]
-----
-IP=$(kubectl get service {tmp-service-exposed} -o jsonpath="{.status.loadBalancer.ingress[0].hostname}")
-PORT=$(kubectl get service {tmp-service-exposed} -o jsonpath="{.spec.ports[*].port}")
-echo $IP:$PORT
-----
---
 ====
 
 Curl the Service:
@@ -200,4 +239,19 @@ curl $IP:$PORT/hello
 Hello y'all!
 ----
 
-TIP: You can build, push and deploy the container image by running: `./mvnw clean package -Dquarkus.kubernetes.deploy=true`
+[sidebar]
+--
+TIP: If you're using Openshift (Sandbox) and would like to create a url you can share to the outside world, you can create it like so:
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+oc create route edge --service=tutorial-app 
+url=$(oc get route tutorial-app -o jsonpath='{.spec.host}')
+curl https://$url/hello
+----
+[.console-output]
+[source,text]
+----
+Hello y'all!
+----
+--
