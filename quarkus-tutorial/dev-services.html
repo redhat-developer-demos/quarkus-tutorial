@@ -150,7 +150,7 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Quarkus supports the automatic provisioning of unconfigured services in <strong>development and test</strong> mode.
+<p>Quarkus supports the automatic provisioning of unconfigured services in <strong>dev and test</strong> mode.
 We refer to this capability as Dev Services. From a developer&#8217;s perspective this means that if you include an extension and don&#8217;t configure it then Quarkus will automatically start the relevant service (usually using <a href="https://www.testcontainers.org/">Testcontainers</a> behind the scenes) and wire up your application to use this service, even pre-configuring access credentials.</p>
 </div>
 <div class="admonitionblock note">
@@ -186,7 +186,7 @@ If you are using a proprietary database such as <code>DB2</code> or <code>MSSQL<
 <h2 id="_replace_database_extensions"><a class="anchor" href="#_replace_database_extensions"></a>Replace Database Extensions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Instead of the built-in h2 database, we&#8217;re now going to use an external database.  Swapping out from one database provider to another is fairly trivial with Quarkus.  We just remove the h2 extension and add the postgresql extension instead:</p>
+<p>Instead of the built-in h2 database, we&#8217;re now going to use an external database.  Swapping out from one database provider to another is fairly trivial with Quarkus.  In our case we just need to remove the h2 extension and add the postgresql extension instead:</p>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -224,7 +224,7 @@ quarkus extension add quarkus-jdbc-postgresql</code></pre>
 <h2 id="_update_configuration"><a class="anchor" href="#_update_configuration"></a>Update configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We&#8217;ll also need to update the configuration and change h2 to postgresql:</p>
+<p>Update the configuration and change h2 to postgresql by updating the application.properties:</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -233,7 +233,7 @@ quarkus extension add quarkus-jdbc-postgresql</code></pre>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Technically you don&#8217;t need to add the db-kind property since there is only one jdbc driver in this case.  We added it for clarity&#8217;s sake.
+You technically don&#8217;t need to add the db-kind property since there is only one jdbc driver in our application.  We added it for clarity&#8217;s sake.
 </td>
 </tr>
 </table>
@@ -248,13 +248,11 @@ quarkus.hibernate-orm.database.generation=drop-and-create</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>You will now see that Quarkus has reloaded and started up a Postgresql database dev service:</p>
+<p>Notice in the logs how Quarkus has reloaded and started up a Postgresql database dev service:</p>
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">--
-Checking Podman Environment
-2023-03-16 08:06:56,882 INFO  [io.qua.dat.dep.dev.DevServicesDatasourceProcessor] (build-13) Dev Services for the default datasource (postgresql) started - container ID is c7c9a6ccf029</code></pre>
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">2023-03-16 08:06:56,882 INFO  [io.qua.dat.dep.dev.DevServicesDatasourceProcessor] (build-13) Dev Services for the default datasource (postgresql) started - container ID is c7c9a6ccf029</code></pre>
 </div>
 </div>
 </div>
@@ -263,7 +261,7 @@ Checking Podman Environment
 <h2 id="_verify_postgresql_testcontainer_is_running"><a class="anchor" href="#_verify_postgresql_testcontainer_is_running"></a>Verify Postgresql testcontainer is running</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can now also verify/access the dev services container via Podman:</p>
+<p>Let&#8217;s verify in Docker/Podman that the dev services container is running.  You should see 2 containers, one testcontainers/ryuk container which orchestrates the dev services, and another postgres container which is running the database and which is automatically wired into our Quarkus dev mode:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -276,7 +274,7 @@ Checking Podman Environment
 </div>
 </div>
 <div class="paragraph">
-<p>You can check to see that the fruit endpoint is still working, but in this case the data is coming from the postgresql database.</p>
+<p>Call the fruit endpoint again. The data is now coming from the postgresql database container.</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -297,6 +295,80 @@ Checking Podman Environment
     "season": "Spring"
   }
 ]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_run_unit_tests_with_testcontainers"><a class="anchor" href="#_run_unit_tests_with_testcontainers"></a>Run Unit Tests with TestContainers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Let&#8217;s stop dev mode for now to verify that the Postgres container also stops when we&#8217;re done with dev mode by sending a <code>CTRL+C</code> in the terminal and checking again with docker ps. Notice that the postgres container has disappeared as expected.</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker ps</code></pre>
+</div>
+</div>
+<div class="imageblock text-left mt-4 center">
+<div class="content">
+<img src="_images/Dev_Services_Stopped.png" alt="Dev Services Stopped" width="800" height="100">
+</div>
+</div>
+<div class="paragraph">
+<p>Run the tests:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset2_maven"></a>Maven</p>
+</li>
+<li>
+<p><a id="tabset2_quarkus-cli"></a>Quarkus CLI</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset2_maven">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn test</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset2_quarkus-cli">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus test</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Reminder: Once the tests have run, send <code>CTRL+C</code> since Quarkus CLI starts tests in continuous mode.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Notice in the logs that Quarkus and TestContainers work in unison to spin up the Postgres container again, run the tests, and then tear down the container again once done.</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.redhat.developers.GreetingResourceTest
+2023-07-04 17:40:04,096 INFO  [org.tes.doc.DockerClientProviderStrategy] (build-23) Found Docker environment with Environment variables, system properties and defaults. Resolved dockerHost=unix:///run/user/1000/podman/podman.sock
+2023-07-04 17:40:04,100 INFO  [org.tes.DockerClientFactory] (build-23) Docker host IP address is localhost
+2023-07-04 17:40:04,235 INFO  [org.tes.DockerClientFactory] (build-23) Connected to docker:
+  Server Version: 4.5.1
+  API Version: 1.41
+  Operating System: fedora
+  Total Memory: 31787 MB
+2023-07-04 17:40:04,254 INFO  [org.tes.uti.ImageNameSubstitutor] (build-23) Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+2023-07-04 17:40:04,257 INFO  [org.tes.DockerClientFactory] (build-23) Checking the system...
+2023-07-04 17:40:04,258 INFO  [org.tes.DockerClientFactory] (build-23) ✔︎ Docker server version should be at least 1.6.0
+2023-07-04 17:40:05,038 INFO  [tc.doc.io/postgres:14] (build-23) Creating container for image: docker.io/postgres:14</code></pre>
 </div>
 </div>
 </div>
@@ -335,10 +407,10 @@ We added a %prod. prefix to some of the properties.  This prefix makes it so the
 <div class="sect2">
 <h3 id="_create_a_postgresql_database"><a class="anchor" href="#_create_a_postgresql_database"></a>Create a postgresql database</h3>
 <div class="paragraph">
-<p>There are several ways to deploy a Postgresql Database to Kubernetes.  If you&#8217;re using Openshift, you could create one easily through the UI (Developer Perspective &gt; +Add &gt; Database &gt; PostgreSQL).  Just make sure your database name, username and password match up with what you have configured in your application.properties or secrets.</p>
+<p>There are several ways to deploy a Postgresql Database to Kubernetes.  If you&#8217;re using Openshift, you could create one easily through the UI (Developer Perspective &gt; +Add &gt; Database &gt; PostgreSQL).  Make sure your database name, username and password match up with what you have configured in your application.properties or secrets.</p>
 </div>
 <div class="paragraph">
-<p>You can also create the following Kubernetes manifest for a simple ephemeral instance:</p>
+<p>Alternatively you can also create the following Kubernetes manifest for a simple ephemeral instance:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -407,22 +479,22 @@ EOF</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset2_maven"></a>Maven</p>
+<p><a id="tabset3_maven"></a>Maven</p>
 </li>
 <li>
-<p><a id="tabset2_quarkus-cli"></a>Quarkus CLI</p>
+<p><a id="tabset3_quarkus-cli"></a>Quarkus CLI</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset2_maven">
+<div class="tab-pane" aria-labelledby="tabset3_maven">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn clean package -DskipTests -Dquarkus.container-image.push=true</code></pre>
 </div>
 </div>
 </div>
-<div class="tab-pane" aria-labelledby="tabset2_quarkus-cli">
+<div class="tab-pane" aria-labelledby="tabset3_quarkus-cli">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus image push --also-build --no-tests</code></pre>

@@ -175,14 +175,16 @@
 <div class="tab-pane" aria-labelledby="tabset1_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn quarkus:add-extension -Dextensions=quarkus-spring-web,quarkus-spring-data-jpa,quarkus-resteasy-reactive-jackson</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn quarkus:remove-extension -Dextensions=quarkus-resteasy-reactive
+mvn quarkus:add-extension -Dextensions=quarkus-spring-web,quarkus-spring-data-jpa,quarkus-resteasy-reactive-jackson</code></pre>
 </div>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_quarkus-cli">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus extension add quarkus-spring-web quarkus-spring-data-jpa quarkus-resteasy-reactive-jackson</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus ext remove quarkus-resteasy-reactive
+quarkus ext add quarkus-spring-web quarkus-spring-data-jpa quarkus-resteasy-reactive-jackson</code></pre>
 </div>
 </div>
 </div>
@@ -207,16 +209,17 @@
 [INFO] ------------------------------------------------------------------------</code></pre>
 </div>
 </div>
-<div class="admonitionblock important">
+<div class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-important" title="Important"></i>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-The <code>quarkus-spring-web</code> extension requires <code>quarkus-resteasy-jackson</code> or <code>quarkus-resteasy-reactive-jackson</code>.
-In order to be conservative with the amount of dependencies, please change in <code>pom.xml</code> the extension <code>quarkus-reasteasy-reactive</code>
-to <code>quarkus-resteasy-reactive-jackson</code>.
+<div class="paragraph">
+<p>The <code>quarkus-spring-web</code> extension requires <code>quarkus-resteasy-reactive-jackson</code>.
+In order to be conservative with the amount of dependencies, the <code>quarkus-resteasy-reactive</code> was removed in favor of <code>quarkus-resteasy-reactive-jackson</code>.</p>
+</div>
 </td>
 </tr>
 </table>
@@ -287,7 +290,7 @@ public class FruitController {
 </div>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s try to filter only the fruits with the <strong>Summer</strong> season:</p>
+<p>Let&#8217;s try to filter only the fruits with the <strong>Summer</strong> season.  Don&#8217;t forget to start quarkus dev mode again if you stopped it.</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">

@@ -149,6 +149,14 @@
 <h1 class="page">Deploying to Kubernetes</h1>
 <div id="preamble">
 <div class="sectionbody">
+<div class="imageblock text-right mt-4 right">
+<div class="content">
+<a class="image" href="https://developers.redhat.com/developer-sandbox"><img src="_images/openshift_sandbox.png" alt="Openshift Sandbox" width="250" height="250"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>In this chapter we will push our newly built application to Kubernetes. If you don&#8217;t have a Kubernetes instance at your disposal, you can create a free Openshift Sandbox instance on <a href="https://developers.redhat.com/developer-sandbox">developers.redhat.com/sandbox</a>.</p>
+</div>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -156,7 +164,7 @@
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-You will need a public container registry to store your image. If you don&#8217;t have an account, we recommend you to create a free account at <a href="http://quay.io" class="bare" target="_blank" rel="noopener">http://quay.io</a>.
+You will need a public container registry to store your image. If you don&#8217;t have an account, we recommend to create a free account at <a href="http://quay.io" class="bare" target="_blank" rel="noopener">http://quay.io</a>.
 </td>
 </tr>
 </table>
@@ -169,9 +177,6 @@ You will need a public container registry to store your image. If you don&#8217;
 <div class="sect1">
 <h2 id="_adding_the_kubernetes_and_jib_extensions"><a class="anchor" href="#_adding_the_kubernetes_and_jib_extensions"></a>Adding the Kubernetes and Jib extensions</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>You need a container registry that is accessible from your Kubernetes cluster to deploy the application container image in it.</p>
-</div>
 <div class="paragraph">
 <p>In this chapter we&#8217;ll be using the Quarkus Kubernetes Extension to create the Kubernetes deployment file, and the Quarkus Jib Extension to create and push the container image to your container registry without the need of a local podman/docker instance.</p>
 </div>
@@ -228,7 +233,7 @@ quarkus.container-image.registry=quay.io<i class="conum" data-value="1"></i><b>(
 quarkus.container-image.group=myrepo<i class="conum" data-value="2"></i><b>(2)</b>
 quarkus.container-image.name=tutorial-app<i class="conum" data-value="3"></i><b>(3)</b>
 quarkus.container-image.tag=1.0-SNAPSHOT<i class="conum" data-value="4"></i><b>(4)</b>
-quarkus.kubernetes.service-type=load-balancer</code></pre>
+quarkus.kubernetes.service-type=load-balancer<i class="conum" data-value="5"></i><b>(5)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -248,6 +253,10 @@ quarkus.kubernetes.service-type=load-balancer</code></pre>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
 <td>Tag of the container image. By default is the <code>version</code> element of <code>pom.xml</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Create an external ip for the service.</td>
 </tr>
 </table>
 </div>
@@ -278,7 +287,7 @@ If you don&#8217;t, your push <strong>will</strong> fail.
 </div>
 </div>
 <div class="paragraph">
-<p>Now create and push your container image using jib:</p>
+<p>Now we&#8217;re going to create the artifact, build a container and push it to our registry in one go using jib.</p>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -295,18 +304,30 @@ If you don&#8217;t, your push <strong>will</strong> fail.
 <div class="tab-pane" aria-labelledby="tabset2_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn clean package -DskipTests -Dquarkus.container-image.push=true</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn clean package -DskipTests -Dquarkus.container-image.push=true -Dquarkus.container-image.builder=jib</code></pre>
 </div>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset2_quarkus-cli">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus image push --also-build --no-tests</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus image build jib --no-tests -Dquarkus.container-image.push=true</code></pre>
 </div>
 </div>
 </div>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You can also use Docker/Podman to build &amp; push.  To do so, just omit 'jib' from the command.
+</td>
+</tr>
+</table>
 </div>
 <div class="listingblock console-output">
 <div class="content">
@@ -329,11 +350,46 @@ If you don&#8217;t, your push <strong>will</strong> fail.
 <h2 id="_deploy_your_application_to_your_kubernetes_cluster"><a class="anchor" href="#_deploy_your_application_to_your_kubernetes_cluster"></a>Deploy your application to your Kubernetes cluster</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>When a Kubernetes extension is present in the classpath, a Kubernetes deployment file is scaffolded for you during the package phase.</p>
+<p>When a Kubernetes extension is present in the classpath, Quarkus will scaffold a Kubernetes deployment file in your target folder during the package phase.  We can apply it to deploy the application to our Kubernetes cluster:</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You will need the <a href="https://kubernetes.io/docs/tasks/tools/">kubectl</a> or oc cli tool installed locally for the apply command below. <a href="https://developers.redhat.com/blog/2021/04/21/access-your-developer-sandbox-for-red-hat-openshift-from-the-command-line#">Here are instructions</a> to install the oc tool and log in to your Openshift Sandbox.
+</td>
+</tr>
+</table>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset3_kubectl"></a>kubectl</p>
+</li>
+<li>
+<p><a id="tabset3_oc"></a>oc</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset3_kubectl">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f target/kubernetes/kubernetes.yml</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset3_oc">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f target/kubernetes/kubernetes.yml</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -343,25 +399,56 @@ service/tutorial-app created
 deployment.apps/tutorial-app created</code></pre>
 </div>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>You might need to wait for some seconds until your application is up and running.</p>
+<p>With the Quarkus CLI tool deploying is even easier.  Instead of the above <code>kubectl apply</code> command, you can simply run <code>quarkus deploy</code> to deploy the application to your cluster:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus deploy</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You might need to wait a few seconds until your application is up and running.  Once it is, let&#8217;s get the url to test:</p>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset3_minikube"></a>Minikube</p>
+<p><a id="tabset4_openshift-sandbox-kubernetes-on-aws"></a>Openshift Sandbox / Kubernetes on AWS</p>
 </li>
 <li>
-<p><a id="tabset3_hosted"></a>Hosted</p>
+<p><a id="tabset4_minikube"></a>Minikube</p>
 </li>
 <li>
-<p><a id="tabset3_hosted-on-aws"></a>Hosted on AWS</p>
+<p><a id="tabset4_hosted"></a>Hosted</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset3_minikube">
+<div class="tab-pane" aria-labelledby="tabset4_openshift-sandbox-kubernetes-on-aws">
+<div class="paragraph">
+<p>If using a hosted Kubernetes cluster like OpenShift (Sandbox) on AWS then use curl and the EXTERNAL-IP address with port <code>8080</code> or get it using <code>kubectl</code>:</p>
+</div>
+<div id="{section-k8s}-ip-port-service" class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">IP=$(kubectl get service tutorial-app -o jsonpath="{.status.loadBalancer.ingress[0].hostname}")
+PORT=$(kubectl get service tutorial-app -o jsonpath="{.spec.ports[0].port}")
+echo $IP:$PORT</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset4_minikube">
 <div id="{section-k8s}-ip-port-minikube" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">IP=$(minikube ip)
@@ -370,25 +457,13 @@ echo $IP:$PORT</code></pre>
 </div>
 </div>
 </div>
-<div class="tab-pane" aria-labelledby="tabset3_hosted">
+<div class="tab-pane" aria-labelledby="tabset4_hosted">
 <div class="paragraph">
 <p>If using a hosted Kubernetes cluster like OpenShift then use curl and the EXTERNAL-IP address with port <code>8080</code> or get it using <code>kubectl</code>:</p>
 </div>
 <div id="{section-k8s}-ip-port-openshift" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">IP=$(kubectl get service tutorial-app -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
-PORT=$(kubectl get service tutorial-app -o jsonpath="{.spec.ports[*].port}")
-echo $IP:$PORT</code></pre>
-</div>
-</div>
-</div>
-<div class="tab-pane" aria-labelledby="tabset3_hosted-on-aws">
-<div class="paragraph">
-<p>If using a hosted Kubernetes cluster like OpenShift then use curl and the EXTERNAL-IP address with port <code>8080</code> or get it using <code>kubectl</code>:</p>
-</div>
-<div id="{section-k8s}-ip-port-service" class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">IP=$(kubectl get service tutorial-app -o jsonpath="{.status.loadBalancer.ingress[0].hostname}")
 PORT=$(kubectl get service tutorial-app -o jsonpath="{.spec.ports[*].port}")
 echo $IP:$PORT</code></pre>
 </div>
@@ -409,6 +484,8 @@ echo $IP:$PORT</code></pre>
 <pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">Hello y'all!</code></pre>
 </div>
 </div>
+<div class="sidebarblock">
+<div class="content">
 <div class="admonitionblock tip">
 <table>
 <tr>
@@ -416,10 +493,24 @@ echo $IP:$PORT</code></pre>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-You can build, push and deploy the container image by running: <code>./mvnw clean package -Dquarkus.kubernetes.deploy=true</code>
+If you&#8217;re using Openshift (Sandbox) and would like to create a url you can share to the outside world, you can create it like so:
 </td>
 </tr>
 </table>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc create route edge --service=tutorial-app
+url=$(oc get route tutorial-app -o jsonpath='{.spec.host}')
+curl <a href="https://$url/hello" class="bare">https://$url/hello</a></code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">Hello y'all!</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
