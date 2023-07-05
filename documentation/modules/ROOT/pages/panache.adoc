@@ -430,7 +430,7 @@ curl localhost:8080/fruit?season=Summer
 
 == Using Repository instead of ActiveRecord pattern
 
-Is `PanacheEntity` too opinionated for you? Maybe you prefer the traditional *Repository* pattern? Don't worry: we got you covered.
+Is `PanacheEntity` too opinionated for you? Maybe you prefer the traditional *Repository* pattern? Don't worry: we've got you covered.
 
 Panache also helps you to create Repositories.
 

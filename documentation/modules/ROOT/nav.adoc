@@ -15,9 +15,9 @@
 ** xref:health.adoc[Health Check]
 ** xref:metrics.adoc[Metrics]
 ** xref:security.adoc[Security with JWT RBAC]
-** xref:security-oidc.adoc[Security using OpenID Connect]
+// ** xref:security-oidc.adoc[Security using OpenID Connect]
 
-* Reactive
-** xref:reactive.adoc[Reactive with Mutiny]
-** xref:reactive-messaging.adoc[Streaming reactive messages]
-** xref:kafka-and-streams.adoc[Apache Kafka with Reactive Streams]
+// * Reactive
+// ** xref:reactive.adoc[Reactive with Mutiny]
+// ** xref:reactive-messaging.adoc[Streaming reactive messages]
+// ** xref:kafka-and-streams.adoc[Apache Kafka with Reactive Streams]
