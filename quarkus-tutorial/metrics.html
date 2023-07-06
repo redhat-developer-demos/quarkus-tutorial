@@ -103,24 +103,6 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="security.html">Security with JWT RBAC</a>
   </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="security-oidc.html">Security using OpenID Connect</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">Reactive</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="reactive-messaging.html">Streaming reactive messages</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
-  </li>
 </ul>
   </li>
 </ul>
@@ -313,7 +295,24 @@ public class TimeResource {
 <h2 id="_check_the_metrics"><a class="anchor" href="#_check_the_metrics"></a>Check the metrics</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>By default the metrics are exposed in Prometheus format. You can check the output by pointing your browser to <a href="http://localhost:8080/q/metrics" class="bare" target="_blank" rel="noopener">http://localhost:8080/q/metrics</a></p>
+<p>By default the metrics are exposed in Prometheus format. You can check the output by pointing your browser to <a href="http://localhost:8080/q/metrics" class="bare" target="_blank" rel="noopener">http://localhost:8080/q/metrics</a>.  See if you can find the TimeResource counter result.</p>
+</div>
+<div class="imageblock text-left mt-4 center">
+<div class="content">
+<img src="_images/Timed_Resource.png" alt="Micrometer Timed Resource" width="800" height="100">
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+In this tutorial we consulted the results in raw format, however these metrics are meant to be consumed by a monitoring system such as Prometheus so you can produce meaningful dashboards or alerts instead of accessing the metrics endpoint directly.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>

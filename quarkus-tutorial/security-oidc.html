@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Security using OpenID Connect :: Quarkus Tutorial</title>
     <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/security-oidc.html">
-    <link rel="prev" href="security.html">
-    <link rel="next" href="reactive.html">
     <meta name="generator" content="Antora 2.3.1">
     <link rel="stylesheet" href="../_/css/site.css">
   </head>
@@ -103,24 +101,6 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="security.html">Security with JWT RBAC</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="2">
-    <a class="nav-link" href="security-oidc.html">Security using OpenID Connect</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">Reactive</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="reactive.html">Reactive with Mutiny</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="reactive-messaging.html">Streaming reactive messages</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
-  </li>
 </ul>
   </li>
 </ul>
@@ -138,7 +118,6 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">quarkus-tutorial</a></li>
-    <li>Cloud Native</li>
     <li><a href="security-oidc.html">Security using OpenID Connect</a></li>
   </ul>
 </nav>
@@ -162,7 +141,7 @@
 <h2 id="_add_the_oidc_and_keycloak_extensions"><a class="anchor" href="#_add_the_oidc_and_keycloak_extensions"></a>Add the OIDC and KeyCloak extensions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Just open a new terminal window, and make sure you’re at the root of your <code>tutorial-app</code> project, then run:</p>
+<p>Just open a new terminal window, and make sure you&#8217;re at the root of your <code>tutorial-app</code> project, then run:</p>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -201,13 +180,18 @@
 <p>Quarkus introduced an experimental <strong>Dev Services For Keycloak</strong> feature which is enabled by default when the <code>quarkus-oidc</code> extension is started in dev mode. It starts a Keycloak container and initializes it by registering the existing Keycloak realm or creating a new realm with the client and users for you to start developing your Quarkus application secured by Keycloak immediately.</p>
 </div>
 <div class="paragraph">
-<p>When working in Dev Mode, you can use Dev Services for KeyCloak. This is the easy way to locally test your KeyCloak authentication.</p>
+<p>When working in Dev Mode, you can use Dev Services for KeyCloak. This is an easy way to locally test your KeyCloak authentication.</p>
 </div>
 <div class="paragraph">
-<p>Simply go to <a href="http://localhost:8080/q/dev/">Dev UI</a> and select the OpenId Connect Card linking to a Keycloak page.</p>
+<p>Let&#8217;s define a static port for the KeyCloak dev service so you can copy/paste the links further down in this section.  Add the following line to your application.properties:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus.keycloak.devservices.port=34000</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>Click on the <a href="http://localhost:8080/q/dev/io.quarkus.quarkus-oidc/provider">Provider: Keycloak link</a> and you will see a Keycloak page which will be presented slightly differently depending on how Dev Services for Keycloak feature has been configured.</p>
+<p>Now go to the <a href="http://localhost:8080/q/dev-ui/dev-services">Dev UI - Dev Services</a>.  You will see a 'keycloak' section with information about the running Keycloak Dev Services container, including auth server url and some default oidc users.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -223,28 +207,31 @@ By default, <code>alice</code> and <code>bob</code> users (with the passwords ma
 </table>
 </div>
 <div class="paragraph">
-<p>However, we can add our own user, role and group by following these steps:</p>
+<p>We can add our own user, role and group in KeyCloak by following these steps:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Click on <a href="http://localhost:55105/auth">KeyCloak Admin link</a> in the left corner.</p>
-</li>
-<li>
-<p>Login using `admin' as user and password.</p>
+<p>Go to the <a href="http://localhost:34000/admin/master/console/">KeyCloak Administration console</a> and use `admin' as user and password.</p>
 </li>
 <li>
 <p>Go to <a href="https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus-realm.json" class="bare">https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus-realm.json</a> and save it on your local machine.</p>
 </li>
 <li>
-<p>Go to <a href="http://localhost:55105/auth/admin/master/console/#/realms/quarkus/partial-import">Import</a> in the KeyCloak Administration console and import <code>quarkus-realm.json</code>.
-After this step you should have <code>Subscriber</code> Role and Group.</p>
+<p>Go to the <a href="http://localhost:34000/admin/master/console/#/quarkus/realm-settings">'quarkus' Realm Settings</a></p>
 </li>
 <li>
-<p>Go to <a href="http://localhost:55105/auth/admin/master/console/#/realms/quarkus/users">Users</a> and check that <code>jdoe</code> user is mapped to the <code>Subscriber</code> role and group.</p>
+<p>Click on 'Action' in the top right and select Partial Import.</p>
 </li>
 <li>
-<p>Setup a password for <code>jdoe</code> user.</p>
+<p>Browse to the <code>quarkus-realm.json</code> you downloaded and select all resources to import.  Then also select "Overwrite" when it asks "If a resource already exists, specify what should be done:"
+After this step you should have a <code>Subscriber</code> Role and Group.</p>
+</li>
+<li>
+<p>Go to 'Users' in the left menu and click on 'jdoe' and then on the 'Role Mapping' tab and check that the <code>jdoe</code> user is correctly mapped to the 'Subscriber' role.</p>
+</li>
+<li>
+<p>Reset the password for the 'jdoe' user in the Credentials settings to 'jdoepass'.</p>
 </li>
 </ol>
 </div>
@@ -326,23 +313,30 @@ public class UserResource {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -X POST 'http://localhost:56006/auth/realms/quarkus/protocol/openid-connect/token' \ <i class="conum" data-value="1"></i><b>(1)</b>
- -H "Content-Type: application/x-www-form-urlencoded" \
- -d "username=jdoe" \
- -d 'password=the_pass_you_set' \ <i class="conum" data-value="2"></i><b>(2)</b>
- -d 'grant_type=password' \
- -d 'client_id=admin-cli'</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -X POST 'http://localhost:34000/realms/quarkus/protocol/openid-connect/token' \
+-H 'Content-Type: application/x-www-form-urlencoded' \
+-d 'username=jdoe' \
+-d 'password=jdoepass' \
+-d 'grant_type=password' \
+-d 'client_id=admin-cli'</code></pre>
 </div>
 </div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
 <div class="colist arabic">
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>If you are using KeyCloak Dev Services, you can get the KeyCloak port from Quarkus logs.</td>
+<td>Replace the KeyCloak port with the current value of the dev service container port (this is the same as the one in the url you were using to set up KeyCloak).</td>
 </tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Consider to replace the password here with the one you set in the beginning.</td>
+</table>
+</div>
+</td>
 </tr>
 </table>
 </div>
@@ -360,18 +354,17 @@ Below you can find details on how to do that using <code>curl</code> and <code>j
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl -X POST 'http://localhost:56006/auth/realms/quarkus/protocol/openid-connect/token' \
- -H "Content-Type: application/x-www-form-urlencoded" \
- -d "username=jdoe" \
- -d 'password=jdoe' \
- -d 'grant_type=password' \
- -d 'client_id=admin-cli' | jq -r '.access_token')
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl -X POST 'http://localhost:34000/realms/quarkus/protocol/openid-connect/token' \
+-H 'Content-Type: application/x-www-form-urlencoded' \
+-d 'username=jdoe' \
+-d 'password=jdoepass' \
+-d 'grant_type=password' | jq -r '.access_token')
 
 curl -H "Authorization: Bearer $token" localhost:8080/api/users/info</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>And you’ll see the response for the given token:</p>
+<p>And you&#8217;ll see the response for the given token:</p>
 </div>
 <div class="listingblock console-output">
 <div class="content">
@@ -545,10 +538,6 @@ After this step you should have <code>Subscriber</code> Role and Group, together
 </div>
 </div>
 </div>
-<nav class="pagination">
-  <span class="prev"><a href="security.html">Security with JWT RBAC</a></span>
-  <span class="next"><a href="reactive.html">Reactive with Mutiny</a></span>
-</nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
