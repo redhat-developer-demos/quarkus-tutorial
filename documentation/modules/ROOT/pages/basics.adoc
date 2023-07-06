@@ -17,7 +17,7 @@ mvn "io.quarkus.platform:quarkus-maven-plugin:create" \
 -DprojectGroupId="com.redhat.developers" \
 -DprojectArtifactId="tutorial-app" \
 -DprojectVersion="1.0-SNAPSHOT" \
--Dextensions='resteasy-reactive'
+-Dextensions=resteasy-reactive
 cd {project-name}
 ----
 --
