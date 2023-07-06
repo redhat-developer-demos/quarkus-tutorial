@@ -125,5 +125,10 @@ for i in {1..5}; do curl -w '\n' localhost:8080/time; done
 
 == Check the metrics
 
-By default the metrics are exposed in Prometheus format. You can check the output by pointing your browser to http://localhost:8080/q/metrics[window=_blank]
+By default the metrics are exposed in Prometheus format. You can check the output by pointing your browser to http://localhost:8080/q/metrics[window=_blank].  See if you can find the TimeResource counter result. 
+
+[.mt-4.center]
+image::Timed_Resource.png[Micrometer Timed Resource,800,100,align="left"]
+
+NOTE: In this tutorial we consulted the results in raw format, however these metrics are meant to be consumed by a monitoring system such as Prometheus so you can produce meaningful dashboards or alerts instead of accessing the metrics endpoint directly.
 

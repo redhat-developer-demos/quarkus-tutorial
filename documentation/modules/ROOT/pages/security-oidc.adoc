@@ -9,7 +9,7 @@ In this section we will secure our endpoints with Bearer Tokens by using Dev Ser
 
 == Add the OIDC and KeyCloak extensions
 
-Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
+Just open a new terminal window, and make sure you're at the root of your `{project-name}` project, then run:
 
 [tabs]
 ====
@@ -37,24 +37,30 @@ quarkus extension add quarkus-oidc quarkus-keycloak-authorization
 == Working with DevServices for KeyCloak
 Quarkus introduced an experimental *Dev Services For Keycloak* feature which is enabled by default when the `quarkus-oidc` extension is started in dev mode. It starts a Keycloak container and initializes it by registering the existing Keycloak realm or creating a new realm with the client and users for you to start developing your Quarkus application secured by Keycloak immediately.
 
-When working in Dev Mode, you can use Dev Services for KeyCloak. This is the easy way to locally test your KeyCloak authentication.
+When working in Dev Mode, you can use Dev Services for KeyCloak. This is an easy way to locally test your KeyCloak authentication.
 
-Simply go to http://localhost:8080/q/dev/[Dev UI] and select the OpenId Connect Card linking to a Keycloak page.
+Let's define a static port for the KeyCloak dev service so you can copy/paste the links further down in this section.  Add the following line to your application.properties:
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus.keycloak.devservices.port=34000
+----
 
-Click on the http://localhost:8080/q/dev/io.quarkus.quarkus-oidc/provider[Provider: Keycloak link] and you will see a Keycloak page which will be presented slightly differently depending on how Dev Services for Keycloak feature has been configured.
+Now go to the http://localhost:8080/q/dev-ui/dev-services[Dev UI - Dev Services].  You will see a 'keycloak' section with information about the running Keycloak Dev Services container, including auth server url and some default oidc users.
 
 TIP: By default, `alice` and `bob` users (with the passwords matching the names), and user and admin roles are created. 
 `alice` has both admin and user roles, and `bob` has just the user role.
 
-However, we can add our own user, role and group by following these steps:
+We can add our own user, role and group in KeyCloak by following these steps:
 
-. Click on http://localhost:55105/auth[KeyCloak Admin link] in the left corner.
-. Login using `admin' as user and password.
+. Go to the http://localhost:34000/admin/master/console/[KeyCloak Administration console] and use `admin' as user and password.
 . Go to https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus-realm.json and save it on your local machine.
-. Go to http://localhost:55105/auth/admin/master/console/#/realms/quarkus/partial-import[Import] in the KeyCloak Administration console and import `quarkus-realm.json`.
-After this step you should have `Subscriber` Role and Group.
-. Go to http://localhost:55105/auth/admin/master/console/#/realms/quarkus/users[Users] and check that `jdoe` user is mapped to the `Subscriber` role and group. 
-. Setup a password for `jdoe` user.
+. Go to the http://localhost:34000/admin/master/console/#/quarkus/realm-settings['quarkus' Realm Settings]
+. Click on 'Action' in the top right and select Partial Import.
+. Browse to the `quarkus-realm.json` you downloaded and select all resources to import.  Then also select "Overwrite" when it asks "If a resource already exists, specify what should be done:"
+After this step you should have a `Subscriber` Role and Group.
+. Go to 'Users' in the left menu and click on 'jdoe' and then on the 'Role Mapping' tab and check that the `jdoe` user is correctly mapped to the 'Subscriber' role. 
+. Reset the password for the 'jdoe' user in the Credentials settings to 'jdoepass'.
 
 Congratulations! Now you can run this section in Dev Mode without starting the KeyCloak container nor adding the KeyCloak setup in `application.properties`.
 [WARNING]
@@ -108,15 +114,17 @@ First you need a token valid to authenticate. Run the following command to obtai
 [.console-input]
 [source,bash]
 ----
-curl -X POST 'http://localhost:56006/auth/realms/quarkus/protocol/openid-connect/token' \ #<1>
- -H "Content-Type: application/x-www-form-urlencoded" \  
- -d "username=jdoe" \
- -d 'password=the_pass_you_set' \ #<2>
- -d 'grant_type=password' \ 
- -d 'client_id=admin-cli'
+curl -X POST 'http://localhost:34000/realms/quarkus/protocol/openid-connect/token' \
+-H 'Content-Type: application/x-www-form-urlencoded' \
+-d 'username=jdoe' \
+-d 'password=jdoepass' \
+-d 'grant_type=password' \
+-d 'client_id=admin-cli'
 ----
-<1> If you are using KeyCloak Dev Services, you can get the KeyCloak port from Quarkus logs.
-<2> Consider to replace the password here with the one you set in the beginning.
+[IMPORTANT]
+--
+<1> Replace the KeyCloak port with the current value of the dev service container port (this is the same as the one in the url you were using to set up KeyCloak).
+--
 
 You should see an output similar to:
 
@@ -131,17 +139,16 @@ Below you can find details on how to do that using `curl` and `jq`:
 [.console-input]
 [source,bash]
 ----
-token=$(curl -X POST 'http://localhost:56006/auth/realms/quarkus/protocol/openid-connect/token' \
- -H "Content-Type: application/x-www-form-urlencoded" \
- -d "username=jdoe" \
- -d 'password=jdoe' \
- -d 'grant_type=password' \
- -d 'client_id=admin-cli' | jq -r '.access_token')
+token=$(curl -X POST 'http://localhost:34000/realms/quarkus/protocol/openid-connect/token' \
+-H 'Content-Type: application/x-www-form-urlencoded' \
+-d 'username=jdoe' \
+-d 'password=jdoepass' \
+-d 'grant_type=password' | jq -r '.access_token')
 
 curl -H "Authorization: Bearer $token" localhost:8080/api/users/info
 ----
 
-And you’ll see the response for the given token:
+And you'll see the response for the given token:
 
 [.console-output]
 [source,text]
