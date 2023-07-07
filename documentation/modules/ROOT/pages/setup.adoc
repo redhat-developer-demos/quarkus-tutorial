@@ -27,7 +27,9 @@ endif::workshop[]
 GraalVM is only required if you intend to build a native image for your local operating system. If you want to create a container using a native image, you can use the Quarkus feature for this and don't need to install GraalVM locally.
 ====
 
-NOTE: * You can also use Docker instead of Podman. The advantage of Podman is that it is 100% Free Open Source and does not need to run with elevated privileges. Just use 'podman' instead of 'docker' throughout the tutorial's instructions, or easier yet, alias docker=podman to automatically use podman under the hood for docker commands.
+NOTE: * You can also use Docker instead of Podman. The advantage of Podman is that it is 100% Free Open Source and does not need to run with elevated privileges. 
+
+IMPORTANT: We highly recommend Windows users to use https://learn.microsoft.com/en-us/windows/wsl/install[WSL].
 
 [tabs]
 ====
@@ -81,8 +83,7 @@ You can also install Java and Maven using https://sdkman.io[SDKMAN!]. This allow
 Container Image::
 +
 --
-If you have https://podman-desktop.io/downloads[Podman Desktop for Linux, window="_blank"]  then you can pull the Linux container image 
-https://quay.io/repository/rhdevelopers/tutorial-tools?tab=tags[tutorial tools] which has all the tools listed below installed and pre-configured.
+You can run the tutorial from inside a container which has all the tools listed below installed and pre-configured.
 [#docker-pull-tutorials-cli]
 [source,bash]
 -----
