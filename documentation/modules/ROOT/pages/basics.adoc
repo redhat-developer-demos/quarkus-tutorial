@@ -46,7 +46,7 @@ IMPORTANT: All the remaining parts of this tutorial assume that you'll be workin
 
 include::ROOT:partial$compile-and-run.adoc[]
 
-Notice how *fast* Quarkus was ready to serve your requests. In this particular example Quarkus only required *0.394s* to start.
+Notice how *fast* Quarkus was ready to serve your requests. In this particular example Quarkus only required *0.019s* to start.
 
 You can open your browser with the url `http://localhost:8080/hello[window="_blank"]` and you should see a response like `hello`.
 

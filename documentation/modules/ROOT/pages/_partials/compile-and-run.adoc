@@ -43,6 +43,11 @@ java -jar target/quarkus-app/quarkus-run.jar
 Native mode::
 +
 --
+
+Quarkus simplifies the https://quarkus.io/guides/building-native-image[compilation of Java applications down to a native binary] using GraalVM/Mandrel. To do so, add a "native" flag to your build command.   
+
+NOTE: To force building a native binary in a GraalVM Mandrel container, add `-Dquarkus.native.container-build=true`.  
+
 [%header,cols="1,1"]
 |=====
 
@@ -109,8 +114,8 @@ quarkus image build --native
 
 NOTE: Native compilation will take few minutes to complete.
 
-The above command built a native binary of the Java code and also built it into a container image.
-To run the application (in native mode) you will need to start up a container:
+The above command will build a native binary of the Java code and then copy it into a container image.
+Start the container that runs the native binary:
 
 [#basics-build-run-native-docker-app]
 [.console-input]
@@ -131,8 +136,7 @@ __  ____  __  _____   ___  __ ____  ______
  --/ __ \/ / / / _ | / _ \/ //_/ / / / __/ 
  -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \   
 --\___\_\____/_/ |_/_/|_/_/|_|\____/___/   
-INFO  [io.quarkus] (Quarkus Main Thread) tutorial-app 1.0-SNAPSHOT on JVM (powered by Quarkus 3.1.2.Final) started in 0.394s. Listening on: http://localhost:8080
-
-INFO  [io.quarkus] (Quarkus Main Thread) Profile dev activated. Live Coding activated.
-INFO  [io.quarkus] (Quarkus Main Thread) Installed features: [cdi, resteasy-reactive, smallrye-context-propagation, vertx]
+2023-07-07 11:47:14,046 INFO  [io.quarkus] (main) code-with-quarkus 1.0.0-SNAPSHOT native (powered by Quarkus 3.2.0.Final) started in 0.019s. Listening on: http://0.0.0.0:8080
+2023-07-07 11:47:14,047 INFO  [io.quarkus] (main) Profile prod activated. 
+2023-07-07 11:47:14,047 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy-reactive, smallrye-context-propagation, vertx]
 ----
