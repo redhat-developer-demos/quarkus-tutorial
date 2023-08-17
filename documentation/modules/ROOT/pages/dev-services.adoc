@@ -22,8 +22,8 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn quarkus:remove-extension -Dextension=quarkus-jdbc-h2
-mvn quarkus:add-extension -Dextension=quarkus-jdbc-postgresql
+./mvnwquarkus:remove-extension -Dextension=quarkus-jdbc-h2
+./mvnwquarkus:add-extension -Dextension=quarkus-jdbc-postgresql
 ----
 
 --
@@ -127,7 +127,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn test
+./mvnwtest
 ----
 
 --
@@ -265,7 +265,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn clean package -DskipTests -Dquarkus.container-image.push=true
+./mvnwclean package -DskipTests -Dquarkus.container-image.push=true
 ----
 
 --
