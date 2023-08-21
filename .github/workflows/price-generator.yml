@@ -20,4 +20,4 @@ jobs:
         java-version: 11
     - name: Maven build
       working-directory: apps/price-generator
-      run: ./mvnwpackage -Pnative -Dquarkus.native.container-build=true
+      run: ./mvnw package -Pnative -Dquarkus.native.container-build=true

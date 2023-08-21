@@ -143,7 +143,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnwclean test
+./mvnw clean test
 ----
 
 --
@@ -184,7 +184,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnwquarkus:dev
+./mvnw quarkus:dev
 ----
 
 --

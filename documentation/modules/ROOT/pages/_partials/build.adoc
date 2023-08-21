@@ -11,7 +11,7 @@ JVM mode::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw -DskipTests clean package
+./mvnw  -DskipTests clean package
 ----
 
 After successful maven build, run the following command to build the container - choose the terminal of the target environment you wish to use (podman, minishift or minokube) as you want to build and publish the image in the right registry:
@@ -31,7 +31,7 @@ Native mode::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw -DskipTests clean package -Pnative -Dnative-image.docker-build=true <1>
+./mvnw  -DskipTests clean package -Pnative -Dnative-image.docker-build=true <1>
 ----
 <1> Using the `-Dnative-image.docker-build=true` is very important as need a linux native binary what will be containerized. 
 

@@ -46,6 +46,6 @@ You can run the test either in IDE or by running Maven:
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw clean compile test
+./mvnw  clean compile test
 ----
 #end::test[]

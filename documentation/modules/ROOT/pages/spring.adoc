@@ -14,8 +14,8 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnwquarkus:remove-extension -Dextensions=quarkus-resteasy-reactive
-./mvnwquarkus:add-extension -Dextensions=quarkus-spring-web,quarkus-spring-data-jpa,quarkus-resteasy-reactive-jackson
+./mvnw quarkus:remove-extension -Dextensions=quarkus-resteasy-reactive
+./mvnw quarkus:add-extension -Dextensions=quarkus-spring-web,quarkus-spring-data-jpa,quarkus-resteasy-reactive-jackson
 ----
 
 --

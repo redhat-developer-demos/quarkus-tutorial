@@ -37,7 +37,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnwquarkus:add-extension -Dextensions=quarkus-rest-client-reactive,quarkus-rest-client-reactive-jsonb
+./mvnw quarkus:add-extension -Dextensions=quarkus-rest-client-reactive,quarkus-rest-client-reactive-jsonb
 ----
 
 --

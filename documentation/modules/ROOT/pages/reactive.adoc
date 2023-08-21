@@ -19,7 +19,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnwquarkus:add-extension -Dextension=quarkus-mutiny
+./mvnw quarkus:add-extension -Dextension=quarkus-mutiny
 ----
 
 --
