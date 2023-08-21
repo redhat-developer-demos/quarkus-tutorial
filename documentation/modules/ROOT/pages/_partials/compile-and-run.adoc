@@ -16,7 +16,7 @@ a|
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
- mvn package 
+ ./mvnwpackage 
 ----
 
 a|
@@ -60,7 +60,7 @@ a|
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
- mvn package -Dnative
+ ./mvnwpackage -Dnative
 ----
 
 a|
@@ -100,7 +100,7 @@ a|
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
- mvn quarkus:image-build \
+ ./mvnwquarkus:image-build \
   -Dnative
 ----
 a|

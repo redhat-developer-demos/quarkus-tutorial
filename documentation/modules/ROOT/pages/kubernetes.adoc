@@ -25,7 +25,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn quarkus:add-extension -Dextensions=quarkus-kubernetes,quarkus-container-image-jib
+./mvnwquarkus:add-extension -Dextensions=quarkus-kubernetes,quarkus-container-image-jib
 ----
 
 --
@@ -90,7 +90,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn clean package -DskipTests -Dquarkus.container-image.push=true -Dquarkus.container-image.builder=jib
+./mvnwclean package -DskipTests -Dquarkus.container-image.push=true -Dquarkus.container-image.builder=jib
 ----
 
 --
