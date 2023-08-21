@@ -185,8 +185,8 @@ If you are using a proprietary database such as <code>DB2</code> or <code>MSSQL<
 <div class="tab-pane" aria-labelledby="tabset1_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn quarkus:remove-extension -Dextension=quarkus-jdbc-h2
-mvn quarkus:add-extension -Dextension=quarkus-jdbc-postgresql</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnwquarkus:remove-extension -Dextension=quarkus-jdbc-h2
+./mvnwquarkus:add-extension -Dextension=quarkus-jdbc-postgresql</code></pre>
 </div>
 </div>
 </div>
@@ -315,7 +315,7 @@ quarkus.hibernate-orm.database.generation=drop-and-create</code></pre>
 <div class="tab-pane" aria-labelledby="tabset2_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn test</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnwtest</code></pre>
 </div>
 </div>
 </div>
@@ -472,7 +472,7 @@ EOF</code></pre>
 <div class="tab-pane" aria-labelledby="tabset3_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn clean package -DskipTests -Dquarkus.container-image.push=true</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnwclean package -DskipTests -Dquarkus.container-image.push=true</code></pre>
 </div>
 </div>
 </div>

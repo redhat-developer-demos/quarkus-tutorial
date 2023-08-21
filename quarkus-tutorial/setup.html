@@ -241,12 +241,6 @@ We highly recommend Windows users to use <a href="https://learn.microsoft.com/en
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://adoptopenjdk.net">Windows</a> (Make sure you set the <code>JAVA_HOME</code> environment variable and add <code>%JAVA_HOME%\bin</code> to your <code>PATH</code>)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Apache Maven 3.8.1+</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>brew install maven</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dnf install maven</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://maven.apache.org/download.cgi">Windows</a> (Make sure you set the <code>MAVEN_HOME</code> environment variable and add <code>%MAVEN_HOME%\bin</code> to your <code>PATH</code>)</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Graal VM</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java17-darwin-amd64-22.3.0.tar.gz">GraalVM Community Edition 22.3.0</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java17-linux-amd64-22.3.0.tar.gz">GraalVM Community Edition 22.3.0</a></p></td>
@@ -262,7 +256,7 @@ We highly recommend Windows users to use <a href="https://learn.microsoft.com/en
 </td>
 <td class="content">
 <div class="paragraph">
-<p>You can also install Java and Maven using <a href="https://sdkman.io">SDKMAN!</a>. This allows easy version/distribution switching (and you can install the Quarkus CLI with it as well)</p>
+<p>You can also install Java using <a href="https://sdkman.io">SDKMAN!</a>. This allows easy version/distribution switching (and you can install the Quarkus CLI with it as well)</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -270,7 +264,6 @@ We highly recommend Windows users to use <a href="https://learn.microsoft.com/en
   source "$HOME/.sdkman/bin/sdkman-init.sh"
 
   sdk install java
-  sdk install maven
   sdk install quarkus</code></pre>
 </div>
 </div>
@@ -290,13 +283,13 @@ mkdir quarkus-tutorial
 cd quarkus-tutorial
 mkdir work
 docker run -ti -p 8080:8080 -v `pwd`/work:/work \
-  -v `mvn help:evaluate -Dexpression=settings.localRepository | grep \
+  -v `./mvnwhelp:evaluate -Dexpression=settings.localRepository | grep \
   -v '\[INFO\]' | grep -v '\[WARNING\]'`:/opt/developer/.m2/repository \
   --rm quay.io/rhdevelopers/tutorial-tools:0.0.7 bash
 
 # -p will map Quarkus running in the container to your host port
 # -v `pwd`... will map the host work subdirectory to the container /work directory, this is where you will create your application
-# -v `mvn ...` will map your ~/.m2/repository of your host to the container repository to save downloading again between image runs</code></pre>
+# -v `./mvnw...` will map your ~/.m2/repository of your host to the container repository to save downloading again between image runs</code></pre>
 </div>
 </div>
 <div class="admonitionblock tip">
