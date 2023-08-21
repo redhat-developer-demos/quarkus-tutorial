@@ -180,7 +180,7 @@ You will need a public container registry to store your image. If you don&#8217;
 <div class="tab-pane" aria-labelledby="tabset1_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnwquarkus:add-extension -Dextensions=quarkus-kubernetes,quarkus-container-image-jib</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextensions=quarkus-kubernetes,quarkus-container-image-jib</code></pre>
 </div>
 </div>
 </div>
@@ -286,7 +286,7 @@ If you don&#8217;t, your push <strong>will</strong> fail.
 <div class="tab-pane" aria-labelledby="tabset2_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnwclean package -DskipTests -Dquarkus.container-image.push=true -Dquarkus.container-image.builder=jib</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw clean package -DskipTests -Dquarkus.container-image.push=true -Dquarkus.container-image.builder=jib</code></pre>
 </div>
 </div>
 </div>

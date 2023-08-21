@@ -147,7 +147,7 @@
 <div class="tab-pane" aria-labelledby="tabset1_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw"io.quarkus.platform:quarkus-maven-plugin:create" \
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw "io.quarkus.platform:quarkus-maven-plugin:create" \
 -DprojectGroupId="com.redhat.developers" \
 -DprojectArtifactId="tutorial-app" \
 -DprojectVersion="1.0-SNAPSHOT" \
@@ -225,7 +225,7 @@ All the remaining parts of this tutorial assume that you&#8217;ll be working ins
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div id="basics-build-quarkus-jvm-app-mvn" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"> ./mvnwpackage</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"> ./mvnw package</code></pre>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div id="basics-build-quarkus-jvm-app-quarkus" class="listingblock console-input">
@@ -276,7 +276,7 @@ To force building a native binary in a GraalVM Mandrel container, add <code>-Dqu
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div id="basics-build-quarkus-native-app-mvn" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"> ./mvnwpackage -Dnative</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"> ./mvnw package -Dnative</code></pre>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div id="basics-build-quarkus-native-app-quarkus" class="listingblock console-input">
@@ -324,7 +324,7 @@ Native compilation will take few minutes to complete.
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div id="basics-build-quarkus-native-container-app-mvn" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"> ./mvnwquarkus:image-build \
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"> ./mvnw quarkus:image-build \
   -Dnative</code></pre>
 </div>
 </div></div></td>
@@ -441,7 +441,7 @@ Start the container that runs the native binary:</p>
 <div class="tab-pane" aria-labelledby="tabset3_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnwclean test</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw clean test</code></pre>
 </div>
 </div>
 </div>
@@ -526,7 +526,7 @@ If you use <code>tutorial-tools</code>, your host <code>quarkus-tutorial/work</c
 <div class="tab-pane" aria-labelledby="tabset4_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnwquarkus:dev</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:dev</code></pre>
 </div>
 </div>
 </div>
