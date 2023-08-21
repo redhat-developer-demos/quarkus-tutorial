@@ -13,7 +13,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw "io.quarkus.platform:quarkus-maven-plugin:create" \
+mvn "io.quarkus.platform:quarkus-maven-plugin:create" \
 -DprojectGroupId="com.redhat.developers" \
 -DprojectArtifactId="tutorial-app" \
 -DprojectVersion="1.0-SNAPSHOT" \
