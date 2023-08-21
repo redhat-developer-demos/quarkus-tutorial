@@ -24,12 +24,12 @@ endif::workshop[]
 
 [TIP]
 ====
-GraalVM is only required if you intend to build a native image for your local operating system. If you want to create a container using a native image, you can use the Quarkus feature for this and don't need to install GraalVM locally.
+Installing GraalVM is only required if you intend to build a https://quarkus.io/guides/building-native-image[native binary] for your local operating system and don't have a container runtime. Otherwise Quarkus can build the native binary inside a GraalVM-like container based on the Mandrel project which is easier and doesn't require you to install and configure GraalVM on your machine. Note that for Windows users this feature might only work in WSL with Podman/Docker installed.
 ====
 
 NOTE: * You can also use Docker instead of Podman. The advantage of Podman is that it is 100% Free Open Source and does not need to run with elevated privileges. 
 
-IMPORTANT: We highly recommend Windows users to use https://learn.microsoft.com/en-us/windows/wsl/install[WSL].
+IMPORTANT: We highly recommend Windows users to use https://learn.microsoft.com/en-us/windows/wsl/install[WSL2] 
 
 [tabs]
 ====
@@ -51,10 +51,10 @@ Please have them installed and configured before you get started with any of the
 | `brew tap AdoptOpenJDK/openjdk && brew cask install adoptopenjdk17`
 | `dnf install java-17-openjdk.x86_64`
 | https://adoptopenjdk.net[Windows] (Make sure you set the `JAVA_HOME` environment variable and add `%JAVA_HOME%\bin` to your `PATH`)
-| **Graal VM**
-| https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-{graalvm-version}/graalvm-ce-java17-darwin-amd64-{graalvm-version}.tar.gz[GraalVM Community Edition {graalvm-version}]
-| https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-{graalvm-version}/graalvm-ce-java17-linux-amd64-{graalvm-version}.tar.gz[GraalVM Community Edition {graalvm-version}]
-| https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-{graalvm-version}/graalvm-ce-java17-windows-amd64-{graalvm-version}.zip[GraalVM Community Edition {graalvm-version}]
+| **Graal VM [Optional *]**
+| https://www.graalvm.org/latest/docs/getting-started/macos/[Download & install GraalVM for MacOS]
+| https://www.graalvm.org/latest/docs/getting-started/linux/[Download & install GraalVM for Linux]
+| https://www.graalvm.org/latest/docs/getting-started/windows/[Download & install GraalVM for Windows]
 
 |===
 
@@ -75,7 +75,7 @@ You can also install Java using https://sdkman.io[SDKMAN!]. This allows easy ver
 Container Image::
 +
 --
-You can run the tutorial from inside a container which has all the tools listed below installed and pre-configured.
+You can run the tutorial from inside a container which has all the tools listed above installed and pre-configured.
 [#docker-pull-tutorials-cli]
 [source,bash]
 -----
@@ -84,13 +84,13 @@ mkdir quarkus-tutorial
 cd quarkus-tutorial
 mkdir work
 docker run -ti -p 8080:8080 -v `pwd`/work:/work \
-  -v `./mvnwhelp:evaluate -Dexpression=settings.localRepository | grep \
+  -v `./mvnw help:evaluate -Dexpression=settings.localRepository | grep \
   -v '\[INFO\]' | grep -v '\[WARNING\]'`:/opt/developer/.m2/repository \
   --rm quay.io/rhdevelopers/tutorial-tools:0.0.7 bash
 
 # -p will map Quarkus running in the container to your host port
 # -v `pwd`... will map the host work subdirectory to the container /work directory, this is where you will create your application
-# -v `./mvnw...` will map your ~/.m2/repository of your host to the container repository to save downloading again between image runs
+# -v `./mvnw ...` will map your ~/.m2/repository of your host to the container repository to save downloading again between image runs
 -----
 
 [TIP]

@@ -13,7 +13,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw"io.quarkus.platform:quarkus-maven-plugin:create" \
+./mvnw "io.quarkus.platform:quarkus-maven-plugin:create" \
 -DprojectGroupId="com.redhat.developers" \
 -DprojectArtifactId="tutorial-app" \
 -DprojectVersion="1.0-SNAPSHOT" \
@@ -94,7 +94,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnwclean test
+./mvnw clean test
 ----
 
 --
@@ -143,7 +143,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnwquarkus:dev
+./mvnw quarkus:dev
 ----
 
 --

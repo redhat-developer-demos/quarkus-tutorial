@@ -10,7 +10,7 @@ If you have not deployed the application previously, you need to add Quarkus Kub
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:add-extension -Dextensions="quarkus-kubernetes"
+./mvnw  quarkus:add-extension -Dextensions="quarkus-kubernetes"
 ----
 
 You need to configure group and name of the container used to deploy into Kubernetes.
@@ -33,7 +33,7 @@ Now you need to run Maven goal to generate Kubernetes resource.
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw package -DskipTests
+./mvnw  package -DskipTests
 ----
 
 You can inspect the generated file by accessing next file:

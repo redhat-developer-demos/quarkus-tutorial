@@ -19,7 +19,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnwquarkus:add-extension -Dextensions=quarkus-oidc,quarkus-keycloak-authorization
+./mvnw quarkus:add-extension -Dextensions=quarkus-oidc,quarkus-keycloak-authorization
 ----
 
 --

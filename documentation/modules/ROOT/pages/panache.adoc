@@ -14,7 +14,7 @@ We'll use http://www.h2database.com[H2,window="_blank"] as our backing database 
 
 Quarkus provides a lot of optimized dependencies to its ecosystem through *extensions*. For this particular chapter, we'll need to add extensions that enables us to work with H2, Hibernate ORM, Panache (a novel persistence API), and JSON.
 
-You probably still have `./mvnwquarkus:dev` running in your terminal. And that's perfectly fine!
+You probably still have `./mvnw quarkus:dev` running in your terminal. And that's perfectly fine!
 
 Just open a new terminal window, and make sure you're at the root of your `{project-name}` project, then run:
 
@@ -26,7 +26,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnwquarkus:add-extension -Dextension="quarkus-resteasy-reactive-jsonb, quarkus-jdbc-h2, quarkus-hibernate-orm-panache, quarkus-smallrye-openapi"
+./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-reactive-jsonb, quarkus-jdbc-h2, quarkus-hibernate-orm-panache, quarkus-smallrye-openapi"
 ----
 
 --
