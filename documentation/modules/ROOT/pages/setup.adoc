@@ -24,7 +24,8 @@ endif::workshop[]
 
 [TIP]
 ====
-Installing GraalVM is only required if you intend to build a https://quarkus.io/guides/building-native-image[native binary] for your local operating system and don't have a container runtime. Quarkus can also build the native binary inside a GraalVM-like container based on the Mandrel project which is easier and doesn't require you to install and configure GraalVM on your machine.
+Installing GraalVM is only required if you intend to build a https://quarkus.io/guides/building-native-image[native binary] for your local operating system and don't have a container runtime. 
+Quarkus can simply build the native binary inside a container and this way you don't need to install and configure GraalVM on your machine.
 ====
 
 NOTE: * You can also use Docker instead of Podman. The advantage of Podman is that it is 100% Free Open Source and does not need to run with elevated privileges. 
@@ -32,7 +33,7 @@ NOTE: * You can also use Docker instead of Podman. The advantage of Podman is th
 
 [tabs]
 ====
-Local  Installation::
+Local  Installation (read the tip below for an alternative way to install these tools)::
 +
 --
 Please have them installed and configured before you get started with any of the tutorial chapters.
@@ -63,13 +64,14 @@ Please have them installed and configured before you get started with any of the
 
 [TIP]
 =====
-If you are using Linux, MacOS or WSL on Windows you can also install the required tools using https://sdkman.io[SDKMAN!]. This allows easy version/distribution switching (and you can install the Quarkus CLI with it as well)
+If you are using Linux, MacOS or WSL on Windows you can also install the required tools using https://sdkman.io[SDKMAN!]. This allows easy version/distribution switching (and you can install the Quarkus CLI with it as well). 
+Alternatively on Windows you can also try https://chocolatey.org/[Chocolatey] which works similarly.
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
   curl -s "https://get.sdkman.io" | bash
   source "$HOME/.sdkman/bin/sdkman-init.sh"
-
+.
   sdk install java 
   sdk install maven
   sdk install quarkus
