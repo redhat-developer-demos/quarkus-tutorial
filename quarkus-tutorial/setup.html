@@ -166,7 +166,8 @@ which allows you to run this entire tutorial within a container that will have a
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Installing GraalVM is only required if you intend to build a <a href="https://quarkus.io/guides/building-native-image">native binary</a> for your local operating system and don&#8217;t have a container runtime. Quarkus can also build the native binary inside a GraalVM-like container based on the Mandrel project which is easier and doesn&#8217;t require you to install and configure GraalVM on your machine.</p>
+<p>Installing GraalVM is only required if you intend to build a <a href="https://quarkus.io/guides/building-native-image">native binary</a> for your local operating system and don&#8217;t have a container runtime.
+Quarkus can simply build the native binary inside a container and this way you don&#8217;t need to install and configure GraalVM on your machine.</p>
 </div>
 </td>
 </tr>
@@ -188,7 +189,7 @@ which allows you to run this entire tutorial within a container that will have a
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset1_local-installation"></a>Local  Installation</p>
+<p><a id="tabset1_local-installation-read-the-tip-below-for-an-alternative-way-to-install-these-tools"></a>Local  Installation (read the tip below for an alternative way to install these tools)</p>
 </li>
 <li>
 <p><a id="tabset1_container-image"></a>Container Image</p>
@@ -196,7 +197,7 @@ which allows you to run this entire tutorial within a container that will have a
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset1_local-installation">
+<div class="tab-pane" aria-labelledby="tabset1_local-installation-read-the-tip-below-for-an-alternative-way-to-install-these-tools">
 <div class="paragraph">
 <p>Please have them installed and configured before you get started with any of the tutorial chapters.</p>
 </div>
@@ -250,13 +251,14 @@ which allows you to run this entire tutorial within a container that will have a
 </td>
 <td class="content">
 <div class="paragraph">
-<p>If you are using Linux, MacOS or WSL on Windows you can also install the required tools using <a href="https://sdkman.io">SDKMAN!</a>. This allows easy version/distribution switching (and you can install the Quarkus CLI with it as well)</p>
+<p>If you are using Linux, MacOS or WSL on Windows you can also install the required tools using <a href="https://sdkman.io">SDKMAN!</a>. This allows easy version/distribution switching (and you can install the Quarkus CLI with it as well).
+Alternatively on Windows you can also try <a href="https://chocolatey.org/">Chocolatey</a> which works similarly.</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">  curl -s "https://get.sdkman.io" | bash
   source "$HOME/.sdkman/bin/sdkman-init.sh"
-
+.
   sdk install java
   sdk install maven
   sdk install quarkus
