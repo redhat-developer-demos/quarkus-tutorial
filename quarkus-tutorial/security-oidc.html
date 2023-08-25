@@ -158,7 +158,7 @@
 <div class="tab-pane" aria-labelledby="tabset1_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextensions=quarkus-oidc,quarkus-keycloak-authorization</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -D"extensions=quarkus-oidc,quarkus-keycloak-authorization"</code></pre>
 </div>
 </div>
 </div>
@@ -313,12 +313,7 @@ public class UserResource {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -X POST 'http://localhost:34000/realms/quarkus/protocol/openid-connect/token' \
--H 'Content-Type: application/x-www-form-urlencoded' \
--d 'username=jdoe' \
--d 'password=jdoepass' \
--d 'grant_type=password' \
--d 'client_id=admin-cli'</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -X POST "http://localhost:34000/realms/quarkus/protocol/openid-connect/token" -H "Content-Type: application/x-www-form-urlencoded" -d "username=jdoe" -d "password=jdoepass" -d "grant_type=password" -d "client_id=admin-cli"</code></pre>
 </div>
 </div>
 <div class="admonitionblock important">
@@ -354,11 +349,7 @@ Below you can find details on how to do that using <code>curl</code> and <code>j
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl -X POST 'http://localhost:34000/realms/quarkus/protocol/openid-connect/token' \
--H 'Content-Type: application/x-www-form-urlencoded' \
--d 'username=jdoe' \
--d 'password=jdoepass' \
--d 'grant_type=password' | jq -r '.access_token')
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl -X POST "http://localhost:34000/realms/quarkus/protocol/openid-connect/token" -H "Content-Type: application/x-www-form-urlencoded" -d "username=jdoe" -d "password=jdoepass" -d "grant_type=password" | jq -r ".access_token")
 
 curl -H "Authorization: Bearer $token" localhost:8080/api/users/info</code></pre>
 </div>
