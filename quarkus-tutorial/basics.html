@@ -147,11 +147,7 @@
 <div class="tab-pane" aria-labelledby="tabset1_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn "io.quarkus.platform:quarkus-maven-plugin:create" \
--DprojectGroupId="com.redhat.developers" \
--DprojectArtifactId="tutorial-app" \
--DprojectVersion="1.0-SNAPSHOT" \
--Dextensions=resteasy-reactive
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn "io.quarkus.platform:quarkus-maven-plugin:create" -DprojectGroupId="com.redhat.developers" -DprojectArtifactId="tutorial-app" -DprojectVersion="1.0-SNAPSHOT" -Dextensions=resteasy-reactive
 cd tutorial-app</code></pre>
 </div>
 </div>
@@ -168,9 +164,7 @@ cd tutorial-app</code></pre>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus create app \
-  -x resteasy-reactive \
-  com.redhat.developers:tutorial-app:1.0-SNAPSHOT
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus create app -x resteasy-reactive com.redhat.developers:tutorial-app:1.0-SNAPSHOT
 cd tutorial-app</code></pre>
 </div>
 </div>
@@ -458,7 +452,7 @@ Start the container that runs the native binary:</p>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-<code>quarkus test</code> starts tests in continuous testing mode (more about this below) so to return to the command line you will need to press (q)
+<code>quarkus test</code> starts tests in continuous testing mode (more about this below) so to return to the command line after the tests ran you will need to press (q)
 </td>
 </tr>
 </table>
@@ -538,6 +532,18 @@ If you use <code>tutorial-tools</code>, your host <code>quarkus-tutorial/work</c
 </div>
 </div>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+By default Quarkus uses 'localhost' for the dev mode host setting. If you are working in a remote development environment, you may need to set the host to 0.0.0.0 by appending <code>-D"quarkus.http.host=0.0.0.0"</code> to the above command.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
