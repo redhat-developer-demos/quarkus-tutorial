@@ -13,11 +13,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn "io.quarkus.platform:quarkus-maven-plugin:create" \
--DprojectGroupId="com.redhat.developers" \
--DprojectArtifactId="tutorial-app" \
--DprojectVersion="1.0-SNAPSHOT" \
--Dextensions=resteasy-reactive
+mvn "io.quarkus.platform:quarkus-maven-plugin:create" -DprojectGroupId="com.redhat.developers" -DprojectArtifactId="tutorial-app" -DprojectVersion="1.0-SNAPSHOT" -Dextensions=resteasy-reactive
 cd {project-name}
 ----
 --
@@ -32,9 +28,7 @@ Then create the application:
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus create app \
-  -x resteasy-reactive \
-  com.redhat.developers:tutorial-app:1.0-SNAPSHOT
+quarkus create app -x resteasy-reactive com.redhat.developers:tutorial-app:1.0-SNAPSHOT
 cd {project-name}
 ----
 --
@@ -107,7 +101,7 @@ Quarkus CLI::
 quarkus test
 ----
 
-NOTE: `quarkus test` starts tests in continuous testing mode (more about this below) so to return to the command line you will need to press (q)
+NOTE: `quarkus test` starts tests in continuous testing mode (more about this below) so to return to the command line after the tests ran you will need to press (q)
 --
 ====
 
@@ -157,6 +151,8 @@ quarkus dev
 ----
 --
 ====
+
+NOTE: By default Quarkus uses 'localhost' for the dev mode host setting. If you are working in a remote development environment, you may need to set the host to 0.0.0.0 by appending `-D"quarkus.http.host=0.0.0.0"` to the above command. 
 
 == Dev UI
 
