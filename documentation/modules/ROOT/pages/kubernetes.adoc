@@ -25,7 +25,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:add-extension -Dextensions=quarkus-kubernetes,quarkus-container-image-jib
+./mvnw quarkus:add-extension -Dextensions="quarkus-kubernetes,quarkus-container-image-jib"
 ----
 
 --
@@ -90,7 +90,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw clean package -DskipTests -Dquarkus.container-image.push=true -Dquarkus.container-image.builder=jib
+./mvnw quarkus:build -DskipTests -D"quarkus.container-image.push=true" -D"quarkus.container-image.builder=jib"
 ----
 
 --
@@ -100,12 +100,12 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus image build jib --no-tests -Dquarkus.container-image.push=true
+quarkus image build jib --no-tests -D"quarkus.container-image.push=true"
 ----
 --
 ====
 
-NOTE: You can also use Docker/Podman to build & push.  To do so, just omit 'jib' from the command.
+NOTE: If you're having trouble with jib, you can also just use Docker/Podman to build & push.  To do so, omit 'jib' from the command.
 
 [.console-output]
 [source,text]
@@ -129,7 +129,7 @@ NOTE: You can also use Docker/Podman to build & push.  To do so, just omit 'jib'
 
 When a Kubernetes extension is present in the classpath, Quarkus will scaffold a Kubernetes deployment file in your target folder during the package phase.  We can apply it to deploy the application to our Kubernetes cluster:  
 
-NOTE: You will need the https://kubernetes.io/docs/tasks/tools/[kubectl] or oc cli tool installed locally for the apply command below. https://developers.redhat.com/blog/2021/04/21/access-your-developer-sandbox-for-red-hat-openshift-from-the-command-line#[Here are instructions] to install the oc tool and log in to your Openshift Sandbox.
+NOTE: You will need the https://kubernetes.io/docs/tasks/tools/[kubectl] or oc cli tool installed locally for the apply command below. https://developers.redhat.com/blog/2021/04/21/access-your-developer-sandbox-for-red-hat-openshift-from-the-command-line#[Here are instructions] to install the oc tool and log in to your Openshift Sandbox.  Hint: your favorite package manager (dnf/brew/choco) can likely be used for the installation. Eg. `dnf install kubectl` or `choco install kubernetes-client` or `choco install openshift-client` 
 
 [tabs]
 ====
@@ -156,22 +156,20 @@ oc apply -f target/kubernetes/kubernetes.yml
 [.console-output]
 [source,text]
 ----
-serviceaccount/tutorial-app created
 service/tutorial-app created
 deployment.apps/tutorial-app created
 ----
 
-[TIP]
-=====
+
 With the Quarkus CLI tool deploying is even easier.  Instead of the above `kubectl apply` command, you can simply run `quarkus deploy` to deploy the application to your cluster:
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
 quarkus deploy
 ----
-=====
 
-You might need to wait a few seconds until your application is up and running.  Once it is, let's get the url to test:
+
+After the command has finished, you might need to wait a few more seconds until your application is up and running.  Once it is, let's get the url to test.  (command prompt and powershell users will need to tweak these commands a little bit)
 
 
 [tabs]
@@ -238,6 +236,11 @@ curl $IP:$PORT/hello
 ----
 Hello y'all!
 ----
+
+If you're using the Openshift Sandbox UI, you can also find the application running in the "Topology" view as seen in the screenshot below:
+
+[.mt-4.center]
+image::Openshift.png[Openshift,400,400,align="center"]
 
 [sidebar]
 --

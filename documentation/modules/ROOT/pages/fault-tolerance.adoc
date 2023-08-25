@@ -14,7 +14,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:add-extension -Dextensions=quarkus-smallrye-fault-tolerance
+./mvnw quarkus:add-extension -D"extensions=quarkus-smallrye-fault-tolerance"
 ----
 
 --

@@ -19,7 +19,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:add-extension -Dextensions=quarkus-oidc,quarkus-keycloak-authorization
+./mvnw quarkus:add-extension -D"extensions=quarkus-oidc,quarkus-keycloak-authorization"
 ----
 
 --
@@ -114,12 +114,7 @@ First you need a token valid to authenticate. Run the following command to obtai
 [.console-input]
 [source,bash]
 ----
-curl -X POST 'http://localhost:34000/realms/quarkus/protocol/openid-connect/token' \
--H 'Content-Type: application/x-www-form-urlencoded' \
--d 'username=jdoe' \
--d 'password=jdoepass' \
--d 'grant_type=password' \
--d 'client_id=admin-cli'
+curl -X POST "http://localhost:34000/realms/quarkus/protocol/openid-connect/token" -H "Content-Type: application/x-www-form-urlencoded" -d "username=jdoe" -d "password=jdoepass" -d "grant_type=password" -d "client_id=admin-cli"
 ----
 [IMPORTANT]
 --
@@ -139,11 +134,7 @@ Below you can find details on how to do that using `curl` and `jq`:
 [.console-input]
 [source,bash]
 ----
-token=$(curl -X POST 'http://localhost:34000/realms/quarkus/protocol/openid-connect/token' \
--H 'Content-Type: application/x-www-form-urlencoded' \
--d 'username=jdoe' \
--d 'password=jdoepass' \
--d 'grant_type=password' | jq -r '.access_token')
+token=$(curl -X POST "http://localhost:34000/realms/quarkus/protocol/openid-connect/token" -H "Content-Type: application/x-www-form-urlencoded" -d "username=jdoe" -d "password=jdoepass" -d "grant_type=password" | jq -r ".access_token")
 
 curl -H "Authorization: Bearer $token" localhost:8080/api/users/info
 ----
