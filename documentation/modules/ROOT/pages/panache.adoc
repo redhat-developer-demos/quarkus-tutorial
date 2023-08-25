@@ -203,7 +203,7 @@ Now you can insert a new fruit by using `curl`:
 [.console-input]
 [source,bash]
 ----
-curl -d '{"name": "Banana", "season": "Summer"}' -H "Content-Type: application/json" http://localhost:8080/fruit
+curl -d "{\"name\": \"Banana\", \"season\": \"Summer\"}" -H "Content-Type: application/json" http://localhost:8080/fruit
 ----
 
 [.console-output]

@@ -265,7 +265,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw clean package -DskipTests -Dquarkus.container-image.push=true
+./mvnw clean package -DskipTests -D"quarkus.container-image.push=true"
 ----
 
 --

@@ -76,6 +76,7 @@ Alternatively on Windows you can also try https://chocolatey.org/[Chocolatey] wh
   sdk install maven
   sdk install quarkus
   sdk install java 17.0.8-graalce
+  sdk install jbang  
 ----
 =====
 --
