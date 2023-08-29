@@ -6,7 +6,7 @@ Quarkus provides JVM and other statistics out-of-box with the Metrics extension,
 
 == Add the Metrics extension
 
-Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
+In a new terminal window at the root of your `{project-name}` project, run:
 
 [tabs]
 ====

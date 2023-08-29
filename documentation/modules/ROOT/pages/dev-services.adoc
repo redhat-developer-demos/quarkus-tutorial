@@ -11,8 +11,25 @@ More on zero config setup of datasources can be found https://quarkus.io/guides/
 
 == Replace Database Extensions 
 
-Instead of the built-in h2 database, we're now going to use an external database.  Swapping out from one database provider to another is fairly trivial with Quarkus.  In our case we just need to remove the h2 extension and add the postgresql extension instead:
+Instead of the built-in h2 database, we're now going to use an external database.  Swapping out from one database provider to another is fairly trivial with Quarkus.
+Let's start with updating the configuration in the application.properties.
 
+TIP: You technically don't need to add the db-kind property since there is only one jdbc driver in our application.  We added it for clarity's sake.
+
+[#quarkuspdb-update-props]
+[.console-input]
+[source,config,subs="+macros,+attributes"]
+----
+# Configuration file
+# key = value
+greeting=Hello y'all!
+quarkus.datasource.db-kind=postgresql
+quarkus.hibernate-orm.database.generation=drop-and-create
+----
+
+WARNING: Make sure the h2 db-kind and jdbc.url properties have been removed.
+
+Now let's swap the h2 extension out for the postgresql extension:
 
 [tabs]
 ====
@@ -38,24 +55,6 @@ quarkus extension add quarkus-jdbc-postgresql
 ----
 --
 ====
-
-
-== Update configuration
-
-Update the configuration and change h2 to postgresql by updating the application.properties:
-
-TIP: You technically don't need to add the db-kind property since there is only one jdbc driver in our application.  We added it for clarity's sake.
-
-[#quarkuspdb-update-props]
-[.console-input]
-[source,config,subs="+macros,+attributes"]
-----
-# Configuration file
-# key = value
-greeting=Hello y'all!
-quarkus.datasource.db-kind=postgresql
-quarkus.hibernate-orm.database.generation=drop-and-create
-----
 
 
 Notice in the logs how Quarkus has reloaded and started up a Postgresql database dev service:
