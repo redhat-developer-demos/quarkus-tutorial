@@ -96,7 +96,7 @@ public class LivenessProbe implements HealthCheck {
 
 == Add a custom readiness probe
 
-In dev mode, all your heath checks are visible in health UI: http://localhost:8080/q/health-ui/.
+In dev mode, all your health checks are visible in health UI: http://localhost:8080/q/health-ui/.
 
 Some extensions may provide default health checks, including that the extension will automatically register its health checks. 
 For example, quarkus-agroal (that is used to manage Quarkus datasources) automatically registers a readiness health check that will validate each datasource.
