@@ -189,7 +189,7 @@ Quarkus can simply build the native binary inside a container and this way you d
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset1_local-installation-read-the-tip-below-for-an-alternative-way-to-install-these-tools"></a>Local  Installation (read the tip below for an alternative way to install these tools)</p>
+<p><a id="tabset1_local-installation"></a>Local  Installation</p>
 </li>
 <li>
 <p><a id="tabset1_container-image"></a>Container Image</p>
@@ -197,7 +197,7 @@ Quarkus can simply build the native binary inside a container and this way you d
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset1_local-installation-read-the-tip-below-for-an-alternative-way-to-install-these-tools">
+<div class="tab-pane" aria-labelledby="tabset1_local-installation">
 <div class="paragraph">
 <p>Please have them installed and configured before you get started with any of the tutorial chapters.</p>
 </div>
@@ -282,13 +282,12 @@ mkdir quarkus-tutorial
 cd quarkus-tutorial
 mkdir work
 docker run -ti -p 8080:8080 -v `pwd`/work:/work \
-  -v `./mvnw help:evaluate -Dexpression=settings.localRepository | grep \
-  -v '\[INFO\]' | grep -v '\[WARNING\]'`:/opt/developer/.m2/repository \
+  -v `mvn help:evaluate -Dexpression=settings.localRepository -q -DforceStdout`:/opt/developer/.m2/repository \
   --rm quay.io/rhdevelopers/tutorial-tools:0.0.7 bash
 
 # -p will map Quarkus running in the container to your host port
 # -v `pwd`... will map the host work subdirectory to the container /work directory, this is where you will create your application
-# -v `./mvnw ...` will map your ~/.m2/repository of your host to the container repository to save downloading again between image runs</code></pre>
+# -v `mvn ...` will map your ~/.m2/repository of your host to the container repository to save downloading again between image runs</code></pre>
 </div>
 </div>
 <div class="admonitionblock tip">
