@@ -13,7 +13,7 @@
 ** xref:rest-client.adoc[REST Client]
 ** xref:fault-tolerance.adoc[Fault Tolerance]
 ** xref:health.adoc[Health Check]
-** xref:metrics.adoc[Metrics]
+** xref:observability.adoc[Observability]
 ** xref:security.adoc[Security with JWT RBAC]
 // ** xref:security-oidc.adoc[Security using OpenID Connect]
 
