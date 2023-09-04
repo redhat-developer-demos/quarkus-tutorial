@@ -186,7 +186,7 @@ quarkus.hibernate-orm.database.generation=drop-and-create
 quarkus.hibernate-orm.sql-load-script=import.sql
 ----
 
-NOTE: We added a %prod. prefix to some of the properties.  This prefix makes it so these property will only be evaluated with the (default) prod profile.  In dev mode these values will be ignored, thus triggering the Dev Services creation.
+NOTE: We added a %prod. prefix to some of the properties.  This prefix makes it so these properties will only be evaluated with the (default) prod profile.  In dev mode these values will be ignored, thus triggering the Dev Services creation.
 
 === Create a postgresql database
 
