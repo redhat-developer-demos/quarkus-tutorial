@@ -33,7 +33,7 @@ NOTE: * You can also use Docker instead of Podman. The advantage of Podman is th
 
 [tabs]
 ====
-Local  Installation (read the tip below for an alternative way to install these tools)::
+Local  Installation::
 +
 --
 Please have them installed and configured before you get started with any of the tutorial chapters.
@@ -92,13 +92,12 @@ mkdir quarkus-tutorial
 cd quarkus-tutorial
 mkdir work
 docker run -ti -p 8080:8080 -v `pwd`/work:/work \
-  -v `./mvnw help:evaluate -Dexpression=settings.localRepository | grep \
-  -v '\[INFO\]' | grep -v '\[WARNING\]'`:/opt/developer/.m2/repository \
+  -v `mvn help:evaluate -Dexpression=settings.localRepository -q -DforceStdout`:/opt/developer/.m2/repository \
   --rm quay.io/rhdevelopers/tutorial-tools:0.0.7 bash
 
 # -p will map Quarkus running in the container to your host port
 # -v `pwd`... will map the host work subdirectory to the container /work directory, this is where you will create your application
-# -v `./mvnw ...` will map your ~/.m2/repository of your host to the container repository to save downloading again between image runs
+# -v `mvn ...` will map your ~/.m2/repository of your host to the container repository to save downloading again between image runs
 -----
 
 [TIP]
