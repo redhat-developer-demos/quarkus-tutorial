@@ -3,8 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Metrics :: Quarkus Tutorial</title>
-    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/metrics.html">
+    <title>Observability :: Quarkus Tutorial</title>
+    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/observability.html">
+    <link rel="prev" href="health.html">
+    <link rel="next" href="security.html">
     <meta name="generator" content="Antora 2.3.1">
     <link rel="stylesheet" href="../_/css/site.css">
   </head>
@@ -95,7 +97,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="health.html">Health Check</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="observability.html">Observability</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -118,27 +120,33 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">quarkus-tutorial</a></li>
-    <li><a href="metrics.html">Metrics</a></li>
+    <li>Cloud Native</li>
+    <li><a href="observability.html">Observability</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/redhat-developer-demos/quarkus-tutorial/edit/master/documentation/modules/ROOT/pages/metrics.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/redhat-developer-demos/quarkus-tutorial/edit/master/documentation/modules/ROOT/pages/observability.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Metrics</h1>
+<h1 class="page">Observability</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>When running applications in production we need to send monitoring information to some services like Prometheus.</p>
+<p>When running applications in production we need to send telemetry (metrics and tracing information) to some services like Prometheus and Jaeger.</p>
 </div>
 <div class="paragraph">
-<p>Quarkus provides JVM and other statistics out-of-box with the Metrics extension, but it&#8217;s very valuable for our application to produce its own metrics. Let&#8217;s see how we can achieve it in this chapter.</p>
+<p>Quarkus provides JVM and other statistics out-of-box with the Metrics extension, and it provides distributed tracing with the opentelemetry extensions.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_add_the_metrics_extension"><a class="anchor" href="#_add_the_metrics_extension"></a>Add the Metrics extension</h2>
+<h2 id="_tracing"><a class="anchor" href="#_tracing"></a>Tracing</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>Let&#8217;s start with tracing. Tracing allows you to follow the flow of a request throughout your services. This becomes very important once you have more than one (micro) service running or are making external requests, eg. to a REST client or a database.</p>
+</div>
+<div class="sect2">
+<h3 id="_add_the_opentelemetry_extension"><a class="anchor" href="#_add_the_opentelemetry_extension"></a>Add the OpenTelemetry extension</h3>
 <div class="paragraph">
 <p>In a new terminal window at the root of your <code>tutorial-app</code> project, run:</p>
 </div>
@@ -157,21 +165,113 @@
 <div class="tab-pane" aria-labelledby="tabset1_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -D"extensions=quarkus-micrometer"</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -D"extensions=opentelemetry"</code></pre>
 </div>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_quarkus-cli">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus extension add quarkus-micrometer</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus extension add opentelemetry</code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="paragraph">
-<p>You should also add the <code>quarkus-micrometer-registry-prometheus</code> extension :</p>
+<p>The opentelementry extension works out of the box and will start sending data to a grpc receiver (by default localhost:4317) if we send new requests to the app.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_start_an_opentelemetry_collector"><a class="anchor" href="#_start_an_opentelemetry_collector"></a>Start an OpenTelemetry Collector</h3>
+<div class="paragraph">
+<p>To start collecting and inspecting telemetry, let&#8217;s run a container that instantiates Jaeger (a tool to inspect telemetry data) and also acts as an OpenTelemetry collector and query service:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker run --name=jaeger -d -p 16686:16686 -p 4317:4317 -e COLLECTOR_OTLP_ENABLED=true jaegertracing/all-in-one:latest</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Create a few requests so we have some telemetry data to work with by hitting our /fruit endpoint a few times again:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit?season=Summer</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_trace_down_the_requests_in_jaeger"><a class="anchor" href="#_trace_down_the_requests_in_jaeger"></a>Trace down the requests in Jaeger</h3>
+<div class="paragraph">
+<p>Go to <a href="http://localhost:16686" class="bare">http://localhost:16686</a> in your browser. You should see the Jaeger UI, if not make sure the docker run command was executed successfully. To see the traces we just produced, select 'tutorial-app' from the Service dropdown and click 'Find Traces'. Depending on how many times you sent requests to the fruit endpoint, you&#8217;ll see a number of traces that were collected.</p>
+</div>
+<div class="imageblock text-center mt-4 center">
+<div class="content">
+<img src="_images/Jaeger.png" alt="Jaeger Tracing" width="800" height="500">
+</div>
+</div>
+<div class="paragraph">
+<p>Click on the first "tutorial-app: GET /fruit" trace to drill into the details of the latest request. Notice that without doing any further work, even data from the calls out to the FruityVice REST service was collected, so we can see how long each request took:</p>
+</div>
+<div class="imageblock text-center mt-4 center">
+<div class="content">
+<img src="_images/Jaeger_Span.png" alt="Jaeger Span" width="800" height="500">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_tracing_database_calls"><a class="anchor" href="#_tracing_database_calls"></a>Tracing Database calls</h3>
+<div class="paragraph">
+<p>The keen observer (no pun intended) might have noticed that there is no tracing data for the database calls. To be able to do so, we&#8217;ll need to add the opentelemetry-jdbc dependency to our application. This time we&#8217;ll need to add the dependency directly to the .pom.xml file because it&#8217;s not a quarkus extension. Add the following snippet to your pom.xml just <strong>before</strong> the <code>&lt;/dependencies&gt;</code> line:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">    &lt;dependency&gt;
+        &lt;groupId&gt;io.opentelemetry.instrumentation&lt;/groupId&gt;
+        &lt;artifactId&gt;opentelemetry-jdbc&lt;/artifactId&gt;
+    &lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We&#8217;ll also need to add a new property to our <code>application.properties</code> file to enable telemetry for our datasource:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># enable tracing
+quarkus.datasource.jdbc.telemetry=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Create a few more requests to the fruit resource:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit?season=Summer</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8230;&#8203;And go back to the Jaeger UI at <a href="http://localhost:16686" class="bare">http://localhost:16686</a>. Click the 'Find Traces' again (make sure the tutorial-app Service is selected) and click on the first trace from the top. You will now see 2 more spans, one with 'DataSource.getConnection' that shows how long it took for the DB connection to get established, and one with 'SELECT quarkus.Fruit' that shows the details of the DB query and how long it took.</p>
+</div>
+<div class="imageblock text-center mt-4 center">
+<div class="content">
+<img src="_images/Jaeger_DataSource.png" alt="Jaeger DataSource" width="800" height="500">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_metrics"><a class="anchor" href="#_metrics"></a>Metrics</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Observability also means the ability to expose, collect and observe detailed metrics about your application and the JVM running underneath (if applicable).
+Let&#8217;s add the metrics extension that enables this capability in Quarkus:</p>
+</div>
+<div class="sect2">
+<h3 id="_add_the_metrics_extension"><a class="anchor" href="#_add_the_metrics_extension"></a>Add the Metrics extension</h3>
+<div class="paragraph">
+<p>In a terminal window at the root of your <code>tutorial-app</code> project, run:</p>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -188,11 +288,42 @@
 <div class="tab-pane" aria-labelledby="tabset2_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -D"extensions=quarkus-micrometer-registry-prometheus"</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -D"extensions=quarkus-micrometer"</code></pre>
 </div>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset2_quarkus-cli">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus extension add quarkus-micrometer</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>You should also add the <code>quarkus-micrometer-registry-prometheus</code> extension which formats the metrics in format that Prometheus can easily ingest:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset3_maven"></a>Maven</p>
+</li>
+<li>
+<p><a id="tabset3_quarkus-cli"></a>Quarkus CLI</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset3_maven">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -D"extensions=quarkus-micrometer-registry-prometheus"</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset3_quarkus-cli">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus extension add quarkus-micrometer-registry-prometheus</code></pre>
@@ -201,13 +332,15 @@
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_create_timeresource"><a class="anchor" href="#_create_timeresource"></a>Create TimeResource</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>Create a new <code>TimeResource</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+<p>By just adding these extensions, your application is now exposing metrics at the <a href="http://localhost:8080/q/metrics" class="bare">http://localhost:8080/q/metrics</a> endpoint. You can also access the metrics by going to the <a href="http://localhost:8080/q/dev">Dev UI</a> where you will see a new card "Micrometer metrics" and a link in that card to a <a href="http://localhost:8080/q/dev-ui/io.quarkus.quarkus-micrometer/prometheus">Prometheus metrics page</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_create_timeresource"><a class="anchor" href="#_create_timeresource"></a>Create TimeResource</h3>
+<div class="paragraph">
+<p>We can also generate custom metrics. Let&#8217;s add a custom counter that counts how many times a particular method has been called.
+Create a new <code>TimeResource</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -265,10 +398,8 @@ public class TimeResource {
 </table>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_invoke_the_endpoint_multiple_times"><a class="anchor" href="#_invoke_the_endpoint_multiple_times"></a>Invoke the endpoint multiple times</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_invoke_the_endpoint_multiple_times"><a class="anchor" href="#_invoke_the_endpoint_multiple_times"></a>Invoke the endpoint multiple times</h3>
 <div class="paragraph">
 <p>We need to send some requests to our endpoint to increment our <code>@Counted</code> metrics, so use the following command:</p>
 </div>
@@ -287,10 +418,8 @@ public class TimeResource {
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_check_the_metrics"><a class="anchor" href="#_check_the_metrics"></a>Check the metrics</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_check_the_metrics"><a class="anchor" href="#_check_the_metrics"></a>Check the metrics</h3>
 <div class="paragraph">
 <p>By default the metrics are exposed in Prometheus format. You can check the output by pointing your browser to <a href="http://localhost:8080/q/metrics" class="bare" target="_blank" rel="noopener">http://localhost:8080/q/metrics</a>.  See if you can find the TimeResource counter result.</p>
 </div>
@@ -313,6 +442,11 @@ In this tutorial we consulted the results in raw format, however these metrics a
 </div>
 </div>
 </div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="health.html">Health Check</a></span>
+  <span class="next"><a href="security.html">Security with JWT RBAC</a></span>
+</nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
