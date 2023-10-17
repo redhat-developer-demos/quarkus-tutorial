@@ -329,7 +329,7 @@ If you&#8217;re having trouble with jib, you can also just use Docker/Podman to 
 </div>
 </div>
 <div class="sect1">
-<h2 id="_deploy_your_application_to_your_kubernetes_cluster"><a class="anchor" href="#_deploy_your_application_to_your_kubernetes_cluster"></a>Deploy your application to your Kubernetes cluster</h2>
+<h2 id="_deploy_the_application_to_your_kubernetes_cluster"><a class="anchor" href="#_deploy_the_application_to_your_kubernetes_cluster"></a>Deploy the application to your Kubernetes cluster</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>When a Kubernetes extension is present in the classpath, Quarkus will scaffold a Kubernetes deployment file in your target folder during the package phase.  We can apply it to deploy the application to our Kubernetes cluster:</p>
@@ -381,7 +381,7 @@ deployment.apps/tutorial-app created</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>With the Quarkus CLI tool deploying is even easier.  Instead of the above <code>kubectl apply</code> command, you can simply run <code>quarkus deploy</code> to deploy the application to your cluster:</p>
+<p>With the Quarkus CLI tool deploying is even easier.  Instead of the above <code>kubectl apply</code> command, you can simply run <code>quarkus deploy</code> to deploy the application to your cluster. If you don&#8217;t have the kubectl or oc cli installed or are not sure how to log in to your cluster, just add <code>-Dquarkus.kubernetes-client.api-server-url={yourServerUrl} -Dquarkus.kubernetes-client.token={myToken}</code> to the below command.</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
