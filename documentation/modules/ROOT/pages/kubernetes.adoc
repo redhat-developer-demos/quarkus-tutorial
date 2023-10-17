@@ -125,7 +125,7 @@ NOTE: If you're having trouble with jib, you can also just use Docker/Podman to 
 
 
 
-== Deploy your application to your Kubernetes cluster
+== Deploy the application to your Kubernetes cluster
 
 When a Kubernetes extension is present in the classpath, Quarkus will scaffold a Kubernetes deployment file in your target folder during the package phase.  We can apply it to deploy the application to our Kubernetes cluster:  
 
@@ -161,7 +161,7 @@ deployment.apps/tutorial-app created
 ----
 
 
-With the Quarkus CLI tool deploying is even easier.  Instead of the above `kubectl apply` command, you can simply run `quarkus deploy` to deploy the application to your cluster:
+With the Quarkus CLI tool deploying is even easier.  Instead of the above `kubectl apply` command, you can simply run `quarkus deploy` to deploy the application to your cluster. If you don't have the kubectl or oc cli installed or are not sure how to log in to your cluster, just add `-Dquarkus.kubernetes-client.api-server-url={yourServerUrl} -Dquarkus.kubernetes-client.token={myToken}` to the below command.
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
