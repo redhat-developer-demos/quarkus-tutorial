@@ -9,7 +9,9 @@ Then we're going to filter all the beers with an ABV greater than 15.0 and retur
 
 == Add the Mutiny extension
 
-Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
+Create a new Quarkus project, for example using https://code.quarkus.io/ website.
+
+Then open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
 
 [tabs]
 ====
@@ -19,7 +21,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:add-extension -Dextension=quarkus-mutiny
+./mvnw quarkus:add-extension -Dextension=quarkus-mutiny,quarkus-rest-client-reactive-jsonb,quarkus-resteasy-reactive-jsonb
 ----
 
 --
@@ -29,29 +31,26 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus extension add quarkus-mutiny
+quarkus extension add quarkus-mutiny,quarkus-rest-client-reactive-jsonb,quarkus-resteasy-reactive-jsonb
 ----
 --
 ====
 
 == Create Beer POJO
 
-Create a new `Beer` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Create a new `Beer` Java class in `src/main/java` in the `org.acme` package with the following contents:
 
 [.console-input]
 [source,java]
 ----
-package com.redhat.developers;
+package org.acme;
 
 import jakarta.json.bind.annotation.JsonbCreator;
-import java.math.BigDecimal;
 
 public class Beer {
 
     private String name;
-
     private String tagline;
-
     private double abv;
 
     private Beer(String name, String tagline, double abv) {
@@ -84,32 +83,35 @@ public class Beer {
 
 Now we're going to implement a Java interface that mimics the remote REST endpoint.
 
-Create a new `BeerService` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Create a new `BeerService` Java interface in `src/main/java` in the `org.acme` package with the following contents:
 
 [.console-input]
 [source,java]
 ----
-package com.redhat.developers;
+package org.acme;
 
 import java.util.List;
 
+import jakarta.json.JsonArray;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
+import io.smallrye.mutiny.Uni;
+
 @Path("/v2")
 @RegisterRestClient
 public interface BeerService {
-    
+
     @GET
     @Path("/beers")
     @Produces(MediaType.APPLICATION_JSON)
-    List<Beer> getBeers(@QueryParam("page") int page);
-
+    Uni<List<Beer>> getBeers(@QueryParam("page") int page);
 }
 ----
 
@@ -120,49 +122,57 @@ Add the following properties to your `application.properties` in `src/main/resou
 [.console-input]
 [source,properties]
 ----
-com.redhat.developers.BeerService/mp-rest/url=https://api.punkapi.com
+org.acme.BeerService/mp-rest/url=https://api.punkapi.com
 ----
 
-== Create BeerResource
+== Pagination + Filtering
 
-Create a new `BeerResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+We want to query all the beers page by page and filter by its _abv_ value.
+
+image::pagination.png[]
+
+=== Create BeerResource
+
+Create a new `BeerResource` Java class in `src/main/java` in the `org.acme` package with the following contents:
 
 [.console-input]
 [source,java]
 ----
-package com.redhat.developers;
+package org.acme;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import jakarta.json.Json;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonMergePatch;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.PathParam;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-
 import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
 
 @Path("/beer")
 public class BeerResource {
-    
+
     @RestClient
     BeerService beerService;
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public Multi<Beer> beers() {
-        return Multi.createBy().repeating() <1>
-            .supplier( <2>
+        return Multi.createBy().repeating() // <1>
+            .uni( 
                 () -> new AtomicInteger(1),
-                i -> beerService.getBeers(i.getAndIncrement())
+                i -> beerService.getBeers(i.getAndIncrement()) // <2>
             )
-            .until(List::isEmpty) <3>
-            .onItem().<Beer>disjoint() <4>
-            .select().where(b -> b.getAbv() > 15.0); <6>
+            .until(List::isEmpty) // <3>
+            .onItem().<Beer>disjoint() // <4>
+            .select().where(b -> b.getAbv() > 15.0); // <5>
     }
-
 }
 ----
 <1> Creates a `Multi`.
@@ -171,7 +181,7 @@ public class BeerResource {
 <4> We dismember all the returned lists and create a sequence of beers.
 <5> And then we filter the `Multi` with beers with `ABV > 15.0`.
 
-== Invoke the endpoint
+=== Invoke the endpoint
 
 You can check your new implementation by pointing your browser to http://localhost:8080/beer[window=_blank]
 
@@ -182,6 +192,7 @@ You can also run the following command:
 ----
 curl localhost:8080/beer
 ----
+
 [.console-output]
 [source,json]
 ----
@@ -247,4 +258,83 @@ curl localhost:8080/beer
     "tagline": "11th Anniversary Imperial Stout."
   }
 ]
+----
+
+== Parallel Calls
+
+Suppose that now, you want to query two beers by its id, (so execute two requests against the remote API), and then compare its _abv_ values.
+
+image::parallel.png[]
+
+=== Modify BeerService
+
+Open `BeerService` interface and add the following method to get a beer:
+
+[.console-input]
+[source,java]
+----
+@GET
+@Path("/beers/{id}")
+@Produces(MediaType.APPLICATION_JSON)
+Uni<JsonArray> getBeer(@PathParam("id") int id);
+----
+
+=== Modify BeerResource
+
+Open `BeerResource` class and add the following methods to do in parallel the both calls.
+
+[.console-input]
+[source,java]
+----
+@GET
+@Path("/{beerA}/{beerB}")
+public Uni<JsonValue> compare(@PathParam("beerA") int beerA, @PathParam("beerB") int beerB) {
+    Uni<JsonArray> beer1 = beerService.getBeer(beerA); // <1>
+    Uni<JsonArray> beer2 = beerService.getBeer(beerB); // <2>
+
+    return Uni.combine()
+        .all()
+        .unis(beer1, beer2) // <3>
+        .with((b1, b2) -> this.compare(b1, b2)); // <4>
+}
+
+private JsonValue compare(JsonArray beerA, JsonArray beerB) {
+    JsonObject source = beerA.get(0).asJsonObject();
+    JsonObject target = beerB.get(0).asJsonObject();
+
+    String beerAName = source.getString("name");
+    String beerBName = target.getString("name");
+
+    double beerAAbv = source.getJsonNumber("abv").doubleValue();
+    double beerBAbv = target.getJsonNumber("abv").doubleValue();
+
+    return Json.createObjectBuilder()
+        .add("source-name", beerAName)
+        .add("target-name", beerBName)
+        .add("source-abv", beerAAbv)
+        .add("target-abv", beerBAbv)
+        .build();
+}
+----
+<1> Executes request for first beer
+<2> Executes request for second beer
+<3> Waits until both requests returns a response
+<4> Compare both beers and returns an object with the result
+
+=== Invoke the endpoint
+
+You can check your new implementation by pointing your browser to http://localhost:8080/beer/1/2[window=_blank]
+
+You can also run the following command:
+
+[.console-input]
+[source,bash]
+----
+curl localhost:8080/beer/1/2
+----
+
+[.console-output]
+[source,json]
+----
+{"source-name":"Buzz","target-name":"Trashy Blonde","source-abv":4.5,"target-abv":4.1}
 ----
