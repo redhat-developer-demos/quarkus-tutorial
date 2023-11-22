@@ -149,8 +149,7 @@
 <p>Mutiny is just part of the Reactive story. To complement it, we need Reactive Streams too. And an important service that can serve as the underlying implementation for our stream is <a href="http://kafka.apache.org" target="_blank" rel="noopener">Apache Kafka</a>.</p>
 </div>
 <div class="paragraph">
-<p>In this chapter we&#8217;re going to use Mutiny to create price request for beers to a remote service called <code>price-generator</code> using Kafka as the broker for our messages in a Kafka topic called <code>beer</code>. The <code>price-generator</code> will get the beer from this topic, add a tag price to it, and send the information back in a Kafka topic called <code>priced-beer</code>.
-Finally, we&#8217;ll read the priced beers from the topic and send it through our REST endpoint using SSE (Server-Side Events).</p>
+<p>In this chapter, we&#8217;ll do a small change, we send beers with a price to a Kafka broker instead of using a memory channel.</p>
 </div>
 </div>
 </div>
@@ -191,245 +190,18 @@ Finally, we&#8217;ll read the priced beers from the topic and send it through ou
 </div>
 </div>
 <div class="sect1">
-<h2 id="_modify_beer_pojo"><a class="anchor" href="#_modify_beer_pojo"></a>Modify Beer POJO</h2>
+<h2 id="_modify_beerprocessor"><a class="anchor" href="#_modify_beerprocessor"></a>Modify BeerProcessor</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Make sure you have the  <code>Beer</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+<p>In the <code>BeerProcessor</code> Java class in <code>src/main/java</code> in the <code>org.acme</code> package should have the <code>print</code> method commented as it&#8217;s not necessary anymore because the content of the <code>messages</code> channel will be send to a Kafka topic:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
-
-import jakarta.json.bind.annotation.JsonbCreator;
-import java.math.BigDecimal;
-
-public class Beer {
-
-    private String name;
-
-    private String tagline;
-
-    private double abv;
-
-    private Beer(String name, String tagline, double abv) {
-        this.name = name;
-        this.tagline = tagline;
-        this.abv = abv;
-    }
-
-    @JsonbCreator
-    public static Beer of(String name, String tagline, double abv) {
-        return new Beer(name, tagline, abv);
-    }
-
-    public PricedBeer withPrice(BigDecimal price) {
-        return PricedBeer.of(this.name, price);
-    }
-
-
-    public String getName() {
-        return name;
-    }
-
-    public String getTagline() {
-        return tagline;
-    }
-
-    public double getAbv() {
-        return abv;
-    }
-
-}</code></pre>
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">/**@Incoming("messages")
+public void print(JsonObject beer) {
+    System.out.println(JsonbBuilder.create().toJson(beer));
+}**/</code></pre>
 </div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_modify_pricedbeer_pojo"><a class="anchor" href="#_modify_pricedbeer_pojo"></a>Modify PricedBeer POJO</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Make sure you have the <code>PricedBeer</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
-
-import java.math.BigDecimal;
-
-import jakarta.json.bind.annotation.JsonbCreator;
-
-public class PricedBeer {
-
-    private String name;
-
-    private BigDecimal price;
-
-    private PricedBeer(String name, BigDecimal price) {
-        this.name = name;
-        this.price = price;
-    }
-
-    @JsonbCreator
-    public static PricedBeer of(String name, double price) {
-        return new PricedBeer(name, new BigDecimal(price).setScale(2));
-    }
-
-    public static PricedBeer of(String name, BigDecimal price) {
-        return new PricedBeer(name, price);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_modify_the_beergenerator"><a class="anchor" href="#_modify_the_beergenerator"></a>Modify the BeerGenerator</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Modify the <code>BeerGenerator</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
-
-
-import java.time.Duration;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.json.bind.JsonbBuilder;
-
-import io.smallrye.mutiny.Multi;
-import org.eclipse.microprofile.reactive.messaging.Outgoing;
-
-import org.eclipse.microprofile.rest.client.inject.RestClient;
-
-
-@ApplicationScoped
-public class BeerGenerator {
-
-    @RestClient
-    BeerService service;
-
-    @Outgoing("beers")
-    Multi&lt;String&gt; beers() {
-        List&lt;Beer&gt;  beers = service.getBeers(10);
-        return Multi.createFrom().ticks().every(Duration.ofSeconds(1)) <i class="conum" data-value="1"></i><b>(1)</b>
-                .onOverflow().drop() <i class="conum" data-value="2"></i><b>(2)</b>
-                .map(tick -&gt; beers.get(ThreadLocalRandom.current().nextInt(0, beers.size()))) <i class="conum" data-value="3"></i><b>(3)</b>
-                .map(JsonbBuilder.create()::toJson); <i class="conum" data-value="4"></i><b>(4)</b>
-    }
-}</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>We&#8217;re creating a Multi that generates a new message every <code>1</code> second.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>We apply backpressure by dropping the messages if the topic is not ready.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>For each message we choose a random <code>Beer</code> from our list.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>We map the <code>Beer</code> to JSON format.</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_update_beerresource"><a class="anchor" href="#_update_beerresource"></a>Update BeerResource</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Let&#8217;s modify the <code>BeerResource</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
-
-import java.time.Duration;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import jakarta.json.bind.JsonbBuilder;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-
-import org.eclipse.microprofile.reactive.messaging.Channel;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
-
-import io.smallrye.mutiny.Multi;
-
-@Path("/beer")
-public class BeerResource {
-
-    @RestClient
-    BeerService beerService;
-
-    @Channel("priced-beer") <i class="conum" data-value="1"></i><b>(1)</b>
-    Multi&lt;String&gt; pricedBeers;
-
-
-    @GET
-    @Path("all")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Multi&lt;Beer&gt; beers() {
-        return Multi.createBy().repeating()
-                .supplier(
-                        () -&gt; new AtomicInteger(1),
-                        i -&gt; beerService.getBeers(i.getAndIncrement())
-                )
-                .until(List::isEmpty)
-                .onItem().&lt;Beer&gt;disjoint()
-                .select().where(b -&gt; b.getAbv() &gt; 15.0);
-    }
-
-
-    @GET
-    @Produces(MediaType.SERVER_SENT_EVENTS)
-    public Multi&lt;PricedBeer&gt; pricedBeers() {
-        return pricedBeers.map(s -&gt; JsonbBuilder.create().fromJson(s, PricedBeer.class)) <i class="conum" data-value="2"></i><b>(2)</b>
-                .ifNoItem().after(Duration.ofSeconds(1)).fail(); <i class="conum" data-value="3"></i><b>(3)</b>
-    }
-
-}</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>We inject the Multi directly by using the <code>@Channel</code> annotation.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>We just map the <code>PricedBeer</code> to JSON format.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>If no item is retrieved after 1 second, we will assume that the call failed.</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
@@ -437,191 +209,49 @@ public class BeerResource {
 <h2 id="_add_the_reactive_messaging_kafka_properties"><a class="anchor" href="#_add_the_reactive_messaging_kafka_properties"></a>Add the Reactive Messaging Kafka properties</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Add the following properties to your <code>application.properties</code> in <code>src/main/resources</code>:</p>
+<p>Add the following properties to your <code>application.properties</code> in <code>src/main/resources</code> to configure <code>messages</code> channel to be backed by a Kafka topic instead of a memory channel:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">kafka.bootstrap.servers=localhost:9092</code></pre>
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">mp.messaging.outgoing.messages.connector=smallrye-kafka <i class="conum" data-value="1"></i><b>(1)</b>
+mp.messaging.outgoing.messages.topic=pricedbeers <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
 </div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>messages</code> channel is backed to Kafka</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>messages</code> channel sends events to <code>pricedbeers</code> topic</td>
+</tr>
+</table>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+If all channels are backed to Kafka, it&#8217;s not necessary to set the <code>connector</code> property.
+</td>
+</tr>
+</table>
 </div>
-<div class="sect1">
-<h2 id="_create_compose_configuration"><a class="anchor" href="#_create_compose_configuration"></a>Create compose configuration</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The external dependencies required to run this chapter are:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Kafka</p>
-</li>
-<li>
-<p>Zookeeper (required by Kafka)</p>
-</li>
-<li>
-<p>The <code>price-generator</code> service</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>We&#8217;re going to use <code>docker-compose</code> to bootstrap these external services.</p>
-</div>
-<div class="paragraph">
-<p>Create a new file called <code>compose.yml</code> in the root of your <code>tutorial-app</code> folder:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">version: '3'
-services:
-  zookeeper:
-    image: quay.io/strimzi/kafka:0.23.0-kafka-2.8.0
-    command: [
-        "sh", "-c",
-        "bin/zookeeper-server-start.sh config/zookeeper.properties"
-    ]
-    ports:
-      - "2181:2181"
-    environment:
-      LOG_DIR: /tmp/logs
-  kafka:
-    image: quay.io/strimzi/kafka:0.23.0-kafka-2.8.0
-    command: [
-        "sh", "-c",
-        "bin/kafka-server-start.sh config/server.properties --override listeners=$${KAFKA_LISTENERS} --override advertised.listeners=$${KAFKA_ADVERTISED_LISTENERS} --override zookeeper.connect=$${KAFKA_ZOOKEEPER_CONNECT}"
-    ]
-    depends_on:
-      - zookeeper
-    ports:
-      - "9092:9092"
-    environment:
-      LOG_DIR: "/tmp/logs"
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-  price-generator:
-    image: quay.io/rhdevelopers/quarkus-tutorial-price-generator:2.0
-    network_mode: host
-    depends_on:
-      - kafka</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_run_compose"><a class="anchor" href="#_run_compose"></a>Run compose</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Make sure you are in the same folder that you&#8217;ve created the <code>compose.yml</code> file (in our case, the root of our <code>tutorial-app</code> folder).</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">docker-compose up</code></pre>
-</div>
-</div>
-<div class="listingblock console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">kafka_1            | [2020-05-13 01:54:53,281] INFO [ThrottledChannelReaper-Fetch]: Starting (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
-kafka_1            | [2020-05-13 01:54:53,281] INFO [ThrottledChannelReaper-Produce]: Starting (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
-kafka_1            | [2020-05-13 01:54:53,284] INFO [ThrottledChannelReaper-Request]: Starting (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
-kafka_1            | [2020-05-13 01:54:53,367] INFO Loading logs. (kafka.log.LogManager)
-kafka_1            | [2020-05-13 01:54:53,504] INFO [Log partition=__consumer_offsets-38, dir=/tmp/kafka-logs] Loading producer state till offset 15 with message format version 2 (kafka.log.Log)
-kafka_1            | [2020-05-13 01:54:53,531] INFO [ProducerStateManager partition=__consumer_offsets-38] Loading producer state from snapshot file '/tmp/kafka-logs/__consumer_offsets-38/00000000000000000015.snapshot' (kafka.log.ProducerStateManager)
-kafka_1            | [2020-05-13 01:54:53,550] INFO [Log partition=__consumer_offsets-38, dir=/tmp/kafka-logs] Completed load of log with 1 segments, log start offset 0 and log end offset 15 in 125 ms (kafka.log.Log)</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_invoke_the_beer_endpoint"><a class="anchor" href="#_invoke_the_beer_endpoint"></a>Invoke the /beer endpoint</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Run the following command:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -N localhost:8080/beer</code></pre>
-</div>
-</div>
-<div class="listingblock console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">data: {"name":"AB:21","price":1525.00}
-
-data: {"name":"Neon Overlord","price":1640.00}
-
-data: {"name":"Brewdog Vs Beavertown","price":1015.00}
-
-data: {"name":"Ace Of Chinook","price":1871.00}
-
-data: {"name":"Hop Shot","price":1180.00}
-
-data: {"name":"Neon Overlord","price":213.00}
-
-data: {"name":"Hop Shot","price":174.00}
-
-data: {"name":"Hello My Name Is Ingrid 2016","price":1230.00}
-
-data: {"name":"Twin Atlantic","price":1143.00}
-
-data: {"name":"AB:21","price":1372.00}
-
-data: {"name":"Self Assembly Pope","price":1667.00}
-
-data: {"name":"Kingpin","price":1954.00}
-
-data: {"name":"Crew Brew","price":460.00}
-
-data: {"name":"Ace Of Chinook","price":307.00}
-
-data: {"name":"Mango And Chili Barley Wine","price":318.00}
-
-data: {"name":"Self Assembly Pope","price":339.00}
-
-data: {"name":"Ace Of Chinook","price":1578.00}
-
-data: {"name":"Chili Hammer","price":470.00}
-
-data: {"name":"Science IPA","price":968.00}
-
-data: {"name":"Casino Rye Ale","price":1349.00}
-
-data: {"name":"Prototype Helles","price":1721.00}
-
-data: {"name":"Kingpin","price":1992.00}
-
-data: {"name":"Hello My Name Is Ingrid 2016","price":1933.00}
-
-data: {"name":"Casino Rye Ale","price":234.00}
-
-data: {"name":"Ace Of Chinook","price":1343.00}
-
-data: {"name":"Small Batch: Rye IPA","price":167.00}
-
-data: {"name":"Science IPA","price":234.00}
-
-data: {"name":"Brewdog Vs Beavertown","price":1123.00}
-
-data: {"name":"Prototype Helles","price":945.00}
-
-data: {"name":"Kingpin","price":851.00}
-
-data: {"name":"Ace Of Equinox","price":1422.00}
-
-data: {"name":"Crew Brew","price":883.00}
-
-data: {"name":"Prototype Helles","price":502.00}
-
-data: {"name":"Brewdog Vs Beavertown","price":710.00}
-
-data: {"name":"Casino Rye Ale","price":1848.00}
-
-data: {"name":"Gin Blitz","price":278.00}
-
-data: {"name":"Brewdog Vs Beavertown","price":719.00}
-
-data: {"name":"Hello My Name Is Ingrid 2016","price":113.00}</code></pre>
-</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+If the channel name is the same as the topic, it&#8217;s not necessary to set the <code>topic</code> property.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -645,6 +275,25 @@ You can disable Dev Services for Kafka by adding <code>quarkus.kafka.devservices
 </td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_invoke_the_endpoint"><a class="anchor" href="#_invoke_the_endpoint"></a>Invoke the endpoint</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>With all these changes done, having Docker/Podman running in your computer, and starting the service in Dev Mode, you can send the same request as in the previous chapter:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/beer/emit/1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, nothing is shown as return or in the Quarkus terminal, because the event is sent to a Kafka topic.</p>
+</div>
+<div class="paragraph">
+<p>To check the content of the topic, we can use the Dev UI interfac by pointing your browser to <a href="http://localhost:8080/q/dev-ui/io.quarkus.quarkus-kafka-client/topics" class="bare" target="_blank" rel="noopener">http://localhost:8080/q/dev-ui/io.quarkus.quarkus-kafka-client/topics</a></p>
 </div>
 </div>
 </div>
