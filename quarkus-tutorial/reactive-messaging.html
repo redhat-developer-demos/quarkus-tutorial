@@ -155,7 +155,13 @@ JMS is a blocking API which blocks us from implementing the reactive principles.
 Quarkus implements version 2.x of this specification but also provides many other extensions.</p>
 </div>
 <div class="paragraph">
-<p>In this chapter we&#8217;re going to use SmallRye Reactive Messaging to generate beers having a price.</p>
+<p>In this chapter we&#8217;re going to use SmallRye Reactive Messaging to generate beers having a price but using messages instead of synchronous calls.</p>
+</div>
+<div class="paragraph">
+<p>At this point, we&#8217;re going to use an inmemory channel which means that messages are sent through the same application using the memory as transport channel of the messages.</p>
+</div>
+<div class="paragraph">
+<p>In the following section, we&#8217;ll see what we need to change to start using an external broker for sending messages.</p>
 </div>
 </div>
 </div>
@@ -196,164 +202,40 @@ Quarkus implements version 2.x of this specification but also provides many othe
 </div>
 </div>
 <div class="sect1">
-<h2 id="_modify_beer_pojo"><a class="anchor" href="#_modify_beer_pojo"></a>Modify Beer POJO</h2>
+<h2 id="_modify_beerresource"><a class="anchor" href="#_modify_beerresource"></a>Modify BeerResource</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Modify the <code>Beer</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package to have the following contents:</p>
+<p>Let&#8217;s create a new endpoint that finds a beer and sends/emits a message to <code>beers</code> channel with the beer.</p>
+</div>
+<div class="paragraph">
+<p>Open <code>BeerResource</code> class and add the following code.</p>
+</div>
+<div class="paragraph">
+<p>In the imports section:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import jakarta.ws.rs.core.Response;
 
-import jakarta.json.bind.annotation.JsonbCreator;
-import java.math.BigDecimal;
-
-public class Beer {
-
-    private String name;
-
-    private String tagline;
-
-    private double abv;
-
-    private Beer(String name, String tagline, double abv) {
-        this.name = name;
-        this.tagline = tagline;
-        this.abv = abv;
-    }
-
-    @JsonbCreator
-    public static Beer of(String name, String tagline, double abv) {
-        return new Beer(name, tagline, abv);
-    }
-
-    public PricedBeer withPrice(BigDecimal price) {
-        return PricedBeer.of(this.name, price);
-    }
-
-
-    public String getName() {
-        return name;
-    }
-
-    public String getTagline() {
-        return tagline;
-    }
-
-    public double getAbv() {
-        return abv;
-    }
-
-}</code></pre>
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;</code></pre>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_create_pricedbeer_pojo"><a class="anchor" href="#_create_pricedbeer_pojo"></a>Create PricedBeer POJO</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>Create a new <code>PricedBeer</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+<p>And the business code:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Channel("beers")
+Emitter&lt;JsonObject&gt; emitter;
 
-import java.math.BigDecimal;
-
-import jakarta.json.bind.annotation.JsonbCreator;
-
-public class PricedBeer {
-
-    private String name;
-
-    private BigDecimal price;
-
-    private PricedBeer(String name, BigDecimal price) {
-        this.name = name;
-        this.price = price;
-    }
-
-    @JsonbCreator
-    public static PricedBeer of(String name, double price) {
-        return new PricedBeer(name, new BigDecimal(price).setScale(2));
-    }
-
-    public static PricedBeer of(String name, BigDecimal price) {
-        return new PricedBeer(name, price);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_create_beergenerator"><a class="anchor" href="#_create_beergenerator"></a>Create BeerGenerator</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Create a new <code>BeerGenerator</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
-
-
-import java.time.Duration;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.json.bind.JsonbBuilder;
-
-import io.smallrye.mutiny.Multi;
-import org.eclipse.microprofile.reactive.messaging.Outgoing;
-
-import org.eclipse.microprofile.rest.client.inject.RestClient;
-
-
-@ApplicationScoped
-public class BeerGenerator {
-
-    @RestClient
-    BeerService service;
-
-    @Outgoing("beers")
-    Multi&lt;String&gt; beers() {
-        List&lt;Beer&gt;  beers = service.getBeers(10);
-        return Multi.createFrom().ticks().every(Duration.ofSeconds(1)) <i class="conum" data-value="1"></i><b>(1)</b>
-                .onOverflow().drop() <i class="conum" data-value="2"></i><b>(2)</b>
-                .map(tick -&gt; beers.get(ThreadLocalRandom.current().nextInt(0, beers.size()))) <i class="conum" data-value="3"></i><b>(3)</b>
-                .map(JsonbBuilder.create()::toJson); <i class="conum" data-value="4"></i><b>(4)</b>
-    }
-
-    @Incoming("beers")
-    @Outgoing("groups")
-    public Multi&lt;List&lt;String&gt;&gt; skipGroup(Multi&lt;String&gt; stream) {
-        return stream.skip().first(Duration.ofMillis(10)).group().intoLists().of(5); <i class="conum" data-value="5"></i><b>(5)</b>
-    }
-
-
-    @Incoming("groups")
-    @Outgoing("messages")
-    public String processGroup(List&lt;String&gt; list) {
-        return String.join(",", list.toString()); <i class="conum" data-value="6"></i><b>(6)</b>
-    }
-
-
-    @Incoming("messages")
-    public String print(String msg) {
-        System.out.println(msg);
-        return  msg; <i class="conum" data-value="7"></i><b>(7)</b>
-    }
+@GET
+@Path("/emit/{beer}")
+public Response emitBeer(@PathParam("beer") int beerId) {
+    beerService.getBeer(beerId) <i class="conum" data-value="1"></i><b>(1)</b>
+        .map(beers -&gt; beers.get(0).asJsonObject()) <i class="conum" data-value="2"></i><b>(2)</b>
+        .subscribe().with(emitter::send); <i class="conum" data-value="3"></i><b>(3)</b>
+    return Response.ok().build(); <i class="conum" data-value="4"></i><b>(4)</b>
 }</code></pre>
 </div>
 </div>
@@ -361,227 +243,70 @@ public class BeerGenerator {
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>We&#8217;re creating a Multi that generates a new message every <code>1</code> second.</td>
+<td>Finds the beer</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>We apply backpressure by dropping the messages if the topic is not ready.</td>
+<td>Gets the first beer</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>For each message we choose a random <code>Beer</code> from our list.</td>
+<td>Emits the beer to <code>beers</code> channel</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>We map the <code>Beer</code> to JSON format.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>The method `skipGroup' skips the messages sent during the first 10 milliseconds and groups next into lists of 5.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>The <code>processGroup</code> method takes each group and does further processing.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="7"></i><b>7</b></td>
-<td>The <code>print</code> method is just to have a manner to observe the output.</td>
+<td>Sends an ack to caller</td>
 </tr>
 </table>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_block_processing"><a class="anchor" href="#_block_processing"></a>Block Processing</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>Invoking a blocking operation/service can take longer time. In such cases you can protect your implementation
-by using <code>@Blocking</code> annotation.</p>
+<p>The previous code sends the beer as a <code>JsonObject</code> to <code>beers</code> channel.
+Since we are using a memory channel, let&#8217;s create a new Java class in the same project capturing the messages sent to the channel.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s modify the <code>BeerGenerator</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package
-by adding the <code>@Blocking</code> annotation to the <code>processGroup</code> method:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
-
-
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.json.bind.JsonbBuilder;
-
-import io.smallrye.common.annotation.Blocking;
-import io.smallrye.mutiny.Multi;
-import org.eclipse.microprofile.reactive.messaging.Incoming;
-import org.eclipse.microprofile.reactive.messaging.Outgoing;
-
-import org.eclipse.microprofile.rest.client.inject.RestClient;
-
-
-@ApplicationScoped
-public class BeerGenerator {
-
-    @RestClient
-    BeerService service;
-
-    @Outgoing("beers")
-    Multi&lt;String&gt; beers() {
-        List&lt;Beer&gt;  beers = service.getBeers(10);
-        return Multi.createFrom().ticks().every(Duration.ofSeconds(1))
-                .onOverflow().drop()
-                .map(tick -&gt; beers.get(ThreadLocalRandom.current().nextInt(0, beers.size())))
-                .map(JsonbBuilder.create()::toJson);
-    }
-
-    @Incoming("beers")
-    @Outgoing("groups")
-    public Multi&lt;List&lt;String&gt;&gt; group(Multi&lt;String&gt; stream) {
-        return stream.skip().first(Duration.ofMillis(10)).group().intoLists().of(5);
-    }
-
-
-    @Incoming("groups")
-    @Outgoing("messages")
-    @Blocking
-    public String processGroup(List&lt;String&gt; list) {
-        try {
-            Thread.sleep(1000);
-            System.out.println(LocalDateTime.now().toLocalTime());
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        return String.join(",", list.toString());
-    }
-
-
-    @Incoming("messages")
-    public String print(String msg) {
-        System.out.println(msg);
-        return  msg;
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The <code>processGroup</code> method is invoked on a worker thread, but please be careful when using <code>@Blocking</code> as it impacts the
-concurrency aspect of your implementation.</p>
+<p>Moreover this new class, will send another event to a different channel which will be captured by another method.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_retry_processing"><a class="anchor" href="#_retry_processing"></a>Retry Processing</h2>
+<h2 id="_create_beerprocessor"><a class="anchor" href="#_create_beerprocessor"></a>Create BeerProcessor</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Please run the following in a new terminal window, being at the root of your <code>tutorial-app</code> project:</p>
-</div>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset2_maven"></a>Maven</p>
-</li>
-<li>
-<p><a id="tabset2_quarkus-cli"></a>Quarkus CLI</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset2_maven">
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension=quarkus-smallrye-fault-tolerance</code></pre>
-</div>
-</div>
-</div>
-<div class="tab-pane" aria-labelledby="tabset2_quarkus-cli">
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus extension add quarkus-smallrye-fault-tolerance</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p>Even in the case of reactive applications you can experience faulty situations caused by unforeseen scenarios.
-Let&#8217;s assume that something not expected occurs during <code>processGroup</code> logic execution.</p>
+<p>Create a new <code>BeerProcessor</code> Java class in <code>src/main/java</code> in the <code>org.acme</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme;
 
-
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.json.bind.JsonbBuilder;
-
-import io.smallrye.common.annotation.Blocking;
-import io.smallrye.mutiny.Multi;
-import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
 
-import org.eclipse.microprofile.rest.client.inject.RestClient;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
+import jakarta.json.bind.JsonbBuilder;
 
 
 @ApplicationScoped
-public class BeerGenerator {
-    private final Random random = new Random();
+public class BeerProcessor {
 
-    @RestClient
-    BeerService service;
-
-    @Outgoing("beers")
-    Multi&lt;String&gt; beers() {
-        List&lt;Beer&gt;  beers = service.getBeers(10);
-        return Multi.createFrom().ticks().every(Duration.ofSeconds(1))
-                .onOverflow().drop()
-                .map(tick -&gt; beers.get(ThreadLocalRandom.current().nextInt(0, beers.size())))
-                .map(JsonbBuilder.create()::toJson);
+    @Incoming("beers") <i class="conum" data-value="1"></i><b>(1)</b>
+    @Outgoing("messages") <i class="conum" data-value="2"></i><b>(2)</b>
+    public JsonObject processPrize(JsonObject beer) { <i class="conum" data-value="3"></i><b>(3)</b>
+        JsonObjectBuilder beerWithPrice = Json.createObjectBuilder(beer).add("price", getPrice());
+        return beerWithPrice.build(); <i class="conum" data-value="4"></i><b>(4)</b>
     }
 
-    @Incoming("beers")
-    @Outgoing("groups")
-    @Retry(maxRetries = 10, delay = 1, delayUnit = ChronoUnit.SECONDS) <i class="conum" data-value="1"></i><b>(1)</b>
-    public Multi&lt;List&lt;String&gt;&gt; group(Multi&lt;String&gt; stream) {
-        int i = random.nextInt(10);
-        System.out.println("Show retry  for random number "+i);
-        if (i &gt; 1) {
-            throw new RuntimeException("not working"); <i class="conum" data-value="2"></i><b>(2)</b>
-        }
-        return stream.skip().first(Duration.ofMillis(10)).group().intoLists().of(5);
+    private int getPrice() {
+        return ThreadLocalRandom.current().nextInt(1, 10);
     }
 
-
-    @Incoming("groups")
-    @Outgoing("messages")
-    @Blocking
-    public String processGroup(List&lt;String&gt; list) {
-        try {
-            Thread.sleep(1000);
-            System.out.println(LocalDateTime.now().toLocalTime());
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        return String.join(",", list.toString());
-    }
-
-
-    @Incoming("messages")
-    public String print(String msg) {
-        System.out.println(msg);
-        return  msg;
+    @Incoming("messages") <i class="conum" data-value="5"></i><b>(5)</b>
+    public void print(JsonObject beer) {
+        System.out.println(JsonbBuilder.create().toJson(beer));
     }
 }</code></pre>
 </div>
@@ -590,28 +315,57 @@ public class BeerGenerator {
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>In case of a <code>RuntimeException</code>, the <code>@Retry</code> annotation will attempt execution of the same logic maxium 10 times,
-at an interval of 1 second.</td>
+<td>Listen events from <code>beers</code> channel</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Throw <code>RuntimeException</code> if the random number is greater than 1.</td>
+<td>Sends/Emits the result of the method call to the <code>messages</code> channel</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Argument is the message of the <code>beers</code> channel</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Return object is sent to the <code>messages</code> channel</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Captures <code>messages</code> event</td>
 </tr>
 </table>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+You can use the <code>@Retry</code> annotation from the <code>fault-tolerant</code> extension to add some resiliency.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_invoke_the_endpoint"><a class="anchor" href="#_invoke_the_endpoint"></a>Invoke the endpoint</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Now restart Quarkus in Dev Mode and you should observe something similar to:</p>
+<p>With all these changes done and having the application running (either in DevMode or as a packaged application) invoke the service and inspect the Quarkus console for the output:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/beer/emit/1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And in the Quarkus console, you&#8217;ll see an output in JSON format of the beer with the price field added.</p>
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">[io.quarkus] (Quarkus Main Thread) tutorial-app stopped in 0.024s
-Show retry  for random number 6
-Show retry  for random number 3
-Show retry  for random number 0
-__  ____  __  _____   ___  __ ____  ______
- --/ __ \/ / / / _ | / _ \/ //_/ / / / __/
- -/ /_/ / /_/ / __ |/ , _/ ,&lt; / /_/ /\ \
---\___\_\____/_/ |_/_/|_/_/|_|\____/___/</code></pre>
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{"id":1,"name":"Buzz","tagline":"A Real Bitter Experience."..."contributed_by":"Sam Mason &lt;samjbmason&gt;","price":8}</code></pre>
 </div>
 </div>
 </div>
