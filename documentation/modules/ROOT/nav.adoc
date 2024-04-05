@@ -21,3 +21,11 @@
 ** xref:reactive.adoc[Reactive with Mutiny]
 ** xref:reactive-messaging.adoc[Streaming reactive messages]
 ** xref:kafka-and-streams.adoc[Apache Kafka with Reactive Streams]
+
+* AI
+** xref:#[Working with prompts]
+** xref:#[Chains and Memory]
+** xref:#[Agents and Tools]
+** xref:#[Embedding Documents]
+** xref:#[Working with local models]
+** xref:#[Bringing Kubernetes and Kafka to the party]
