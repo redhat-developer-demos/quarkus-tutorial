@@ -14,8 +14,8 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:remove-extension -D"extensions=quarkus-resteasy-reactive"
-./mvnw quarkus:add-extension -D"extensions=quarkus-spring-web,quarkus-spring-data-jpa,quarkus-resteasy-reactive-jackson"
+./mvnw quarkus:remove-extension -D"extensions=rest, rest-jsonb"
+./mvnw quarkus:add-extension -D"extensions=spring-web,spring-data-jpa,rest-jackson"
 ----
 
 --
@@ -25,8 +25,8 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus ext remove quarkus-resteasy-reactive
-quarkus ext add quarkus-spring-web quarkus-spring-data-jpa quarkus-resteasy-reactive-jackson
+quarkus ext remove rest rest-jsonb
+quarkus ext add spring-web spring-data-jpa rest-jackson
 ----
 --
 ====
