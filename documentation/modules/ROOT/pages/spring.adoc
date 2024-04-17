@@ -53,8 +53,8 @@ quarkus ext add spring-web spring-data-jpa rest-jackson
 
 [NOTE]
 --
-The `quarkus-spring-web` extension requires `quarkus-resteasy-reactive-jackson`.
-In order to be conservative with the amount of dependencies, the `quarkus-resteasy-reactive` was removed in favor of `quarkus-resteasy-reactive-jackson`.
+The `quarkus-spring-web` extension requires `quarkus-rest-jackson`.
+In order to be conservative with the amount of dependencies, the `quarkus-rest-jsonb` was removed in favor of `quarkus-rest-jackson`.
 --
 
 == Create a Spring Data Repository for Fruit
