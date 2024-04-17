@@ -24,7 +24,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:add-extension -Dextension=quarkus-smallrye-reactive-messaging
+./mvnw quarkus:add-extension -Dextension=messaging
 ----
 
 --
@@ -34,7 +34,7 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus extension add quarkus-smallrye-reactive-messaging
+quarkus extension add messaging
 ----
 --
 ====

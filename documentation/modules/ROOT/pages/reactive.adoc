@@ -21,7 +21,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:add-extension -Dextension=quarkus-mutiny,quarkus-rest-client-reactive-jsonb,quarkus-resteasy-reactive-jsonb
+./mvnw quarkus:add-extension -Dextension=mutiny,rest-client-jsonb,rest-jsonb
 ----
 
 --
@@ -31,7 +31,7 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus extension add quarkus-mutiny,quarkus-rest-client-reactive-jsonb,quarkus-resteasy-reactive-jsonb
+quarkus extension add mutiny,rest-client-jsonb,rest-jsonb
 ----
 --
 ====
