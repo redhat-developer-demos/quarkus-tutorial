@@ -162,7 +162,7 @@
 <div class="tab-pane" aria-labelledby="tabset1_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn "io.quarkus.platform:quarkus-maven-plugin:create" -DprojectGroupId="com.redhat.developers" -DprojectArtifactId="tutorial-app" -DprojectVersion="1.0-SNAPSHOT" -Dextensions=resteasy-reactive
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn "io.quarkus.platform:quarkus-maven-plugin:create" -DprojectGroupId="com.redhat.developers" -DprojectArtifactId="tutorial-app" -DprojectVersion="1.0-SNAPSHOT" -Dextensions=rest
 cd tutorial-app</code></pre>
 </div>
 </div>
@@ -179,7 +179,7 @@ cd tutorial-app</code></pre>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus create app -x resteasy-reactive com.redhat.developers:tutorial-app:1.0-SNAPSHOT
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus create app -x rest com.redhat.developers:tutorial-app:1.0-SNAPSHOT
 cd tutorial-app</code></pre>
 </div>
 </div>
@@ -399,7 +399,7 @@ Start the container that runs the native binary:</p>
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Hello from RESTEasy Reactive</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Hello from Quarkus REST</code></pre>
 </div>
 </div>
 </div>
