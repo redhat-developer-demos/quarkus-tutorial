@@ -172,16 +172,16 @@
 <div class="tab-pane" aria-labelledby="tabset1_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:remove-extension -D"extensions=quarkus-resteasy-reactive"
-./mvnw quarkus:add-extension -D"extensions=quarkus-spring-web,quarkus-spring-data-jpa,quarkus-resteasy-reactive-jackson"</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:remove-extension -D"extensions=rest, rest-jsonb"
+./mvnw quarkus:add-extension -D"extensions=spring-web,spring-data-jpa,rest-jackson"</code></pre>
 </div>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_quarkus-cli">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus ext remove quarkus-resteasy-reactive
-quarkus ext add quarkus-spring-web quarkus-spring-data-jpa quarkus-resteasy-reactive-jackson</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus ext remove rest rest-jsonb
+quarkus ext add spring-web spring-data-jpa rest-jackson</code></pre>
 </div>
 </div>
 </div>
@@ -214,8 +214,8 @@ quarkus ext add quarkus-spring-web quarkus-spring-data-jpa quarkus-resteasy-reac
 </td>
 <td class="content">
 <div class="paragraph">
-<p>The <code>quarkus-spring-web</code> extension requires <code>quarkus-resteasy-reactive-jackson</code>.
-In order to be conservative with the amount of dependencies, the <code>quarkus-resteasy-reactive</code> was removed in favor of <code>quarkus-resteasy-reactive-jackson</code>.</p>
+<p>The <code>quarkus-spring-web</code> extension requires <code>quarkus-rest-jackson</code>.
+In order to be conservative with the amount of dependencies, the <code>quarkus-rest-jsonb</code> was removed in favor of <code>quarkus-rest-jackson</code>.</p>
 </div>
 </td>
 </tr>
