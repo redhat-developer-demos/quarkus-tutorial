@@ -13,7 +13,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn "io.quarkus.platform:quarkus-maven-plugin:create" -DprojectGroupId="com.redhat.developers" -DprojectArtifactId="tutorial-app" -DprojectVersion="1.0-SNAPSHOT" -Dextensions=resteasy-reactive
+mvn "io.quarkus.platform:quarkus-maven-plugin:create" -DprojectGroupId="com.redhat.developers" -DprojectArtifactId="tutorial-app" -DprojectVersion="1.0-SNAPSHOT" -Dextensions=rest
 cd {project-name}
 ----
 --
@@ -28,7 +28,7 @@ Then create the application:
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus create app -x resteasy-reactive com.redhat.developers:tutorial-app:1.0-SNAPSHOT
+quarkus create app -x rest com.redhat.developers:tutorial-app:1.0-SNAPSHOT
 cd {project-name}
 ----
 --
@@ -55,7 +55,7 @@ curl localhost:8080/hello
 [.console-output]
 [source,bash]
 ----
-Hello from RESTEasy Reactive
+Hello from Quarkus REST
 ----
 
 == Stopping the application
