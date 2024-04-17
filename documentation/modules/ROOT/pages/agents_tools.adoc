@@ -1,0 +1,340 @@
+= Agents and Tools
+
+Quarkus provides a novel reactive API called Mutiny, with the goal of easing the development of highly scalable, resilient, and asynchronous systems.
+
+In this chapter we're going to see some examples of how Mutiny changes the design of our Quarkus applications.
+to online beer database (https://punkapi.com/documentation/v2) to retrieve beer information.
+This API does not return all beers at once, so we'll need to navigate through the pages to fetch all the information.
+Then we're going to filter all the beers with an ABV greater than 15.0 and return all these beers in a Reactive REST endpoint.
+
+== Add the Mutiny extension
+
+Create a new Quarkus project, for example using https://code.quarkus.io/ website.
+
+Then open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
+
+[tabs]
+====
+Maven::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+./mvnw quarkus:add-extension -Dextension=quarkus-mutiny,quarkus-rest-client-reactive-jsonb,quarkus-resteasy-reactive-jsonb
+----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus extension add quarkus-mutiny,quarkus-rest-client-reactive-jsonb,quarkus-resteasy-reactive-jsonb
+----
+--
+====
+
+== Create Beer POJO
+
+Create a new `Beer` Java class in `src/main/java` in the `org.acme` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package org.acme;
+
+import jakarta.json.bind.annotation.JsonbCreator;
+
+public class Beer {
+
+    private String name;
+    private String tagline;
+    private double abv;
+
+    private Beer(String name, String tagline, double abv) {
+        this.name = name;
+        this.tagline = tagline;
+        this.abv = abv;
+    }
+
+    @JsonbCreator
+    public static Beer of(String name, String tagline, double abv) {
+        return new Beer(name, tagline, abv);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getTagline() {
+        return tagline;
+    }
+
+    public double getAbv() {
+        return abv;
+    }
+
+}
+----
+
+== Create BeerService
+
+Now we're going to implement a Java interface that mimics the remote REST endpoint.
+
+Create a new `BeerService` Java interface in `src/main/java` in the `org.acme` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package org.acme;
+
+import java.util.List;
+
+import jakarta.json.JsonArray;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
+
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
+import io.smallrye.mutiny.Uni;
+
+@Path("/v2")
+@RegisterRestClient
+public interface BeerService {
+
+    @GET
+    @Path("/beers")
+    @Produces(MediaType.APPLICATION_JSON)
+    Uni<List<Beer>> getBeers(@QueryParam("page") int page);
+}
+----
+
+== Configure REST Client properties
+
+Add the following properties to your `application.properties` in `src/main/resources`:
+
+[.console-input]
+[source,properties]
+----
+org.acme.BeerService/mp-rest/url=https://api.punkapi.com
+----
+
+== Pagination + Filtering
+
+We want to query all the beers page by page and filter by its _abv_ value.
+
+image::pagination.png[]
+
+=== Create BeerResource
+
+Create a new `BeerResource` Java class in `src/main/java` in the `org.acme` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package org.acme;
+
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import jakarta.json.Json;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonMergePatch;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
+
+@Path("/beer")
+public class BeerResource {
+
+    @RestClient
+    BeerService beerService;
+
+    @GET
+    public Multi<Beer> beers() {
+        return Multi.createBy().repeating() // <1>
+            .uni( 
+                () -> new AtomicInteger(1),
+                i -> beerService.getBeers(i.getAndIncrement()) // <2>
+            )
+            .until(List::isEmpty) // <3>
+            .onItem().<Beer>disjoint() // <4>
+            .select().where(b -> b.getAbv() > 15.0); // <5>
+    }
+}
+----
+<1> Creates a `Multi`.
+<2> The supplier will start with `1` and will query the remote endpoint asking for page `i`.
+<3> The multi will end when the beer list returned is empty.
+<4> We dismember all the returned lists and create a sequence of beers.
+<5> And then we filter the `Multi` with beers with `ABV > 15.0`.
+
+=== Invoke the endpoint
+
+You can check your new implementation by pointing your browser to http://localhost:8080/beer[window=_blank]
+
+You can also run the following command:
+
+[.console-input]
+[source,bash]
+----
+curl localhost:8080/beer
+----
+
+[.console-output]
+[source,json]
+----
+[
+  {
+    "abv": 55,
+    "name": "The End Of History",
+    "tagline": "The World's Strongest Beer."
+  },
+  {
+    "abv": 16.5,
+    "name": "Anarchist Alchemist",
+    "tagline": "Triple Hopped Triple Ipa."
+  },
+  {
+    "abv": 15.2,
+    "name": "Lumberjack Stout",
+    "tagline": "Blueberry Bacon Stout."
+  },
+  {
+    "abv": 18.3,
+    "name": "Bowman's Beard - B-Sides",
+    "tagline": "English Barley Wine."
+  },
+  {
+    "abv": 41,
+    "name": "Sink The Bismarck!",
+    "tagline": "IPA For The Dedicated."
+  },
+  {
+    "abv": 16.2,
+    "name": "Tokyo*",
+    "tagline": "Intergalactic Stout. Rich. Smoky. Fruity."
+  },
+  {
+    "abv": 18,
+    "name": "AB:02",
+    "tagline": "Triple Dry Hopped Imperial Red Ale."
+  },
+  {
+    "abv": 17.2,
+    "name": "Black Tokyo Horizon (w/Nøgne Ø & Mikkeller)",
+    "tagline": "Imperial Stout Collaboration."
+  },
+  {
+    "abv": 16.1,
+    "name": "Dog D",
+    "tagline": "Anniversary Imperial Stout."
+  },
+  {
+    "abv": 32,
+    "name": "Tactical Nuclear Penguin",
+    "tagline": "Uber Imperial Stout."
+  },
+  {
+    "abv": 16.1,
+    "name": "Dog E",
+    "tagline": "Ninth Anniversary Imperial Stout."
+  },
+  {
+    "abv": 17,
+    "name": "Dog G",
+    "tagline": "11th Anniversary Imperial Stout."
+  }
+]
+----
+
+== Parallel Calls
+
+Suppose that now, you want to query two beers by its id, (so execute two requests against the remote API), and then compare its _abv_ values.
+
+image::parallel.png[]
+
+=== Modify BeerService
+
+Open `BeerService` interface and add the following method to get a beer:
+
+[.console-input]
+[source,java]
+----
+@GET
+@Path("/beers/{id}")
+@Produces(MediaType.APPLICATION_JSON)
+Uni<JsonArray> getBeer(@PathParam("id") int id);
+----
+
+=== Modify BeerResource
+
+Open `BeerResource` class and add the following methods to do in parallel the both calls.
+
+[.console-input]
+[source,java]
+----
+@GET
+@Path("/{beerA}/{beerB}")
+public Uni<JsonValue> compare(@PathParam("beerA") int beerA, @PathParam("beerB") int beerB) {
+    Uni<JsonArray> beer1 = beerService.getBeer(beerA); // <1>
+    Uni<JsonArray> beer2 = beerService.getBeer(beerB); // <2>
+
+    return Uni.combine()
+        .all()
+        .unis(beer1, beer2) // <3>
+        .with((b1, b2) -> this.compare(b1, b2)); // <4>
+}
+
+private JsonValue compare(JsonArray beerA, JsonArray beerB) {
+    JsonObject source = beerA.get(0).asJsonObject();
+    JsonObject target = beerB.get(0).asJsonObject();
+
+    String beerAName = source.getString("name");
+    String beerBName = target.getString("name");
+
+    double beerAAbv = source.getJsonNumber("abv").doubleValue();
+    double beerBAbv = target.getJsonNumber("abv").doubleValue();
+
+    return Json.createObjectBuilder()
+        .add("source-name", beerAName)
+        .add("target-name", beerBName)
+        .add("source-abv", beerAAbv)
+        .add("target-abv", beerBAbv)
+        .build();
+}
+----
+<1> Executes request for first beer
+<2> Executes request for second beer
+<3> Waits until both requests returns a response
+<4> Compare both beers and returns an object with the result
+
+=== Invoke the endpoint
+
+You can check your new implementation by pointing your browser to http://localhost:8080/beer/1/2[window=_blank]
+
+You can also run the following command:
+
+[.console-input]
+[source,bash]
+----
+curl localhost:8080/beer/1/2
+----
+
+[.console-output]
+[source,json]
+----
+{"source-name":"Buzz","target-name":"Trashy Blonde","source-abv":4.5,"target-abv":4.1}
+----

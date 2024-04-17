@@ -23,9 +23,9 @@
 ** xref:kafka-and-streams.adoc[Apache Kafka with Reactive Streams]
 
 * AI
-** xref:#[Working with prompts]
-** xref:#[Chains and Memory]
-** xref:#[Agents and Tools]
-** xref:#[Embedding Documents]
-** xref:#[Working with local models]
-** xref:#[Bringing Kubernetes and Kafka to the party]
+** xref:prompts.adoc[Working with prompts]
+** xref:chains_memory.adoc[Chains and Memory]
+** xref:agents_tools.adoc[Agents and Tools]
+** xref:embed_documents.adoc[Embedding Documents]
+** xref:local_models.adoc[Working with local models]
+** xref:kubernetes_kafka_ai.adoc[Bringing Kubernetes and Kafka to the party]
