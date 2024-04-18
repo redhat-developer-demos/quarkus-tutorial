@@ -108,7 +108,7 @@ You can also run the following command:
 curl localhost:8080/earth/flat
 ----
 
-An example of output (it can vary on each prompt exection):
+An example of output (it can vary on each prompt execution):
 
 [.console-output]
 [source,text]
