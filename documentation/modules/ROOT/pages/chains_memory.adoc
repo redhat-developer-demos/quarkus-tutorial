@@ -493,7 +493,7 @@ public class DeveloperResource {
 
 == Invoke the endpoint
 
-You can check your prompt implementation by pointing your browser to http://localhost:8080/code/guess[window=_blank]
+You can check your implementation by pointing your browser to http://localhost:8080/code/guess[window=_blank]
 
 You can also run the following command:
 

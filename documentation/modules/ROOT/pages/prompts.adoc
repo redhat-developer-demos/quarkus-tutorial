@@ -16,7 +16,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn "io.quarkus.platform:quarkus-maven-plugin:create" -DprojectGroupId="com.redhat.developers" -DprojectArtifactId="{project-ai-name}" -DprojectVersion="1.0-SNAPSHOT" -Dextensions=quarkus-rest,quarkus-langchain4j-openai
+mvn "io.quarkus.platform:quarkus-maven-plugin:create" -DprojectGroupId="com.redhat.developers" -DprojectArtifactId="{project-ai-name}" -DprojectVersion="1.0-SNAPSHOT" -Dextensions=rest,langchain4j-openai
 cd {project-ai-name}
 ----
 --
@@ -27,7 +27,7 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus create app -x quarkus-rest,quarkus-langchain4j-openai com.redhat.developers:{project-ai-name}:1.0-SNAPSHOT
+quarkus create app -x rest langchain4j-openai com.redhat.developers:{project-ai-name}:1.0-SNAPSHOT
 cd {project-ai-name}
 ----
 --
