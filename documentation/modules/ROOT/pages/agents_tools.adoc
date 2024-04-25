@@ -9,7 +9,7 @@ This section will use AI to trigger an email service from our local application.
 
 IMPORTANT: We keep assuming that you'll be working inside the project folder that was created before. In this case, `{project-ai-name}`.
 
-== Add the Mailer and Mailpit extension
+== Add the Mailer and Mailpit extensions
 
 Just open a new terminal window, and make sure you’re at the root of your `{project-ai-name}` project, then run:
 
@@ -138,7 +138,7 @@ public class EmailMeAPoemResource {
 
 == Adding email service properties to your configuration
 
-Add the following database properties to your `application.properties` so that it looks like:
+Add the following properties to your `application.properties` so that it looks like:
 
 [#quarkuspdb-update-props]
 [.console-input]

@@ -1,17 +1,17 @@
 = Embedding Documents
 
-Quarkus provides a novel reactive API called Mutiny, with the goal of easing the development of highly scalable, resilient, and asynchronous systems.
+:project-ai-name: quarkus-langchain-app
 
-In this chapter we're going to see some examples of how Mutiny changes the design of our Quarkus applications.
-to online beer database (https://punkapi.com/documentation/v2) to retrieve beer information.
-This API does not return all beers at once, so we'll need to navigate through the pages to fetch all the information.
-Then we're going to filter all the beers with an ABV greater than 15.0 and return all these beers in a Reactive REST endpoint.
+You can combine your own business data (or whatever data!) with the LLM to enrich the possibilities offered by your application.
 
-== Add the Mutiny extension
+This section will embed business documents to use them with the LLM to improve the user experience.
 
-Create a new Quarkus project, for example using https://code.quarkus.io/ website.
 
-Then open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
+IMPORTANT: We keep assuming that you'll be working inside the project folder that was created before. In this case, `{project-ai-name}`.
+
+== Add the Websockets and Context Propagation extensions
+
+Just open a new terminal window, and make sure you’re at the root of your `{project-ai-name}` project, then run:
 
 [tabs]
 ====
@@ -21,7 +21,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:add-extension -Dextension=quarkus-mutiny,quarkus-rest-client-reactive-jsonb,quarkus-resteasy-reactive-jsonb
+./mvnw quarkus:add-extension -D"extensions=websockets,smallrye-context-propagation,langchain4j-core"
 ----
 
 --
@@ -31,310 +31,418 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus extension add quarkus-mutiny,quarkus-rest-client-reactive-jsonb,quarkus-resteasy-reactive-jsonb
+quarkus extension add websockets smallrye-context-propagation langchain4j-core
 ----
 --
 ====
 
-== Create Beer POJO
+== Adding temperature property to your configuration
 
-Create a new `Beer` Java class in `src/main/java` in the `org.acme` package with the following contents:
+The "temperature" parameter in AI language models controls the randomness of text generation. Lower values result in more predictable outputs, while higher values encourage creativity and diversity in responses.
+
+Add the following properties to your `application.properties` so that it looks like:
+
+[.console-input]
+[source,config,subs="+macros,+attributes"]
+----
+quarkus.langchain4j.openai.api-key=demo
+
+quarkus.langchain4j.openai.log-requests=true
+quarkus.langchain4j.openai.log-responses=true
+quarkus.langchain4j.openai.timeout=60s
+
+%dev.quarkus.mailer.host=localhost
+%dev.quarkus.mailer.port=1025
+%dev.quarkus.mailer.mock=false
+
+quarkus.langchain4j.openai.chat-model.temperature=0.0
+----
+
+== Embedding the business document
+
+Now we provide the document containing our service's terms of use.
+
+Create the file `miles-of-smiles-terms-of-use.txt` in the folder `src/main/resources` with the following content:
+
+[.console-input]
+[source,text]
+----
+Miles of Smiles Car Rental Services Terms of Use
+
+1. Introduction
+These Terms of Service (“Terms”) govern the access or use by you, an individual, from within any country in the world, of applications, websites, content, products, and services (“Services”) made available by Miles of Smiles Car Rental Services, a company registered in the United States of America.
+
+2. The Services
+Miles of Smiles rents out vehicles to the end user. We reserve the right to temporarily or permanently discontinue the Services at any time and are not liable for any modification, suspension or discontinuation of the Services.
+
+3. Bookings
+3.1 Users may make a booking through our website or mobile application.
+3.2 You must provide accurate, current and complete information during the reservation process. You are responsible for all charges incurred under your account.
+3.3 All bookings are subject to vehicle availability.
+
+4. Cancellation Policy
+4.1 Reservations can be cancelled up to 7 days prior to the start of the booking period.
+4.2 If the booking period is less than 3 days, cancellations are not permitted.
+
+5. Use of Vehicle
+5.1 All cars rented from Miles of Smiles must not be used:
+for any illegal purpose or in connection with any criminal offense.
+for teaching someone to drive.
+in any race, rally or contest.
+while under the influence of alcohol or drugs.
+
+6. Liability
+6.1 Users will be held liable for any damage, loss, or theft that occurs during the rental period.
+6.2 We do not accept liability for any indirect or consequential loss, damage, or expense including but not limited to loss of profits.
+
+7. Governing Law
+These terms will be governed by and construed in accordance with the laws of the United States of America, and any disputes relating to these terms will be subject to the exclusive jurisdiction of the courts of United States.
+
+8. Changes to These Terms
+We may revise these terms of use at any time by amending this page. You are expected to check this page from time to time to take notice of any changes we made.
+
+9. Acceptance of These Terms
+By using the Services, you acknowledge that you have read and understand these Terms and agree to be bound by them.
+If you do not agree to these Terms, please do not use or access our Services.
+----
+
+== Create the embedding bean
+
+Let's create a bean to help us with the document embedding process.
+
+Create a new `EmbedBean` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
 ----
-package org.acme;
+package com.redhat.developers;
 
-import jakarta.json.bind.annotation.JsonbCreator;
+import static dev.langchain4j.data.document.UrlDocumentLoader.load;
+import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 
-public class Beer {
+import java.io.IOException;
+import java.net.URL;
 
-    private String name;
-    private String tagline;
-    private double abv;
+import jakarta.enterprise.context.ApplicationScoped;
 
-    private Beer(String name, String tagline, double abv) {
-        this.name = name;
-        this.tagline = tagline;
-        this.abv = abv;
+import dev.langchain4j.data.document.Document;
+import dev.langchain4j.data.document.DocumentSplitter;
+import dev.langchain4j.data.document.splitter.DocumentSplitters;
+import dev.langchain4j.data.segment.TextSegment;
+import dev.langchain4j.model.embedding.EmbeddingModel;
+import dev.langchain4j.model.openai.OpenAiTokenizer;
+import dev.langchain4j.retriever.EmbeddingStoreRetriever;
+import dev.langchain4j.retriever.Retriever;
+import dev.langchain4j.store.embedding.EmbeddingStore;
+import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
+import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
+
+public class EmbedBean {
+
+    @ApplicationScoped
+    Retriever<TextSegment> retriever(EmbeddingStore<TextSegment> embeddingStore, EmbeddingModel embeddingModel) {
+
+        // You will need to adjust these parameters to find the optimal setting, which will depend on two main factors:
+        // - The nature of your data
+        // - The embedding model you are using
+        int maxResultsRetrieved = 1;
+        double minScore = 0.6;
+
+        return EmbeddingStoreRetriever.from(embeddingStore, embeddingModel, maxResultsRetrieved, minScore);
     }
 
-    @JsonbCreator
-    public static Beer of(String name, String tagline, double abv) {
-        return new Beer(name, tagline, abv);
+    @ApplicationScoped
+    EmbeddingStore<TextSegment> embeddingStore(EmbeddingModel embeddingModel) throws IOException {
+
+        // Normally, you would already have your embedding store filled with your data.
+        // However, for the purpose of this demonstration, we will:
+
+        // 1. Create an in-memory embedding store
+        EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
+
+        // 2. Load an example document ("Miles of Smiles" terms of use)
+        String documentName = "miles-of-smiles-terms-of-use.txt";
+        URL resource = Thread.currentThread().getContextClassLoader().getResource(documentName);
+        if (resource == null) {
+            throw new IllegalStateException("Unable to locate document: '" + documentName + "' on the classpath");
+        }
+        Document document = load(resource);
+
+        // 3. Split the document into segments 100 tokens each
+        // 4. Convert segments into embeddings
+        // 5. Store embeddings into embedding store
+        // All this can be done manually, but we will use EmbeddingStoreIngestor to automate this:
+        DocumentSplitter documentSplitter = DocumentSplitters.recursive(100, 0, new OpenAiTokenizer(GPT_3_5_TURBO));
+        EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
+                .documentSplitter(documentSplitter)
+                .embeddingModel(embeddingModel)
+                .embeddingStore(embeddingStore)
+                .build();
+        ingestor.ingest(document);
+
+        return embeddingStore;
+    }
+}
+
+----
+
+== Create the Booking structure
+
+Now we create the Booking structure.
+
+Create a new `Booking` Java record in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import java.time.LocalDate;
+
+public record Booking(String bookingNumber, LocalDate bookingFrom, LocalDate bookingTo, Customer customer) {
+}
+----
+
+Let's implement an exception to be thrown when a Booking can't be cancelled.
+
+Create a new `BookingCannotBeCancelledException` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+public class BookingCannotBeCancelledException extends RuntimeException {
+
+    public BookingCannotBeCancelledException(String bookingNumber) {
+        super("Booking " + bookingNumber + " cannot be canceled");
+    }
+}
+----
+
+And another exception to be thrown when a Booking is not found.
+
+Create a new `BookingNotFoundException` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+public class BookingNotFoundException extends RuntimeException {
+
+    public BookingNotFoundException(String bookingNumber) {
+        super("Booking " + bookingNumber + " not found");
+    }
+}
+----
+
+Now we create a Booking service mockup.
+
+Create a new `BookingService` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import java.time.LocalDate;
+
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
+public class BookingService {
+
+    public Booking getBookingDetails(String bookingNumber, String customerName, String customerSurname) {
+        ensureExists(bookingNumber, customerName, customerSurname);
+
+        // Retrieval from DB mocking
+        LocalDate bookingFrom = LocalDate.now().plusDays(1);
+        LocalDate bookingTo = LocalDate.now().plusDays(3);
+        Customer customer = new Customer(customerName, customerSurname);
+        return new Booking(bookingNumber, bookingFrom, bookingTo, customer);
     }
 
-    public String getName() {
-        return name;
+    public void cancelBooking(String bookingNumber, String customerName, String customerSurname) {
+        ensureExists(bookingNumber, customerName, customerSurname);
+
+        // Cancellation mocking
+        throw new BookingCannotBeCancelledException(bookingNumber);
     }
 
-    public String getTagline() {
-        return tagline;
+    private void ensureExists(String bookingNumber, String customerName, String customerSurname) {
+        // Check mocking
+        if (!(bookingNumber.equals("123-456")
+                && customerName.equals("John")
+                && customerSurname.equals("Doe"))) {
+            throw new BookingNotFoundException(bookingNumber);
+        }
+    }
+}
+----
+
+Now we define a Booking singleton that will serve our AI with proper tools.
+
+Create a new `BookingTools` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import jakarta.inject.Singleton;
+
+import dev.langchain4j.agent.tool.Tool;
+
+@Singleton
+public class BookingTools {
+
+    private final BookingService bookingService;
+
+    public BookingTools(BookingService bookingService) {
+        this.bookingService = bookingService;
     }
 
-    public double getAbv() {
-        return abv;
+    @Tool
+    public Booking getBookingDetails(String bookingNumber, String customerName, String customerSurname) {
+        return bookingService.getBookingDetails(bookingNumber, customerName, customerSurname);
+    }
+
+    @Tool
+    public void cancelBooking(String bookingNumber, String customerName, String customerSurname) {
+        bookingService.cancelBooking(bookingNumber, customerName, customerSurname);
+    }
+}
+----
+
+
+== Create the customer support service
+
+Now we create the whole structure for our AI-based customer service.
+
+Create a new `AssistantForCustomerSupport` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import dev.langchain4j.service.MemoryId;
+import dev.langchain4j.service.SystemMessage;
+import dev.langchain4j.service.UserMessage;
+import io.quarkiverse.langchain4j.RegisterAiService;
+
+@RegisterAiService(tools = BookingTools.class, retrieverSupplier = RegisterAiService.BeanRetrieverSupplier.class)
+public interface AssistantForCustomerSupport {
+
+    @SystemMessage({
+            "You are a customer support agent of a car rental company named 'Miles of Smiles'.",
+            "Before providing information about booking or cancelling booking, you MUST always check:",
+            "booking number, customer name and surname.",
+            "Today is {current_date}."
+    })
+    String chat(@MemoryId Object id, @UserMessage String userMessage);
+}
+----
+
+Create a new `Customer` Java record in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+public record Customer(String name, String surname) {
+}
+----
+
+Create a new `Customer` Java record in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+public record Customer(String name, String surname) {
+}
+----
+
+And finally our chat implementation that will do the whole thing.
+
+Create a new `ChatSocket` Java record in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import java.io.IOException;
+import java.io.UncheckedIOException;
+
+import jakarta.websocket.OnClose;
+import jakarta.websocket.OnMessage;
+import jakarta.websocket.Session;
+import jakarta.websocket.server.ServerEndpoint;
+
+import org.eclipse.microprofile.context.ManagedExecutor;
+import org.jboss.logging.Logger;
+
+import io.quarkiverse.langchain4j.ChatMemoryRemover;
+
+@ServerEndpoint(value = "/chat")
+public class ChatSocket {
+
+    private static final Logger LOG = Logger.getLogger(ChatSocket.class);
+
+    private final AssistantForCustomerSupport assistant;
+    private final ManagedExecutor managedExecutor;
+
+    public ChatSocket(AssistantForCustomerSupport assistant, ManagedExecutor managedExecutor) {
+        this.assistant = assistant;
+        this.managedExecutor = managedExecutor;
+    }
+
+    @OnMessage
+    public void onMessage(Session session, String userMessage) throws Exception {
+        if (userMessage.equalsIgnoreCase("_ready_")) {
+            return;
+        }
+
+        // we need to use a worker thread because OnMessage always runs on the event loop
+        managedExecutor.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    session.getBasicRemote().sendText("[User]: " + userMessage);
+                    session.getBasicRemote().sendText("[Assistant]: " + assistant.chat(session, userMessage));
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
+                } catch (Exception e) {
+                    LOG.error(e);
+                }
+            }
+        });
+    }
+
+    @OnClose
+    void onClose(Session session) {
+        ChatMemoryRemover.remove(assistant, session);
     }
 
 }
 ----
 
-== Create BeerService
+== Invoke the endpoint
 
-Now we're going to implement a Java interface that mimics the remote REST endpoint.
+You can check your prompt implementation by pointing your browser to http://localhost:8080/chat[window=_blank]
 
-Create a new `BeerService` Java interface in `src/main/java` in the `org.acme` package with the following contents:
 
-[.console-input]
-[source,java]
-----
-package org.acme;
-
-import java.util.List;
-
-import jakarta.json.JsonArray;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.MediaType;
-
-import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
-
-import io.smallrye.mutiny.Uni;
-
-@Path("/v2")
-@RegisterRestClient
-public interface BeerService {
-
-    @GET
-    @Path("/beers")
-    @Produces(MediaType.APPLICATION_JSON)
-    Uni<List<Beer>> getBeers(@QueryParam("page") int page);
-}
-----
-
-== Configure REST Client properties
-
-Add the following properties to your `application.properties` in `src/main/resources`:
-
-[.console-input]
-[source,properties]
-----
-org.acme.BeerService/mp-rest/url=https://api.punkapi.com
-----
-
-== Pagination + Filtering
-
-We want to query all the beers page by page and filter by its _abv_ value.
-
-image::pagination.png[]
-
-=== Create BeerResource
-
-Create a new `BeerResource` Java class in `src/main/java` in the `org.acme` package with the following contents:
-
-[.console-input]
-[source,java]
-----
-package org.acme;
-
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import jakarta.json.Json;
-import jakarta.json.JsonArray;
-import jakarta.json.JsonMergePatch;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonValue;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-
-import org.eclipse.microprofile.rest.client.inject.RestClient;
-import io.smallrye.mutiny.Multi;
-import io.smallrye.mutiny.Uni;
-
-@Path("/beer")
-public class BeerResource {
-
-    @RestClient
-    BeerService beerService;
-
-    @GET
-    public Multi<Beer> beers() {
-        return Multi.createBy().repeating() // <1>
-            .uni( 
-                () -> new AtomicInteger(1),
-                i -> beerService.getBeers(i.getAndIncrement()) // <2>
-            )
-            .until(List::isEmpty) // <3>
-            .onItem().<Beer>disjoint() // <4>
-            .select().where(b -> b.getAbv() > 15.0); // <5>
-    }
-}
-----
-<1> Creates a `Multi`.
-<2> The supplier will start with `1` and will query the remote endpoint asking for page `i`.
-<3> The multi will end when the beer list returned is empty.
-<4> We dismember all the returned lists and create a sequence of beers.
-<5> And then we filter the `Multi` with beers with `ABV > 15.0`.
-
-=== Invoke the endpoint
-
-You can check your new implementation by pointing your browser to http://localhost:8080/beer[window=_blank]
-
-You can also run the following command:
-
-[.console-input]
-[source,bash]
-----
-curl localhost:8080/beer
-----
+An example of output (it can vary on each prompt execution):
 
 [.console-output]
-[source,json]
-----
-[
-  {
-    "abv": 55,
-    "name": "The End Of History",
-    "tagline": "The World's Strongest Beer."
-  },
-  {
-    "abv": 16.5,
-    "name": "Anarchist Alchemist",
-    "tagline": "Triple Hopped Triple Ipa."
-  },
-  {
-    "abv": 15.2,
-    "name": "Lumberjack Stout",
-    "tagline": "Blueberry Bacon Stout."
-  },
-  {
-    "abv": 18.3,
-    "name": "Bowman's Beard - B-Sides",
-    "tagline": "English Barley Wine."
-  },
-  {
-    "abv": 41,
-    "name": "Sink The Bismarck!",
-    "tagline": "IPA For The Dedicated."
-  },
-  {
-    "abv": 16.2,
-    "name": "Tokyo*",
-    "tagline": "Intergalactic Stout. Rich. Smoky. Fruity."
-  },
-  {
-    "abv": 18,
-    "name": "AB:02",
-    "tagline": "Triple Dry Hopped Imperial Red Ale."
-  },
-  {
-    "abv": 17.2,
-    "name": "Black Tokyo Horizon (w/Nøgne Ø & Mikkeller)",
-    "tagline": "Imperial Stout Collaboration."
-  },
-  {
-    "abv": 16.1,
-    "name": "Dog D",
-    "tagline": "Anniversary Imperial Stout."
-  },
-  {
-    "abv": 32,
-    "name": "Tactical Nuclear Penguin",
-    "tagline": "Uber Imperial Stout."
-  },
-  {
-    "abv": 16.1,
-    "name": "Dog E",
-    "tagline": "Ninth Anniversary Imperial Stout."
-  },
-  {
-    "abv": 17,
-    "name": "Dog G",
-    "tagline": "11th Anniversary Imperial Stout."
-  }
-]
+[source,text]
 ----
 
-== Parallel Calls
-
-Suppose that now, you want to query two beers by its id, (so execute two requests against the remote API), and then compare its _abv_ values.
-
-image::parallel.png[]
-
-=== Modify BeerService
-
-Open `BeerService` interface and add the following method to get a beer:
-
-[.console-input]
-[source,java]
-----
-@GET
-@Path("/beers/{id}")
-@Produces(MediaType.APPLICATION_JSON)
-Uni<JsonArray> getBeer(@PathParam("id") int id);
 ----
 
-=== Modify BeerResource
 
-Open `BeerResource` class and add the following methods to do in parallel the both calls.
-
-[.console-input]
-[source,java]
-----
-@GET
-@Path("/{beerA}/{beerB}")
-public Uni<JsonValue> compare(@PathParam("beerA") int beerA, @PathParam("beerB") int beerB) {
-    Uni<JsonArray> beer1 = beerService.getBeer(beerA); // <1>
-    Uni<JsonArray> beer2 = beerService.getBeer(beerB); // <2>
-
-    return Uni.combine()
-        .all()
-        .unis(beer1, beer2) // <3>
-        .with((b1, b2) -> this.compare(b1, b2)); // <4>
-}
-
-private JsonValue compare(JsonArray beerA, JsonArray beerB) {
-    JsonObject source = beerA.get(0).asJsonObject();
-    JsonObject target = beerB.get(0).asJsonObject();
-
-    String beerAName = source.getString("name");
-    String beerBName = target.getString("name");
-
-    double beerAAbv = source.getJsonNumber("abv").doubleValue();
-    double beerBAbv = target.getJsonNumber("abv").doubleValue();
-
-    return Json.createObjectBuilder()
-        .add("source-name", beerAName)
-        .add("target-name", beerBName)
-        .add("source-abv", beerAAbv)
-        .add("target-abv", beerBAbv)
-        .build();
-}
-----
-<1> Executes request for first beer
-<2> Executes request for second beer
-<3> Waits until both requests returns a response
-<4> Compare both beers and returns an object with the result
-
-=== Invoke the endpoint
-
-You can check your new implementation by pointing your browser to http://localhost:8080/beer/1/2[window=_blank]
-
-You can also run the following command:
-
-[.console-input]
-[source,bash]
-----
-curl localhost:8080/beer/1/2
-----
-
-[.console-output]
-[source,json]
-----
-{"source-name":"Buzz","target-name":"Trashy Blonde","source-abv":4.5,"target-abv":4.1}
-----
