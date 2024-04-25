@@ -188,6 +188,17 @@ public class EmbedBean {
 
 == Create the Booking structure
 
+Create a new `Customer` Java record in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+public record Customer(String name, String surname) {
+}
+----
+
 Now we create the Booking structure.
 
 Create a new `Booking` Java record in `src/main/java` in the `com.redhat.developers` package with the following contents:
@@ -345,28 +356,6 @@ public interface AssistantForCustomerSupport {
 }
 ----
 
-Create a new `Customer` Java record in `src/main/java` in the `com.redhat.developers` package with the following contents:
-
-[.console-input]
-[source,java]
-----
-package com.redhat.developers;
-
-public record Customer(String name, String surname) {
-}
-----
-
-Create a new `Customer` Java record in `src/main/java` in the `com.redhat.developers` package with the following contents:
-
-[.console-input]
-[source,java]
-----
-package com.redhat.developers;
-
-public record Customer(String name, String surname) {
-}
-----
-
 And finally our chat implementation that will do the whole thing.
 
 Create a new `ChatSocket` Java record in `src/main/java` in the `com.redhat.developers` package with the following contents:
@@ -431,6 +420,124 @@ public class ChatSocket {
 
 }
 ----
+
+== Create the chat frontend
+
+Finally, let's add our chat frontend.
+
+Create a new `index.html` Java record in `src/main/resources/META-INF/resources` with the following contents:
+
+[.console-input]
+[source,html]
+----
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Quarkus Langchain4j Chat!</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly-additions.min.css">
+
+    <style>
+        #chat {
+          resize: none;
+          overflow: hidden;
+          min-height: 300px;
+          max-height: 300px;
+      }
+    </style>
+</head>
+
+<body>
+        <nav class="navbar navbar-default navbar-pf" role="navigation">
+                <div class="navbar-header">                  
+                  <a class="navbar-brand" href="/">
+                   <p><strong>>> Quarkus Langchain4j Chat!</strong></p>
+                  </a>
+                </div>
+        </nav>
+    <div class="container">
+      <br/>
+      <div class="row">
+          <textarea data-testid="chatwin" class="col-md-8" id="chat"></textarea>
+      </div>
+      <div class="row">
+          <input class="col-md-6" id="msg" type="text" placeholder="enter your message">
+          <button class="col-md-1 btn btn-primary" id="send" type="button" disabled>send</button>
+      </div>
+      
+      </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/js/patternfly.min.js"></script>
+
+    <script type="text/javascript">
+      var connected = false;
+      var socket;
+
+      $( document ).ready(function() {
+          connect();
+          $("#send").click(sendMessage);
+
+          $("#name").keypress(function(event){
+              if(event.keyCode == 13 || event.which == 13) {
+                  connect();
+              }
+          });
+
+          $("#msg").keypress(function(event) {
+              if(event.keyCode == 13 || event.which == 13) {
+                  sendMessage();
+              }
+          });
+
+        $("#chat").change(function() {
+            scrollToBottom();
+          });
+
+          $("#name").focus();
+      });
+
+      var connect = function() {
+          if (! connected) {
+              socket = new WebSocket("ws://" + location.host + "/chat");
+              socket.onopen = function() {
+                  connected = true;
+                  console.log("Connected to the web socket");
+                  $("#send").attr("disabled", false);
+                  $("#connect").attr("disabled", true);
+                  $("#name").attr("disabled", true);
+                  $("#msg").focus();
+              };
+              socket.onmessage =function(m) {
+                  console.log("Got message: " + m.data);
+                  $("#chat").append(m.data + "\n");
+                  scrollToBottom();
+              };
+          }
+      };
+
+      var sendMessage = function() {
+          if (connected) {
+              var value = $("#msg").val();
+              console.log("Sending " + value);
+              socket.send(value);
+              $("#msg").val("");
+          }
+      };
+
+      var scrollToBottom = function () {
+        $('#chat').scrollTop($('#chat')[0].scrollHeight);
+      };
+
+    </script>
+</body>
+
+</html>
+----
+
 
 == Invoke the endpoint
 
