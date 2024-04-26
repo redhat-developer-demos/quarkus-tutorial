@@ -36,6 +36,18 @@ quarkus extension add websockets smallrye-context-propagation langchain4j-core
 --
 ====
 
+This section exceptionally needs an external LangChain4j extension, which we'll manually add to our POM file here:
+
+[.console-input]
+[source,xml]
+----
+<dependency>
+  <groupId>dev.langchain4j</groupId>
+  <artifactId>langchain4j</artifactId>
+  <version>0.24.0</version>
+</dependency>
+----
+
 == Adding temperature property to your configuration
 
 The "temperature" parameter in AI language models controls the randomness of text generation. Lower values result in more predictable outputs, while higher values encourage creativity and diversity in responses.
@@ -425,7 +437,7 @@ public class ChatSocket {
 
 Finally, let's add our chat frontend.
 
-Create a new `index.html` Java record in `src/main/resources/META-INF/resources` with the following contents:
+Create a new `chat-assistant.html` file in `src/main/resources/META-INF/resources` with the following contents:
 
 [.console-input]
 [source,html]
@@ -541,15 +553,11 @@ Create a new `index.html` Java record in `src/main/resources/META-INF/resources`
 
 == Invoke the endpoint
 
-You can check your prompt implementation by pointing your browser to http://localhost:8080/chat[window=_blank]
+You can check your prompt implementation by pointing your browser to http://localhost:8080/chat-assistant.html[window=_blank]
 
 
 An example of output (it can vary on each prompt execution):
 
-[.console-output]
-[source,text]
-----
-
-----
+image::chat-assistant.png[]
 
 
