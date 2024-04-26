@@ -26,7 +26,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:add-extension -Dextension="quarkus-resteasy-reactive-jsonb, quarkus-jdbc-h2, quarkus-hibernate-orm-panache, quarkus-smallrye-openapi"
+./mvnw quarkus:add-extension -Dextension="rest-jsonb, jdbc-h2, hibernate-orm-panache, smallrye-openapi"
 ----
 
 --
@@ -36,7 +36,7 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus extension add quarkus-resteasy-reactive-jsonb quarkus-jdbc-h2 quarkus-hibernate-orm-panache quarkus-smallrye-openapi
+quarkus extension add rest-jsonb jdbc-h2 hibernate-orm-panache smallrye-openapi
 ----
 --
 ====
@@ -45,7 +45,7 @@ quarkus extension add quarkus-resteasy-reactive-jsonb quarkus-jdbc-h2 quarkus-hi
 [.console-output]
 [source,text]
 ----
-✅ Adding extension io.quarkus:quarkus-resteasy-reactive-jsonb
+✅ Adding extension io.quarkus:quarkus-rest-jsonb
 ✅ Adding extension io.quarkus:quarkus-smallrye-openapi
 ✅ Adding extension io.quarkus:quarkus-hibernate-orm-panache
 ✅ Adding extension io.quarkus:quarkus-jdbc-h2
