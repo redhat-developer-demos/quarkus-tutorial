@@ -1,2 +1,146 @@
 = Working with local models
 
+:project-ollama-name: quarkus-ollama-app
+
+Throughout this tutorial, we've been working with remote models. Let's switch now to a local model.
+
+There are various options out there, and we'll work with Ollama.
+
+
+== Installing Ollama
+
+First, you must download and install the specific Ollama version on your operating system. https://ollama.com/download[The instructions can be found here, window="_blank"].
+
+Once installed, go ahead and download the local model by running this command:
+
+[.console-input]
+[source,bash]
+----
+ollama pull llama3:latest
+----
+
+Now, let's run our modal locally:
+
+[.console-input]
+[source,bash]
+----
+ollama serve
+----
+
+== Creating a new project with the Ollama extension
+
+The Ollama extension isn't compatible with other extensions we have used in this tutorial, so we'll create a new project.
+
+[tabs%sync]
+====
+
+Maven::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+mvn "io.quarkus.platform:quarkus-maven-plugin:create" -DprojectGroupId="com.redhat.developers" -DprojectArtifactId="{project-ollama-name}" -DprojectVersion="1.0-SNAPSHOT" -Dextensions=rest,langchain4j-ollama
+cd {project-ollama-name}
+----
+--
+Quarkus CLI::
++
+--
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus create app -x rest langchain4j-ollama com.redhat.developers:{project-ollama-name}:1.0-SNAPSHOT
+cd {project-ollama-name}
+----
+--
+====
+
+== Connect to Ollama
+
+Just add these properties to the `application.properties` file available in `src/main/resources`:
+
+[.console-input]
+[source,properties]
+----
+quarkus.langchain4j.ollama.chat-model.model-id=llama3:latest
+quarkus.langchain4j.ollama.timeout=120s
+----
+
+== Create the AI service
+
+Let's create an interface for our AI service.
+
+Create a new `Assistant` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import io.quarkiverse.langchain4j.RegisterAiService;
+
+@RegisterAiService
+public interface Assistant {
+    String chat(String message);
+}
+----
+
+== Create the prompt-base resource
+
+Now we're going to implement a resource that send prompts using the AI service.
+
+Create a new `ExistencialQuestionResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import jakarta.inject.Inject;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+
+@Path("/earth")
+public class ExistencialQuestionResource {
+
+    @Inject
+    Assistant assistant;
+
+    @GET
+    @Path("/flat")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String isEarthFlat() {
+        return assistant.chat("Can you explain me why earth is flat?");
+    }
+}
+----
+
+== Invoke the endpoint
+
+You can check your prompt implementation by pointing your browser to http://localhost:8080/earth/flat[window=_blank]
+
+You can also run the following command:
+
+[.console-input]
+[source,bash]
+----
+curl localhost:8080/earth/flat
+----
+
+An example of output (it can vary on each prompt execution):
+
+[.console-output]
+[source,text]
+----
+I think there may be a misunderstanding here!
+
+Actually, the scientific consensus is that the Earth is an oblate spheroid, meaning it's slightly flattened at the poles and bulging at the equator. The evidence from various fields of science, including astronomy, geology, and physics, all point to the fact that our planet is indeed round.
+
+Here are some reasons why we know the Earth is not flat:
+
+1. **Ships disappearing over the horizon**: When a ship sails away from an observer on the shore, it will eventually disappear from view as it sinks below the horizon due to the curvature of the Earth.
+----
