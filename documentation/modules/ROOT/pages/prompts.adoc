@@ -16,7 +16,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn "io.quarkus.platform:quarkus-maven-plugin:create" -DprojectGroupId="com.redhat.developers" -DprojectArtifactId="{project-ai-name}" -DprojectVersion="1.0-SNAPSHOT" -Dextensions=rest,langchain4j-openai
+./mvnw "io.quarkus.platform:quarkus-maven-plugin:create" -DprojectGroupId="com.redhat.developers" -DprojectArtifactId="{project-ai-name}" -DprojectVersion="1.0-SNAPSHOT" -Dextensions=rest,langchain4j-openai
 cd {project-ai-name}
 ----
 --
@@ -27,7 +27,7 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus create app -x rest langchain4j-openai com.redhat.developers:{project-ai-name}:1.0-SNAPSHOT
+quarkus create app -x rest -x langchain4j-openai com.redhat.developers:{project-ai-name}:1.0-SNAPSHOT
 cd {project-ai-name}
 ----
 --
@@ -35,7 +35,7 @@ cd {project-ai-name}
 
 IMPORTANT: All the remaining parts of this section assume that you'll be working inside the project folder that was just created. In this case, `{project-ai-name}`.
 
-This tutorial was explicitly tested with LangChain4j OpenAI version 0.4.0. So, to guarantee that everything will work as expected, we'll need to update it on our POM file:
+This tutorial was explicitly tested with LangChain4j OpenAI version 0.4.0. So, to guarantee that everything will work as expected, we'll need to update it on our POM file, so replace the existing dependency with the following:
 
 [.console-input]
 [source,xml]
@@ -80,7 +80,7 @@ public interface Assistant {
 
 Now we're going to implement a resource that send prompts using the AI service.
 
-Create a new `ExistencialQuestionResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Create a new `ExistentialQuestionResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
@@ -94,7 +94,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
 @Path("/earth")
-public class ExistencialQuestionResource {
+public class ExistentialQuestionResource {
 
     @Inject
     Assistant assistant;
@@ -109,6 +109,33 @@ public class ExistencialQuestionResource {
 ----
 
 == Invoke the endpoint
+
+Start the app in Quarkus Dev Mode:
+
+[tabs%sync]
+====
+
+Maven::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+./mvnw quarkus:dev
+----
+--
+Quarkus CLI::
++
+--
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus create app -x rest -x langchain4j-openai com.redhat.developers:{project-ai-name}:1.0-SNAPSHOT
+quarkus dev
+----
+--
+====
 
 You can check your prompt implementation by pointing your browser to http://localhost:8080/earth/flat[window=_blank]
 
