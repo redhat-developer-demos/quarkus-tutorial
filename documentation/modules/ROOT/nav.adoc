@@ -1,31 +1,31 @@
 * Requirements
-** xref:setup.adoc[Setup]
+** xref:01_setup.adoc[Setup]
 
 * Basics
-** xref:basics.adoc[Basics and Fundamentals]
-** xref:configuration.adoc[Configuration]
-** xref:panache.adoc[Hibernate with Panache]
-** xref:kubernetes.adoc[Deploy to Kubernetes]
-** xref:dev-services.adoc[Dev Services]
-** xref:spring.adoc[Spring Compatibility]
+** xref:02_basics.adoc[Basics and Fundamentals]
+** xref:03_configuration.adoc[Configuration]
+** xref:04_panache.adoc[Hibernate with Panache]
+** xref:05_kubernetes.adoc[Deploy to Kubernetes]
+** xref:06_dev-services.adoc[Dev Services]
+** xref:07_spring.adoc[Spring Compatibility]
 
 * Cloud Native
-** xref:rest-client.adoc[REST Client]
-** xref:fault-tolerance.adoc[Fault Tolerance]
-** xref:health.adoc[Health Check]
-** xref:observability.adoc[Observability]
-** xref:security.adoc[Security with JWT RBAC]
-// ** xref:security-oidc.adoc[Security using OpenID Connect]
+** xref:08_rest-client.adoc[REST Client]
+** xref:09_fault-tolerance.adoc[Fault Tolerance]
+** xref:10_health.adoc[Health Check]
+** xref:11_observability.adoc[Observability]
+** xref:12_security.adoc[Security with JWT RBAC]
+// ** xref:13_security-oidc.adoc[Security using OpenID Connect]
 
 * Reactive
-** xref:reactive.adoc[Reactive with Mutiny]
-** xref:reactive-messaging.adoc[Streaming reactive messages]
-** xref:kafka-and-streams.adoc[Apache Kafka with Reactive Streams]
+** xref:14_reactive.adoc[Reactive with Mutiny]
+** xref:15_reactive-messaging.adoc[Streaming reactive messages]
+** xref:15_kafka-and-streams.adoc[Apache Kafka with Reactive Streams]
 
 * AI
-** xref:prompts.adoc[Working with prompts]
-** xref:chains_memory.adoc[Chains and Memory]
-** xref:agents_tools.adoc[Agents/Tools]
-** xref:embed_documents.adoc[Embedding Documents]
-** xref:local_models.adoc[Working with local models]
-** xref:kubernetes_kafka_ai.adoc[Bringing Kubernetes and Kafka to the party]
+** xref:17_prompts.adoc[Working with prompts]
+** xref:18_chains_memory.adoc[Chains and Memory]
+** xref:19_agents_tools.adoc[Agents/Tools]
+** xref:20_embed_documents.adoc[Embedding Documents]
+** xref:21_local_models.adoc[Working with local models]
+** xref:22_kubernetes_kafka_ai.adoc[Bringing Kubernetes and Kafka to the party]

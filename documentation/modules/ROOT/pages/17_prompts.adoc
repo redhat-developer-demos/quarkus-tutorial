@@ -2,7 +2,9 @@
 
 :project-ai-name: quarkus-langchain-app
 
-Quarkus and LangChain4j make it easier for you to use prompts on your application.
+The Quarkus LangChain4j extension seamlessly integrates Large Language Models (LLMs) into Quarkus applications. LLMs are AI-based systems designed to understand, generate, and manipulate human language, showcasing advanced natural language processing capabilities. Thanks to this extensions we can enable the harnessing of LLM capabilities for the development of more intelligent applications. 
+
+In this first chapter we'll explore the simplest of interactions with an LLM: Prompting. It essentially means just asking questions to an LLM and receiving an answer in natural language from a given Model, such as OpenAI, Mistral, Hugging Face, Ollama, etc.
 
 
 == Creating a Quarkus & LangChain Application
@@ -34,18 +36,6 @@ cd {project-ai-name}
 ====
 
 IMPORTANT: All the remaining parts of this section assume that you'll be working inside the project folder that was just created. In this case, `{project-ai-name}`.
-
-This tutorial was explicitly tested with LangChain4j OpenAI version 0.4.0. So, to guarantee that everything will work as expected, we'll need to update it on our POM file, so replace the existing dependency with the following:
-
-[.console-input]
-[source,xml]
-----
-<dependency>
-  <groupId>io.quarkiverse.langchain4j</groupId>
-  <artifactId>quarkus-langchain4j-openai</artifactId>
-  <version>0.4.0</version>
-</dependency>
-----
 
 == Connect to OpenAI
 
