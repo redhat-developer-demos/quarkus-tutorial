@@ -2,17 +2,12 @@
 
 :project-ai-name: quarkus-langchain-app
 
-If you only stick with prompts, you rely solely on the current message.
+So far we explored how to use prompts with LLMs, however to really leverage the power of LLMs it is essential that you 
+can build a conversation by referring to previous questions and answers and manage concurrent interactions. 
 
-But LangChain4j can help you do more, which this section covers.
+In this section we'll cover how we can acchieve this with the LangChain4j extension in Quarkus.
 
-It shows you how to create conversations with the LLM, refer to past answers, and manage concurrent interactions.
-
-
-
-IMPORTANT: We keep assuming that you'll be working inside the project folder that was created before. In this case, `{project-ai-name}`.
-
-== Create the AI service with memory
+== Create an AI service with memory
 
 Let's create an interface for our AI service, but with memory feature this time.
 
@@ -63,8 +58,8 @@ public class ChatMemoryBean implements ChatMemoryProvider {
 
     @Override
     public ChatMemory get(Object memoryId) {
-        return memories.computeIfAbsent(memoryId, id -> MessageWindowChatMemory.builder()
-                .maxMessages(20)
+        return memories.computeIfAbsent(memoryId, id -> MessageWindowChatMemory.builder() #<1>
+                .maxMessages(20) #<2>
                 .id(memoryId)
                 .build());
     }
@@ -75,10 +70,13 @@ public class ChatMemoryBean implements ChatMemoryProvider {
     }
 }
 ----
+<1> If no chat memory exists yet, create a new instance
+<2> Retain a maximum of 20 messages
+
 
 == Create a Developer resource
 
-Now we create a resource to help us to create code.
+Now let's create a resource to help us write some code.
 
 Create a new `DeveloperResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
@@ -117,14 +115,14 @@ public class DeveloperResource {
     @Produces(MediaType.TEXT_PLAIN)
     public void createRestEndpoint() {
 
-        Tokenizer tokenizer = new OpenAiTokenizer(GPT_3_5_TURBO);
+        Tokenizer tokenizer = new OpenAiTokenizer();
         ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(1000, tokenizer);
 
         UserMessage userMessage1 = userMessage(
-                "How to write a REST endpoint in Java using Quarkus? ");
+                "How do I write a REST endpoint in Java using Quarkus? ");
         chatMemory.add(userMessage1);
 
-        System.out.println("[User]: " + userMessage1.text() + System.lineSeparator());
+        System.out.println("[User]: " + userMessage1.contents() + System.lineSeparator());
 
         final Response<AiMessage> response1 = model.generate(chatMemory.messages());
         chatMemory.add(response1.content());
@@ -132,11 +130,11 @@ public class DeveloperResource {
         System.out.println("[LLM]: " + response1.content().text() + System.lineSeparator());
 
         UserMessage userMessage2 = userMessage(
-                "Create a test of the first point? " +
+                "Create a test of the first point. " +
                         "Be short, 15 lines of code maximum.");
         chatMemory.add(userMessage2);
 
-        System.out.println("[User]: " + userMessage2.text() + System.lineSeparator());
+        System.out.println("[User]: " + userMessage2.contents() + System.lineSeparator());
 
         final Response<AiMessage> response2 = model.generate(chatMemory.messages());
 
@@ -150,7 +148,7 @@ public class DeveloperResource {
 
 You can check your prompt implementation by pointing your browser to http://localhost:8080/code/rest[window=_blank]
 
-You can also run the following command:
+You can also run the following command in your terminal:
 
 [.console-input]
 [source,bash]
@@ -158,61 +156,55 @@ You can also run the following command:
 curl localhost:8080/code/rest
 ----
 
-The result will be at your Quarkus terminal. An example of output (it can vary on each prompt execution):
+The result will be in the logs of your Quarkus application (ie. the terminal where you're running the `quarkus dev` command). An example of output (it can vary on each prompt execution):
 
 [.console-output]
 [source,text]
 ----
-[User]: How to write a REST endpoint in Java using Quarkus?
+[User]: How do I write a REST endpoint in Java using Quarkus? 
 
-[LLM]: To write a REST endpoint in Java using Quarkus, you can follow these steps:
+[LLM]: To create a REST endpoint in Java using Quarkus, you can follow these steps:
 
-1. Create a new Quarkus project using the Quarkus Maven Plugin or Quarkus CLI. You can refer to the Quarkus documentation for detailed instructions.
+1. Create a new Quarkus project using the Quarkus Maven plugin or Quarkus CLI.
+2. Create a new Java class for your REST endpoint. You can annotate this class with `@Path` to define the base URL path for your endpoint.
+3. Add methods to your class and annotate them with `@GET`, `@POST`, `@PUT`, or `@DELETE` annotations to define the HTTP method for each endpoint.
+4. Use the `@Produces` and `@Consumes` annotations to specify the content type of the responses and requests.
+5. Use the `@PathParam` and `@QueryParam` annotations to capture path and query parameters in your endpoint methods.
+6. Implement the logic for your endpoint methods.
+7. Build and run your Quarkus project to start the application and test your REST endpoint.
 
-2. Create a new Java class for your REST endpoint. This class should be annotated with `@Path` to specify the base path for the endpoint and `@GET`, `@POST`, `@PUT`, `@DELETE`, etc., annotations to define the HTTP methods supported by the endpoint.
+Here's an example of a simple REST endpoint class in Quarkus:
 
 ```java
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 @Path("/hello")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class HelloResource {
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
+    public String sayHello() {
         return "Hello, World!";
+    }
+
+    @GET
+    @Path("/{name}")
+    public String sayHelloTo(@PathParam("name") String name) {
+        return "Hello, " + name + "!";
     }
 }
 ```
 
-3. Make sure to add the necessary dependencies in your `pom.xml` file to enable REST services and JSON support in your Quarkus project.
-
-```xml
-<dependency>
-    <groupId>io.quarkus</groupId>
-    <artifactId>quarkus-resteasy</artifactId>
-</dependency>
-<dependency>
-    <groupId>io.quarkus</groupId>
-    <artifactId>quarkus-resteasy-jsonb</artifactId>
-</dependency>
-```
-
-4. Build and run your Quarkus application using the command line or your favorite IDE.
-
-5. Access your REST endpoint by making an HTTP request to the appropriate URL. For example, if your endpoint is defined with a base path of `/hello`, you can access it at `http://localhost:8080/hello`.
-
-That's it! You have now successfully created a REST endpoint in Java using Quarkus. You can further customize your endpoint by adding request parameters, path parameters, response headers, error handling, and other features supported by JAX-RS and Quarkus.
+This class defines two REST endpoints: `/hello` for saying hello to the world, and `/hello/{name}` for saying hello to a specific name. You can access these endpoints at `http://localhost:8080/hello` and `http://localhost:8080/hello/{name}` respectively.
 
 
-[User]: Create a test of the first point? Be short, 15 lines of code maximum.
+[User]: Create a test of the first point. Be short, 15 lines of code maximum.
 
-[LLM]: You can create a test for the `HelloResource` endpoint using Quarkus Test Framework in just a few lines of code. Here's an example of a test class for the `HelloResource` endpoint:
+[LLM]: Here's an example of a simple test for the `sayHello` endpoint in Quarkus using JUnit:
 
-``` java
+```java
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.Test;
@@ -224,7 +216,7 @@ import static org.hamcrest.CoreMatchers.is;
 public class HelloResourceTest {
 
     @Test
-    public void testHelloEndpoint() {
+    public void testSayHelloEndpoint() {
         given()
           .when().get("/hello")
           .then()
@@ -234,76 +226,18 @@ public class HelloResourceTest {
 }
 ```
 
-In this test class, we are using RestAssured to make an HTTP GET request to the `/hello` endpoint and verifying that the response status code is 200 and the response body is "Hello, World!". The `@QuarkusTest` annotation is used to start a test Quarkus application before running the tests.
+In this test, we are using the QuarkusTest annotation to run the test in the Quarkus test environment. The `testSayHelloEndpoint` method sends a GET request to the `/hello` endpoint and verifies that the response status code is 200 and that the response body is "Hello, World!".
+```
 
 ----
 
 Let's now get some help to learn a little bit about Kubernetes. 
 
-Here is an updated version of our `DeveloperResource` class:
+Add a new `generateKubernetes()` method to the `DeveloperResource` class:
 
 [.console-input]
 [source,java]
 ----
-package com.redhat.developers;
-
-import static dev.langchain4j.data.message.UserMessage.userMessage;
-import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
-
-import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-
-import dev.langchain4j.chain.ConversationalChain;
-import dev.langchain4j.data.message.AiMessage;
-import dev.langchain4j.data.message.UserMessage;
-import dev.langchain4j.memory.ChatMemory;
-import dev.langchain4j.memory.chat.TokenWindowChatMemory;
-import dev.langchain4j.model.Tokenizer;
-import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.openai.OpenAiTokenizer;
-import dev.langchain4j.model.output.Response;
-
-@Path("/code")
-public class DeveloperResource {
-
-    @Inject
-    private ChatLanguageModel model;
-
-    @GET
-    @Path("/rest")
-    @Produces(MediaType.TEXT_PLAIN)
-    public void createRestEndpoint() {
-
-        Tokenizer tokenizer = new OpenAiTokenizer(GPT_3_5_TURBO);
-        ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(1000, tokenizer);
-
-        UserMessage userMessage1 = userMessage(
-                "How to write a REST endpoint in Java? ");
-        chatMemory.add(userMessage1);
-
-        System.out.println("[User]: " + userMessage1.text() + System.lineSeparator());
-
-        final Response<AiMessage> response1 = model.generate(chatMemory.messages());
-        chatMemory.add(response1.content());
-
-        System.out.println("[LLM]: " + response1.content().text() + System.lineSeparator());
-
-        UserMessage userMessage2 = userMessage(
-                "Create a test of the first point? " +
-                        "Be short, 15 lines of code maximum.");
-        chatMemory.add(userMessage2);
-
-        System.out.println("[User]: " + userMessage2.text() + System.lineSeparator());
-
-        final Response<AiMessage> response2 = model.generate(chatMemory.messages());
-
-        System.out.println("[LLM]: " + response2.content().text() + System.lineSeparator());
-
-    }
-
     @GET
     @Path("/k8s")
     @Produces(MediaType.TEXT_PLAIN)
@@ -326,7 +260,6 @@ public class DeveloperResource {
         System.out.println("[LLM]: " + answer2);
 
     }
-}
 ----
 
 == Invoke the endpoint
@@ -341,7 +274,7 @@ You can also run the following command:
 curl localhost:8080/code/k8s
 ----
 
-The result will be at your Quarkus terminal. An example of output (it can vary on each prompt execution):
+The result will be onc again in your Quarkus application logs. An example of output (it can vary on each prompt execution):
 
 [.console-output]
 [source,text]
@@ -382,97 +315,15 @@ Save this YAML file as `sample-app-deployment.yaml` and apply it using the `kube
 
 == How to index a conversation
 
-We can use LangChain4j to index a conversation so we can reuse it.
+We can use the LangChain4j extension to index a conversation so we can reuse it.
 
-Let's update our `DeveloperResource` ith the following contents:
+Let's inject an instance of the AssistenWithMemory class and add a new `guessWho()` method to our `DeveloperResource`:
 
 [.console-input]
 [source,java]
 ----
-package com.redhat.developers;
-
-import static dev.langchain4j.data.message.UserMessage.userMessage;
-import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
-
-import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-
-import dev.langchain4j.chain.ConversationalChain;
-import dev.langchain4j.data.message.AiMessage;
-import dev.langchain4j.data.message.UserMessage;
-import dev.langchain4j.memory.ChatMemory;
-import dev.langchain4j.memory.chat.TokenWindowChatMemory;
-import dev.langchain4j.model.Tokenizer;
-import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.openai.OpenAiTokenizer;
-import dev.langchain4j.model.output.Response;
-
-@Path("/code")
-public class DeveloperResource {
-
-    @Inject
-    private ChatLanguageModel model;
-
     @Inject
     AssistantWithMemory assistant;
-
-    @GET
-    @Path("/rest")
-    @Produces(MediaType.TEXT_PLAIN)
-    public void createRestEndpoint() {
-
-        Tokenizer tokenizer = new OpenAiTokenizer(GPT_3_5_TURBO);
-        ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(1000, tokenizer);
-
-        UserMessage userMessage1 = userMessage(
-                "How to write a REST endpoint in Java? ");
-        chatMemory.add(userMessage1);
-
-        System.out.println("[User]: " + userMessage1.text() + System.lineSeparator());
-
-        final Response<AiMessage> response1 = model.generate(chatMemory.messages());
-        chatMemory.add(response1.content());
-
-        System.out.println("[LLM]: " + response1.content().text() + System.lineSeparator());
-
-        UserMessage userMessage2 = userMessage(
-                "Create a test of the first point? " +
-                        "Be short, 15 lines of code maximum.");
-        chatMemory.add(userMessage2);
-
-        System.out.println("[User]: " + userMessage2.text() + System.lineSeparator());
-
-        final Response<AiMessage> response2 = model.generate(chatMemory.messages());
-
-        System.out.println("[LLM]: " + response2.content().text() + System.lineSeparator());
-
-    }
-
-    @GET
-    @Path("/k8s")
-    @Produces(MediaType.TEXT_PLAIN)
-    public void generateKubernetes() {
-
-        ConversationalChain chain = ConversationalChain.builder()
-                .chatLanguageModel(model)
-                .build();
-
-        String userMessage1 = "Can you give a brief explanation of Kubernetes, 3 lines max?";
-        System.out.println("[User]: " + userMessage1 + System.lineSeparator());
-
-        String answer1 = chain.execute(userMessage1);
-        System.out.println("[LLM]: " + answer1 + System.lineSeparator());
-
-        String userMessage2 = "Can you give me a YAML example to deploy an application for that?";
-        System.out.println("[User]: " + userMessage2 + System.lineSeparator());
-
-        String answer2 = chain.execute(userMessage2);
-        System.out.println("[LLM]: " + answer2);
-
-    }
 
     @GET
     @Path("/guess")
@@ -488,7 +339,7 @@ public class DeveloperResource {
         System.out.println(assistant.chat(2, "What is my profession?"));
 
     }
-}
+
 ----
 
 == Invoke the endpoint
@@ -513,3 +364,5 @@ Hello Francine, nice to meet you! How can I assist you today?
 Your name is Klaus.
 Your profession is a Lawyer. You are legally trained and licensed to represent clients in legal matters.
 ----
+
+NOTE: You might be confused by the responses (ie. Klaus is not a lawyer but a doctor). Take a close look at the IDs of our calls to the assistant. Do you notice that the last question was in fact directed to Francine with ID=2? We were indeed able to maintain 2 separate and concurrent conversations with the LLM!
