@@ -1,36 +1,48 @@
-= Working with Podman Desktop AI
+= Working with Podman Desktop AI Lab
 
 :project-podman-ai-name: quarkus-podman-ai-app
 
 Throughout this tutorial, we've been working with OpenAI's remote models, however wouldn't it be nice if we could work
-with models on our local machine (without incurring costs!)
+with models on our local machine (without incurring costs)?
 
-We could install models on our local machine with Instructlab or Ollama, however in this case let's start with (arguably) the easiest way: Podman Desktop AI.
+Podman Desktop is a GUI tool that helps with running and managing containers on our local machine, but it can also help with running AI models locally as well thanks to its AI Lab extension. Thanks to Quarkus and LangChain4j it then becomes trivial to start developing with these models. Let's find out how! 
 
 
 == Installing Podman Desktop AI
 
-First, you must download and install the specific Ollama version on your operating system. https://ollama.com/download[The instructions can be found here, window="_blank"].
+First, if you haven't yet, you must download and install Podman Desktop on your operating system. https://podman-desktop.io/downloads[The instructions can be found here, window="_blank"].
 
-Once installed, go ahead and download the local model by running this command:
+Once installed, go ahead and start the application and go through the setup process. After that, you should see an "AI Lab" extension in the left menu
 
-[.console-input]
-[source,bash]
-----
-ollama pull llama3:latest
-----
+image::podman-desktop-ai.png[]
 
-Now, let's run our modal locally:
+Go ahead and click on it, and in the AI Lab, select the "Catalog"
 
-[.console-input]
-[source,bash]
-----
-ollama serve
-----
+image::podman-desktop-ai-catalog.png[]
 
-== Creating a new project with the Ollama extension
+You should now see a list of available AI Models choose from. You can also import different ones (eg. from Huggingface), but we will use one of the InstructLab models that are already available. 
 
-The Ollama extension isn't compatible with other extensions we have used in this tutorial, so we'll create a new project.
+NOTE: If you haven't heard of https://developers.redhat.com/articles/2024/05/07/instructlab-open-source-generative-ai[Instructlab], it's an open source project for enhancing large language models (LLMs) used in generative artificial intelligence (gen AI) applications. You can even contribute to it yourself! 
+
+To start using the model, we'll first need to download it, so go ahead and do that with the download button image:podman-desktop-model-download.png[download button,30] next to the instructlab/merlinite-7b-lab-GGUF entry (this might take a little while). 
+
+Once downloaded, you can create a new model service by clicking on the rocket button image:podman-desktop-create-model-service.png[rocket button, 30] that will appear where you previously clicked the download button. 
+
+You will be taken to the "Creating Model Service" page where you can set the port that should be exposed for the service. Podman Desktop assigns a random available port by default, but let's set it to `*35000*` so we can remember more easily what the port is when we configure our Quarkus application. 
+
+image::podman-desktop-create-merlinite-service.png[]
+
+After a few moments, your very own Model service will be running locally on your laptop! You an check the details on the Service details page, including some samples to test out the service with cURL (or even Java!). 
+
+Now it's time to go back to our Quarkus application.
+
+NOTE: The InstructLab service uses the OpenAI protocol, so we can continue to use the quarkus-langchain4j-openai extension for this exercise
+
+
+
+== Creating a new project
+
+Some of the exercises we completed previously are not compatible with non-OpenAI models, so let's create a fresh new project
 
 [tabs%sync]
 ====
@@ -41,8 +53,8 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn "io.quarkus.platform:quarkus-maven-plugin:create" -DprojectGroupId="com.redhat.developers" -DprojectArtifactId="{project-ollama-name}" -DprojectVersion="1.0-SNAPSHOT" -Dextensions=rest,langchain4j-ollama
-cd {project-ollama-name}
+mvn "io.quarkus.platform:quarkus-maven-plugin:create" -DprojectGroupId="com.redhat.developers" -DprojectArtifactId="{project-podman-ai-name}" -DprojectVersion="1.0-SNAPSHOT" -Dextensions=langchain4j-openai,rest
+cd {project-podman-ai-name}
 ----
 --
 Quarkus CLI::
@@ -52,47 +64,64 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus create app -x rest langchain4j-ollama com.redhat.developers:{project-ollama-name}:1.0-SNAPSHOT
-cd {project-ollama-name}
+quarkus create app -x rest langchain4j-openai com.redhat.developers:{project-podman-ai-name}:1.0-SNAPSHOT
+cd {project-podman-ai-name}
 ----
 --
 ====
 
-== Connect to Ollama
+== Connect to the InstructLab Model
 
-Just add these properties to the `application.properties` file available in `src/main/resources`:
+Add the following properties in the `application.properties` file available in `src/main/resources`:
 
 [.console-input]
 [source,properties]
 ----
-quarkus.langchain4j.ollama.chat-model.model-id=llama3:latest
-quarkus.langchain4j.ollama.timeout=120s
+quarkus.langchain4j.openai.base-url=http://localhost:35000/v1 #<1>
+# Configure openai server to use a specific model
+quarkus.langchain4j.openai.chat-model.model-name=instructlab/merlinite-7b-lab-GGUF #<2>
+# Set timeout to 3 minutes
+quarkus.langchain4j.openai.timeout=180s
+# Enable logging of both requests and responses
+quarkus.langchain4j.openai.log-requests=true
+quarkus.langchain4j.openai.log-responses=true
 ----
+<1> Port number 35000 was what we had defined in podman desktop when we created the model service 
+<2> The model we selected to serve. If you chose a different model in Podman Desktop, you'll need to update it here as well.
 
 == Create the AI service
 
 Let's create an interface for our AI service.
 
-Create a new `Assistant` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Create a new `AssistantForInstructLab.java` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
 ----
 package com.redhat.developers;
 
+import dev.langchain4j.service.SystemMessage;
+import dev.langchain4j.service.UserMessage;
 import io.quarkiverse.langchain4j.RegisterAiService;
+import jakarta.enterprise.context.SessionScoped;
 
-@RegisterAiService
-public interface Assistant {
-    String chat(String message);
+@RegisterAiService()
+@SessionScoped
+public interface AssistantForInstructLab {
+
+    @SystemMessage({
+            "You are a Java developer who likes to over engineer things" #<1>
+    })
+    String chat(@UserMessage String userMessage);
 }
 ----
+<1> Gives some context to the model
 
 == Create the prompt-base resource
 
-Now we're going to implement a resource that send prompts using the AI service.
+Now we're going to implement another REST resource that accepts prompts 
 
-Create a new `ExistentialQuestionResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Create a new `InstructLabResource.java` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
@@ -103,45 +132,75 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
-@Path("/earth")
-public class ExistentialQuestionResource {
+@Path("/instructlab")
+public class InstructLabResource {
 
     @Inject
-    Assistant assistant;
+    AssistantForInstructLab assistant;
 
     @GET
-    @Path("/flat")
     @Produces(MediaType.TEXT_PLAIN)
-    public String isEarthFlat() {
-        return assistant.chat("Can you explain why the earth is flat?");
+    public String prompt(@QueryParam("message") String message) {
+        return assistant.chat(message);
     }
 }
 ----
 
 == Invoke the endpoint
 
-You can check your prompt implementation by pointing your browser to http://localhost:8080/earth/flat[window=_blank]
+Let's ask our model to create a class that returns the square root of a given number:
+
+You can check your prompt implementation by pointing your browser to http://localhost:8080/instructlab?message=generate%20a%20class%20that%20returns%20the%20square%20root%20of%20a%20given%20number[window=_blank]
 
 You can also run the following command:
 
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/earth/flat
+curl http://localhost:8080/instructlab?message=generate%20a%20class%20that%20returns%20the%20square%20root%20of%20a%20given%20number
 ----
 
-An example of output (it can vary on each prompt execution):
+An example of output (remember, your result will likely be different):
 
 [.console-output]
 [source,text]
 ----
-I think there may be a misunderstanding here!
+Here is a simple Java class to calculate the square root of a given number using the built-in `Math` class in Java:
 
-Actually, the scientific consensus is that the Earth is an oblate spheroid, meaning it's slightly flattened at the poles and bulging at the equator. The evidence from various fields of science, including astronomy, geology, and physics, all point to the fact that our planet is indeed round.
+```java
+public class SquareRootCalculator {
+    public static void main(String[] args) {
+        int num = 16; // square root of 16 is 4.0
+        double result = Math.sqrt(num);
+        System.out.println("Square root of " + num + ": " + result);
+    }
+}
+```
 
-Here are some reasons why we know the Earth is not flat:
+Alternatively, if you want to handle negative numbers or non-integer inputs, you can use the `Math.sqrt()` function directly:
 
-1. **Ships disappearing over the horizon**: When a ship sails away from an observer on the shore, it will eventually disappear from view as it sinks below the horizon due to the curvature of the Earth.
+```java
+public class SquareRootCalculator {
+    public static void main(String[] args) {
+        double num = -16; // square root of -16 is -4.0
+        double result = Math.sqrt(num);
+        System.out.println("Square root of " + num + ": " + result);
+    }
+}
+```
+
+This will allow you to calculate the square root of any given number, positive or negative, and handle non-integer inputs.
 ----
+
+Notice that (at least in our case) the LLM responded with a Java class, since we provided in the SystemMessage that the 
+LLM should respond as if they were a Java engineer.  
+
+== Going further
+
+Feel free to play around with the different models Podman Desktop AI Lab provides. You will notice that some are faster 
+than others, and some will respond better to specific questions than others, based on how they have been trained.
+
+NOTE: If you want to help improve the answers generated by the InstructLab model, feel free to https://github.com/instructlab/community/blob/main/README.md[contribute to the project]. 

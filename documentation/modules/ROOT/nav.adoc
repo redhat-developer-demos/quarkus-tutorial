@@ -27,6 +27,6 @@
 ** xref:18_chains_memory.adoc[Chains and Memory]
 ** xref:19_agents_tools.adoc[Agents/Tools]
 ** xref:20_embed_documents.adoc[Embedding Documents]
-//** xref:21_podman_ai[Working with Podman Desktop AI]
+** xref:21_podman_ai.adoc[Working with Podman Desktop AI]
 ** xref:22_local_models.adoc[Working with local models]
 //** xref:23_kubernetes_kafka_ai.adoc[Bringing Kubernetes and Kafka to the party]
