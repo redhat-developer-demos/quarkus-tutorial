@@ -1,0 +1,465 @@
+= Embedding Documents
+
+:project-ai-name: quarkus-langchain-app
+
+Many applications involving Large Language Models (LLMs) often require user-specific data beyond their training set, such as CSV files, data from various sources, or reports. To achieve this, the process of Retrieval Augmented Generation (RAG) is commonly employed. 
+Through this technique you can combine your own business data (or whatever data!) with the LLM to enrich the possibilities offered by your application.
+
+In this section we're going to add business logic for a fictional car rental service which has a terms and conditions 
+document that outlines how long in advance cancellations are allowed.
+We're going to embed this business document for the LLM, which will use it to determine business rules accordingly.
+
+
+== Add the Websockets and Context Propagation extensions
+
+Open a new terminal window, and make sure you’re at the root of your `{project-ai-name}` project, then run:
+
+[tabs]
+====
+Maven::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+./mvnw quarkus:add-extension -D"extensions=websockets-next,quarkus-langchain4j-easy-rag"
+----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus extension add websockets-next langchain4j-easy-rag
+----
+--
+====
+
+== Adding temperature property to your configuration
+
+Add the following properties to your `application.properties` so that it looks like:
+
+[.console-input]
+[source,config,subs="+macros,+attributes"]
+----
+quarkus.langchain4j.openai.api-key=<YOUR OPENAI KEY>
+
+quarkus.langchain4j.openai.log-requests=true
+quarkus.langchain4j.openai.log-responses=true
+quarkus.langchain4j.openai.timeout=60s
+
+%dev.quarkus.mailer.mock=false
+
+quarkus.langchain4j.openai.chat-model.temperature=0.0 #<1>
+quarkus.langchain4j.easy-rag.path=src/main/resources/catalog #<2>
+
+booking.daystostart=1
+booking.daystoend=3
+
+quarkus.langchain4j.openai.chat-model.model-name=gpt-4o #<3>
+----
+<1> The "temperature" parameter in AI language models controls the randomness of text generation. Lower values result in more predictable outputs, while higher values encourage creativity and diversity in responses.
+<2> Path to where documents are stored for the Retrieval Augmentation Generation (ie. the documents the AI model will use to build local knowledge)
+<3> The specific model to use. IMPORTANT: gpt3.5-turbo is much cheaper but the results will be slower and less reliable.
+
+
+== Embedding the business document
+
+NOTE: If you don't provide an actual OpenAI key you will still be able to go through this exercise but the "Tools" functions won't be called, resulting in unexpected answers.
+
+Let's provide a document containing the service's terms of use:
+
+Create a new folder in `src/main/resources/catalog and add a new file named `miles-of-smiles-terms-of-use.txt` in this folder. 
+Then add the following content to it:
+
+[.console-input]
+[source,text]
+----
+Miles of Smiles Car Rental Services Terms of Use
+
+1. Introduction
+These Terms of Service (“Terms”) govern the access or use by you, an individual, from within any country in the world, of applications, websites, content, products, and services (“Services”) made available by Miles of Smiles Car Rental Services, a company registered in the United States of America.
+
+2. The Services
+Miles of Smiles rents out vehicles to the end user. We reserve the right to temporarily or permanently discontinue the Services at any time and are not liable for any modification, suspension or discontinuation of the Services.
+
+3. Bookings
+3.1 Users may make a booking through our website or mobile application.
+3.2 You must provide accurate, current and complete information during the reservation process. You are responsible for all charges incurred under your account.
+3.3 All bookings are subject to vehicle availability.
+
+4. Cancellation Policy
+4.1 Reservations can be cancelled up to 7 days prior to the start of the booking period for a full refund
+4.3 If the booking starts within less than 7 days, cancellations are not permitted.
+
+5. Use of Vehicle
+5.1 All cars rented from Miles of Smiles must not be used:
+for any illegal purpose or in connection with any criminal offense.
+for teaching someone to drive.
+in any race, rally or contest.
+while under the influence of alcohol or drugs.
+
+6. Liability
+6.1 Users will be held liable for any damage, loss, or theft that occurs during the rental period.
+6.2 We do not accept liability for any indirect or consequential loss, damage, or expense including but not limited to loss of profits.
+
+7. Governing Law
+These terms will be governed by and construed in accordance with the laws of the United States of America, and any disputes relating to these terms will be subject to the exclusive jurisdiction of the courts of United States.
+
+8. Changes to These Terms
+We may revise these terms of use at any time by amending this page. You are expected to check this page from time to time to take notice of any changes we made.
+
+9. Acceptance of These Terms
+By using the Services, you acknowledge that you have read and understand these Terms and agree to be bound by them.
+If you do not agree to these Terms, please do not use or access our Services.
+----
+
+NOTE: Notice in the above document that the rules state it is not allowed to cancel a booking within 7 days prior to the start of the booking.
+
+Remember how we set the `quarkus.langchain4j.easy-rag.path` in the application.properties file? It points to this same directory, 
+and thanks to the langchain4j-easy-rag extension any document in this folder will be scanned and added to the context of the LLM. 
+
+
+== Create the Booking structure
+
+Create a new `Customer` Java record in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+public record Customer(String name, String surname) {
+}
+----
+
+Now we create a Booking record as well.
+
+Create a new `Booking` Java record in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import java.time.LocalDate;
+
+public record Booking(String bookingNumber, LocalDate bookingFrom, LocalDate bookingTo, Customer customer) {
+}
+----
+
+== Create the Booking functionality
+
+Let's create a simplified Booking service for the LLM to call:
+
+Create a new `BookingService` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import java.time.LocalDate;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
+public class BookingService {
+
+    @ConfigProperty(name="booking.daystostart")
+    int daystostart;
+
+    @ConfigProperty(name="booking.daystoend")
+    int daystoend;
+
+    private static String FIRSTNAME="john"; 
+    private static String LASTNAME="doe";
+    private static String BOOKINGNUMBER ="123-456"; #<1> 
+
+    public Booking getBookingDetails(String bookingNumber, String customerName, String customerSurname) {
+        ensureExists(bookingNumber, customerName, customerSurname);
+        LocalDate bookingFrom = LocalDate.now().plusDays(daystostart);
+        LocalDate bookingTo = LocalDate.now().plusDays(daystoend);
+        // Retrieval from DB mocking        
+        Customer customer = new Customer(customerName, customerSurname);
+        return new Booking(bookingNumber, bookingFrom, bookingTo, customer);
+    }
+
+    public void cancelBooking(String bookingNumber, String customerName, String customerSurname) {
+        ensureExists(bookingNumber, customerName, customerSurname);
+
+        // TODO add logic to double check booking conditions in case the LLM got it wrong.
+        // throw new BookingCannotBeCancelledException(bookingNumber);
+    }
+
+    private void ensureExists(String bookingNumber, String customerName, String customerSurname) {
+        // Check mocking
+        if (!(bookingNumber.equals(BOOKINGNUMBER)
+                && customerName.toLowerCase().equals(FIRSTNAME)
+                && customerSurname.toLowerCase().equals(LASTNAME))) {
+            throw new BookingNotFoundException(bookingNumber);
+        }
+    }
+}
+
+class BookingNotFoundException extends RuntimeException {
+
+    public BookingNotFoundException(String bookingNumber) {
+        super("Booking " + bookingNumber + " not found");
+    }
+}
+
+class BookingCannotBeCancelledException extends RuntimeException {
+
+    public BookingCannotBeCancelledException(String bookingNumber) {
+        super("Booking " + bookingNumber + " cannot be canceled");
+    }
+}
+----
+<1> We hardcoded a booking entry for simplicity's sake. Of course, in a real world scenario this would likely come from a DB.
+
+Now we define a Booking singleton that will serve our AI with proper tools.
+
+Create a new `BookingTools` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import jakarta.inject.Singleton;
+
+import dev.langchain4j.agent.tool.Tool;
+
+@Singleton
+public class BookingTools {
+
+    private final BookingService bookingService;
+
+    public BookingTools(BookingService bookingService) {
+        this.bookingService = bookingService;
+    }
+
+    @Tool
+    public Booking getBookingDetails(String bookingNumber, String customerName, String customerSurname) {
+        return bookingService.getBookingDetails(bookingNumber, customerName, customerSurname);
+    }
+
+    @Tool
+    public void cancelBooking(String bookingNumber, String customerName, String customerSurname) {
+        bookingService.cancelBooking(bookingNumber, customerName, customerSurname);
+    }
+}
+----
+
+
+== Create the customer support service
+
+Now we create the whole structure for our AI-based customer service.
+
+Create a new `AssistantForCustomerSupport` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import dev.langchain4j.service.SystemMessage;
+import dev.langchain4j.service.UserMessage;
+import io.quarkiverse.langchain4j.RegisterAiService;
+import jakarta.enterprise.context.SessionScoped;
+
+@RegisterAiService(tools = BookingTools.class)
+@SessionScoped
+public interface AssistantForCustomerSupport {
+
+    @SystemMessage({
+            "You are a customer support agent of a car rental company named 'Miles of Smiles'.",
+            "Before providing information about booking or cancelling booking, you MUST always check:",
+            "booking number, customer name and surname and the Cancellation policy in the Terms of Use",
+            "Before cancelling, confirm with the customer that they want to proceed",
+            "Do NOT cancel the booking if the start date is not compliant with the Cancellation policy in the Terms of Use",
+            "Today is {current_date}."
+    })
+    String chat(@UserMessage String userMessage);
+}
+----
+
+And finally our chat implementation that will do the whole thing.
+
+Create a new `ChatSocket` Java record in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import jakarta.websocket.OnOpen;
+import io.quarkus.websockets.next.OnTextMessage;
+import io.quarkus.websockets.next.WebSocket;
+
+@WebSocket(path = "/chat")
+public class ChatSocket {
+
+    private final AssistantForCustomerSupport assistant;
+
+    public ChatSocket(AssistantForCustomerSupport assistant) {
+        this.assistant = assistant;
+    }
+
+    @OnOpen
+    public String onOpen() {
+        return "Hello from Miles of Smiles, how can we help you?";
+    }
+
+    @OnTextMessage
+    public String onMessage(String userMessage){
+        return assistant.chat(userMessage);
+    }
+}
+----
+
+== Create the chat frontend
+
+Finally, let's add our chat frontend.
+
+Create a new `chat-assistant.html` file in `src/main/resources/META-INF/resources` with the following contents:
+
+[.console-input]
+[source,html]
+----
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Quarkus Langchain4j Chat!</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly-additions.min.css">
+
+    <style>
+        #chat {
+          resize: none;
+          overflow: hidden;
+          min-height: 300px;
+          max-height: 300px;
+      }
+    </style>
+</head>
+
+<body>
+        <nav class="navbar navbar-default navbar-pf" role="navigation">
+                <div class="navbar-header">
+                  <a class="navbar-brand" href="/">
+                   <p><strong>>> Quarkus Langchain4j Chat!</strong></p>
+                  </a>
+                </div>
+        </nav>
+    <div class="container">
+      <br/>
+      <div class="row">
+          <textarea data-testid="chatwin" class="col-md-8" id="chat"></textarea>
+      </div>
+      <div class="row">
+          <input class="col-md-6" id="msg" type="text" placeholder="enter your message">
+          <button class="col-md-1 btn btn-primary" id="send" type="button" disabled>send</button>
+      </div>
+
+      </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/js/patternfly.min.js"></script>
+
+    <script type="text/javascript">
+      var connected = false;
+      var socket;
+
+      $( document ).ready(function() {
+          connect();
+          $("#send").click(sendMessage);
+
+          $("#name").keypress(function(event){
+              if(event.keyCode == 13 || event.which == 13) {
+                  connect();
+              }
+          });
+
+          $("#msg").keypress(function(event) {
+              if(event.keyCode == 13 || event.which == 13) {
+                  sendMessage();
+              }
+          });
+
+        $("#chat").change(function() {
+            scrollToBottom();
+          });
+
+          $("#name").focus();
+      });
+
+      var connect = function() {
+          if (! connected) {
+              socket = new WebSocket("ws://" + location.host + "/chat");
+              socket.onopen = function(m) {
+                  connected = true;
+                  console.log("Connected to the web socket");
+                  $("#send").attr("disabled", false);
+                  $("#connect").attr("disabled", true);
+                  $("#name").attr("disabled", true);
+                  $("#chat").append("[Assistant] Hi from Miles of Smiles, how may I help you? \n");
+                  $("#msg").focus();
+              };
+              socket.onmessage =function(m) {
+                  console.log("Got message: " + m.data);
+                  $("#chat").append("[Assistant] " + m.data + "\n");
+                  scrollToBottom();
+              };
+          }
+      };
+
+      var sendMessage = function() {
+          if (connected) {
+              var value = $("#msg").val();
+              console.log("Sending " + value);
+              $("#chat").append("[You] " + value + "\n")
+              socket.send(value);
+              $("#msg").val("");
+          }
+      };
+
+      var scrollToBottom = function () {
+        $('#chat').scrollTop($('#chat')[0].scrollHeight);
+      };
+
+    </script>
+</body>
+
+</html>
+----
+
+
+== Invoke the endpoint
+
+You can check your prompt implementation by pointing your browser to http://localhost:8080/chat-assistant.html[window=_blank]
+
+Try cancelling a booking for booking number 123-456 with name John Doe. If everything goes well, the booking should be rejected, 
+since we have specified the start date to be in 1 day. 
+
+An example of output (can vary on each prompt execution):
+
+image::chat-assistant-cancelled.png[]
+
+Now change the value of `booking.daystostart` in your application.properties to > 7 and refresh the browser window. 
+Try cancelling again, and you should see that this time we are allowed to cancel the reservation.
+
+image::chat-assistant-success.png[]
+
+For an extra challenge, feel free to play around with the SystemMessage in `AssistantForCustomerSupport.java`, 
+or perhaps change the `BookingService.java` to call a database that contains customer & booking information. 
+And see if bookings effectively get cancelled or not :)
+
+

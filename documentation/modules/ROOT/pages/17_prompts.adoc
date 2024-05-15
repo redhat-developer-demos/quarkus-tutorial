@@ -1,0 +1,146 @@
+= Working with prompts
+
+:project-ai-name: quarkus-langchain-app
+
+The Quarkus LangChain4j extension seamlessly integrates Large Language Models (LLMs) into Quarkus applications. LLMs are AI-based systems designed to understand, generate, and manipulate human language, showcasing advanced natural language processing capabilities. Thanks to this extensions we can enable the harnessing of LLM capabilities for the development of more intelligent applications. 
+
+In this first chapter we'll explore the simplest of interactions with an LLM: Prompting. It essentially means just asking questions to an LLM and receiving an answer in natural language from a given Model, such as OpenAI, Mistral, Hugging Face, Ollama, etc.
+
+
+== Creating a Quarkus & LangChain Application
+
+[tabs%sync]
+====
+
+Maven::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+./mvnw "io.quarkus.platform:quarkus-maven-plugin:create" -DprojectGroupId="com.redhat.developers" -DprojectArtifactId="{project-ai-name}" -DprojectVersion="1.0-SNAPSHOT" -Dextensions=rest,langchain4j-core,langchain4j-openai
+cd {project-ai-name}
+----
+--
+Quarkus CLI::
++
+--
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus create app -x rest -x langchain4j-openai -x langchain4j-core com.redhat.developers:{project-ai-name}:1.0-SNAPSHOT
+cd {project-ai-name}
+----
+--
+====
+
+IMPORTANT: All the remaining parts of this section assume that you'll be working inside the project folder that was just created. In this case, `{project-ai-name}`.
+
+== Connect to OpenAI
+
+LangChain4j provides you a proxy to connect your application to OpenAI by just adding a property to the `application.properties` file available in `src/main/resources`:
+
+[.console-input]
+[source,properties]
+----
+quarkus.langchain4j.openai.api-key=demo
+----
+
+== Create the AI service
+
+First we need to create an interface for our AI service.
+
+Create a new `Assistant` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import io.quarkiverse.langchain4j.RegisterAiService;
+
+@RegisterAiService
+public interface Assistant {
+    String chat(String message);
+}
+----
+
+== Create the prompt-base resource
+
+Now we're going to implement a resource that send prompts using the AI service.
+
+Create a new `ExistentialQuestionResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import jakarta.inject.Inject;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+
+@Path("/earth")
+public class ExistentialQuestionResource {
+
+    @Inject
+    Assistant assistant;
+
+    @GET
+    @Path("/flat")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String isEarthFlat() {
+        return assistant.chat("Can you explain why the earth is flat?");
+    }
+}
+----
+
+== Invoke the endpoint
+
+Start the app in Quarkus Dev Mode:
+
+[tabs%sync]
+====
+
+Maven::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+./mvnw quarkus:dev
+----
+--
+Quarkus CLI::
++
+--
+
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus create app -x rest -x langchain4j-openai com.redhat.developers:{project-ai-name}:1.0-SNAPSHOT
+quarkus dev
+----
+--
+====
+
+You can check your prompt implementation by pointing your browser to http://localhost:8080/earth/flat[window=_blank]
+
+You can also run the following command:
+
+[.console-input]
+[source,bash]
+----
+curl localhost:8080/earth/flat
+----
+
+An example of output (it can vary on each prompt execution):
+
+[.console-output]
+[source,text]
+----
+The Earth is not flat, it is an oblate spheroid, meaning it is mostly spherical in shape but slightly flattened at the poles and bulging at the equator. This shape is due to the Earth's rotation, which causes it to bulge slightly at the equator and flatten at the poles. The idea that the Earth is flat is a misconception that has been debunked by centuries of scientific evidence, including satellite imagery, photos from space, and measurements of the Earth's curvature.
+----

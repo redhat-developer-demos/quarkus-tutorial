@@ -1,0 +1,219 @@
+= Agents/Tools
+
+:project-ai-name: quarkus-langchain-app
+
+Things become more interesting when you can bring the AI LLM into your application and get it to interact with specific functions you build for it. 
+
+This section will use AI to trigger an email service from our local application. To do this, we'll use LangChain4j's concept of Agents and Tools.
+
+Agents operate by utilizing a language model to decipher a series of actions, unlike chains where actions are pre-programmed. Ie. agents leverage a language model as a cognitive engine to decide on the actions (tools) and their order.
+
+You can read more about this in the https://docs.quarkiverse.io/quarkus-langchain4j/dev/agent-and-tools.html[Quarkus LangChain4j Documentation]
+
+== Add the Mailer and Mailpit extensions
+
+Open a new terminal window, and make sure you’re at the root of your `{project-ai-name}` project, then run:
+
+[tabs]
+====
+Maven::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+./mvnw quarkus:add-extension -D"extensions=mailpit,mailer"
+----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus extension add mailpit mailer
+----
+--
+====
+
+== Create the email service
+
+Let's create a class for our email service.
+
+Create a new `EmailService` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
+import dev.langchain4j.agent.tool.Tool;
+import io.quarkus.logging.Log;
+import io.quarkus.mailer.Mail;
+import io.quarkus.mailer.Mailer;
+
+@ApplicationScoped
+public class EmailService {
+
+    @Inject
+    Mailer mailer;
+
+    @Tool("send the given content by email")
+    public void sendAnEmail(String content) {
+        Log.info("Sending an email: " + content);
+        mailer.send(Mail
+            .withText("sendMeALetter@quarkus.io", "A poem for you", content)
+            .setFrom("origin@quarkus.io"));
+    }
+
+}
+----
+
+
+== Create the AI service with prompt context
+
+Let's create an interface for our AI service, but with `SystemMessage` and `UserMessage` this time. 
+`SystemMessage` gives context to the AI Model. 
+In this case we tell it that it should craft a message as if it is written by a professional poet. 
+The `UserMessage` is the actual instruction/question we're sending to the AI model. As you can see in the example below, 
+you can format and parametrize the UserMessage, translating structured content to text and vice-versa.  
+
+Create a new `AssistantWithContext` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import dev.langchain4j.service.SystemMessage;
+import dev.langchain4j.service.UserMessage;
+import io.quarkiverse.langchain4j.RegisterAiService;
+
+@RegisterAiService(tools = EmailService.class)
+public interface AssistantWithContext {
+
+    /**
+     * Ask the LLM to create a poem about the given topic.
+     *
+     * @param topic the topic of the poem
+     * @param lines the number of line of the poem
+     * @return the poem
+     */
+    @SystemMessage("You are a professional poet")
+    @UserMessage("Write a poem about {topic}. The poem should be {lines} lines long. Then send this poem by email.")
+    String writeAPoem(String topic, int lines);
+
+}
+----
+
+Note that this assistant references the email service as a tool.
+
+== Create a email sending resource
+
+Now we create a resource that builds the interaction and calls the service with the required parameters (topic & lines).
+
+Create a new `EmailMeAPoemResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+
+[.console-input]
+[source,java]
+----
+package com.redhat.developers;
+
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+
+@Path("/email-me-a-poem")
+public class EmailMeAPoemResource {
+
+    private final AssistantWithContext service;
+
+    public EmailMeAPoemResource(AssistantWithContext service) {
+        this.service = service;
+    }
+
+    @GET
+    public String emailMeAPoem() {
+        return service.writeAPoem("Quarkus", 4);
+    }
+
+}
+----
+
+== Adding email service properties to your configuration
+
+Update the following properties in your `application.properties`
+
+IMPORTANT: The LangChain4j `demo` key currently does not support tools, so you will need to use a real OpenAI key for the email service to be called by the OpenAI model.
+You can create an account over at https://platform.openai.com/[OpenAI] if you'd like to see this in action. 
+Note that OpenAI requires you to fund your account with credits to be able to use the API. The minimum is $5 but this amount will go a long way to test the scenarios in this tutorial. 
+
+NOTE: If you do not want to create an OpenAI key, you can still test the below scenario, it just won't send an email since the "Tool" functionality unfortunately won't work.
+
+[#quarkuspdb-update-props]
+[.console-input]
+[source,config,subs="+macros,+attributes"]
+----
+quarkus.langchain4j.openai.api-key=<YOUR OPENAI KEY>
+
+quarkus.langchain4j.openai.log-requests=true
+quarkus.langchain4j.openai.log-responses=true
+quarkus.langchain4j.openai.timeout=60s
+
+%dev.quarkus.mailer.mock=false
+----
+
+Because we haven't configured the local email service, Quarkus will use DevServices to instantiate and configure a local email service for you (in Dev Mode only!).
+
+You can check it running:
+
+[.console-input]
+[source,bash]
+----
+podman ps
+----
+
+And you should see something like this:
+
+[.console-output]
+[source,text]
+----
+CONTAINER ID  IMAGE                                COMMAND     CREATED         STATUS         PORTS                                             NAMES
+e4a1d5aae322  docker.io/testcontainers/ryuk:0.6.0  /bin/ryuk   34 seconds ago  Up 34 seconds  0.0.0.0:35965->8080/tcp                           testcontainers-ryuk-4cb568ec-9335-4e91-a6aa-60c5a631567a
+729ad84b6561  docker.io/axllent/mailpit:latest                 34 seconds ago  Up 34 seconds  0.0.0.0:39141->1025/tcp, 0.0.0.0:45875->8025/tcp  suspicious_hypatia
+----
+
+Which means that you have a email service up and running.
+
+== Invoke the endpoint
+
+You can check your prompt implementation by pointing your browser to http://localhost:8080/email-me-a-poem[window=_blank]
+
+You can also run the following command:
+
+[.console-input]
+[source,bash]
+----
+curl localhost:8080/email-me-a-poem
+----
+
+An example of output (it can vary on each prompt execution):
+
+[.console-output]
+[source,text]
+----
+I have composed a poem about Quarkus. I have sent it to you via email. Let me know if you need anything else
+----
+
+If you have a valid OpenAI key configured, you can check the "real" email:
+
+First, open the http://localhost:8080/q/dev-ui[DevUI, window=_blank] and click on the Mailpit arrow.
+
+image::devui-mailpit.png[]
+
+Now you can see the email that was sent:
+
+image::mailpit-email-sent.png[]
