@@ -5,7 +5,7 @@
 So far we explored how to use prompts with LLMs, however to really leverage the power of LLMs it is essential that you 
 can build a conversation by referring to previous questions and answers and manage concurrent interactions. 
 
-In this section we'll cover how we can acchieve this with the LangChain4j extension in Quarkus.
+In this section we'll cover how we can achieve this with the LangChain4j extension in Quarkus.
 
 == Create an AI service with memory
 
@@ -317,7 +317,7 @@ Save this YAML file as `sample-app-deployment.yaml` and apply it using the `kube
 
 We can use the LangChain4j extension to index a conversation so we can reuse it.
 
-Let's inject an instance of the AssistenWithMemory class and add a new `guessWho()` method to our `DeveloperResource`:
+Let's inject an instance of the AssistantWithMemory class and add a new `guessWho()` method to our `DeveloperResource`:
 
 [.console-input]
 [source,java]

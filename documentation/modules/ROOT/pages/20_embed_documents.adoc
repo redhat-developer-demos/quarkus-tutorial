@@ -2,16 +2,17 @@
 
 :project-ai-name: quarkus-langchain-app
 
-You can combine your own business data (or whatever data!) with the LLM to enrich the possibilities offered by your application.
+Many applications involving Large Language Models (LLMs) often require user-specific data beyond their training set, such as CSV files, data from various sources, or reports. To achieve this, the process of Retrieval Augmented Generation (RAG) is commonly employed. 
+Through this technique you can combine your own business data (or whatever data!) with the LLM to enrich the possibilities offered by your application.
 
-This section will embed business documents to use them with the LLM to improve the user experience.
+In this section we're going to add business logic for a fictional car rental service which has a terms and conditions 
+document that outlines how long in advance cancellations are allowed.
+We're going to embed this business document for the LLM, which will use it to determine business rules accordingly.
 
-
-IMPORTANT: We keep assuming that you'll be working inside the project folder that was created before. In this case, `{project-ai-name}`.
 
 == Add the Websockets and Context Propagation extensions
 
-Just open a new terminal window, and make sure you’re at the root of your `{project-ai-name}` project, then run:
+Open a new terminal window, and make sure you’re at the root of your `{project-ai-name}` project, then run:
 
 [tabs]
 ====
@@ -21,7 +22,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:add-extension -D"extensions=websockets,smallrye-context-propagation,langchain4j-core"
+./mvnw quarkus:add-extension -D"extensions=websockets-next,quarkus-langchain4j-easy-rag"
 ----
 
 --
@@ -31,50 +32,47 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus extension add websockets smallrye-context-propagation langchain4j-core
+quarkus extension add websockets-next langchain4j-easy-rag
 ----
 --
 ====
 
-This section exceptionally needs an external LangChain4j extension, which we'll manually add to our POM file here:
-
-[.console-input]
-[source,xml]
-----
-<dependency>
-  <groupId>dev.langchain4j</groupId>
-  <artifactId>langchain4j</artifactId>
-  <version>0.24.0</version>
-</dependency>
-----
-
 == Adding temperature property to your configuration
-
-The "temperature" parameter in AI language models controls the randomness of text generation. Lower values result in more predictable outputs, while higher values encourage creativity and diversity in responses.
 
 Add the following properties to your `application.properties` so that it looks like:
 
 [.console-input]
 [source,config,subs="+macros,+attributes"]
 ----
-quarkus.langchain4j.openai.api-key=demo
+quarkus.langchain4j.openai.api-key=<YOUR OPENAI KEY>
 
 quarkus.langchain4j.openai.log-requests=true
 quarkus.langchain4j.openai.log-responses=true
 quarkus.langchain4j.openai.timeout=60s
 
-%dev.quarkus.mailer.host=localhost
-%dev.quarkus.mailer.port=1025
 %dev.quarkus.mailer.mock=false
 
-quarkus.langchain4j.openai.chat-model.temperature=0.0
+quarkus.langchain4j.openai.chat-model.temperature=0.0 #<1>
+quarkus.langchain4j.easy-rag.path=src/main/resources/catalog #<2>
+
+booking.daystostart=1
+booking.daystoend=3
+
+quarkus.langchain4j.openai.chat-model.model-name=gpt-4o #<3>
 ----
+<1> The "temperature" parameter in AI language models controls the randomness of text generation. Lower values result in more predictable outputs, while higher values encourage creativity and diversity in responses.
+<2> Path to where documents are stored for the Retrieval Augmentation Generation (ie. the documents the AI model will use to build local knowledge)
+<3> The specific model to use. IMPORTANT: gpt3.5-turbo is much cheaper but the results will be slower and less reliable.
+
 
 == Embedding the business document
 
-Now we provide the document containing our service's terms of use.
+NOTE: If you don't provide an actual OpenAI key you will still be able to go through this exercise but the "Tools" functions won't be called, resulting in unexpected answers.
 
-Create the file `miles-of-smiles-terms-of-use.txt` in the folder `src/main/resources` with the following content:
+Let's provide a document containing the service's terms of use:
+
+Create a new folder in `src/main/resources/catalog and add a new file named `miles-of-smiles-terms-of-use.txt` in this folder. 
+Then add the following content to it:
 
 [.console-input]
 [source,text]
@@ -93,8 +91,8 @@ Miles of Smiles rents out vehicles to the end user. We reserve the right to temp
 3.3 All bookings are subject to vehicle availability.
 
 4. Cancellation Policy
-4.1 Reservations can be cancelled up to 7 days prior to the start of the booking period.
-4.2 If the booking period is less than 3 days, cancellations are not permitted.
+4.1 Reservations can be cancelled up to 7 days prior to the start of the booking period for a full refund
+4.3 If the booking starts within less than 7 days, cancellations are not permitted.
 
 5. Use of Vehicle
 5.1 All cars rented from Miles of Smiles must not be used:
@@ -118,85 +116,11 @@ By using the Services, you acknowledge that you have read and understand these T
 If you do not agree to these Terms, please do not use or access our Services.
 ----
 
-== Create the embedding bean
+NOTE: Notice in the above document that the rules state it is not allowed to cancel a booking within 7 days prior to the start of the booking.
 
-Let's create a bean to help us with the document embedding process.
+Remember how we set the `quarkus.langchain4j.easy-rag.path` in the application.properties file? It points to this same directory, 
+and thanks to the langchain4j-easy-rag extension any document in this folder will be scanned and added to the context of the LLM. 
 
-Create a new `EmbedBean` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
-
-[.console-input]
-[source,java]
-----
-package com.redhat.developers;
-
-import static dev.langchain4j.data.document.UrlDocumentLoader.load;
-import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
-
-import java.io.IOException;
-import java.net.URL;
-
-import jakarta.enterprise.context.ApplicationScoped;
-
-import dev.langchain4j.data.document.Document;
-import dev.langchain4j.data.document.DocumentSplitter;
-import dev.langchain4j.data.document.splitter.DocumentSplitters;
-import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.model.embedding.EmbeddingModel;
-import dev.langchain4j.model.openai.OpenAiTokenizer;
-import dev.langchain4j.retriever.EmbeddingStoreRetriever;
-import dev.langchain4j.retriever.Retriever;
-import dev.langchain4j.store.embedding.EmbeddingStore;
-import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
-import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
-
-public class EmbedBean {
-
-    @ApplicationScoped
-    Retriever<TextSegment> retriever(EmbeddingStore<TextSegment> embeddingStore, EmbeddingModel embeddingModel) {
-
-        // You will need to adjust these parameters to find the optimal setting, which will depend on two main factors:
-        // - The nature of your data
-        // - The embedding model you are using
-        int maxResultsRetrieved = 1;
-        double minScore = 0.6;
-
-        return EmbeddingStoreRetriever.from(embeddingStore, embeddingModel, maxResultsRetrieved, minScore);
-    }
-
-    @ApplicationScoped
-    EmbeddingStore<TextSegment> embeddingStore(EmbeddingModel embeddingModel) throws IOException {
-
-        // Normally, you would already have your embedding store filled with your data.
-        // However, for the purpose of this demonstration, we will:
-
-        // 1. Create an in-memory embedding store
-        EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
-
-        // 2. Load an example document ("Miles of Smiles" terms of use)
-        String documentName = "miles-of-smiles-terms-of-use.txt";
-        URL resource = Thread.currentThread().getContextClassLoader().getResource(documentName);
-        if (resource == null) {
-            throw new IllegalStateException("Unable to locate document: '" + documentName + "' on the classpath");
-        }
-        Document document = load(resource);
-
-        // 3. Split the document into segments 100 tokens each
-        // 4. Convert segments into embeddings
-        // 5. Store embeddings into embedding store
-        // All this can be done manually, but we will use EmbeddingStoreIngestor to automate this:
-        DocumentSplitter documentSplitter = DocumentSplitters.recursive(100, 0, new OpenAiTokenizer(GPT_3_5_TURBO));
-        EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
-                .documentSplitter(documentSplitter)
-                .embeddingModel(embeddingModel)
-                .embeddingStore(embeddingStore)
-                .build();
-        ingestor.ingest(document);
-
-        return embeddingStore;
-    }
-}
-
-----
 
 == Create the Booking structure
 
@@ -211,7 +135,7 @@ public record Customer(String name, String surname) {
 }
 ----
 
-Now we create the Booking structure.
+Now we create a Booking record as well.
 
 Create a new `Booking` Java record in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
@@ -226,41 +150,9 @@ public record Booking(String bookingNumber, LocalDate bookingFrom, LocalDate boo
 }
 ----
 
-Let's implement an exception to be thrown when a Booking can't be cancelled.
+== Create the Booking functionality
 
-Create a new `BookingCannotBeCancelledException` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
-
-[.console-input]
-[source,java]
-----
-package com.redhat.developers;
-
-public class BookingCannotBeCancelledException extends RuntimeException {
-
-    public BookingCannotBeCancelledException(String bookingNumber) {
-        super("Booking " + bookingNumber + " cannot be canceled");
-    }
-}
-----
-
-And another exception to be thrown when a Booking is not found.
-
-Create a new `BookingNotFoundException` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
-
-[.console-input]
-[source,java]
-----
-package com.redhat.developers;
-
-public class BookingNotFoundException extends RuntimeException {
-
-    public BookingNotFoundException(String bookingNumber) {
-        super("Booking " + bookingNumber + " not found");
-    }
-}
-----
-
-Now we create a Booking service mockup.
+Let's create a simplified Booking service for the LLM to call:
 
 Create a new `BookingService` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
@@ -270,18 +162,28 @@ Create a new `BookingService` Java class in `src/main/java` in the `com.redhat.d
 package com.redhat.developers;
 
 import java.time.LocalDate;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class BookingService {
 
+    @ConfigProperty(name="booking.daystostart")
+    int daystostart;
+
+    @ConfigProperty(name="booking.daystoend")
+    int daystoend;
+
+    private static String FIRSTNAME="john"; 
+    private static String LASTNAME="doe";
+    private static String BOOKINGNUMBER ="123-456"; #<1> 
+
     public Booking getBookingDetails(String bookingNumber, String customerName, String customerSurname) {
         ensureExists(bookingNumber, customerName, customerSurname);
-
-        // Retrieval from DB mocking
-        LocalDate bookingFrom = LocalDate.now().plusDays(1);
-        LocalDate bookingTo = LocalDate.now().plusDays(3);
+        LocalDate bookingFrom = LocalDate.now().plusDays(daystostart);
+        LocalDate bookingTo = LocalDate.now().plusDays(daystoend);
+        // Retrieval from DB mocking        
         Customer customer = new Customer(customerName, customerSurname);
         return new Booking(bookingNumber, bookingFrom, bookingTo, customer);
     }
@@ -289,20 +191,35 @@ public class BookingService {
     public void cancelBooking(String bookingNumber, String customerName, String customerSurname) {
         ensureExists(bookingNumber, customerName, customerSurname);
 
-        // Cancellation mocking
-        throw new BookingCannotBeCancelledException(bookingNumber);
+        // TODO add logic to double check booking conditions in case the LLM got it wrong.
+        // throw new BookingCannotBeCancelledException(bookingNumber);
     }
 
     private void ensureExists(String bookingNumber, String customerName, String customerSurname) {
         // Check mocking
-        if (!(bookingNumber.equals("123-456")
-                && customerName.equals("John")
-                && customerSurname.equals("Doe"))) {
+        if (!(bookingNumber.equals(BOOKINGNUMBER)
+                && customerName.toLowerCase().equals(FIRSTNAME)
+                && customerSurname.toLowerCase().equals(LASTNAME))) {
             throw new BookingNotFoundException(bookingNumber);
         }
     }
 }
+
+class BookingNotFoundException extends RuntimeException {
+
+    public BookingNotFoundException(String bookingNumber) {
+        super("Booking " + bookingNumber + " not found");
+    }
+}
+
+class BookingCannotBeCancelledException extends RuntimeException {
+
+    public BookingCannotBeCancelledException(String bookingNumber) {
+        super("Booking " + bookingNumber + " cannot be canceled");
+    }
+}
 ----
+<1> We hardcoded a booking entry for simplicity's sake. Of course, in a real world scenario this would likely come from a DB.
 
 Now we define a Booking singleton that will serve our AI with proper tools.
 
@@ -350,21 +267,24 @@ Create a new `AssistantForCustomerSupport` Java class in `src/main/java` in the 
 ----
 package com.redhat.developers;
 
-import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
 import io.quarkiverse.langchain4j.RegisterAiService;
+import jakarta.enterprise.context.SessionScoped;
 
-@RegisterAiService(tools = BookingTools.class, retrieverSupplier = RegisterAiService.BeanRetrieverSupplier.class)
+@RegisterAiService(tools = BookingTools.class)
+@SessionScoped
 public interface AssistantForCustomerSupport {
 
     @SystemMessage({
             "You are a customer support agent of a car rental company named 'Miles of Smiles'.",
             "Before providing information about booking or cancelling booking, you MUST always check:",
-            "booking number, customer name and surname.",
+            "booking number, customer name and surname and the Cancellation policy in the Terms of Use",
+            "Before cancelling, confirm with the customer that they want to proceed",
+            "Do NOT cancel the booking if the start date is not compliant with the Cancellation policy in the Terms of Use",
             "Today is {current_date}."
     })
-    String chat(@MemoryId Object id, @UserMessage String userMessage);
+    String chat(@UserMessage String userMessage);
 }
 ----
 
@@ -377,59 +297,28 @@ Create a new `ChatSocket` Java record in `src/main/java` in the `com.redhat.deve
 ----
 package com.redhat.developers;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
+import jakarta.websocket.OnOpen;
+import io.quarkus.websockets.next.OnTextMessage;
+import io.quarkus.websockets.next.WebSocket;
 
-import jakarta.websocket.OnClose;
-import jakarta.websocket.OnMessage;
-import jakarta.websocket.Session;
-import jakarta.websocket.server.ServerEndpoint;
-
-import org.eclipse.microprofile.context.ManagedExecutor;
-import org.jboss.logging.Logger;
-
-import io.quarkiverse.langchain4j.ChatMemoryRemover;
-
-@ServerEndpoint(value = "/chat")
+@WebSocket(path = "/chat")
 public class ChatSocket {
 
-    private static final Logger LOG = Logger.getLogger(ChatSocket.class);
-
     private final AssistantForCustomerSupport assistant;
-    private final ManagedExecutor managedExecutor;
 
-    public ChatSocket(AssistantForCustomerSupport assistant, ManagedExecutor managedExecutor) {
+    public ChatSocket(AssistantForCustomerSupport assistant) {
         this.assistant = assistant;
-        this.managedExecutor = managedExecutor;
     }
 
-    @OnMessage
-    public void onMessage(Session session, String userMessage) throws Exception {
-        if (userMessage.equalsIgnoreCase("_ready_")) {
-            return;
-        }
-
-        // we need to use a worker thread because OnMessage always runs on the event loop
-        managedExecutor.submit(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    session.getBasicRemote().sendText("[User]: " + userMessage);
-                    session.getBasicRemote().sendText("[Assistant]: " + assistant.chat(session, userMessage));
-                } catch (IOException e) {
-                    throw new UncheckedIOException(e);
-                } catch (Exception e) {
-                    LOG.error(e);
-                }
-            }
-        });
+    @OnOpen
+    public String onOpen() {
+        return "Hello from Miles of Smiles, how can we help you?";
     }
 
-    @OnClose
-    void onClose(Session session) {
-        ChatMemoryRemover.remove(assistant, session);
+    @OnTextMessage
+    public String onMessage(String userMessage){
+        return assistant.chat(userMessage);
     }
-
 }
 ----
 
@@ -463,7 +352,7 @@ Create a new `chat-assistant.html` file in `src/main/resources/META-INF/resource
 
 <body>
         <nav class="navbar navbar-default navbar-pf" role="navigation">
-                <div class="navbar-header">                  
+                <div class="navbar-header">
                   <a class="navbar-brand" href="/">
                    <p><strong>>> Quarkus Langchain4j Chat!</strong></p>
                   </a>
@@ -478,7 +367,7 @@ Create a new `chat-assistant.html` file in `src/main/resources/META-INF/resource
           <input class="col-md-6" id="msg" type="text" placeholder="enter your message">
           <button class="col-md-1 btn btn-primary" id="send" type="button" disabled>send</button>
       </div>
-      
+
       </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -515,17 +404,18 @@ Create a new `chat-assistant.html` file in `src/main/resources/META-INF/resource
       var connect = function() {
           if (! connected) {
               socket = new WebSocket("ws://" + location.host + "/chat");
-              socket.onopen = function() {
+              socket.onopen = function(m) {
                   connected = true;
                   console.log("Connected to the web socket");
                   $("#send").attr("disabled", false);
                   $("#connect").attr("disabled", true);
                   $("#name").attr("disabled", true);
+                  $("#chat").append("[Assistant] Hi from Miles of Smiles, how may I help you? \n");
                   $("#msg").focus();
               };
               socket.onmessage =function(m) {
                   console.log("Got message: " + m.data);
-                  $("#chat").append(m.data + "\n");
+                  $("#chat").append("[Assistant] " + m.data + "\n");
                   scrollToBottom();
               };
           }
@@ -535,6 +425,7 @@ Create a new `chat-assistant.html` file in `src/main/resources/META-INF/resource
           if (connected) {
               var value = $("#msg").val();
               console.log("Sending " + value);
+              $("#chat").append("[You] " + value + "\n")
               socket.send(value);
               $("#msg").val("");
           }
@@ -555,9 +446,20 @@ Create a new `chat-assistant.html` file in `src/main/resources/META-INF/resource
 
 You can check your prompt implementation by pointing your browser to http://localhost:8080/chat-assistant.html[window=_blank]
 
+Try cancelling a booking for booking number 123-456 with name John Doe. If everything goes well, the booking should be rejected, 
+since we have specified the start date to be in 1 day. 
 
-An example of output (it can vary on each prompt execution):
+An example of output (can vary on each prompt execution):
 
-image::chat-assistant.png[]
+image::chat-assistant-cancelled.png[]
+
+Now change the value of `booking.daystostart` in your application.properties to > 7 and refresh the browser window. 
+Try cancelling again, and you should see that this time we are allowed to cancel the reservation.
+
+image::chat-assistant-success.png[]
+
+For an extra challenge, feel free to play around with the SystemMessage in `AssistantForCustomerSupport.java`, 
+or perhaps change the `BookingService.java` to call a database that contains customer & booking information. 
+And see if bookings effectively get cancelled or not :)
 
 

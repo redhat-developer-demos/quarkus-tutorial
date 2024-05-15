@@ -2,13 +2,13 @@
 
 :project-ai-name: quarkus-langchain-app
 
-The real deal to bring AI for your development process is when you can create a real interaction between services you build and/or use with the LLM.
+Things become more interesting when you can bring the AI LLM into your application and get it to interact with specific functions you build for it. 
 
 This section will use AI to trigger an email service from our local application. To do this, we'll use LangChain4j's concept of Agents and Tools.
 
 Agents operate by utilizing a language model to decipher a series of actions, unlike chains where actions are pre-programmed. Ie. agents leverage a language model as a cognitive engine to decide on the actions (tools) and their order.
 
-You can read more about this concept in the https://docs.quarkiverse.io/quarkus-langchain4j/dev/agent-and-tools.html[Quarkus LangChain4j Documentation]
+You can read more about this in the https://docs.quarkiverse.io/quarkus-langchain4j/dev/agent-and-tools.html[Quarkus LangChain4j Documentation]
 
 == Add the Mailer and Mailpit extensions
 
@@ -148,9 +148,10 @@ public class EmailMeAPoemResource {
 Update the following properties in your `application.properties`
 
 IMPORTANT: The LangChain4j `demo` key currently does not support tools, so you will need to use a real OpenAI key for the email service to be called by the OpenAI model.
-You can create an account over at https://platform.openai.com/[OpenAI] if you'd like to see this in action.
+You can create an account over at https://platform.openai.com/[OpenAI] if you'd like to see this in action. 
+Note that OpenAI requires you to fund your account with credits to be able to use the API. The minimum is $5 but this amount will go a long way to test the scenarios in this tutorial. 
 
-NOTE: If you do not want to create an OpenAI key, you can still test the below scenario, it just won't send an email.
+NOTE: If you do not want to create an OpenAI key, you can still test the below scenario, it just won't send an email since the "Tool" functionality unfortunately won't work.
 
 [#quarkuspdb-update-props]
 [.console-input]

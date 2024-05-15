@@ -91,7 +91,7 @@ public interface Assistant {
 
 Now we're going to implement a resource that send prompts using the AI service.
 
-Create a new `ExistencialQuestionResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Create a new `ExistentialQuestionResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
@@ -105,7 +105,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
 @Path("/earth")
-public class ExistencialQuestionResource {
+public class ExistentialQuestionResource {
 
     @Inject
     Assistant assistant;
@@ -114,7 +114,7 @@ public class ExistencialQuestionResource {
     @Path("/flat")
     @Produces(MediaType.TEXT_PLAIN)
     public String isEarthFlat() {
-        return assistant.chat("Can you explain me why earth is flat?");
+        return assistant.chat("Can you explain why the earth is flat?");
     }
 }
 ----
