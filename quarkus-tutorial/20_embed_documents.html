@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Embedding Documents :: Quarkus Tutorial</title>
+    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/20_embed_documents.html">
+    <link rel="prev" href="19_agents_tools.html">
+    <link rel="next" href="22_local_models.html">
+    <meta name="generator" content="Antora 2.3.1">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/RHDLogo.svg" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://redhat-developer-demos.github.io/quarkus-tutorial">Quarkus Tutorial</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="quarkus-tutorial" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Requirements</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_setup.html">Setup</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Basics</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02_basics.html">Basics and Fundamentals</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03_configuration.html">Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04_panache.html">Hibernate with Panache</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="05_kubernetes.html">Deploy to Kubernetes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="06_dev-services.html">Dev Services</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="07_spring.html">Spring Compatibility</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Cloud Native</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="08_rest-client.html">REST Client</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="09_fault-tolerance.html">Fault Tolerance</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="10_health.html">Health Check</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="11_observability.html">Observability</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="12_security.html">Security with JWT RBAC</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Reactive</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="14_reactive.html">Reactive with Mutiny</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="15_reactive-messaging.html">Streaming reactive messages</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="15_kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">AI</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="17_prompts.html">Working with prompts</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="18_chains_memory.html">Chains and Memory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="19_agents_tools.html">Agents/Tools</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="20_embed_documents.html">Embedding Documents</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="22_local_models.html">Working with local models</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">quarkus-tutorial</a></li>
+    <li>AI</li>
+    <li><a href="20_embed_documents.html">Embedding Documents</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/redhat-developer-demos/quarkus-tutorial/edit/master/documentation/modules/ROOT/pages/20_embed_documents.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Embedding Documents</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Many applications involving Large Language Models (LLMs) often require user-specific data beyond their training set, such as CSV files, data from various sources, or reports. To achieve this, the process of Retrieval Augmented Generation (RAG) is commonly employed.
+Through this technique you can combine your own business data (or whatever data!) with the LLM to enrich the possibilities offered by your application.</p>
+</div>
+<div class="paragraph">
+<p>In this section we&#8217;re going to add business logic for a fictional car rental service which has a terms and conditions
+document that outlines how long in advance cancellations are allowed.
+We&#8217;re going to embed this business document for the LLM, which will use it to determine business rules accordingly.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_add_the_websockets_and_context_propagation_extensions"><a class="anchor" href="#_add_the_websockets_and_context_propagation_extensions"></a>Add the Websockets and Context Propagation extensions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Open a new terminal window, and make sure you’re at the root of your <code>quarkus-langchain-app</code> project, then run:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset1_maven"></a>Maven</p>
+</li>
+<li>
+<p><a id="tabset1_quarkus-cli"></a>Quarkus CLI</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset1_maven">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -D"extensions=websockets-next,quarkus-langchain4j-easy-rag"</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_quarkus-cli">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus extension add websockets-next langchain4j-easy-rag</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_adding_temperature_property_to_your_configuration"><a class="anchor" href="#_adding_temperature_property_to_your_configuration"></a>Adding temperature property to your configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Add the following properties to your <code>application.properties</code> so that it looks like:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.langchain4j.openai.api-key=&lt;YOUR OPENAI KEY&gt;
+
+quarkus.langchain4j.openai.log-requests=true
+quarkus.langchain4j.openai.log-responses=true
+quarkus.langchain4j.openai.timeout=60s
+
+%dev.quarkus.mailer.mock=false
+
+quarkus.langchain4j.openai.chat-model.temperature=0.0 <i class="conum" data-value="1"></i><b>(1)</b>
+quarkus.langchain4j.easy-rag.path=src/main/resources/catalog <i class="conum" data-value="2"></i><b>(2)</b>
+
+booking.daystostart=1
+booking.daystoend=3
+
+quarkus.langchain4j.openai.chat-model.model-name=gpt-4o <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The "temperature" parameter in AI language models controls the randomness of text generation. Lower values result in more predictable outputs, while higher values encourage creativity and diversity in responses.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Path to where documents are stored for the Retrieval Augmentation Generation (ie. the documents the AI model will use to build local knowledge)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The specific model to use. IMPORTANT: gpt3.5-turbo is much cheaper but the results will be slower and less reliable.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_embedding_the_business_document"><a class="anchor" href="#_embedding_the_business_document"></a>Embedding the business document</h2>
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you don&#8217;t provide an actual OpenAI key you will still be able to go through this exercise but the "Tools" functions won&#8217;t be called, resulting in unexpected answers.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s provide a document containing the service&#8217;s terms of use:</p>
+</div>
+<div class="paragraph">
+<p>Create a new folder in <code>src/main/resources/catalog and add a new file named `miles-of-smiles-terms-of-use.txt</code> in this folder.
+Then add the following content to it:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">Miles of Smiles Car Rental Services Terms of Use
+
+1. Introduction
+These Terms of Service (“Terms”) govern the access or use by you, an individual, from within any country in the world, of applications, websites, content, products, and services (“Services”) made available by Miles of Smiles Car Rental Services, a company registered in the United States of America.
+
+2. The Services
+Miles of Smiles rents out vehicles to the end user. We reserve the right to temporarily or permanently discontinue the Services at any time and are not liable for any modification, suspension or discontinuation of the Services.
+
+3. Bookings
+3.1 Users may make a booking through our website or mobile application.
+3.2 You must provide accurate, current and complete information during the reservation process. You are responsible for all charges incurred under your account.
+3.3 All bookings are subject to vehicle availability.
+
+4. Cancellation Policy
+4.1 Reservations can be cancelled up to 7 days prior to the start of the booking period for a full refund
+4.3 If the booking starts within less than 7 days, cancellations are not permitted.
+
+5. Use of Vehicle
+5.1 All cars rented from Miles of Smiles must not be used:
+for any illegal purpose or in connection with any criminal offense.
+for teaching someone to drive.
+in any race, rally or contest.
+while under the influence of alcohol or drugs.
+
+6. Liability
+6.1 Users will be held liable for any damage, loss, or theft that occurs during the rental period.
+6.2 We do not accept liability for any indirect or consequential loss, damage, or expense including but not limited to loss of profits.
+
+7. Governing Law
+These terms will be governed by and construed in accordance with the laws of the United States of America, and any disputes relating to these terms will be subject to the exclusive jurisdiction of the courts of United States.
+
+8. Changes to These Terms
+We may revise these terms of use at any time by amending this page. You are expected to check this page from time to time to take notice of any changes we made.
+
+9. Acceptance of These Terms
+By using the Services, you acknowledge that you have read and understand these Terms and agree to be bound by them.
+If you do not agree to these Terms, please do not use or access our Services.</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Notice in the above document that the rules state it is not allowed to cancel a booking within 7 days prior to the start of the booking.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Remember how we set the <code>quarkus.langchain4j.easy-rag.path</code> in the application.properties file? It points to this same directory,
+and thanks to the langchain4j-easy-rag extension any document in this folder will be scanned and added to the context of the LLM.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_the_booking_structure"><a class="anchor" href="#_create_the_booking_structure"></a>Create the Booking structure</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Create a new <code>Customer</code> Java record in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+
+public record Customer(String name, String surname) {
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now we create a Booking record as well.</p>
+</div>
+<div class="paragraph">
+<p>Create a new <code>Booking</code> Java record in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+
+import java.time.LocalDate;
+
+public record Booking(String bookingNumber, LocalDate bookingFrom, LocalDate bookingTo, Customer customer) {
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_the_booking_functionality"><a class="anchor" href="#_create_the_booking_functionality"></a>Create the Booking functionality</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Let&#8217;s create a simplified Booking service for the LLM to call:</p>
+</div>
+<div class="paragraph">
+<p>Create a new <code>BookingService</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+
+import java.time.LocalDate;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
+public class BookingService {
+
+    @ConfigProperty(name="booking.daystostart")
+    int daystostart;
+
+    @ConfigProperty(name="booking.daystoend")
+    int daystoend;
+
+    private static String FIRSTNAME="john";
+    private static String LASTNAME="doe";
+    private static String BOOKINGNUMBER ="123-456"; <i class="conum" data-value="1"></i><b>(1)</b>
+
+    public Booking getBookingDetails(String bookingNumber, String customerName, String customerSurname) {
+        ensureExists(bookingNumber, customerName, customerSurname);
+        LocalDate bookingFrom = LocalDate.now().plusDays(daystostart);
+        LocalDate bookingTo = LocalDate.now().plusDays(daystoend);
+        // Retrieval from DB mocking
+        Customer customer = new Customer(customerName, customerSurname);
+        return new Booking(bookingNumber, bookingFrom, bookingTo, customer);
+    }
+
+    public void cancelBooking(String bookingNumber, String customerName, String customerSurname) {
+        ensureExists(bookingNumber, customerName, customerSurname);
+
+        // TODO add logic to double check booking conditions in case the LLM got it wrong.
+        // throw new BookingCannotBeCancelledException(bookingNumber);
+    }
+
+    private void ensureExists(String bookingNumber, String customerName, String customerSurname) {
+        // Check mocking
+        if (!(bookingNumber.equals(BOOKINGNUMBER)
+                &amp;&amp; customerName.toLowerCase().equals(FIRSTNAME)
+                &amp;&amp; customerSurname.toLowerCase().equals(LASTNAME))) {
+            throw new BookingNotFoundException(bookingNumber);
+        }
+    }
+}
+
+class BookingNotFoundException extends RuntimeException {
+
+    public BookingNotFoundException(String bookingNumber) {
+        super("Booking " + bookingNumber + " not found");
+    }
+}
+
+class BookingCannotBeCancelledException extends RuntimeException {
+
+    public BookingCannotBeCancelledException(String bookingNumber) {
+        super("Booking " + bookingNumber + " cannot be canceled");
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We hardcoded a booking entry for simplicity&#8217;s sake. Of course, in a real world scenario this would likely come from a DB.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Now we define a Booking singleton that will serve our AI with proper tools.</p>
+</div>
+<div class="paragraph">
+<p>Create a new <code>BookingTools</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+
+import jakarta.inject.Singleton;
+
+import dev.langchain4j.agent.tool.Tool;
+
+@Singleton
+public class BookingTools {
+
+    private final BookingService bookingService;
+
+    public BookingTools(BookingService bookingService) {
+        this.bookingService = bookingService;
+    }
+
+    @Tool
+    public Booking getBookingDetails(String bookingNumber, String customerName, String customerSurname) {
+        return bookingService.getBookingDetails(bookingNumber, customerName, customerSurname);
+    }
+
+    @Tool
+    public void cancelBooking(String bookingNumber, String customerName, String customerSurname) {
+        bookingService.cancelBooking(bookingNumber, customerName, customerSurname);
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_the_customer_support_service"><a class="anchor" href="#_create_the_customer_support_service"></a>Create the customer support service</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Now we create the whole structure for our AI-based customer service.</p>
+</div>
+<div class="paragraph">
+<p>Create a new <code>AssistantForCustomerSupport</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+
+import dev.langchain4j.service.SystemMessage;
+import dev.langchain4j.service.UserMessage;
+import io.quarkiverse.langchain4j.RegisterAiService;
+import jakarta.enterprise.context.SessionScoped;
+
+@RegisterAiService(tools = BookingTools.class)
+@SessionScoped
+public interface AssistantForCustomerSupport {
+
+    @SystemMessage({
+            "You are a customer support agent of a car rental company named 'Miles of Smiles'.",
+            "Before providing information about booking or cancelling booking, you MUST always check:",
+            "booking number, customer name and surname and the Cancellation policy in the Terms of Use",
+            "Before cancelling, confirm with the customer that they want to proceed",
+            "Do NOT cancel the booking if the start date is not compliant with the Cancellation policy in the Terms of Use",
+            "Today is {current_date}."
+    })
+    String chat(@UserMessage String userMessage);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And finally our chat implementation that will do the whole thing.</p>
+</div>
+<div class="paragraph">
+<p>Create a new <code>ChatSocket</code> Java record in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+
+import jakarta.websocket.OnOpen;
+import io.quarkus.websockets.next.OnTextMessage;
+import io.quarkus.websockets.next.WebSocket;
+
+@WebSocket(path = "/chat")
+public class ChatSocket {
+
+    private final AssistantForCustomerSupport assistant;
+
+    public ChatSocket(AssistantForCustomerSupport assistant) {
+        this.assistant = assistant;
+    }
+
+    @OnOpen
+    public String onOpen() {
+        return "Hello from Miles of Smiles, how can we help you?";
+    }
+
+    @OnTextMessage
+    public String onMessage(String userMessage){
+        return assistant.chat(userMessage);
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_the_chat_frontend"><a class="anchor" href="#_create_the_chat_frontend"></a>Create the chat frontend</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Finally, let&#8217;s add our chat frontend.</p>
+</div>
+<div class="paragraph">
+<p>Create a new <code>chat-assistant.html</code> file in <code>src/main/resources/META-INF/resources</code> with the following contents:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-html hljs" data-lang="html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Quarkus Langchain4j Chat!&lt;/title&gt;
+    &lt;link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly.min.css"&gt;
+    &lt;link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly-additions.min.css"&gt;
+
+    &lt;style&gt;
+        #chat {
+          resize: none;
+          overflow: hidden;
+          min-height: 300px;
+          max-height: 300px;
+      }
+    &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+        &lt;nav class="navbar navbar-default navbar-pf" role="navigation"&gt;
+                &lt;div class="navbar-header"&gt;
+                  &lt;a class="navbar-brand" href="/"&gt;
+                   &lt;p&gt;&lt;strong&gt;&gt;&gt; Quarkus Langchain4j Chat!&lt;/strong&gt;&lt;/p&gt;
+                  &lt;/a&gt;
+                &lt;/div&gt;
+        &lt;/nav&gt;
+    &lt;div class="container"&gt;
+      &lt;br/&gt;
+      &lt;div class="row"&gt;
+          &lt;textarea data-testid="chatwin" class="col-md-8" id="chat"&gt;&lt;/textarea&gt;
+      &lt;/div&gt;
+      &lt;div class="row"&gt;
+          &lt;input class="col-md-6" id="msg" type="text" placeholder="enter your message"&gt;
+          &lt;button class="col-md-1 btn btn-primary" id="send" type="button" disabled&gt;send&lt;/button&gt;
+      &lt;/div&gt;
+
+      &lt;/div&gt;
+
+    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"&gt;&lt;/script&gt;
+    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"&gt;&lt;/script&gt;
+    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/js/patternfly.min.js"&gt;&lt;/script&gt;
+
+    &lt;script type="text/javascript"&gt;
+      var connected = false;
+      var socket;
+
+      $( document ).ready(function() {
+          connect();
+          $("#send").click(sendMessage);
+
+          $("#name").keypress(function(event){
+              if(event.keyCode == 13 || event.which == 13) {
+                  connect();
+              }
+          });
+
+          $("#msg").keypress(function(event) {
+              if(event.keyCode == 13 || event.which == 13) {
+                  sendMessage();
+              }
+          });
+
+        $("#chat").change(function() {
+            scrollToBottom();
+          });
+
+          $("#name").focus();
+      });
+
+      var connect = function() {
+          if (! connected) {
+              socket = new WebSocket("ws://" + location.host + "/chat");
+              socket.onopen = function(m) {
+                  connected = true;
+                  console.log("Connected to the web socket");
+                  $("#send").attr("disabled", false);
+                  $("#connect").attr("disabled", true);
+                  $("#name").attr("disabled", true);
+                  $("#chat").append("[Assistant] Hi from Miles of Smiles, how may I help you? \n");
+                  $("#msg").focus();
+              };
+              socket.onmessage =function(m) {
+                  console.log("Got message: " + m.data);
+                  $("#chat").append("[Assistant] " + m.data + "\n");
+                  scrollToBottom();
+              };
+          }
+      };
+
+      var sendMessage = function() {
+          if (connected) {
+              var value = $("#msg").val();
+              console.log("Sending " + value);
+              $("#chat").append("[You] " + value + "\n")
+              socket.send(value);
+              $("#msg").val("");
+          }
+      };
+
+      var scrollToBottom = function () {
+        $('#chat').scrollTop($('#chat')[0].scrollHeight);
+      };
+
+    &lt;/script&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_invoke_the_endpoint"><a class="anchor" href="#_invoke_the_endpoint"></a>Invoke the endpoint</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can check your prompt implementation by pointing your browser to <a href="http://localhost:8080/chat-assistant.html" class="bare" target="_blank" rel="noopener">http://localhost:8080/chat-assistant.html</a></p>
+</div>
+<div class="paragraph">
+<p>Try cancelling a booking for booking number 123-456 with name John Doe. If everything goes well, the booking should be rejected,
+since we have specified the start date to be in 1 day.</p>
+</div>
+<div class="paragraph">
+<p>An example of output (can vary on each prompt execution):</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/chat-assistant-cancelled.png" alt="chat assistant cancelled">
+</div>
+</div>
+<div class="paragraph">
+<p>Now change the value of <code>booking.daystostart</code> in your application.properties to &gt; 7 and refresh the browser window.
+Try cancelling again, and you should see that this time we are allowed to cancel the reservation.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/chat-assistant-success.png" alt="chat assistant success">
+</div>
+</div>
+<div class="paragraph">
+<p>For an extra challenge, feel free to play around with the SystemMessage in <code>AssistantForCustomerSupport.java</code>,
+or perhaps change the <code>BookingService.java</code> to call a database that contains customer &amp; booking information.
+And see if bookings effectively get cancelled or not :)</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="19_agents_tools.html">Agents/Tools</a></span>
+  <span class="next"><a href="22_local_models.html">Working with local models</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

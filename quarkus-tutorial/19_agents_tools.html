@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Agents/Tools :: Quarkus Tutorial</title>
+    <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/19_agents_tools.html">
+    <link rel="prev" href="18_chains_memory.html">
+    <link rel="next" href="20_embed_documents.html">
+    <meta name="generator" content="Antora 2.3.1">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/RHDLogo.svg" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://redhat-developer-demos.github.io/quarkus-tutorial">Quarkus Tutorial</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="quarkus-tutorial" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Requirements</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_setup.html">Setup</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Basics</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02_basics.html">Basics and Fundamentals</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03_configuration.html">Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04_panache.html">Hibernate with Panache</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="05_kubernetes.html">Deploy to Kubernetes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="06_dev-services.html">Dev Services</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="07_spring.html">Spring Compatibility</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Cloud Native</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="08_rest-client.html">REST Client</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="09_fault-tolerance.html">Fault Tolerance</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="10_health.html">Health Check</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="11_observability.html">Observability</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="12_security.html">Security with JWT RBAC</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Reactive</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="14_reactive.html">Reactive with Mutiny</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="15_reactive-messaging.html">Streaming reactive messages</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="15_kafka-and-streams.html">Apache Kafka with Reactive Streams</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">AI</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="17_prompts.html">Working with prompts</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="18_chains_memory.html">Chains and Memory</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="19_agents_tools.html">Agents/Tools</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="20_embed_documents.html">Embedding Documents</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="22_local_models.html">Working with local models</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">quarkus-tutorial</a></li>
+    <li>AI</li>
+    <li><a href="19_agents_tools.html">Agents/Tools</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/redhat-developer-demos/quarkus-tutorial/edit/master/documentation/modules/ROOT/pages/19_agents_tools.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Agents/Tools</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Things become more interesting when you can bring the AI LLM into your application and get it to interact with specific functions you build for it.</p>
+</div>
+<div class="paragraph">
+<p>This section will use AI to trigger an email service from our local application. To do this, we&#8217;ll use LangChain4j&#8217;s concept of Agents and Tools.</p>
+</div>
+<div class="paragraph">
+<p>Agents operate by utilizing a language model to decipher a series of actions, unlike chains where actions are pre-programmed. Ie. agents leverage a language model as a cognitive engine to decide on the actions (tools) and their order.</p>
+</div>
+<div class="paragraph">
+<p>You can read more about this in the <a href="https://docs.quarkiverse.io/quarkus-langchain4j/dev/agent-and-tools.html">Quarkus LangChain4j Documentation</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_add_the_mailer_and_mailpit_extensions"><a class="anchor" href="#_add_the_mailer_and_mailpit_extensions"></a>Add the Mailer and Mailpit extensions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Open a new terminal window, and make sure you’re at the root of your <code>quarkus-langchain-app</code> project, then run:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset1_maven"></a>Maven</p>
+</li>
+<li>
+<p><a id="tabset1_quarkus-cli"></a>Quarkus CLI</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset1_maven">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -D"extensions=mailpit,mailer"</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_quarkus-cli">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus extension add mailpit mailer</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_the_email_service"><a class="anchor" href="#_create_the_email_service"></a>Create the email service</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Let&#8217;s create a class for our email service.</p>
+</div>
+<div class="paragraph">
+<p>Create a new <code>EmailService</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
+import dev.langchain4j.agent.tool.Tool;
+import io.quarkus.logging.Log;
+import io.quarkus.mailer.Mail;
+import io.quarkus.mailer.Mailer;
+
+@ApplicationScoped
+public class EmailService {
+
+    @Inject
+    Mailer mailer;
+
+    @Tool("send the given content by email")
+    public void sendAnEmail(String content) {
+        Log.info("Sending an email: " + content);
+        mailer.send(Mail
+            .withText("sendMeALetter@quarkus.io", "A poem for you", content)
+            .setFrom("origin@quarkus.io"));
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_the_ai_service_with_prompt_context"><a class="anchor" href="#_create_the_ai_service_with_prompt_context"></a>Create the AI service with prompt context</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Let&#8217;s create an interface for our AI service, but with <code>SystemMessage</code> and <code>UserMessage</code> this time.
+<code>SystemMessage</code> gives context to the AI Model.
+In this case we tell it that it should craft a message as if it is written by a professional poet.
+The <code>UserMessage</code> is the actual instruction/question we&#8217;re sending to the AI model. As you can see in the example below,
+you can format and parametrize the UserMessage, translating structured content to text and vice-versa.</p>
+</div>
+<div class="paragraph">
+<p>Create a new <code>AssistantWithContext</code> Java interface in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+
+import dev.langchain4j.service.SystemMessage;
+import dev.langchain4j.service.UserMessage;
+import io.quarkiverse.langchain4j.RegisterAiService;
+
+@RegisterAiService(tools = EmailService.class)
+public interface AssistantWithContext {
+
+    /**
+     * Ask the LLM to create a poem about the given topic.
+     *
+     * @param topic the topic of the poem
+     * @param lines the number of line of the poem
+     * @return the poem
+     */
+    @SystemMessage("You are a professional poet")
+    @UserMessage("Write a poem about {topic}. The poem should be {lines} lines long. Then send this poem by email.")
+    String writeAPoem(String topic, int lines);
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that this assistant references the email service as a tool.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_a_email_sending_resource"><a class="anchor" href="#_create_a_email_sending_resource"></a>Create a email sending resource</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Now we create a resource that builds the interaction and calls the service with the required parameters (topic &amp; lines).</p>
+</div>
+<div class="paragraph">
+<p>Create a new <code>EmailMeAPoemResource</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
+
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+
+@Path("/email-me-a-poem")
+public class EmailMeAPoemResource {
+
+    private final AssistantWithContext service;
+
+    public EmailMeAPoemResource(AssistantWithContext service) {
+        this.service = service;
+    }
+
+    @GET
+    public String emailMeAPoem() {
+        return service.writeAPoem("Quarkus", 4);
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_adding_email_service_properties_to_your_configuration"><a class="anchor" href="#_adding_email_service_properties_to_your_configuration"></a>Adding email service properties to your configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Update the following properties in your <code>application.properties</code></p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+The LangChain4j <code>demo</code> key currently does not support tools, so you will need to use a real OpenAI key for the email service to be called by the OpenAI model.
+You can create an account over at <a href="https://platform.openai.com/">OpenAI</a> if you&#8217;d like to see this in action.
+Note that OpenAI requires you to fund your account with credits to be able to use the API. The minimum is $5 but this amount will go a long way to test the scenarios in this tutorial.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you do not want to create an OpenAI key, you can still test the below scenario, it just won&#8217;t send an email since the "Tool" functionality unfortunately won&#8217;t work.
+</td>
+</tr>
+</table>
+</div>
+<div id="quarkuspdb-update-props" class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.langchain4j.openai.api-key=&lt;YOUR OPENAI KEY&gt;
+
+quarkus.langchain4j.openai.log-requests=true
+quarkus.langchain4j.openai.log-responses=true
+quarkus.langchain4j.openai.timeout=60s
+
+%dev.quarkus.mailer.mock=false</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Because we haven&#8217;t configured the local email service, Quarkus will use DevServices to instantiate and configure a local email service for you (in Dev Mode only!).</p>
+</div>
+<div class="paragraph">
+<p>You can check it running:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman ps</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And you should see something like this:</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">CONTAINER ID  IMAGE                                COMMAND     CREATED         STATUS         PORTS                                             NAMES
+e4a1d5aae322  docker.io/testcontainers/ryuk:0.6.0  /bin/ryuk   34 seconds ago  Up 34 seconds  0.0.0.0:35965-&gt;8080/tcp                           testcontainers-ryuk-4cb568ec-9335-4e91-a6aa-60c5a631567a
+729ad84b6561  docker.io/axllent/mailpit:latest                 34 seconds ago  Up 34 seconds  0.0.0.0:39141-&gt;1025/tcp, 0.0.0.0:45875-&gt;8025/tcp  suspicious_hypatia</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Which means that you have a email service up and running.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_invoke_the_endpoint"><a class="anchor" href="#_invoke_the_endpoint"></a>Invoke the endpoint</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can check your prompt implementation by pointing your browser to <a href="http://localhost:8080/email-me-a-poem" class="bare" target="_blank" rel="noopener">http://localhost:8080/email-me-a-poem</a></p>
+</div>
+<div class="paragraph">
+<p>You can also run the following command:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/email-me-a-poem</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>An example of output (it can vary on each prompt execution):</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">I have composed a poem about Quarkus. I have sent it to you via email. Let me know if you need anything else</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you have a valid OpenAI key configured, you can check the "real" email:</p>
+</div>
+<div class="paragraph">
+<p>First, open the <a href="http://localhost:8080/q/dev-ui" target="_blank" rel="noopener">DevUI</a> and click on the Mailpit arrow.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/devui-mailpit.png" alt="devui mailpit">
+</div>
+</div>
+<div class="paragraph">
+<p>Now you can see the email that was sent:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/mailpit-email-sent.png" alt="mailpit email sent">
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="18_chains_memory.html">Chains and Memory</a></span>
+  <span class="next"><a href="20_embed_documents.html">Embedding Documents</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
