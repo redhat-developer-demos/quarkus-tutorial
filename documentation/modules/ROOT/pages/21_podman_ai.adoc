@@ -12,7 +12,7 @@ Podman Desktop is a GUI tool that helps with running and managing containers on 
 
 First, if you haven't yet, you must download and install Podman Desktop on your operating system. https://podman-desktop.io/downloads[The instructions can be found here, window="_blank"].
 
-Once installed, go ahead and start the application and go through the setup process. After that, you should see an "AI Lab" extension in the left menu
+Once installed, go ahead and start the application and go through the setup process. After that, you should see an "AI Lab" extension in the left menu. If you don't, you may need to install the extension first. For that, go to Extensions -> Catalog and install Podman AI Lab. 
 
 image::podman-desktop-ai.png[]
 
@@ -110,7 +110,7 @@ import jakarta.enterprise.context.SessionScoped;
 public interface AssistantForInstructLab {
 
     @SystemMessage({
-            "You are a Java developer who likes to over engineer things" #<1>
+            "You are a Java developer who likes to over engineer things" //<1>
     })
     String chat(@UserMessage String userMessage);
 }
@@ -143,7 +143,9 @@ public class InstructLabResource {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String prompt(@QueryParam("message") String message) {
+    public String prompt() {
+        // feel free to update this message to any question you may have for the LLM.
+        String message = "Generate a class that returns the square root of a given number";
         return assistant.chat(message);
     }
 }
@@ -153,14 +155,14 @@ public class InstructLabResource {
 
 Let's ask our model to create a class that returns the square root of a given number:
 
-You can check your prompt implementation by pointing your browser to http://localhost:8080/instructlab?message=generate%20a%20class%20that%20returns%20the%20square%20root%20of%20a%20given%20number[window=_blank]
+You can check your prompt implementation by pointing your browser to http://localhost:8080/instructlab[window=_blank]
 
 You can also run the following command:
 
 [.console-input]
 [source,bash]
 ----
-curl http://localhost:8080/instructlab?message=generate%20a%20class%20that%20returns%20the%20square%20root%20of%20a%20given%20number
+curl http://localhost:8080/instructlab
 ----
 
 An example of output (remember, your result will likely be different):
@@ -194,6 +196,10 @@ public class SquareRootCalculator {
 
 This will allow you to calculate the square root of any given number, positive or negative, and handle non-integer inputs.
 ----
+
+NOTE: depending on your local resources, this might take a up to a few minutes. If you run into timeouts, 
+you can try changing the `quarkus.langchain4j.openai.timeout` value in the application.properties file. 
+If you're running on Mac/Windows, you could also try to give the podman machine more CPU/Memory resources.
 
 Notice that (at least in our case) the LLM responded with a Java class, since we provided in the SystemMessage that the 
 LLM should respond as if they were a Java engineer.  
