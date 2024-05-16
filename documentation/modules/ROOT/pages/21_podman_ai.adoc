@@ -10,7 +10,9 @@ Podman Desktop is a GUI tool that helps with running and managing containers on 
 
 == Installing Podman Desktop AI
 
-First, if you haven't yet, you must download and install Podman Desktop on your operating system. https://podman-desktop.io/downloads[The instructions can be found here, window="_blank"].
+First, if you haven't yet, you must download and install Podman Desktop on your operating system. https://podman-desktop.io/downloads[The instructions can be found here, window="_blank"]. 
+
+NOTE: For Windows/Mac users, if you can, give the podman machine at least 8GB of memory and 4 CPU (Generative AI Models are resource hungry!). The model will run with less resources, but it will be significantly slower.
 
 Once installed, go ahead and start the application and go through the setup process. After that, you should see an "AI Lab" extension in the left menu. If you don't, you may need to install the extension first. For that, go to Extensions -> Catalog and install Podman AI Lab. 
 
