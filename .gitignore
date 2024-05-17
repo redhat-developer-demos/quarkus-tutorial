@@ -1,4 +1,5 @@
 *.iml
+package-lock.json
 .idea
 target/
 build/

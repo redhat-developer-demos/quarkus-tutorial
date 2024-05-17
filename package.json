@@ -3,9 +3,9 @@
   "description": "Quarkus Tutorial Documentation",
   "homepage": "https://redhat-developer-demos.github.io/quarkus-tutorial",
   "author": {
-    "email": "kamesh.sampath@hotmail.com",
-    "name": "Kamesh Sampath",
-    "url": "https://twitter.com/@kamesh_sampath"
+    "email": "rhd@redhat.com",
+    "name": "Red Hat Developer",
+    "url": "https://developers.redhat.com"
   },
   "dependencies": {
     "@antora/cli": "2.3.1",
