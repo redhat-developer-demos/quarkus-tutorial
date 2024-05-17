@@ -2,9 +2,10 @@
 
 :project-ollama-name: quarkus-ollama-app
 
-Throughout this tutorial, we've been working with remote models. Let's switch now to a local model.
+Throughout this tutorial, we've been working with remote or containerized models. Let's switch now to a model running natively on our local machine. 
 
-There are various options out there, and we'll work with Ollama.
+There are various options out there. In our case we'll work with Ollama, open-source project that serves as a powerful 
+and user-friendly platform for running LLMs on your local machine.
 
 
 == Installing Ollama

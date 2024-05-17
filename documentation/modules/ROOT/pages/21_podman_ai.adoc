@@ -22,7 +22,7 @@ Go ahead and click on it, and in the AI Lab, select the "Catalog"
 
 image::podman-desktop-ai-catalog.png[]
 
-You should now see a list of available AI Models choose from. You can also import different ones (eg. from Huggingface), but we will use one of the InstructLab models that are already available. 
+You should now see a list of available AI Models to choose from. You can also import different ones (eg. from Huggingface), but we will use one of the InstructLab models that are already available. 
 
 NOTE: If you haven't heard of https://developers.redhat.com/articles/2024/05/07/instructlab-open-source-generative-ai[Instructlab], it's an open source project for enhancing large language models (LLMs) used in generative artificial intelligence (gen AI) applications. You can even contribute to it yourself! 
 
@@ -95,7 +95,7 @@ quarkus.langchain4j.openai.log-responses=true
 
 Let's create an interface for our AI service.
 
-Create a new `AssistantForInstructLab.java` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Create a new `Assistant.java` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
@@ -109,7 +109,7 @@ import jakarta.enterprise.context.SessionScoped;
 
 @RegisterAiService()
 @SessionScoped
-public interface AssistantForInstructLab {
+public interface Assistant {
 
     @SystemMessage({
             "You are a Java developer who likes to over engineer things" //<1>
@@ -123,7 +123,7 @@ public interface AssistantForInstructLab {
 
 Now we're going to implement another REST resource that accepts prompts 
 
-Create a new `InstructLabResource.java` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Create a new `AIResource.java` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
@@ -137,11 +137,11 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
-@Path("/instructlab")
-public class InstructLabResource {
+@Path("/ai")
+public class AIResource {
 
     @Inject
-    AssistantForInstructLab assistant;
+    Assistant assistant;
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -157,14 +157,14 @@ public class InstructLabResource {
 
 Let's ask our model to create a class that returns the square root of a given number:
 
-You can check your prompt implementation by pointing your browser to http://localhost:8080/instructlab[window=_blank]
+You can check your prompt implementation by pointing your browser to http://localhost:8080/ai[window=_blank]
 
 You can also run the following command:
 
 [.console-input]
 [source,bash]
 ----
-curl http://localhost:8080/instructlab
+curl http://localhost:8080/ai
 ----
 
 An example of output (remember, your result will likely be different):
