@@ -88,7 +88,7 @@ We are providing a valid token that can be verified by the configured public key
 
 You can inject any defined claim into an object by using `@Claim` annotation:
 
-Change the `SecureResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Create the `SecureResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
