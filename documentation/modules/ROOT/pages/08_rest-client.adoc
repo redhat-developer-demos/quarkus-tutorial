@@ -1,6 +1,6 @@
 = REST Client
 
-An atypical scenario in a Microservices architecture is the remote invocation of remote REST HTTP endpoints. Quarkus provides a typed REST client that follows the  https://github.com/eclipse/microprofile-rest-client[MicroProfile REST Client, window=_blank] specification.
+A typical scenario in a Microservices architecture is the remote invocation of remote REST HTTP endpoints. Quarkus provides a typed REST client that follows the  https://github.com/eclipse/microprofile-rest-client[MicroProfile REST Client, window=_blank] specification.
 
 Let's create a REST client that accesses https://fruityvice.com[window=_blank] to get nutrition information about our fruits. The endpoint we're interested in is this one:
 
