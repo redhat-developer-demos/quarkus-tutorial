@@ -101,7 +101,7 @@ Quarkus CLI::
 quarkus test
 ----
 
-NOTE: `quarkus test` starts tests in continuous testing mode (more about this below) so to return to the command line after the tests ran you will need to press kbd:[q].
+NOTE: `quarkus test` starts tests in continuous testing mode (more about this below) so to return to the command line after the tests ran you will need to press `q`.
 --
 ====
 
