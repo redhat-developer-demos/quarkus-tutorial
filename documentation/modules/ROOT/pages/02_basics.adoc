@@ -76,7 +76,7 @@ The scaffolding process also creates a test case for the example endpoint.
 
 Check the file `GreetingResourceTest.java` in the folder `src/test/java` to see what a Quarkus integration test looks like.
 
-When running this test, the application is started once, then all tests are executed, and finally, the application stops. Although it is not mandatory, by default the RestAssured project is used to test Rest endpoints but it is up to you to change that.
+When running this test, the application is started once, then all tests are executed, and finally, the application stops. Although it is not mandatory, by default the RestAssured project is used to test REST endpoints but it is up to you to change that.
 
 You can run the test in your IDE or by running the following:
 
@@ -101,7 +101,7 @@ Quarkus CLI::
 quarkus test
 ----
 
-NOTE: `quarkus test` starts tests in continuous testing mode (more about this below) so to return to the command line after the tests ran you will need to press (q)
+NOTE: `quarkus test` starts tests in continuous testing mode (more about this below) so to return to the command line after the tests ran you will need to press kbd:[q].
 --
 ====
 
@@ -109,7 +109,7 @@ NOTE: `quarkus test` starts tests in continuous testing mode (more about this be
 
 Open or import the generated project into your IDE.
 
-If you are using **vscode** you can open the project with:
+If you are using VS Code, you can open the project with:
 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -121,13 +121,13 @@ NOTE: If you use `tutorial-tools`, your host `quarkus-tutorial/work` contains th
 
 == Live Coding (Development mode)
 
-Stop the Quarkus application that might be running in `jvm` or `native` mode.
+Stop the Quarkus application that might be running in JVM or native mode.
 
 _Live Coding_ or _Development mode_ enables hot deployment with background compilation, which means that when you modify your Java files and/or your resource files and refresh your browser, these changes will automatically take effect.
 
 This is probably one of the best features of Quarkus: enabling a very fast and productive iterative feedback loop.
 
-Let's start the _Live Coding_ mode by invoking `mvn`. You probably won't need to stop/start Quarkus again during this tutorial:
+Let's start the _Live Coding_ mode by using the `dev` command. You probably won't need to stop/start Quarkus again during this tutorial:
 
 [tabs%sync]
 ====
@@ -182,6 +182,6 @@ Press `r` and the tests will start running. You should see the status change dow
 All 1 test is passing (0 skipped), 1 test was run in 11705ms. Tests completed at 16:02:32.
 ----
 
-TIP: If you don’t want to have continuous testing enabled, you can change this by adding `quarkus.test.continuous-testing=disabled` in `application.properties`. 
+TIP: If you don’t want to have continuous testing enabled, you can change this by adding `quarkus.test.continuous-testing=disabled` to your `src/main/resources/application.properties`. 
 
 You can find more details about controlling continuous testing in https://quarkus.io/guides/continuous-testing#controlling-continuous-testing[this guide]. 
