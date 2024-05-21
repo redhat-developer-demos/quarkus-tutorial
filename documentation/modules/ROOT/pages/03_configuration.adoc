@@ -1,7 +1,5 @@
 = Configuration
 
-:project-name: fruits-app
-
 Hardcoded values in your code is a no go, so let's see how to add configuration to your application. 
 Quarkus relies on the MicroProfile Config specification and the main configuration file is  `application.properties`.
 
@@ -121,9 +119,9 @@ public class GreetingResourceTest {
 }
 ----
 
-NOTE: If you're still running in live testing mode you will already see that the tests pass again and you can ignore the rest of this page and move on to the next step.
+NOTE: If you're still running in continuous testing mode, you will already see that the tests pass again and you can ignore the rest of this page and move on to the next step.
 
-Stop your current Live Coding session of Quarkus in the terminal by sending a `CTRL+C`:
+Stop your current Live Coding session of Quarkus in the terminal by sending a `Ctrl+C`:
 
 
 
