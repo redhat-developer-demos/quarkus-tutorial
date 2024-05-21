@@ -240,7 +240,7 @@ public interface FruityViceService {
 Now, if 3 (4 x 0.75) failures occur among the rolling window of 4 consecutive invocations, then the circuit is opened for 5000 ms and then will be back to half open. 
 If the invocation succeeds, then the circuit is back to closed again.
 
-Run the following command at least 5 times:
+Run the following command at least 5 times (without network connectivity):
 
 [.console-input]
 [source,bash]
