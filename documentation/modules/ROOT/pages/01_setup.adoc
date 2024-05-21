@@ -28,7 +28,7 @@ Installing GraalVM is only required if you intend to build a https://quarkus.io/
 Quarkus can simply build the native binary inside a container and this way you don't need to install and configure GraalVM on your machine.
 ====
 
-NOTE: * You can also use Docker instead of Podman. The advantage of Podman is that it is 100% Free Open Source and does not need to run with elevated privileges. 
+NOTE: You can also use Docker instead of Podman. The advantage of Podman is that it is 100% Free Open Source and does not need to run with elevated privileges. 
 
 
 [tabs]
@@ -51,11 +51,11 @@ Please have them installed and configured before you get started with any of the
 | `brew tap AdoptOpenJDK/openjdk && brew cask install adoptopenjdk17`
 | `dnf install java-17-openjdk.x86_64`
 | https://adoptopenjdk.net[Windows] (Make sure you set the `JAVA_HOME` environment variable and add `%JAVA_HOME%\bin` to your `PATH`)
-| **Apache Maven 3.8.1+**
+| **Apache Maven 3.8.6+**
 | `brew install maven`
 | `dnf install maven`
 | https://maven.apache.org/download.cgi[Windows] (Make sure you set the `MAVEN_HOME` environment variable and add `%MAVEN_HOME%\bin` to your `PATH`)
-| **Graal VM [Optional *]**
+| **GraalVM [Optional *]**
 | https://www.graalvm.org/latest/docs/getting-started/macos/[Download & install GraalVM for MacOS]
 | https://www.graalvm.org/latest/docs/getting-started/linux/[Download & install GraalVM for Linux]
 | https://www.graalvm.org/latest/docs/getting-started/windows/[Download & install GraalVM for Windows]
@@ -64,7 +64,7 @@ Please have them installed and configured before you get started with any of the
 
 [TIP]
 =====
-If you are using Linux, MacOS or WSL on Windows you can also install the required tools using https://sdkman.io[SDKMAN!]. This allows easy version/distribution switching (and you can install the Quarkus CLI with it as well). 
+If you are using Linux, macOS or WSL on Windows, you can also install the required tools using https://sdkman.io[SDKMAN!]. This allows easy version/distribution switching (and you can install the Quarkus CLI with it as well). 
 Alternatively on Windows you can also try https://chocolatey.org/[Chocolatey] which works similarly.
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -145,7 +145,7 @@ This tutorial was developed and tested with:
 - Minikube `{minikube-version}`
 - OpenShift `{openshift-version}`
 - Minishift `{minishift-version}`
-- Graal VM `{graalvm-version}`
+- GraalVM `{graalvm-version}`
 ====
 
 ifndef::workshop[]
@@ -183,10 +183,10 @@ oc new-project {tutorial-namespace}
 
 [NOTE]
 ====
-On macOS, you might need to install hyperkit and  pass it as the main engine adding `--vm-driver=hyperkit` after `--disk-size=50g`.
+On macOS, you might need to install hyperkit and pass it as the main engine by adding `--vm-driver=hyperkit` after `--disk-size=50g`.
 ====
 
-Prepare your shell environment
+Prepare your shell environment:
 
 [#quarkus-tutorial-shell-env]
 [source,bash,subs="+macros,+attributes"]
@@ -195,8 +195,6 @@ cd quarkus-tutorial
 export TUTORIAL_HOME=pass:[`pwd`]
 export GRAALVM_HOME='PUT THE LOCATION  WHERE YOU HAVE EXTRACTED GRAAL VM'
 ----
-
-Prepare your shell environment:
 
 It is not necessary to install GraalVM as the native compilation can be done within a container.
 The only limitation, in this case, is to have Podman/Docker installed and the produced native executable will only be runnable inside a container.
@@ -210,18 +208,18 @@ If you installed GraalVM, make sure to also install `native-image`
 gu install native-image
 ----
 
-
 [#quarkus-tutorial-shell-env]
 [source,bash,subs="+macros,+attributes"]
 ----
 cd quarkus-tutorial
 export TUTORIAL_HOME=pass:[`pwd`]
 export WORKSHOP_USER='PUT YOUR USERNAME HERE'
-export GRAALVM_HOME='PUT THE LOCATION  WHERE YOU HAVE EXTRACTED GRAAL VM'
-export WORKSHOP_OPENSHIFT_SERVER='PUT THE OPENSHIFT SEVER URL HERE'
+export GRAALVM_HOME='PUT THE LOCATION WHERE YOU HAVE EXTRACTED GRAAL VM'
+export WORKSHOP_OPENSHIFT_SERVER='PUT THE OPENSHIFT SERVER URL HERE'
 ----
 
-Login into OpenShift 
+Login into OpenShift:
+
 [#quarkus-tutorial-oc-login]
 [source,bash,subs="+macros,+attributes"]
 ----
@@ -229,10 +227,10 @@ oc login --username pass:[$WORKSHOP_USER] --server pass:[$WORKSHOP_OPENSHIFT_SER
 ----
 
 ifdef::openshift-console-url[]
-You can also access the Openshift Console via url {openshift-console-url}
+You can also access the OpenShift Console via {openshift-console-url}.
 endif::[]
 
-IMPORTANT: If you are in `MAC OSX`, the variable should point to `Home` sub-directory: `export GRAALVM_HOME=$HOME/Development/graalvm/Contents/Home/`
+IMPORTANT: If you are using macOS, the variable should point to `Home` sub-directory: `export GRAALVM_HOME=$HOME/Development/graalvm/Contents/Home/`
 endif::workshop[]
 
 [#setup-work-folder]
