@@ -216,7 +216,7 @@ Quarkus can simply build the native binary inside a container and this way you d
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-* You can also use Docker instead of Podman. The advantage of Podman is that it is 100% Free Open Source and does not need to run with elevated privileges.
+You can also use Docker instead of Podman. The advantage of Podman is that it is 100% Free Open Source and does not need to run with elevated privileges.
 </td>
 </tr>
 </table>
@@ -260,19 +260,19 @@ Quarkus can simply build the native binary inside a container and this way you d
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://podman-desktop.io/downloads" target="_blank" rel="noopener">Podman Desktop for Windows</a></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Java 17</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>brew tap AdoptOpenJDK/openjdk &amp;&amp; brew cask install adoptopenjdk17</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dnf install java-17-openjdk.x86_64</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://adoptopenjdk.net">Windows</a> (Make sure you set the <code>JAVA_HOME</code> environment variable and add <code>%JAVA_HOME%\bin</code> to your <code>PATH</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Java 21</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>brew install --cask temurin@21</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dnf install java-21-openjdk.x86_64</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://adoptium.net">Windows</a> (Make sure you set the <code>JAVA_HOME</code> environment variable and add <code>%JAVA_HOME%\bin</code> to your <code>PATH</code>)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Apache Maven 3.8.1+</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Apache Maven 3.8.6+</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>brew install maven</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>dnf install maven</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://maven.apache.org/download.cgi">Windows</a> (Make sure you set the <code>MAVEN_HOME</code> environment variable and add <code>%MAVEN_HOME%\bin</code> to your <code>PATH</code>)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Graal VM [Optional *]</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>GraalVM [Optional *]</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.graalvm.org/latest/docs/getting-started/macos/">Download &amp; install GraalVM for MacOS</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.graalvm.org/latest/docs/getting-started/linux/">Download &amp; install GraalVM for Linux</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.graalvm.org/latest/docs/getting-started/windows/">Download &amp; install GraalVM for Windows</a></p></td>
@@ -287,7 +287,7 @@ Quarkus can simply build the native binary inside a container and this way you d
 </td>
 <td class="content">
 <div class="paragraph">
-<p>If you are using Linux, MacOS or WSL on Windows you can also install the required tools using <a href="https://sdkman.io">SDKMAN!</a>. This allows easy version/distribution switching (and you can install the Quarkus CLI with it as well).
+<p>If you are using Linux, macOS or WSL on Windows, you can also install the required tools using <a href="https://sdkman.io">SDKMAN!</a>. This allows easy version/distribution switching (and you can install the Quarkus CLI with it as well).
 Alternatively on Windows you can also try <a href="https://chocolatey.org/">Chocolatey</a> which works similarly.</p>
 </div>
 <div class="listingblock console-input">
@@ -298,7 +298,7 @@ Alternatively on Windows you can also try <a href="https://chocolatey.org/">Choc
   sdk install java
   sdk install maven
   sdk install quarkus
-  sdk install java 17.0.8-graalce
+  sdk install java 21.0.3-tem
   sdk install jbang</code></pre>
 </div>
 </div>
