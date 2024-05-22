@@ -1,20 +1,20 @@
 = Dev Services
 
-Quarkus supports the automatic provisioning of unconfigured services in *dev and test* mode. 
-We refer to this capability as Dev Services. From a developer's perspective this means that if you include an extension and don't configure it then Quarkus will automatically start the relevant service (usually using https://www.testcontainers.org/[Testcontainers] behind the scenes) and wire up your application to use this service, even pre-configuring access credentials.
+Quarkus supports the automatic provisioning of unconfigured services in *dev and test* mode.
+We refer to this capability as Dev Services. From a developer's perspective, this means that if you include an extension and don't configure it then Quarkus will automatically start the relevant service (usually using https://www.testcontainers.org/[Testcontainers] behind the scenes) and wire up your application to use this service, even pre-configuring access credentials.
 
-NOTE: Dev Services will only be enabled in dev/test mode, so it will not affect the application running in production.  If you want to disable all Dev Services you can use the quarkus.devservices.enabled=false config property, or you can simply configure the service in which case it will result in the Dev Service being disabled automatically.
+NOTE: Dev Services will only be enabled in dev/test mode, so it will not affect the application running in production.  If you want to disable all Dev Services you can use the `quarkus.devservices.enabled=false` config property, or you can simply configure the service in which case it will result in the Dev Service being disabled automatically.
 
-TIP: If you are using a proprietary database such as `DB2` or `MSSQL` you will need to accept the license agreement. To do this, create a `src/main/resources/container-license-acceptance.txt` file in your project and add a line with the image name and tag of the database. 
+TIP: If you are using a proprietary database such as IBM Db2 or Microsoft SQL Server, you will need to accept the license agreement. To do this, create a `src/main/resources/container-license-acceptance.txt` file in your project and add a line with the image name and tag of the database.
 
 More on zero config setup of datasources can be found https://quarkus.io/guides/datasource#dev-services[here].
 
-== Replace Database Extensions 
+== Replace Database Extensions
 
-Instead of the built-in h2 database, we're now going to use an external database.  Swapping out from one database provider to another is fairly trivial with Quarkus.
-Let's start with updating the configuration in the application.properties.
+Instead of the built-in h2 database, we're now going to use an external database. Swapping out from one database provider to another is fairly trivial with Quarkus.
+Let's start with updating the configuration in the `application.properties`.
 
-TIP: You technically don't need to add the db-kind property since there is only one jdbc driver in our application.  We added it for clarity's sake.
+TIP: You technically don't need to add the `db-kind` property since there is only one JDBC driver in our application. We added it for clarity's sake.
 
 [#quarkuspdb-update-props]
 [.console-input]
@@ -27,14 +27,14 @@ quarkus.datasource.db-kind=postgresql
 quarkus.hibernate-orm.database.generation=drop-and-create
 ----
 
-WARNING: Make sure the h2 db-kind and jdbc.url properties have been removed.
+WARNING: Make sure the h2 `db-kind` and `jdbc.url` properties have been removed.
 
 Now let's swap the h2 extension out for the postgresql extension:
 
 [tabs]
 ====
 Maven::
-+ 
++
 --
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -57,7 +57,7 @@ quarkus extension add quarkus-jdbc-postgresql
 ====
 
 
-Notice in the logs how Quarkus has reloaded and started up a Postgresql database dev service:
+Notice in the logs how Quarkus has reloaded and started up a PostgreSQL database Dev Service:
 
 [.console-output]
 [source,text]
@@ -67,18 +67,18 @@ Notice in the logs how Quarkus has reloaded and started up a Postgresql database
 
 == Verify Postgresql testcontainer is running
 
-Let's verify in Docker/Podman that the dev services container is running.  You should see 2 containers, one testcontainers/ryuk container which orchestrates the dev services, and another postgres container which is running the database and which is automatically wired into our Quarkus dev mode:
+Let's verify in Docker/Podman that the Dev Services container is running.  You should see 2 containers, one testcontainers/ryuk container which orchestrates the Dev Services, and another PostgreSQL container which is running the database and which is automatically wired into our Quarkus dev mode:
 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-docker ps 
+docker ps
 ----
 
 [.mt-4.center]
 image::Dev_Services_Podman_ps.png[Dev Services Container,800,100,align="left"]
 
-Call the fruit endpoint again. The data is now coming from the postgresql database container. 
+Call the fruit endpoint again. The data is now coming from the PostgreSQL database container.
 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -105,12 +105,12 @@ curl localhost:8080/fruit?season=Spring
 
 == Run Unit Tests with TestContainers
 
-Let's stop dev mode for now to verify that the Postgres container also stops when we're done with dev mode by sending a `CTRL+C` in the terminal and checking again with docker ps. Notice that the postgres container has disappeared as expected.
+Let's stop dev mode for now to verify that the PostgreSQL container also stops when we're done with dev mode by sending a `CTRL+C` in the terminal and checking again with `docker ps`. Notice that the PostgreSQL container has disappeared as expected.
 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-docker ps 
+docker ps
 ----
 
 [.mt-4.center]
@@ -121,7 +121,7 @@ Run the tests:
 [tabs%sync]
 ====
 Maven::
-+ 
++
 --
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -143,7 +143,7 @@ Reminder: Once the tests have run, send `CTRL+C` since Quarkus CLI starts tests 
 --
 ====
 
-Notice in the logs that Quarkus and TestContainers work in unison to spin up the Postgres container again, run the tests, and then tear down the container again once done. 
+Notice in the logs that Quarkus and TestContainers work in unison to spin up the PostgreSQL container again, run the tests, and then tear down the container again once done.
 
 [.console-output]
 [source,text]
@@ -154,7 +154,7 @@ Notice in the logs that Quarkus and TestContainers work in unison to spin up the
 [INFO] Running com.redhat.developers.GreetingResourceTest
 2023-07-04 17:40:04,096 INFO  [org.tes.doc.DockerClientProviderStrategy] (build-23) Found Docker environment with Environment variables, system properties and defaults. Resolved dockerHost=unix:///run/user/1000/podman/podman.sock
 2023-07-04 17:40:04,100 INFO  [org.tes.DockerClientFactory] (build-23) Docker host IP address is localhost
-2023-07-04 17:40:04,235 INFO  [org.tes.DockerClientFactory] (build-23) Connected to docker: 
+2023-07-04 17:40:04,235 INFO  [org.tes.DockerClientFactory] (build-23) Connected to docker:
   Server Version: 4.5.1
   API Version: 1.41
   Operating System: fedora
@@ -170,7 +170,7 @@ Notice in the logs that Quarkus and TestContainers work in unison to spin up the
 
 == [Optional] Re-deploy to Kubernetes
 
-If you would like to redeploy to Kubernetes, this time you will need to provision a Postgresql database because as mentioned before, Dev Services are only enabled in dev/test mode.
+If you would like to redeploy to Kubernetes, this time you will need to provision a PostgreSQL database because as mentioned before, Dev Services are only enabled in dev/test mode.
 
 We will also need to add credentials to connect to the external database. Make sure you have the following properties set:
 
@@ -186,11 +186,11 @@ quarkus.hibernate-orm.database.generation=drop-and-create
 quarkus.hibernate-orm.sql-load-script=import.sql
 ----
 
-NOTE: We added a %prod. prefix to some of the properties.  This prefix makes it so these properties will only be evaluated with the (default) prod profile.  In dev mode these values will be ignored, thus triggering the Dev Services creation.
+NOTE: We added a `%prod.` prefix to some of the properties.  This prefix makes it so these properties will only be evaluated with the (default) `prod` profile.  In dev mode these values will be ignored, thus triggering the Dev Services creation.
 
-=== Create a postgresql database
+=== Create a PostgreSQL database
 
-There are several ways to deploy a Postgresql Database to Kubernetes.  If you're using Openshift, you could create one easily through the UI (Developer Perspective > +Add > Database > PostgreSQL).  Make sure your database name, username and password match up with what you have configured in your application.properties or secrets.  
+There are several ways to deploy a PostgreSQL Database to Kubernetes.  If you're using OpenShift, you could create one easily through the UI (Developer Perspective > +Add > Database > PostgreSQL).  Make sure your database name, username and password match up with what you have configured in your `application.properties` or secrets.
 
 Alternatively you can also create the following Kubernetes manifest for a simple ephemeral instance:
 
@@ -254,12 +254,12 @@ kubectl apply -f postgres.yaml
 
 === Rebuild and deploy your application
 
-Rebuild the application and container, and push to your registry again: 
+Rebuild the application and container, and push to your registry again:
 
 [tabs]
 ====
 Maven::
-+ 
++
 --
 [.console-input]
 [source,bash,subs="+macros,+attributes"]

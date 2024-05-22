@@ -2,10 +2,10 @@
 
 :project-ai-name: quarkus-langchain-app
 
-Many applications involving Large Language Models (LLMs) often require user-specific data beyond their training set, such as CSV files, data from various sources, or reports. To achieve this, the process of Retrieval Augmented Generation (RAG) is commonly employed. 
-Through this technique you can combine your own business data (or whatever data!) with the LLM to enrich the possibilities offered by your application.
+Many applications involving Large Language Models (LLMs) often require user-specific data beyond their training set, such as CSV files, data from various sources, or reports. To achieve this, the process of Retrieval Augmented Generation (RAG) is commonly employed.
+Through this technique, you can combine your own business data (or whatever data!) with the LLM to enrich the possibilities offered by your application.
 
-In this section we're going to add business logic for a fictional car rental service which has a terms and conditions 
+In this section we're going to add business logic for a fictional car rental service which has a terms and conditions
 document that outlines how long in advance cancellations are allowed.
 We're going to embed this business document for the LLM, which will use it to determine business rules accordingly.
 
@@ -71,7 +71,7 @@ NOTE: If you don't provide an actual OpenAI key you will still be able to go thr
 
 Let's provide a document containing the service's terms of use:
 
-Create a new folder in `src/main/resources/catalog and add a new file named `miles-of-smiles-terms-of-use.txt` in this folder. 
+Create a new folder in `src/main/resources/catalog` and add a new file named `miles-of-smiles-terms-of-use.txt` in this folder.
 Then add the following content to it:
 
 [.console-input]
@@ -118,8 +118,8 @@ If you do not agree to these Terms, please do not use or access our Services.
 
 NOTE: Notice in the above document that the rules state it is not allowed to cancel a booking within 7 days prior to the start of the booking.
 
-Remember how we set the `quarkus.langchain4j.easy-rag.path` in the application.properties file? It points to this same directory, 
-and thanks to the langchain4j-easy-rag extension any document in this folder will be scanned and added to the context of the LLM. 
+Remember how we set the `quarkus.langchain4j.easy-rag.path` in the application.properties file? It points to this same directory,
+and thanks to the langchain4j-easy-rag extension any document in this folder will be scanned and added to the context of the LLM.
 
 
 == Create the Booking structure
@@ -175,15 +175,15 @@ public class BookingService {
     @ConfigProperty(name="booking.daystoend")
     int daystoend;
 
-    private static String FIRSTNAME="john"; 
+    private static String FIRSTNAME="john";
     private static String LASTNAME="doe";
-    private static String BOOKINGNUMBER ="123-456"; #<1> 
+    private static String BOOKINGNUMBER ="123-456"; // <1>
 
     public Booking getBookingDetails(String bookingNumber, String customerName, String customerSurname) {
         ensureExists(bookingNumber, customerName, customerSurname);
         LocalDate bookingFrom = LocalDate.now().plusDays(daystostart);
         LocalDate bookingTo = LocalDate.now().plusDays(daystoend);
-        // Retrieval from DB mocking        
+        // Retrieval from DB mocking
         Customer customer = new Customer(customerName, customerSurname);
         return new Booking(bookingNumber, bookingFrom, bookingTo, customer);
     }
@@ -219,9 +219,9 @@ class BookingCannotBeCancelledException extends RuntimeException {
     }
 }
 ----
-<1> We hardcoded a booking entry for simplicity's sake. Of course, in a real world scenario this would likely come from a DB.
+<1> We hardcoded a booking entry for simplicity's sake. Of course, in a real world scenario this would likely come from a database.
 
-Now we define a Booking singleton that will serve our AI with proper tools.
+Now we define a `BookingTools` singleton that will serve our AI with proper tools.
 
 Create a new `BookingTools` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
@@ -446,20 +446,20 @@ Create a new `chat-assistant.html` file in `src/main/resources/META-INF/resource
 
 You can check your prompt implementation by pointing your browser to http://localhost:8080/chat-assistant.html[window=_blank]
 
-Try cancelling a booking for booking number 123-456 with name John Doe. If everything goes well, the booking should be rejected, 
-since we have specified the start date to be in 1 day. 
+Try cancelling a booking for booking number `123-456` with name `John Doe`. If everything goes well, the booking should be rejected,
+since we have specified the start date to be in 1 day.
 
 An example of output (can vary on each prompt execution):
 
 image::chat-assistant-cancelled.png[]
 
-Now change the value of `booking.daystostart` in your application.properties to > 7 and refresh the browser window. 
+Now change the value of `booking.daystostart` in your application.properties to > 7 and refresh the browser window.
 Try cancelling again, and you should see that this time we are allowed to cancel the reservation.
 
 image::chat-assistant-success.png[]
 
-For an extra challenge, feel free to play around with the SystemMessage in `AssistantForCustomerSupport.java`, 
-or perhaps change the `BookingService.java` to call a database that contains customer & booking information. 
+For an extra challenge, feel free to play around with the `SystemMessage` in `AssistantForCustomerSupport.java`,
+or perhaps change the `BookingService.java` to call a database that contains customer and booking information.
 And see if bookings effectively get cancelled or not :)
 
 

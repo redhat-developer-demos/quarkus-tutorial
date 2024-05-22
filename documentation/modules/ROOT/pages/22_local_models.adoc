@@ -2,9 +2,9 @@
 
 :project-ollama-name: quarkus-ollama-app
 
-Throughout this tutorial, we've been working with remote or containerized models. Let's switch now to a model running natively on our local machine. 
+Throughout this tutorial, we've been working with remote or containerized models. Let's switch now to a model running natively on our local machine.
 
-There are various options out there. In our case we'll work with Ollama, open-source project that serves as a powerful 
+There are various options out there. In our case we'll work with Ollama, an open-source project that serves as a powerful
 and user-friendly platform for running LLMs on your local machine.
 
 
@@ -20,7 +20,7 @@ Once installed, go ahead and download the local model by running this command:
 ollama pull llama3:latest
 ----
 
-Now, let's run our modal locally:
+Now, let's run our model locally:
 
 [.console-input]
 [source,bash]
@@ -28,7 +28,7 @@ Now, let's run our modal locally:
 ollama serve
 ----
 
-== Creating a new project with the Ollama extension
+== Create a new project with the Ollama extension
 
 The Ollama extension isn't compatible with other extensions we have used in this tutorial, so we'll create a new project.
 
@@ -129,7 +129,7 @@ You can also run the following command:
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/earth/flat
+curl -w '\n' localhost:8080/earth/flat
 ----
 
 An example of output (it can vary on each prompt execution):

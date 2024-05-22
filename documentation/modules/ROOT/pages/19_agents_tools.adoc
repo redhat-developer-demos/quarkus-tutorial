@@ -2,7 +2,7 @@
 
 :project-ai-name: quarkus-langchain-app
 
-Things become more interesting when you can bring the AI LLM into your application and get it to interact with specific functions you build for it. 
+Things become more interesting when you can bring the AI LLM into your application and get it to interact with specific functions you build for it.
 
 This section will use AI to trigger an email service from our local application. To do this, we'll use LangChain4j's concept of Agents and Tools.
 
@@ -76,11 +76,11 @@ public class EmailService {
 
 == Create the AI service with prompt context
 
-Let's create an interface for our AI service, but with `SystemMessage` and `UserMessage` this time. 
-`SystemMessage` gives context to the AI Model. 
-In this case we tell it that it should craft a message as if it is written by a professional poet. 
-The `UserMessage` is the actual instruction/question we're sending to the AI model. As you can see in the example below, 
-you can format and parametrize the UserMessage, translating structured content to text and vice-versa.  
+Let's create an interface for our AI service, but with `SystemMessage` and `UserMessage` this time.
+`SystemMessage` gives context to the AI Model.
+In this case, we tell it that it should craft a message as if it is written by a professional poet.
+The `UserMessage` is the actual instruction/question we're sending to the AI model. As you can see in the example below,
+you can format and parameterize the `UserMessage`, translating structured content to text and vice-versa.
 
 Create a new `AssistantWithContext` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
@@ -114,7 +114,7 @@ Note that this assistant references the email service as a tool.
 
 == Create a email sending resource
 
-Now we create a resource that builds the interaction and calls the service with the required parameters (topic & lines).
+Now we create a resource that builds the interaction and calls the service with the required parameters (topic and number of lines).
 
 Create a new `EmailMeAPoemResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
@@ -148,8 +148,8 @@ public class EmailMeAPoemResource {
 Update the following properties in your `application.properties`
 
 IMPORTANT: The LangChain4j `demo` key currently does not support tools, so you will need to use a real OpenAI key for the email service to be called by the OpenAI model.
-You can create an account over at https://platform.openai.com/[OpenAI] if you'd like to see this in action. 
-Note that OpenAI requires you to fund your account with credits to be able to use the API. The minimum is $5 but this amount will go a long way to test the scenarios in this tutorial. 
+You can create an account over at https://platform.openai.com/[OpenAI] if you'd like to see this in action.
+Note that OpenAI requires you to fund your account with credits to be able to use the API. The minimum is $5 but this amount will go a long way to test the scenarios in this tutorial.
 
 NOTE: If you do not want to create an OpenAI key, you can still test the below scenario, it just won't send an email since the "Tool" functionality unfortunately won't work.
 
@@ -166,7 +166,7 @@ quarkus.langchain4j.openai.timeout=60s
 %dev.quarkus.mailer.mock=false
 ----
 
-Because we haven't configured the local email service, Quarkus will use DevServices to instantiate and configure a local email service for you (in Dev Mode only!).
+Because we haven't configured the local email service, Quarkus will use Dev Services to instantiate and configure a local email service for you (in dev mode only!).
 
 You can check it running:
 
@@ -186,7 +186,7 @@ e4a1d5aae322  docker.io/testcontainers/ryuk:0.6.0  /bin/ryuk   34 seconds ago  U
 729ad84b6561  docker.io/axllent/mailpit:latest                 34 seconds ago  Up 34 seconds  0.0.0.0:39141->1025/tcp, 0.0.0.0:45875->8025/tcp  suspicious_hypatia
 ----
 
-Which means that you have a email service up and running.
+Which means that you have an email service up and running.
 
 == Invoke the endpoint
 

@@ -2,9 +2,9 @@
 
 :project-ai-name: quarkus-langchain-app
 
-The Quarkus LangChain4j extension seamlessly integrates Large Language Models (LLMs) into Quarkus applications. LLMs are AI-based systems designed to understand, generate, and manipulate human language, showcasing advanced natural language processing capabilities. Thanks to this extensions we can enable the harnessing of LLM capabilities for the development of more intelligent applications. 
+The Quarkus LangChain4j extension seamlessly integrates Large Language Models (LLMs) into Quarkus applications. LLMs are AI-based systems designed to understand, generate, and manipulate human language, showcasing advanced natural language processing capabilities. Thanks to this extension, we can enable the harnessing of LLM capabilities for the development of more intelligent applications.
 
-In this first chapter we'll explore the simplest of interactions with an LLM: Prompting. It essentially means just asking questions to an LLM and receiving an answer in natural language from a given Model, such as OpenAI, Mistral, Hugging Face, Ollama, etc.
+In this first chapter, we'll explore the simplest of interactions with an LLM: Prompting. It essentially means just asking questions to an LLM and receiving an answer in natural language from a given Model, such as OpenAI, Mistral, Hugging Face, Ollama, etc.
 
 
 == Creating a Quarkus & LangChain Application
@@ -100,7 +100,7 @@ public class ExistentialQuestionResource {
 
 == Invoke the endpoint
 
-Start the app in Quarkus Dev Mode:
+Start the app in Quarkus dev mode:
 
 [tabs%sync]
 ====
@@ -121,7 +121,6 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus create app -x rest -x langchain4j-openai com.redhat.developers:{project-ai-name}:1.0-SNAPSHOT
 quarkus dev
 ----
 --
@@ -134,7 +133,7 @@ You can also run the following command:
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/earth/flat
+curl -w '\n' localhost:8080/earth/flat
 ----
 
 An example of output (it can vary on each prompt execution):

@@ -2,11 +2,11 @@
 
 When running applications in production we need to send telemetry (metrics and tracing information) to some services like Prometheus and Jaeger.
 
-Quarkus provides JVM and other statistics out-of-box with the Metrics extension, and it provides distributed tracing with the opentelemetry extensions.
+Quarkus provides JVM and other statistics out-of-box with the Metrics extension, and it provides distributed tracing with the OpenTelemetry extensions.
 
 == Tracing
 
-Let's start with tracing. Tracing allows you to follow the flow of a request throughout your services. This becomes very important once you have more than one (micro) service running or are making external requests, eg. to a REST client or a database. 
+Let's start with tracing. Tracing allows you to follow the flow of a request throughout your services. This becomes very important once you have more than one (micro) service running or are making external requests, eg. to a REST client or a database.
 
 === Add the OpenTelemetry extension
 
@@ -15,7 +15,7 @@ In a new terminal window at the root of your `{project-name}` project, run:
 [tabs]
 ====
 Maven::
-+ 
++
 --
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -35,11 +35,11 @@ quarkus extension add opentelemetry
 --
 ====
 
-The opentelementry extension works out of the box and will start sending data to a grpc receiver (by default localhost:4317) if we send new requests to the app. 
+The opentelementry extension works out of the box and will start sending data to a gRPC receiver (by default localhost:4317) if we send new requests to the app.
 
 === Start an OpenTelemetry Collector
 
-To start collecting and inspecting telemetry, let's run a container that instantiates Jaeger (a tool to inspect telemetry data) and also acts as an OpenTelemetry collector and query service: 
+To start collecting and inspecting telemetry, let's run a container that instantiates Jaeger (a tool to inspect telemetry data) and also acts as an OpenTelemetry collector and query service:
 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -47,22 +47,22 @@ To start collecting and inspecting telemetry, let's run a container that instant
 docker run --name=jaeger -d -p 16686:16686 -p 4317:4317 -e COLLECTOR_OTLP_ENABLED=true jaegertracing/all-in-one:latest
 ----
 
-Create a few requests so we have some telemetry data to work with by hitting our /fruit endpoint a few times again:
+Create a few requests so we have some telemetry data to work with by hitting our `/fruit` endpoint a few times again:
 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-curl localhost:8080/fruit?season=Summer
+curl -w '\n' localhost:8080/fruit?season=Summer
 ----
 
 === Trace down the requests in Jaeger
 
-Go to http://localhost:16686 in your browser. You should see the Jaeger UI, if not make sure the docker run command was executed successfully. To see the traces we just produced, select 'tutorial-app' from the Service dropdown and click 'Find Traces'. Depending on how many times you sent requests to the fruit endpoint, you'll see a number of traces that were collected.  
+Go to http://localhost:16686 in your browser. You should see the Jaeger UI, if not make sure the `docker run` command was executed successfully. To see the traces we just produced, select 'tutorial-app' from the Service dropdown and click 'Find Traces'. Depending on how many times you sent requests to the fruit endpoint, you'll see a number of traces that were collected.
 
 [.mt-4.center]
 image::Jaeger.png[Jaeger Tracing,800,500,align="center"]
 
-Click on the first "tutorial-app: GET /fruit" trace to drill into the details of the latest request. Notice that without doing any further work, even data from the calls out to the FruityVice REST service was collected, so we can see how long each request took:  
+Click on the first "tutorial-app: GET /fruit" trace to drill into the details of the latest request. Notice that without doing any further work, even data from the calls out to the FruityVice REST service was collected, so we can see how long each request took:
 
 [.mt-4.center]
 image::Jaeger_Span.png[Jaeger Span,800,500,align="center"]
@@ -94,18 +94,18 @@ Create a few more requests to the fruit resource:
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-curl localhost:8080/fruit?season=Summer
+curl -w '\n' localhost:8080/fruit?season=Summer
 ----
 
-...And go back to the Jaeger UI at http://localhost:16686. Click the 'Find Traces' again (make sure the tutorial-app Service is selected) and click on the first trace from the top. You will now see 2 more spans, one with 'DataSource.getConnection' that shows how long it took for the DB connection to get established, and one with 'SELECT quarkus.Fruit' that shows the details of the DB query and how long it took. 
+...And go back to the Jaeger UI at http://localhost:16686. Click the 'Find Traces' again (make sure the tutorial-app Service is selected) and click on the first trace from the top. You will now see 2 more spans, one with 'DataSource.getConnection' that shows how long it took for the database connection to get established, and one with 'SELECT quarkus.Fruit' that shows the details of the database query and how long it took.
 
 [.mt-4.center]
 image::Jaeger_DataSource.png[Jaeger DataSource,800,500,align="center"]
 
 == Metrics
 
-Observability also means the ability to expose, collect and observe detailed metrics about your application and the JVM running underneath (if applicable). 
-Let's add the metrics extension that enables this capability in Quarkus: 
+Observability also means the ability to expose, collect and observe detailed metrics about your application and the JVM running underneath (if applicable).
+Let's add the metrics extension that enables this capability in Quarkus:
 
 === Add the Metrics extension
 
@@ -114,7 +114,7 @@ In a terminal window at the root of your `{project-name}` project, run:
 [tabs]
 ====
 Maven::
-+ 
++
 --
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -134,12 +134,12 @@ quarkus extension add quarkus-micrometer
 --
 ====
 
-You should also add the `quarkus-micrometer-registry-prometheus` extension which formats the metrics in format that Prometheus can easily ingest: 
+You should also add the `quarkus-micrometer-registry-prometheus` extension which formats the metrics in format that Prometheus can easily ingest:
 
 [tabs]
 ====
 Maven::
-+ 
++
 --
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -231,7 +231,7 @@ for i in {1..5}; do curl -w '\n' localhost:8080/time; done
 
 === Check the metrics
 
-By default the metrics are exposed in Prometheus format. You can check the output by pointing your browser to http://localhost:8080/q/metrics[window=_blank].  See if you can find the TimeResource counter result. 
+By default the metrics are exposed in Prometheus format. You can check the output by pointing your browser to http://localhost:8080/q/metrics[window=_blank].  See if you can find the TimeResource counter result.
 
 [.mt-4.center]
 image::Timed_Resource.png[Micrometer Timed Resource,800,100,align="left"]

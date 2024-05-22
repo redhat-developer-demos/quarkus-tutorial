@@ -1,6 +1,6 @@
 = Fault Tolerance
 
-When trying to achieve the goal of resilience in our distributed systems, sometimes we need features like retries, fallbacks, and circuit breakers. Luckily for us, Quarkus provides these features for us through the _fault tolerance_ extension.
+When trying to achieve the goal of resilience in our distributed systems, sometimes we need features like retries, fallbacks, and circuit breakers. Luckily for us, Quarkus provides these features for us through the _Fault Tolerance_ extension.
 
 == Add the Fault Tolerance extension
 
@@ -9,7 +9,7 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 [tabs]
 ====
 Maven::
-+ 
++
 --
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -59,7 +59,7 @@ public interface FruityViceService {
     @Produces(MediaType.APPLICATION_JSON)
     @Retry(maxRetries = 3, delay = 2000)
     FruityVice getFruitByName(@PathParam("name") String name);
-    
+
 }
 ----
 
@@ -72,7 +72,7 @@ Run the following command:
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/fruit?season=Summer
+curl -w '\n' localhost:8080/fruit?season=Summer
 ----
 
 [.console-output]
@@ -100,14 +100,14 @@ curl localhost:8080/fruit?season=Summer
 ]
 ----
 
-No change from calls done previously, but now switch off your network so you do not have access to http://fruityvice.com.  
+No change from calls done previously, but now switch off your network so you do not have access to http://fruityvice.com.
 
 Run the following command again:
 
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/fruit?season=Summer
+curl -w '\n' localhost:8080/fruit?season=Summer
 ----
 
 Now after waiting 6 seconds (3 retries x 2 seconds), the next exception is thrown `java.net.UnknownHostException: fruityvice.com`.
@@ -147,7 +147,7 @@ public interface FruityViceService {
     @Retry(maxRetries = 3, delay = 2000)
     @Fallback(FruityViceFallback.class)
     FruityVice getFruitByName(@PathParam("name") String name);
-    
+
     public static class FruityViceFallback implements FallbackHandler<FruityVice> {
 
         private static final FruityVice EMPTY_FRUITY_VICE = FruityVice.of("empty", Nutritions.of(0.0, 0.0));
@@ -155,13 +155,13 @@ public interface FruityViceService {
         public FruityVice handle(ExecutionContext context) {
             return EMPTY_FRUITY_VICE;
         }
- 
+
     }
 
 }
 ----
 
-Now in case of any error, 3 retries are done automatically, waiting for 2 seconds between retries. 
+Now in case of any error, 3 retries are done automatically, waiting for 2 seconds between retries.
 
 If the error persists, then the fallback method is executed.
 
@@ -174,7 +174,7 @@ Run the following command:
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/fruit?season=Summer
+curl -w '\n' localhost:8080/fruit?season=Summer
 ----
 
 [.console-output]
@@ -233,11 +233,11 @@ public interface FruityViceService {
     @Retry(maxRetries = 3, delay = 2000)
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.75, delay = 5000)
     FruityVice getFruitByName(@PathParam("name") String name);
-    
+
 }
 ----
 
-Now, if 3 (4 x 0.75) failures occur among the rolling window of 4 consecutive invocations, then the circuit is opened for 5000 ms and then will be back to half open. 
+Now, if 3 (4 x 0.75) failures occur among the rolling window of 4 consecutive invocations, then the circuit is opened for 5000 ms and then will be back to half open.
 If the invocation succeeds, then the circuit is back to closed again.
 
 Run the following command at least 5 times (without network connectivity):
@@ -245,7 +245,7 @@ Run the following command at least 5 times (without network connectivity):
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/fruit?season=Summer
+curl -w '\n' localhost:8080/fruit?season=Summer
 ----
 
 The output changes from `java.net.UnknownHostException: fruityvice.com` (or any other network exception) in the first calls to `org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getFruitByName` when the circuit is opened.

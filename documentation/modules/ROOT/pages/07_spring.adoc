@@ -9,13 +9,13 @@ Quarkus supports many of your favorite Spring Framework projects. In this chapte
 [tabs]
 ====
 Maven::
-+ 
++
 --
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:remove-extension -D"extensions=rest, rest-jsonb"
-./mvnw quarkus:add-extension -D"extensions=spring-web,spring-data-jpa,rest-jackson"
+./mvnw quarkus:remove-extension -D"extensions=rest"
+./mvnw quarkus:add-extension -D"extensions=spring-web,spring-data-jpa"
 ----
 
 --
@@ -25,8 +25,8 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus ext remove rest rest-jsonb
-quarkus ext add spring-web spring-data-jpa rest-jackson
+quarkus ext remove rest
+quarkus ext add spring-web spring-data-jpa
 ----
 --
 ====
@@ -51,12 +51,6 @@ quarkus ext add spring-web spring-data-jpa rest-jackson
 [INFO] ------------------------------------------------------------------------
 ----
 
-[NOTE]
---
-The `quarkus-spring-web` extension requires `quarkus-rest-jackson`.
-In order to be conservative with the amount of dependencies, the `quarkus-rest-jsonb` was removed in favor of `quarkus-rest-jackson`.
---
-
 == Create a Spring Data Repository for Fruit
 
 Spring Data is one of the most popular Spring APIs, so let's create a Spring Data JPA Repository for our `Fruit` entity. Create the `SpringFruitRepository` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
@@ -73,9 +67,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SpringFruitRepository extends JpaRepository<Fruit, Long> {
-    
+
     public List<Fruit> findBySeason(String season);
-    
+
 }
 ----
 
@@ -116,7 +110,7 @@ public class FruitController {
 }
 ----
 
-Let's try to filter only the fruits with the *Summer* season.  Don't forget to start quarkus dev mode again if you stopped it.
+Let's try to filter only the fruits with the *Summer* season.  Don't forget to start Quarkus dev mode again if you stopped it.
 
 [.console-input]
 [source,bash]

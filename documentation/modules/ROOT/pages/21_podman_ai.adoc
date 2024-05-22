@@ -5,40 +5,40 @@
 Throughout this tutorial, we've been working with OpenAI's remote models, however wouldn't it be nice if we could work
 with models on our local machine (without incurring costs)?
 
-Podman Desktop is a GUI tool that helps with running and managing containers on our local machine, but it can also help with running AI models locally as well thanks to its AI Lab extension. Thanks to Quarkus and LangChain4j it then becomes trivial to start developing with these models. Let's find out how! 
+Podman Desktop is a GUI tool that helps with running and managing containers on our local machine, but it can also help with running AI models locally as well thanks to its AI Lab extension. Thanks to Quarkus and LangChain4j, it then becomes trivial to start developing with these models. Let's find out how!
 
 
 == Installing Podman Desktop AI
 
-First, if you haven't yet, you must download and install Podman Desktop on your operating system. https://podman-desktop.io/downloads[The instructions can be found here, window="_blank"]. 
+First, if you haven't yet, you must download and install Podman Desktop on your operating system. https://podman-desktop.io/downloads[The instructions can be found here, window="_blank"].
 
-NOTE: For Windows/Mac users, if you can, give the podman machine at least 8GB of memory and 4 CPU (Generative AI Models are resource hungry!). The model will run with less resources, but it will be significantly slower.
+NOTE: For Windows/macOS users, if you can, give the Podman machine at least 8GB of memory and 4 CPUs (Generative AI Models are resource hungry!). The model can run with less resources, but it will be significantly slower.
 
-Once installed, go ahead and start the application and go through the setup process. After that, you should see an "AI Lab" extension in the left menu. If you don't, you may need to install the extension first. For that, go to Extensions -> Catalog and install Podman AI Lab. 
+Once installed, go ahead and start the application and go through the setup process. After that, you should see an "AI Lab" extension in the left menu. If you don't, you may need to install the extension first. For that, go to Extensions -> Catalog and install Podman AI Lab.
 
 image::podman-desktop-ai.png[]
 
-Go ahead and click on it, and in the AI Lab, select the "Catalog"
+Go ahead and click on it, and in the AI Lab, select the "Catalog".
 
 image::podman-desktop-ai-catalog.png[]
 
-You should now see a list of available AI Models to choose from. You can also import different ones (eg. from Huggingface), but we will use one of the InstructLab models that are already available. 
+You should now see a list of available AI Models to choose from. You can also import different ones (e.g. from Huggingface), but we will use one of the InstructLab models that are already available.
 
-NOTE: If you haven't heard of https://developers.redhat.com/articles/2024/05/07/instructlab-open-source-generative-ai[Instructlab], it's an open source project for enhancing large language models (LLMs) used in generative artificial intelligence (gen AI) applications. You can even contribute to it yourself! 
+NOTE: If you haven't heard of https://developers.redhat.com/articles/2024/05/07/instructlab-open-source-generative-ai[InstructLab], it's an open source project for enhancing large language models (LLMs) used in generative artificial intelligence (Gen AI) applications. You can even contribute to it yourself!
 
-To start using the model, we'll first need to download it, so go ahead and do that with the download button image:podman-desktop-model-download.png[download button,30] next to the instructlab/merlinite-7b-lab-GGUF entry (this might take a little while). 
+To start using the model, we'll first need to download it, so go ahead and do that with the download button image:podman-desktop-model-download.png[download button,30] next to the instructlab/merlinite-7b-lab-GGUF entry (this might take a little while).
 
-Once downloaded, you can create a new model service by clicking on the rocket button image:podman-desktop-create-model-service.png[rocket button, 30] that will appear where you previously clicked the download button. 
+Once downloaded, you can create a new model service by clicking on the rocket button image:podman-desktop-create-model-service.png[rocket button, 30] that will appear where you previously clicked the download button.
 
-You will be taken to the "Creating Model Service" page where you can set the port that should be exposed for the service. Podman Desktop assigns a random available port by default, but let's set it to `*35000*` so we can remember more easily what the port is when we configure our Quarkus application. 
+You will be taken to the "Creating Model Service" page where you can set the port that should be exposed for the service. Podman Desktop assigns a random available port by default, but let's set it to `35000` so we can remember more easily what the port is when we configure our Quarkus application.
 
 image::podman-desktop-create-merlinite-service.png[]
 
-After a few moments, your very own Model service will be running locally on your laptop! You an check the details on the Service details page, including some samples to test out the service with cURL (or even Java!). 
+After a few moments, your very own Model service will be running locally on your laptop! You an check the details on the Service details page, including some samples to test out the service with cURL (or even Java!).
 
 Now it's time to go back to our Quarkus application.
 
-NOTE: The InstructLab service uses the OpenAI protocol, so we can continue to use the quarkus-langchain4j-openai extension for this exercise
+NOTE: The InstructLab service uses the OpenAI protocol, so we can continue to use the quarkus-langchain4j-openai extension for this exercise.
 
 
 
@@ -88,7 +88,7 @@ quarkus.langchain4j.openai.timeout=180s
 quarkus.langchain4j.openai.log-requests=true
 quarkus.langchain4j.openai.log-responses=true
 ----
-<1> Port number 35000 was what we had defined in podman desktop when we created the model service 
+<1> Port number 35000 was what we had defined in Podman Desktop when we created the model service
 <2> The model we selected to serve. If you chose a different model in Podman Desktop, you'll need to update it here as well.
 
 == Create the AI service
@@ -121,7 +121,7 @@ public interface Assistant {
 
 == Create the prompt-base resource
 
-Now we're going to implement another REST resource that accepts prompts 
+Now we're going to implement another REST resource that accepts prompts.
 
 Create a new `AIResource.java` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
@@ -164,7 +164,7 @@ You can also run the following command:
 [.console-input]
 [source,bash]
 ----
-curl http://localhost:8080/ai
+curl -w '\n' http://localhost:8080/ai
 ----
 
 An example of output (remember, your result will likely be different):
@@ -199,16 +199,16 @@ public class SquareRootCalculator {
 This will allow you to calculate the square root of any given number, positive or negative, and handle non-integer inputs.
 ----
 
-NOTE: depending on your local resources, this might take a up to a few minutes. If you run into timeouts, 
-you can try changing the `quarkus.langchain4j.openai.timeout` value in the application.properties file. 
-If you're running on Mac/Windows, you could also try to give the podman machine more CPU/Memory resources.
+NOTE: depending on your local resources, this might take a up to a few minutes. If you run into timeouts,
+you can try changing the `quarkus.langchain4j.openai.timeout` value in the `application.properties` file.
+If you're running on Windows/macOS, you could also try to give the Podman machine more CPU/Memory resources.
 
-Notice that (at least in our case) the LLM responded with a Java class, since we provided in the SystemMessage that the 
-LLM should respond as if they were a Java engineer.  
+Notice that (at least in our case) the LLM responded with a Java class, since we provided in the `SystemMessage` that the
+LLM should respond as if they were a Java engineer.
 
 == Going further
 
-Feel free to play around with the different models Podman Desktop AI Lab provides. You will notice that some are faster 
+Feel free to play around with the different models Podman Desktop AI Lab provides. You will notice that some are faster
 than others, and some will respond better to specific questions than others, based on how they have been trained.
 
-NOTE: If you want to help improve the answers generated by the InstructLab model, feel free to https://github.com/instructlab/community/blob/main/README.md[contribute to the project]. 
+NOTE: If you want to help improve the answers generated by the InstructLab model, feel free to https://github.com/instructlab/community/blob/main/README.md[contribute to the project].

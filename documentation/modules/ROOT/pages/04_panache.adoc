@@ -3,7 +3,7 @@
 :project-name: tutorial-app
 
 [#quarkusp-demo-overview]
-== Demo Overview 
+== Demo Overview
 
 You'll learn how easy and productive Quarkus is with Hibernate with Panache. For this, we'll develop a simple CRUD REST API that handles information about fruits.
 
@@ -21,12 +21,12 @@ Just open a new terminal window, and make sure you're at the root of your `{proj
 [tabs]
 ====
 Maven::
-+ 
++
 --
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:add-extension -Dextension="rest-jsonb, jdbc-h2, hibernate-orm-panache, smallrye-openapi"
+./mvnw quarkus:add-extension -Dextension="rest-jackson, jdbc-h2, hibernate-orm-panache, smallrye-openapi"
 ----
 
 --
@@ -36,7 +36,7 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus extension add rest-jsonb jdbc-h2 hibernate-orm-panache smallrye-openapi
+quarkus extension add rest-jackson jdbc-h2 hibernate-orm-panache smallrye-openapi
 ----
 --
 ====
@@ -45,7 +45,7 @@ quarkus extension add rest-jsonb jdbc-h2 hibernate-orm-panache smallrye-openapi
 [.console-output]
 [source,text]
 ----
-✅ Adding extension io.quarkus:quarkus-rest-jsonb
+✅ Adding extension io.quarkus:quarkus-rest-jackson
 ✅ Adding extension io.quarkus:quarkus-smallrye-openapi
 ✅ Adding extension io.quarkus:quarkus-hibernate-orm-panache
 ✅ Adding extension io.quarkus:quarkus-jdbc-h2
@@ -144,7 +144,7 @@ Now we should have everything in place to query our *GET* REST endpoint:
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/fruit
+curl -w '\n' localhost:8080/fruit
 ----
 
 [.console-output]
@@ -190,7 +190,6 @@ public class FruitResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response newFruit(Fruit fruit) {
-        fruit.id = null;
         fruit.persist();
         return Response.status(Status.CREATED).entity(fruit).build();
     }
@@ -198,12 +197,12 @@ public class FruitResource {
 }
 ----
 
-Now you can insert a new fruit by using `curl`: 
+Now you can insert a new fruit by using `curl`:
 
 [.console-input]
 [source,bash]
 ----
-curl -d "{\"name\": \"Banana\", \"season\": \"Summer\"}" -H "Content-Type: application/json" http://localhost:8080/fruit
+curl -w '\n' -d "{\"name\": \"Banana\", \"season\": \"Summer\"}" -H "Content-Type: application/json" http://localhost:8080/fruit
 ----
 
 [.console-output]
@@ -237,16 +236,16 @@ Create the file `import.sql` in the folder `src/main/resources` with the followi
 [.console-input]
 [source,sql]
 ----
-create sequence fruit_sequence start with 1 increment by 1;
-INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Mango','Spring');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Strawberry','Spring');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Orange','Winter');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Lemon','Winter');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Blueberry','Summer');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Banana','Summer');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Watermelon','Summer');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Apple','Fall');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Pear','Fall');
+INSERT INTO Fruit(id,name,season) VALUES (1,'Mango','Spring');
+INSERT INTO Fruit(id,name,season) VALUES (2,'Strawberry','Spring');
+INSERT INTO Fruit(id,name,season) VALUES (3,'Orange','Winter');
+INSERT INTO Fruit(id,name,season) VALUES (4,'Lemon','Winter');
+INSERT INTO Fruit(id,name,season) VALUES (5,'Blueberry','Summer');
+INSERT INTO Fruit(id,name,season) VALUES (6,'Banana','Summer');
+INSERT INTO Fruit(id,name,season) VALUES (7,'Watermelon','Summer');
+INSERT INTO Fruit(id,name,season) VALUES (8,'Apple','Fall');
+INSERT INTO Fruit(id,name,season) VALUES (9,'Pear','Fall');
+ALTER SEQUENCE fruit_seq RESTART WITH 10;
 ----
 
 And append the following configuration in `application.properties`:
@@ -315,16 +314,16 @@ Now if you refresh your browser pointing to http://localhost:8080/fruit[window=_
 
 [TIP]
 ====
-You can add different `import.sql` files based on the application profile. 
+You can add different `import.sql` files based on the application profile.
 
-For example: in dev mode, you 
-can use the configuration `quarkus.hibernate-orm.sql-load-script=import-dev.sql`, 
+For example: in dev mode, you
+can use the configuration `quarkus.hibernate-orm.sql-load-script=import-dev.sql`,
 while in production mode you can use `quarkus.hibernate-orm.sql-load-script=import-prod.sql`.
 ====
 
 == Adding a custom finder to the `Fruit` Entity
 
-Update the `Fruit` class to contain a finder method `findBySeason` like: 
+Update the `Fruit` class to contain a finder method `findBySeason` like:
 
 [#quarkusp-find-fruits]
 [.console-input]
@@ -403,7 +402,7 @@ Let's try to filter only the fruits with the *Summer* season:
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/fruit?season=Summer
+curl -w '\n' localhost:8080/fruit?season=Summer
 ----
 
 [.console-output]
@@ -518,7 +517,7 @@ Let's try again to filter only the fruits with the *Spring* season:
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/fruit?season=Spring
+curl -w '\n' localhost:8080/fruit?season=Spring
 ----
 
 [.console-output]
