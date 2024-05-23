@@ -1,6 +1,6 @@
 = Agents/Tools
 
-:project-ai-name: quarkus-langchain-app
+:project-ai-name: quarkus-langchain4j-app
 
 Things become more interesting when you can bring the AI LLM into your application and get it to interact with specific functions you build for it. 
 

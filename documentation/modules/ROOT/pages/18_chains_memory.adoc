@@ -1,6 +1,6 @@
 = Chains and Memory
 
-:project-ai-name: quarkus-langchain-app
+:project-ai-name: quarkus-langchain4j-app
 
 So far we explored how to use prompts with LLMs, however to really leverage the power of LLMs it is essential that you 
 can build a conversation by referring to previous questions and answers and manage concurrent interactions. 

@@ -1,13 +1,13 @@
 = Working with prompts
 
-:project-ai-name: quarkus-langchain-app
+:project-ai-name: quarkus-langchain4j-app
 
 The Quarkus LangChain4j extension seamlessly integrates Large Language Models (LLMs) into Quarkus applications. LLMs are AI-based systems designed to understand, generate, and manipulate human language, showcasing advanced natural language processing capabilities. Thanks to this extensions we can enable the harnessing of LLM capabilities for the development of more intelligent applications. 
 
 In this first chapter we'll explore the simplest of interactions with an LLM: Prompting. It essentially means just asking questions to an LLM and receiving an answer in natural language from a given Model, such as OpenAI, Mistral, Hugging Face, Ollama, etc.
 
 
-== Creating a Quarkus & LangChain Application
+== Creating a Quarkus & LangChain4j Application
 
 [tabs%sync]
 ====

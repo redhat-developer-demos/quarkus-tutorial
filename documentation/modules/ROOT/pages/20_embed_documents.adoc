@@ -1,6 +1,6 @@
 = Embedding Documents
 
-:project-ai-name: quarkus-langchain-app
+:project-ai-name: quarkus-langchain4j-app
 
 Many applications involving Large Language Models (LLMs) often require user-specific data beyond their training set, such as CSV files, data from various sources, or reports. To achieve this, the process of Retrieval Augmented Generation (RAG) is commonly employed. 
 Through this technique you can combine your own business data (or whatever data!) with the LLM to enrich the possibilities offered by your application.
