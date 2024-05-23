@@ -5,7 +5,7 @@
 [#quarkusp-demo-overview]
 == Demo Overview 
 
-You'll learn how easy and productive is Quarkus with Hibernate with Panache. For this, we'll develop a simple CRUD REST API that handles information about fruits.
+You'll learn how easy and productive Quarkus is with Hibernate with Panache. For this, we'll develop a simple CRUD REST API that handles information about fruits.
 
 We'll use http://www.h2database.com[H2,window="_blank"] as our backing database in this section, but it's very easy to use other database engines with Quarkus as you will see in the Dev Services chapter. As an exercise for later, we suggest to try your favorite database engine with the documentation found https://quarkus.io/guides/datasource[here,window="_blank"].
 
@@ -57,7 +57,7 @@ quarkus extension add rest-jsonb jdbc-h2 hibernate-orm-panache smallrye-openapi
 [INFO] ------------------------------------------------------------------------
 ----
 
-You'll notice that by running this command the Quarkus maven plugin added some dependencies to your `pom.xml` file. And best of all: Quarkus will autodetect and apply the changes, and you don't even need to restart Quarkus!
+You'll notice that by running this command the Quarkus Maven plugin added some dependencies to your `pom.xml` file. And best of all: Quarkus will autodetect and apply the changes, and you don't even need to restart Quarkus!
 
 == Adding database properties to your configuration
 
@@ -75,7 +75,7 @@ quarkus.datasource.db-kind=h2
 quarkus.hibernate-orm.database.generation=drop-and-create
 ----
 
-NOTE: With <<Dev Services>> enabled, no JDBC URL needs to be provided in Dev Mode. In this case, we input the URL to ensure consistency across all application run modes.
+NOTE: With <<Dev Services>> enabled, no JDBC URL needs to be provided in dev mode. In this case, we input the URL to ensure consistency across all application run modes.
 
 == Create Fruit Entity
 
@@ -139,7 +139,7 @@ public class FruitResource {
 }
 ----
 
-Now we should everything in place to query our *GET* REST endpoint:
+Now we should have everything in place to query our *GET* REST endpoint:
 
 [.console-input]
 [source,bash]
