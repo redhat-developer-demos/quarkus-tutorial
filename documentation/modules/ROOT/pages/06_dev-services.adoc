@@ -25,6 +25,7 @@ TIP: You technically don't need to add the `db-kind` property since there is onl
 greeting=Hello y'all!
 quarkus.datasource.db-kind=postgresql
 quarkus.hibernate-orm.database.generation=drop-and-create
+quarkus.hibernate-orm.sql-load-script=import.sql
 ----
 
 WARNING: Make sure the h2 `db-kind` and `jdbc.url` properties have been removed.
@@ -39,8 +40,8 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:remove-extension -Dextension=quarkus-jdbc-h2
 ./mvnw quarkus:add-extension -Dextension=quarkus-jdbc-postgresql
+./mvnw quarkus:remove-extension -Dextension=quarkus-jdbc-h2
 ----
 
 --
@@ -50,8 +51,8 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus extension remove quarkus-jdbc-h2
 quarkus extension add quarkus-jdbc-postgresql
+quarkus extension remove quarkus-jdbc-h2
 ----
 --
 ====
@@ -62,12 +63,12 @@ Notice in the logs how Quarkus has reloaded and started up a PostgreSQL database
 [.console-output]
 [source,text]
 ----
-2023-03-16 08:06:56,882 INFO  [io.qua.dat.dep.dev.DevServicesDatasourceProcessor] (build-13) Dev Services for the default datasource (postgresql) started - container ID is c7c9a6ccf029
+2024-05-23 17:46:51,225 INFO  [io.qua.dat.dep.dev.DevServicesDatasourceProcessor] (build-32) Dev Services for default datasource (postgresql) started - container ID is b2957fbe64ee
 ----
 
-== Verify Postgresql testcontainer is running
+== Verify PostgreSQL container is running
 
-Let's verify in Docker/Podman that the Dev Services container is running.  You should see 2 containers, one testcontainers/ryuk container which orchestrates the Dev Services, and another PostgreSQL container which is running the database and which is automatically wired into our Quarkus dev mode:
+Let's verify in Docker/Podman that the Dev Services container is running.  You should see 2 containers, one `testcontainers/ryuk` container which orchestrates the Dev Services, and another `postgres` container which is running the database and which is automatically wired into our Quarkus dev mode:
 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -83,7 +84,7 @@ Call the fruit endpoint again. The data is now coming from the PostgreSQL databa
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-curl localhost:8080/fruit?season=Spring
+curl -w '\n' localhost:8080/fruit?season=Spring
 ----
 
 [.console-output]

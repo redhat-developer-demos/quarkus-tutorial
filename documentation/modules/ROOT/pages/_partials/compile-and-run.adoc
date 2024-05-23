@@ -16,7 +16,7 @@ a|
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
- ./mvnw package 
+ ./mvnw package
 ----
 
 a|
@@ -44,9 +44,9 @@ Native mode::
 +
 --
 
-Quarkus simplifies the https://quarkus.io/guides/building-native-image[compilation of Java applications down to a native binary] using GraalVM/Mandrel. To do so, add a "native" flag to your build command.   
+Quarkus simplifies the https://quarkus.io/guides/building-native-image[compilation of Java applications down to a native binary] using GraalVM/Mandrel. To do so, add a "native" flag to your build command.
 
-NOTE: To force building a native binary in a GraalVM Mandrel container, add `-Dquarkus.native.container-build=true`.  
+NOTE: To force building a native binary in a GraalVM Mandrel container, add `-Dquarkus.native.container-build=true`.
 
 [%header,cols="1,1"]
 |=====
@@ -108,7 +108,7 @@ a|
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus image build --native 
+quarkus image build --native
 ----
 |=====
 
@@ -132,11 +132,11 @@ You'll see an output like this one:
 [.console-output]
 [source,text]
 ----
-__  ____  __  _____   ___  __ ____  ______ 
- --/ __ \/ / / / _ | / _ \/ //_/ / / / __/ 
- -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \   
---\___\_\____/_/ |_/_/|_/_/|_|\____/___/   
-2023-07-07 11:47:14,046 INFO  [io.quarkus] (main) code-with-quarkus 1.0.0-SNAPSHOT native (powered by Quarkus 3.2.0.Final) started in 0.019s. Listening on: http://0.0.0.0:8080
-2023-07-07 11:47:14,047 INFO  [io.quarkus] (main) Profile prod activated. 
+__  ____  __  _____   ___  __ ____  ______
+ --/ __ \/ / / / _ | / _ \/ //_/ / / / __/
+ -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \
+--\___\_\____/_/ |_/_/|_/_/|_|\____/___/
+2023-07-07 11:47:14,046 INFO  [io.quarkus] (main) code-with-quarkus 1.0.0-SNAPSHOT native (powered by Quarkus 3.10.2) started in 0.019s. Listening on: http://0.0.0.0:8080
+2023-07-07 11:47:14,047 INFO  [io.quarkus] (main) Profile prod activated.
 2023-07-07 11:47:14,047 INFO  [io.quarkus] (main) Installed features: [cdi, -reactive, smallrye-context-propagation, vertx]
 ----

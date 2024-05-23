@@ -62,13 +62,13 @@ quarkus extension add rest-client-jackson
 [INFO] Building tutorial-app 1.0-SNAPSHOT
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO]
-[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
+[INFO] --- quarkus-maven-plugin:3.10.2:add-extension (default-cli) @ tutorial-app ---
 ✅ Adding extension io.quarkus:quarkus-rest-client-jackson
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
 [INFO] Total time:  1.773 s
-[INFO] Finished at: 2020-05-11T21:43:38-04:00
+[INFO] Finished at: 2024-05-23T21:43:38-04:00
 [INFO] ------------------------------------------------------------------------
 ----
 
@@ -253,8 +253,6 @@ import jakarta.ws.rs.core.Response.Status;
 @Path("/fruit")
 public class FruitResource {
 
-
-
     @RestClient
     @Inject
     FruityViceService fruityViceService;
@@ -268,7 +266,6 @@ public class FruitResource {
         fruit.persist();
         return Response.status(Status.CREATED).entity(fruit).build();
     }
-
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

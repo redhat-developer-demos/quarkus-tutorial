@@ -69,14 +69,14 @@ Alternatively on Windows you can also try https://chocolatey.org/[Chocolatey] wh
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-  curl -s "https://get.sdkman.io" | bash
-  source "$HOME/.sdkman/bin/sdkman-init.sh"
-.
-  sdk install java
-  sdk install maven
-  sdk install quarkus
-  sdk install java 21.0.3-tem
-  sdk install jbang
+curl -s "https://get.sdkman.io" | bash
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+sdk install java
+sdk install maven
+sdk install quarkus
+sdk install java 21.0.3-tem
+sdk install jbang
 ----
 =====
 --

@@ -14,7 +14,6 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:remove-extension -D"extensions=rest"
 ./mvnw quarkus:add-extension -D"extensions=spring-web,spring-data-jpa"
 ----
 
@@ -25,7 +24,6 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus ext remove rest
 quarkus ext add spring-web spring-data-jpa
 ----
 --
@@ -40,14 +38,14 @@ quarkus ext add spring-web spring-data-jpa
 [INFO] Building tutorial-app 1.0-SNAPSHOT
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO]
-[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
+[INFO] --- quarkus-maven-plugin:3.10.2:add-extension (default-cli) @ tutorial-app ---
 ✅ Adding extension io.quarkus:quarkus-spring-data-jpa
 ✅ Adding extension io.quarkus:quarkus-spring-web
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
 [INFO] Total time:  2.052 s
-[INFO] Finished at: 2020-05-11T21:33:15-04:00
+[INFO] Finished at: 2024-05-23T21:33:15-04:00
 [INFO] ------------------------------------------------------------------------
 ----
 
@@ -115,7 +113,7 @@ Let's try to filter only the fruits with the *Summer* season.  Don't forget to s
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/spring-fruit?season=Summer
+curl -w '\n' localhost:8080/spring-fruit?season=Summer
 ----
 
 [.console-output]
