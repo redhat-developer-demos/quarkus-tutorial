@@ -32,12 +32,12 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 [tabs]
 ====
 Maven::
-+ 
++
 --
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:add-extension -D"extensions=rest-client, rest-client-jsonb"
+./mvnw quarkus:add-extension -D"extensions=rest-client-jackson"
 ----
 
 --
@@ -47,7 +47,7 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus extension add rest-client rest-client-jsonb
+quarkus extension add rest-client-jackson
 ----
 --
 ====
@@ -62,15 +62,17 @@ quarkus extension add rest-client rest-client-jsonb
 [INFO] Building tutorial-app 1.0-SNAPSHOT
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO]
-[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
-✅ Adding extension io.quarkus:quarkus-rest-client
+[INFO] --- quarkus-maven-plugin:3.10.2:add-extension (default-cli) @ tutorial-app ---
+✅ Adding extension io.quarkus:quarkus-rest-client-jackson
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
 [INFO] Total time:  1.773 s
-[INFO] Finished at: 2020-05-11T21:43:38-04:00
+[INFO] Finished at: 2024-05-23T21:43:38-04:00
 [INFO] ------------------------------------------------------------------------
 ----
+
+Notice in the logs how Quarkus is reloading and the `rest-client-jackson` extension is now part of the `Installed features`.
 
 == Create FruityVice POJO
 
@@ -83,22 +85,15 @@ Create a new `FruityVice` Java class in `src/main/java` in the `com.redhat.devel
 ----
 package com.redhat.developers;
 
-import jakarta.json.bind.annotation.JsonbCreator;
-
 public class FruityVice {
 
     private String name;
 
     private Nutritions nutritions;
 
-    FruityVice(String name, Nutritions nutritions) {
+    public FruityVice(String name, Nutritions nutritions) {
         this.name = name;
         this.nutritions = nutritions;
-    }
-
-    @JsonbCreator
-    public static FruityVice of(String name, Nutritions nutritions) {
-        return new FruityVice(name, nutritions);
     }
 
     public String getName() {
@@ -115,14 +110,9 @@ public class FruityVice {
 
         private double calories;
 
-        Nutritions(double carbohydrates, double calories) {
+        public Nutritions(double carbohydrates, double calories) {
             this.carbohydrates = carbohydrates;
             this.calories = calories;
-        }
-
-        @JsonbCreator
-        public static Nutritions of(double carbohydrates, double calories) {
-                return new Nutritions(carbohydrates, calories);
         }
 
         public double getCarbohydrates() {
@@ -165,7 +155,7 @@ public interface FruityViceService {
     @Path("/{name}")
     @Produces(MediaType.APPLICATION_JSON)
     FruityVice getFruitByName(@PathParam("name") String name);
-    
+
 }
 ----
 
@@ -209,12 +199,12 @@ public class FruitDTO {
 
     public static FruitDTO of(Fruit fruit, FruityVice fruityVice) {
         return new FruitDTO(
-            fruit.name, 
-            fruit.season, 
-            fruityVice.getNutritions().getCarbohydrates(), 
+            fruit.name,
+            fruit.season,
+            fruityVice.getNutritions().getCarbohydrates(),
             fruityVice.getNutritions().getCalories());
     }
-    
+
     public String getName() {
         return name;
     }
@@ -265,8 +255,6 @@ import jakarta.ws.rs.core.Response.Status;
 @Path("/fruit")
 public class FruitResource {
 
-
-
     @RestClient
     @Inject
     FruityViceService fruityViceService;
@@ -280,7 +268,6 @@ public class FruitResource {
         fruit.persist();
         return Response.status(Status.CREATED).entity(fruit).build();
     }
-
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -307,7 +294,7 @@ You can also run the following command:
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/fruit?season=Summer
+curl -w '\n' localhost:8080/fruit?season=Summer
 ----
 
 [.console-output]

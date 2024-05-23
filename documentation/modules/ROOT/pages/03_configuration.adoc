@@ -1,6 +1,6 @@
 = Configuration
 
-Hardcoded values in your code is a no go, so let's see how to add configuration to your application. 
+Hardcoded values in your code is a no go, so let's see how to add configuration to your application.
 Quarkus relies on the MicroProfile Config specification and the main configuration file is  `application.properties`.
 
 == Using a config property in your code
@@ -38,23 +38,17 @@ If you refresh your browser pointing to http://localhost:8080/hello[window="_bla
 [.console-output]
 [source,text]
 ----
-jakarta.enterprise.inject.spi.DeploymentException: No config value of type [java.lang.String] exists for: greeting
-	at io.quarkus.arc.runtime.ConfigRecorder.validateConfigProperties(ConfigRecorder.java:37)
-	at io.quarkus.deployment.steps.ConfigBuildStep$validateConfigProperties61.deploy_0(ConfigBuildStep$validateConfigProperties61.zig:120)
-	at io.quarkus.deployment.steps.ConfigBuildStep$validateConfigProperties61.deploy(ConfigBuildStep$validateConfigProperties61.zig:36)
-	at io.quarkus.runner.ApplicationImpl.doStart(ApplicationImpl.zig:166)
-	at io.quarkus.runtime.Application.start(Application.java:89)
-	at io.quarkus.runtime.ApplicationLifecycleManager.run(ApplicationLifecycleManager.java:90)
-	at io.quarkus.runtime.Quarkus.run(Quarkus.java:61)
-	at io.quarkus.runtime.Quarkus.run(Quarkus.java:38)
-	at io.quarkus.runtime.Quarkus.run(Quarkus.java:106)
-	at io.quarkus.runner.GeneratedMain.main(GeneratedMain.zig:29)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
-	at io.quarkus.runner.bootstrap.StartupActionImpl$1.run(StartupActionImpl.java:99)
-	at java.base/java.lang.Thread.run(Thread.java:834)
+io.quarkus.runtime.configuration.ConfigurationException: Failed to load config value of type class java.lang.String for: greeting
+	at io.quarkus.arc.runtime.ConfigRecorder.validateConfigProperties(ConfigRecorder.java:70)
+	at io.quarkus.deployment.steps.ConfigBuildStep$validateConfigValues1665125174.deploy_0(Unknown Source)
+	at io.quarkus.deployment.steps.ConfigBuildStep$validateConfigValues1665125174.deploy(Unknown Source)
+	at io.quarkus.runner.ApplicationImpl.doStart(Unknown Source)
+	at io.quarkus.runtime.Application.start(Application.java:101)
+	at io.quarkus.runtime.ApplicationLifecycleManager.run(ApplicationLifecycleManager.java:111)
+	at io.quarkus.runtime.Quarkus.run(Quarkus.java:71)
+	at io.quarkus.runtime.Quarkus.run(Quarkus.java:44)
+	at io.quarkus.runtime.Quarkus.run(Quarkus.java:124)
+	at io.quarkus.runner.GeneratedMain.main(Unknown Source)
 ----
 
 Which is expected, since we didn't provide the `greeting` property neither at the `application.properties` file nor with some runtime configuration.
@@ -78,7 +72,7 @@ You can also use `curl` to check the same result:
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/hello
+curl -w '\n' localhost:8080/hello
 ----
 
 [.console-output]
@@ -87,9 +81,9 @@ curl localhost:8080/hello
 Hello y'all!
 ----
 
-== Update your integration test
+== Update your test
 
-Since we changed the output of our `/hello` endpoint, our integration test doesn't pass anymore.
+Since we changed the output of our `/hello` endpoint, our test doesn't pass anymore.
 
 Let's update `GreetingResourceTest` to reflect our recent changes:
 
@@ -136,7 +130,7 @@ Now run your tests to check if everything is ok:
 [tabs]
 ====
 Maven::
-+ 
++
 --
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -177,7 +171,7 @@ quarkus test
 [tabs]
 ====
 Maven::
-+ 
++
 --
 [.console-input]
 [source,bash,subs="+macros,+attributes"]

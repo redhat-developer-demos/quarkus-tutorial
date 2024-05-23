@@ -8,7 +8,7 @@
 ====
 
 Maven::
-+ 
++
 --
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -20,11 +20,11 @@ cd {project-name}
 Quarkus CLI::
 +
 --
-The quarkus CLI tool lets you create projects, manage extensions and do essential dev, build and deploy commands using the underlying project build tool in a simplified way. 
+The quarkus CLI tool lets you create projects, manage extensions and do essential dev, build and deploy commands using the underlying project build tool in a simplified way.
 
 Follow these instructions to install Quarkus CLI: https://quarkus.io/guides/cli-tooling
 
-Then create the application: 
+Then create the application:
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
@@ -49,7 +49,7 @@ Or else if you're a CLI person, you can run a `curl` command like:
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/hello
+curl -w '\n' localhost:8080/hello
 ----
 
 [.console-output]
@@ -83,7 +83,7 @@ You can run the test in your IDE or by running the following:
 [tabs%sync]
 ====
 Maven::
-+ 
++
 --
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -132,7 +132,7 @@ Let's start the _Live Coding_ mode by using the `dev` command. You probably won'
 [tabs%sync]
 ====
 Maven::
-+ 
++
 --
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -152,7 +152,7 @@ quarkus dev
 --
 ====
 
-NOTE: By default Quarkus uses 'localhost' for the dev mode host setting. If you are working in a remote development environment, you may need to set the host to 0.0.0.0 by appending `-D"quarkus.http.host=0.0.0.0"` to the above command. 
+NOTE: By default Quarkus uses 'localhost' for the dev mode host setting. If you are working in a remote development environment, you may need to set the host to 0.0.0.0 by appending `-D"quarkus.http.host=0.0.0.0"` to the above command.
 
 == Dev UI
 
@@ -182,6 +182,6 @@ Press `r` and the tests will start running. You should see the status change dow
 All 1 test is passing (0 skipped), 1 test was run in 11705ms. Tests completed at 16:02:32.
 ----
 
-TIP: If you don’t want to have continuous testing enabled, you can change this by adding `quarkus.test.continuous-testing=disabled` to your `src/main/resources/application.properties`. 
+TIP: If you don’t want to have continuous testing enabled, you can change this by adding `quarkus.test.continuous-testing=disabled` to your `src/main/resources/application.properties`.
 
-You can find more details about controlling continuous testing in https://quarkus.io/guides/continuous-testing#controlling-continuous-testing[this guide]. 
+You can find more details about controlling continuous testing in https://quarkus.io/guides/continuous-testing#controlling-continuous-testing[this guide].

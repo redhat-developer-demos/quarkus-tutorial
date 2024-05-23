@@ -11,7 +11,7 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 [tabs]
 ====
 Maven::
-+ 
++
 --
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -46,7 +46,7 @@ public void print(JsonObject beer) {
 
 == Add the Reactive Messaging Kafka properties
 
-Add the following properties to your `application.properties` in `src/main/resources` to configure `messages` channel to be backed by a Kafka topic instead of a memory channel: 
+Add the following properties to your `application.properties` in `src/main/resources` to configure `messages` channel to be backed by a Kafka topic instead of a memory channel:
 
 [.console-input]
 [source,properties]
@@ -71,12 +71,12 @@ TIP: You can disable Dev Services for Kafka by adding `quarkus.kafka.devservices
 
 == Invoke the endpoint
 
-With all these changes done, having Docker/Podman running in your computer, and starting the service in Dev Mode, you can send the same request as in the previous chapter:
+With all these changes done, having Docker/Podman running in your computer, and starting the service in dev mode, you can send the same request as in the previous chapter:
 
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/beer/emit/1
+curl -w '\n' localhost:8080/beer/emit/1
 ----
 
 

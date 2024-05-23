@@ -2,8 +2,8 @@
 
 == Securing endpoints with JWT RBAC
 
-In a microservices architecture, and generally speaking, any application, might need to be protected so only specific users can access the defined endpoint. 
-Quarkus provides integration to the https://github.com/eclipse/microprofile-jwt-auth[MicroProfile JWT RBAC,window=_blank] spec.
+In a microservices architecture, and generally speaking, any application, might need to be protected so only specific users can access the defined endpoint.
+Quarkus provides integration to the https://github.com/eclipse/microprofile-jwt-auth[MicroProfile JWT RBAC,window=_blank] specification.
 
 So let's see how you can start using JWT for _Role Based Access Control_ (RBAC) of endpoints.
 
@@ -14,7 +14,7 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 [tabs]
 ====
 Maven::
-+ 
++
 --
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -103,7 +103,7 @@ import org.eclipse.microprofile.jwt.Claims;
 
 @Path("secure")
 public class SecureResource {
-    
+
     @Claim(standard = Claims.preferred_username)
     String username;
 
@@ -124,7 +124,7 @@ Run the following command in a bash shell:
 [source,bash]
 ----
 token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token -s)
-curl -H "Authorization: Bearer $token" localhost:8080/secure/claim
+curl -w '\n' -H "Authorization: Bearer $token" localhost:8080/secure/claim
 ----
 
 You should see the `preferred_username` field for the given token (jdoe).
@@ -143,7 +143,7 @@ To validate this, just invoke the service again, but change the token:
 [source,bash]
 ----
 token=XXXX
-curl -v -H "Authorization: Bearer $token" localhost:8080/secure/claim
+curl -v -w '\n' -H "Authorization: Bearer $token" localhost:8080/secure/claim
 ----
 
 [.console-output]
@@ -171,7 +171,7 @@ You can check the `401 Unauthorized` response.
 == Add RBAC to SecureResource
 
 So far, you've seen how to get claims from the provided JWT token, but anyone could access that endpoint, so let's protect it with a role.
-For this case you need to use a role that is defined in the JWT token inside the `groups` claim (ie `Subscriber`).
+For this case, you need to use a role that is defined in the JWT token inside the `groups` claim (ie `Subscriber`).
 
 Change the `SecureResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
@@ -189,7 +189,7 @@ import org.eclipse.microprofile.jwt.Claims;
 
 @Path("/secure")
 public class SecureResource {
-    
+
     @Claim(standard = Claims.preferred_username)
     String username;
 
@@ -211,10 +211,10 @@ Run the following command:
 [source,bash]
 ----
 token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token -s)
-curl -H "Authorization: Bearer $token" localhost:8080/secure/claim
+curl -w '\n' -H "Authorization: Bearer $token" localhost:8080/secure/claim
 ----
 
-And you’ll see the preferred_username field for the given token (jdoe).
+And you’ll see the `preferred_username` field for the given token (jdoe).
 
 [.console-output]
 [source,text]
@@ -238,7 +238,7 @@ import org.eclipse.microprofile.jwt.Claims;
 
 @Path("/secure")
 public class SecureResource {
-    
+
     @Claim(standard = Claims.preferred_username)
     String username;
 
@@ -260,7 +260,7 @@ Run the following command:
 [source,bash]
 ----
 token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token -s)
-curl -v -H "Authorization: Bearer $token" localhost:8080/secure/claim
+curl -v -w '\n' -H "Authorization: Bearer $token" localhost:8080/secure/claim
 ----
 
 And you’ll see the preferred_username field for the given token (jdoe).

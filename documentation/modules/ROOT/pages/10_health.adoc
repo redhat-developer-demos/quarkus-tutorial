@@ -15,7 +15,7 @@ Just open a new terminal window, and make sure you’re at the root of your `{pr
 [tabs]
 ====
 Maven::
-+ 
++
 --
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
@@ -45,7 +45,7 @@ Run the following command:
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/q/health
+curl -w '\n' localhost:8080/q/health
 ----
 
 [.console-output]
@@ -96,9 +96,9 @@ public class LivenessProbe implements HealthCheck {
 
 == Add a custom readiness probe
 
-In dev mode, all your health checks are visible in health UI: http://localhost:8080/q/health-ui/.
+In dev mode, all your health checks are visible in the Health UI: http://localhost:8080/q/health-ui/.
 
-Some extensions may provide default health checks, including that the extension will automatically register its health checks. 
+Some extensions may provide default health checks, including that the extension will automatically register its health checks.
 For example, quarkus-agroal (that is used to manage Quarkus datasources) automatically registers a readiness health check that will validate each datasource.
 
 Since the readiness of the database is already assessed just by adding those extensions, we should look into defining health checks for other dependencies that we have.
@@ -143,13 +143,12 @@ Run the following command:
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/health
+curl -w '\n' localhost:8080/health
 ----
 
 [.console-output]
 [source, json]
 ----
-
 {
     "status": "UP",
     "checks": [
@@ -181,7 +180,7 @@ Run the following command:
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/health/live
+curl -w '\n' localhost:8080/health/live
 ----
 
 [.console-output]
@@ -207,7 +206,7 @@ Run the following command:
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/health/ready
+curl -w '\n' localhost:8080/health/ready
 ----
 
 [.console-output]
@@ -235,4 +234,4 @@ You can see that the readiness endpoint only returns information about the readi
 
 == The Health extension and Kubernetes
 
-NOTE: If you're using the Quarkus Kubernetes extension, the liveness and readiness probes are automatically configured in your `Deployment` when you generate the Kubernetes yaml files.
+NOTE: If you're using the Quarkus Kubernetes extension, the liveness and readiness probes are automatically configured in your `Deployment` when you generate the Kubernetes YAML files.

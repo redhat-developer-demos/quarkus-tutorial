@@ -55,8 +55,8 @@ Please have them installed and configured before you get started with any of the
 | `brew install maven`
 | `dnf install maven`
 | https://maven.apache.org/download.cgi[Windows] (Make sure you set the `MAVEN_HOME` environment variable and add `%MAVEN_HOME%\bin` to your `PATH`)
-| **GraalVM [Optional *]**
-| https://www.graalvm.org/latest/docs/getting-started/macos/[Download & install GraalVM for MacOS]
+| **GraalVM for Java 21 [Optional]**
+| https://www.graalvm.org/latest/docs/getting-started/macos/[Download & install GraalVM for macOS]
 | https://www.graalvm.org/latest/docs/getting-started/linux/[Download & install GraalVM for Linux]
 | https://www.graalvm.org/latest/docs/getting-started/windows/[Download & install GraalVM for Windows]
 
@@ -69,14 +69,14 @@ Alternatively on Windows you can also try https://chocolatey.org/[Chocolatey] wh
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-  curl -s "https://get.sdkman.io" | bash
-  source "$HOME/.sdkman/bin/sdkman-init.sh"
-.
-  sdk install java
-  sdk install maven
-  sdk install quarkus
-  sdk install java 21.0.3-tem
-  sdk install jbang
+curl -s "https://get.sdkman.io" | bash
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+sdk install java
+sdk install maven
+sdk install quarkus
+sdk install java 21.0.3-tem
+sdk install jbang
 ----
 =====
 --
