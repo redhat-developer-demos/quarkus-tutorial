@@ -55,8 +55,8 @@ Please have them installed and configured before you get started with any of the
 | `brew install maven`
 | `dnf install maven`
 | https://maven.apache.org/download.cgi[Windows] (Make sure you set the `MAVEN_HOME` environment variable and add `%MAVEN_HOME%\bin` to your `PATH`)
-| **GraalVM [Optional *]**
-| https://www.graalvm.org/latest/docs/getting-started/macos/[Download & install GraalVM for MacOS]
+| **GraalVM for Java 21 [Optional]**
+| https://www.graalvm.org/latest/docs/getting-started/macos/[Download & install GraalVM for macOS]
 | https://www.graalvm.org/latest/docs/getting-started/linux/[Download & install GraalVM for Linux]
 | https://www.graalvm.org/latest/docs/getting-started/windows/[Download & install GraalVM for Windows]
 
