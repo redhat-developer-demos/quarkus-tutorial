@@ -272,8 +272,8 @@ You can also use Docker instead of Podman. The advantage of Podman is that it is
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://maven.apache.org/download.cgi">Windows</a> (Make sure you set the <code>MAVEN_HOME</code> environment variable and add <code>%MAVEN_HOME%\bin</code> to your <code>PATH</code>)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>GraalVM [Optional *]</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.graalvm.org/latest/docs/getting-started/macos/">Download &amp; install GraalVM for MacOS</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>GraalVM for Java 21 [Optional]</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.graalvm.org/latest/docs/getting-started/macos/">Download &amp; install GraalVM for macOS</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.graalvm.org/latest/docs/getting-started/linux/">Download &amp; install GraalVM for Linux</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.graalvm.org/latest/docs/getting-started/windows/">Download &amp; install GraalVM for Windows</a></p></td>
 </tr>
@@ -292,14 +292,14 @@ Alternatively on Windows you can also try <a href="https://chocolatey.org/">Choc
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">  curl -s "https://get.sdkman.io" | bash
-  source "$HOME/.sdkman/bin/sdkman-init.sh"
-.
-  sdk install java
-  sdk install maven
-  sdk install quarkus
-  sdk install java 21.0.3-tem
-  sdk install jbang</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -s "https://get.sdkman.io" | bash
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+sdk install java
+sdk install maven
+sdk install quarkus
+sdk install java 21.0.3-tem
+sdk install jbang</code></pre>
 </div>
 </div>
 </td>

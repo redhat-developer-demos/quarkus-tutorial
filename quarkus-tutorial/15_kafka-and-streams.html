@@ -304,11 +304,11 @@ You can disable Dev Services for Kafka by adding <code>quarkus.kafka.devservices
 <h2 id="_invoke_the_endpoint"><a class="anchor" href="#_invoke_the_endpoint"></a>Invoke the endpoint</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>With all these changes done, having Docker/Podman running in your computer, and starting the service in Dev Mode, you can send the same request as in the previous chapter:</p>
+<p>With all these changes done, having Docker/Podman running in your computer, and starting the service in dev mode, you can send the same request as in the previous chapter:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/beer/emit/1</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/beer/emit/1</code></pre>
 </div>
 </div>
 <div class="paragraph">

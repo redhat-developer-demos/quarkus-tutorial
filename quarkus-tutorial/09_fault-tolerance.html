@@ -168,7 +168,7 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>When trying to achieve the goal of resilience in our distributed systems, sometimes we need features like retries, fallbacks, and circuit breakers. Luckily for us, Quarkus provides these features for us through the <em>fault tolerance</em> extension.</p>
+<p>When trying to achieve the goal of resilience in our distributed systems, sometimes we need features like retries, fallbacks, and circuit breakers. Luckily for us, Quarkus provides these features for us through the <em>Fault Tolerance</em> extension.</p>
 </div>
 </div>
 </div>
@@ -256,7 +256,7 @@ public interface FruityViceService {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit?season=Summer</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/fruit?season=Summer</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -291,7 +291,7 @@ public interface FruityViceService {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit?season=Summer</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/fruit?season=Summer</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -369,7 +369,7 @@ public interface FruityViceService {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit?season=Summer</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/fruit?season=Summer</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -444,7 +444,7 @@ If the invocation succeeds, then the circuit is back to closed again.</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit?season=Summer</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/fruit?season=Summer</code></pre>
 </div>
 </div>
 <div class="paragraph">

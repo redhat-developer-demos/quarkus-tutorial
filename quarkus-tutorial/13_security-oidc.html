@@ -169,12 +169,12 @@
 <p>You can protect your JAX-RS microservices by using Bearer Token Authorization where Bearer Tokens are issued by OpenId Connect and OAuth 2.0 compliant Authorization Servers such as <a href="https://www.keycloak.org/about.html">Keycloak</a>.</p>
 </div>
 <div class="paragraph">
-<p>In this section we will secure our endpoints with Bearer Tokens by using Dev Services when running in Dev Mode and, lastly, by configuring the KeyCloak server for all the run modes.</p>
+<p>In this section we will secure our endpoints with Bearer Tokens by using Dev Services when running in dev mode and, lastly, by configuring the Keycloak server for all the run modes.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_add_the_oidc_and_keycloak_extensions"><a class="anchor" href="#_add_the_oidc_and_keycloak_extensions"></a>Add the OIDC and KeyCloak extensions</h2>
+<h2 id="_add_the_oidc_and_keycloak_extensions"><a class="anchor" href="#_add_the_oidc_and_keycloak_extensions"></a>Add the OIDC and Keycloak extensions</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Just open a new terminal window, and make sure you&#8217;re at the root of your <code>tutorial-app</code> project, then run:</p>
@@ -210,16 +210,16 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="_working_with_devservices_for_keycloak"><a class="anchor" href="#_working_with_devservices_for_keycloak"></a>Working with DevServices for KeyCloak</h2>
+<h2 id="_working_with_devservices_for_keycloak"><a class="anchor" href="#_working_with_devservices_for_keycloak"></a>Working with DevServices for Keycloak</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Quarkus introduced an experimental <strong>Dev Services For Keycloak</strong> feature which is enabled by default when the <code>quarkus-oidc</code> extension is started in dev mode. It starts a Keycloak container and initializes it by registering the existing Keycloak realm or creating a new realm with the client and users for you to start developing your Quarkus application secured by Keycloak immediately.</p>
+<p>Quarkus provides a <strong>Dev Services For Keycloak</strong> feature which is enabled by default when the <code>quarkus-oidc</code> extension is started in dev mode. It starts a Keycloak container and initializes it by registering the existing Keycloak realm or creating a new realm with the client and users for you to start developing your Quarkus application secured by Keycloak immediately.</p>
 </div>
 <div class="paragraph">
-<p>When working in Dev Mode, you can use Dev Services for KeyCloak. This is an easy way to locally test your KeyCloak authentication.</p>
+<p>When working in dev mode, you can use Dev Services for Keycloak. This is an easy way to locally test your Keycloak authentication.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s define a static port for the KeyCloak dev service so you can copy/paste the links further down in this section.  Add the following line to your application.properties:</p>
+<p>Let&#8217;s define a static port for the Keycloak Dev Service so you can copy/paste the links further down in this section.  Add the following line to your application.properties:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -227,7 +227,7 @@
 </div>
 </div>
 <div class="paragraph">
-<p>Now go to the <a href="http://localhost:8080/q/dev-ui/dev-services">Dev UI - Dev Services</a>.  You will see a 'keycloak' section with information about the running Keycloak Dev Services container, including auth server url and some default oidc users.</p>
+<p>Now go to the <a href="http://localhost:8080/q/dev-ui/dev-services">Dev UI - Dev Services</a>.  You will see a 'Keycloak' section with information about the running Keycloak Dev Services container, including auth server url and some default oidc users.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -243,12 +243,12 @@ By default, <code>alice</code> and <code>bob</code> users (with the passwords ma
 </table>
 </div>
 <div class="paragraph">
-<p>We can add our own user, role and group in KeyCloak by following these steps:</p>
+<p>We can add our own user, role and group in Keycloak by following these steps:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Go to the <a href="http://localhost:34000/admin/master/console/">KeyCloak Administration console</a> and use `admin' as user and password.</p>
+<p>Go to the <a href="http://localhost:34000/admin/master/console/">Keycloak Administration console</a> and use `admin' as user and password.</p>
 </li>
 <li>
 <p>Go to <a href="https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus-realm.json" class="bare">https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus-realm.json</a> and save it on your local machine.</p>
@@ -272,7 +272,7 @@ After this step you should have a <code>Subscriber</code> Role and Group.</p>
 </ol>
 </div>
 <div class="paragraph">
-<p>Congratulations! Now you can run this section in Dev Mode without starting the KeyCloak container nor adding the KeyCloak setup in <code>application.properties</code>.</p>
+<p>Congratulations! Now you can run this section in dev mode without starting the Keycloak container nor adding the Keycloak setup in <code>application.properties</code>.</p>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -349,7 +349,7 @@ public class UserResource {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -X POST "http://localhost:34000/realms/quarkus/protocol/openid-connect/token" -H "Content-Type: application/x-www-form-urlencoded" -d "username=jdoe" -d "password=jdoepass" -d "grant_type=password" -d "client_id=admin-cli"</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' -X POST "http://localhost:34000/realms/quarkus/protocol/openid-connect/token" -H "Content-Type: application/x-www-form-urlencoded" -d "username=jdoe" -d "password=jdoepass" -d "grant_type=password" -d "client_id=admin-cli"</code></pre>
 </div>
 </div>
 <div class="admonitionblock important">
@@ -359,13 +359,8 @@ public class UserResource {
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Replace the KeyCloak port with the current value of the dev service container port (this is the same as the one in the url you were using to set up KeyCloak).</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>Replace the Keycloak port with the current value of the Dev Service container port (this is the same as the one in the url you were using to set up Keycloak).</p>
 </div>
 </td>
 </tr>
@@ -387,7 +382,7 @@ Below you can find details on how to do that using <code>curl</code> and <code>j
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl -X POST "http://localhost:34000/realms/quarkus/protocol/openid-connect/token" -H "Content-Type: application/x-www-form-urlencoded" -d "username=jdoe" -d "password=jdoepass" -d "grant_type=password" | jq -r ".access_token")
 
-curl -H "Authorization: Bearer $token" localhost:8080/api/users/info</code></pre>
+curl -w '\n' -H "Authorization: Bearer $token" localhost:8080/api/users/info</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -409,7 +404,7 @@ curl -H "Authorization: Bearer $token" localhost:8080/api/users/info</code></pre
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token -s)
-curl -v -H "Authorization: Bearer $token" localhost:8080/api/users/info</code></pre>
+curl -v -w '\n' -H "Authorization: Bearer $token" localhost:8080/api/users/info</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -483,7 +478,7 @@ public class UserResource {
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.keycloak.jwt.token -s)
-curl -v -H "Authorization: Bearer $token" localhost:8080/api/users/info</code></pre>
+curl -v -w '\n' -H "Authorization: Bearer $token" localhost:8080/api/users/info</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -514,12 +509,12 @@ Forbidden* Closing connection 0</code></pre>
 <h2 id="_application_configuration"><a class="anchor" href="#_application_configuration"></a>Application Configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Although Dev Services are very useful when running Quarkus in Dev Mode, we need to think forward on how the application configuration will be available for production.
+<p>Although Dev Services are very useful when running Quarkus in dev mode, we need to think forward on how the application configuration will be available for production.
 This section explains how to persist the security configurations done earlier with Dev Services.</p>
 </div>
 <div class="paragraph">
 <p>OpenID Connect extension allows you to define the adapter configuration using the <code>application.properties</code> file which should be located at the <code>src/main/resources</code> directory.
-You can simply copy the configuration below to start working with the KeyCloak server:</p>
+You can simply copy the configuration below to start working with the Keycloak server:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">

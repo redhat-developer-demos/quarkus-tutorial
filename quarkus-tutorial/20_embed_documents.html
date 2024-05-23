@@ -169,7 +169,7 @@
 <div class="sectionbody">
 <div class="paragraph">
 <p>Many applications involving Large Language Models (LLMs) often require user-specific data beyond their training set, such as CSV files, data from various sources, or reports. To achieve this, the process of Retrieval Augmented Generation (RAG) is commonly employed.
-Through this technique you can combine your own business data (or whatever data!) with the LLM to enrich the possibilities offered by your application.</p>
+Through this technique, you can combine your own business data (or whatever data!) with the LLM to enrich the possibilities offered by your application.</p>
 </div>
 <div class="paragraph">
 <p>In this section we&#8217;re going to add business logic for a fictional car rental service which has a terms and conditions
@@ -276,7 +276,7 @@ If you don&#8217;t provide an actual OpenAI key you will still be able to go thr
 <p>Let&#8217;s provide a document containing the service&#8217;s terms of use:</p>
 </div>
 <div class="paragraph">
-<p>Create a new folder in <code>src/main/resources/catalog and add a new file named `miles-of-smiles-terms-of-use.txt</code> in this folder.
+<p>Create a new folder in <code>src/main/resources/catalog</code> and add a new file named <code>miles-of-smiles-terms-of-use.txt</code> in this folder.
 Then add the following content to it:</p>
 </div>
 <div class="listingblock console-input">
@@ -446,12 +446,12 @@ class BookingCannotBeCancelledException extends RuntimeException {
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>We hardcoded a booking entry for simplicity&#8217;s sake. Of course, in a real world scenario this would likely come from a DB.</td>
+<td>We hardcoded a booking entry for simplicity&#8217;s sake. Of course, in a real world scenario this would likely come from a database.</td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Now we define a Booking singleton that will serve our AI with proper tools.</p>
+<p>Now we define a <code>BookingTools</code> singleton that will serve our AI with proper tools.</p>
 </div>
 <div class="paragraph">
 <p>Create a new <code>BookingTools</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
@@ -688,7 +688,7 @@ public class ChatSocket {
 <p>You can check your prompt implementation by pointing your browser to <a href="http://localhost:8080/chat-assistant.html" class="bare" target="_blank" rel="noopener">http://localhost:8080/chat-assistant.html</a></p>
 </div>
 <div class="paragraph">
-<p>Try cancelling a booking for booking number 123-456 with name John Doe. If everything goes well, the booking should be rejected,
+<p>Try cancelling a booking for booking number <code>123-456</code> with name <code>John Doe</code>. If everything goes well, the booking should be rejected,
 since we have specified the start date to be in 1 day.</p>
 </div>
 <div class="paragraph">
@@ -709,8 +709,8 @@ Try cancelling again, and you should see that this time we are allowed to cancel
 </div>
 </div>
 <div class="paragraph">
-<p>For an extra challenge, feel free to play around with the SystemMessage in <code>AssistantForCustomerSupport.java</code>,
-or perhaps change the <code>BookingService.java</code> to call a database that contains customer &amp; booking information.
+<p>For an extra challenge, feel free to play around with the <code>SystemMessage</code> in <code>AssistantForCustomerSupport.java</code>,
+or perhaps change the <code>BookingService.java</code> to call a database that contains customer and booking information.
 And see if bookings effectively get cancelled or not :)</p>
 </div>
 </div>

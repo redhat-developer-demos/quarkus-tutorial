@@ -170,7 +170,7 @@
 <div class="sectionbody">
 <div class="paragraph">
 <p>In a microservices architecture, and generally speaking, any application, might need to be protected so only specific users can access the defined endpoint.
-Quarkus provides integration to the <a href="https://github.com/eclipse/microprofile-jwt-auth" target="_blank" rel="noopener">MicroProfile JWT RBAC</a> spec.</p>
+Quarkus provides integration to the <a href="https://github.com/eclipse/microprofile-jwt-auth" target="_blank" rel="noopener">MicroProfile JWT RBAC</a> specification.</p>
 </div>
 <div class="paragraph">
 <p>So let&#8217;s see how you can start using JWT for <em>Role Based Access Control</em> (RBAC) of endpoints.</p>
@@ -321,7 +321,7 @@ public class SecureResource {
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token -s)
-curl -H "Authorization: Bearer $token" localhost:8080/secure/claim</code></pre>
+curl -w '\n' -H "Authorization: Bearer $token" localhost:8080/secure/claim</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -341,7 +341,7 @@ curl -H "Authorization: Bearer $token" localhost:8080/secure/claim</code></pre>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=XXXX
-curl -v -H "Authorization: Bearer $token" localhost:8080/secure/claim</code></pre>
+curl -v -w '\n' -H "Authorization: Bearer $token" localhost:8080/secure/claim</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -373,7 +373,7 @@ curl -v -H "Authorization: Bearer $token" localhost:8080/secure/claim</code></pr
 <div class="sectionbody">
 <div class="paragraph">
 <p>So far, you&#8217;ve seen how to get claims from the provided JWT token, but anyone could access that endpoint, so let&#8217;s protect it with a role.
-For this case you need to use a role that is defined in the JWT token inside the <code>groups</code> claim (ie <code>Subscriber</code>).</p>
+For this case, you need to use a role that is defined in the JWT token inside the <code>groups</code> claim (ie <code>Subscriber</code>).</p>
 </div>
 <div class="paragraph">
 <p>Change the <code>SecureResource</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
@@ -416,11 +416,11 @@ public class SecureResource {
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token -s)
-curl -H "Authorization: Bearer $token" localhost:8080/secure/claim</code></pre>
+curl -w '\n' -H "Authorization: Bearer $token" localhost:8080/secure/claim</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>And you’ll see the preferred_username field for the given token (jdoe).</p>
+<p>And you’ll see the <code>preferred_username</code> field for the given token (jdoe).</p>
 </div>
 <div class="listingblock console-output">
 <div class="content">
@@ -470,7 +470,7 @@ public class SecureResource {
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token -s)
-curl -v -H "Authorization: Bearer $token" localhost:8080/secure/claim</code></pre>
+curl -v -w '\n' -H "Authorization: Bearer $token" localhost:8080/secure/claim</code></pre>
 </div>
 </div>
 <div class="paragraph">

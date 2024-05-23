@@ -193,16 +193,14 @@
 <div class="tab-pane" aria-labelledby="tabset1_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:remove-extension -D"extensions=rest, rest-jsonb"
-./mvnw quarkus:add-extension -D"extensions=spring-web,spring-data-jpa,rest-jackson"</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -D"extensions=spring-web,spring-data-jpa"</code></pre>
 </div>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_quarkus-cli">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus ext remove rest rest-jsonb
-quarkus ext add spring-web spring-data-jpa rest-jackson</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus ext add spring-web spring-data-jpa</code></pre>
 </div>
 </div>
 </div>
@@ -216,31 +214,19 @@ quarkus ext add spring-web spring-data-jpa rest-jackson</code></pre>
 [INFO] Building tutorial-app 1.0-SNAPSHOT
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO]
-[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
+[INFO] --- quarkus-maven-plugin:3.10.2:add-extension (default-cli) @ tutorial-app ---
 ✅ Adding extension io.quarkus:quarkus-spring-data-jpa
 ✅ Adding extension io.quarkus:quarkus-spring-web
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
 [INFO] Total time:  2.052 s
-[INFO] Finished at: 2020-05-11T21:33:15-04:00
+[INFO] Finished at: 2024-05-23T21:33:15-04:00
 [INFO] ------------------------------------------------------------------------</code></pre>
 </div>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
 <div class="paragraph">
-<p>The <code>quarkus-spring-web</code> extension requires <code>quarkus-rest-jackson</code>.
-In order to be conservative with the amount of dependencies, the <code>quarkus-rest-jsonb</code> was removed in favor of <code>quarkus-rest-jackson</code>.</p>
-</div>
-</td>
-</tr>
-</table>
+<p>Notice in the logs how Quarkus is reloading and the Spring compatibility extensions are now part of the <code>Installed features</code>.</p>
 </div>
 </div>
 </div>
@@ -308,11 +294,11 @@ public class FruitController {
 </div>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s try to filter only the fruits with the <strong>Summer</strong> season.  Don&#8217;t forget to start quarkus dev mode again if you stopped it.</p>
+<p>Let&#8217;s try to filter only the fruits with the <strong>Summer</strong> season.  Don&#8217;t forget to start Quarkus dev mode again if you stopped it.</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/spring-fruit?season=Summer</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/spring-fruit?season=Summer</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">

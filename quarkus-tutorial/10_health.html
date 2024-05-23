@@ -232,7 +232,7 @@
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/q/health</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/q/health</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -300,7 +300,7 @@ public class LivenessProbe implements HealthCheck {
 <h2 id="_add_a_custom_readiness_probe"><a class="anchor" href="#_add_a_custom_readiness_probe"></a>Add a custom readiness probe</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In dev mode, all your health checks are visible in health UI: <a href="http://localhost:8080/q/health-ui/" class="bare">http://localhost:8080/q/health-ui/</a>.</p>
+<p>In dev mode, all your health checks are visible in the Health UI: <a href="http://localhost:8080/q/health-ui/" class="bare">http://localhost:8080/q/health-ui/</a>.</p>
 </div>
 <div class="paragraph">
 <p>Some extensions may provide default health checks, including that the extension will automatically register its health checks.
@@ -362,7 +362,7 @@ public class CustomHealthCheck {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/health</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/health</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -402,7 +402,7 @@ public class CustomHealthCheck {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/health/live</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/health/live</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -431,7 +431,7 @@ public class CustomHealthCheck {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/health/ready</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/health/ready</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -469,7 +469,7 @@ public class CustomHealthCheck {
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-If you&#8217;re using the Quarkus Kubernetes extension, the liveness and readiness probes are automatically configured in your <code>Deployment</code> when you generate the Kubernetes yaml files.
+If you&#8217;re using the Quarkus Kubernetes extension, the liveness and readiness probes are automatically configured in your <code>Deployment</code> when you generate the Kubernetes YAML files.
 </td>
 </tr>
 </table>

@@ -320,7 +320,7 @@ public interface BeerService {
 <h2 id="_pagination_filtering"><a class="anchor" href="#_pagination_filtering"></a>Pagination + Filtering</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We want to query all the beers page by page and filter by its <em>abv</em> value.</p>
+<p>We want to query all the beers page by page and filter by their <em>abv</em> value.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -407,7 +407,7 @@ public class BeerResource {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/beer</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/beer</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -483,7 +483,7 @@ public class BeerResource {
 <h2 id="_parallel_calls"><a class="anchor" href="#_parallel_calls"></a>Parallel Calls</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Suppose that now, you want to query two beers by its id, (so execute two requests against the remote API), and then compare its <em>abv</em> values.</p>
+<p>Suppose that now, you want to query two beers by its id, (so execute two requests against the remote API), and then compare their <em>abv</em> values.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -573,7 +573,7 @@ private JsonValue compare(JsonArray beerA, JsonArray beerB) {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/beer/1/2</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/beer/1/2</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">

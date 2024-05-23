@@ -209,23 +209,17 @@ public class GreetingResource {
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">jakarta.enterprise.inject.spi.DeploymentException: No config value of type [java.lang.String] exists for: greeting
-	at io.quarkus.arc.runtime.ConfigRecorder.validateConfigProperties(ConfigRecorder.java:37)
-	at io.quarkus.deployment.steps.ConfigBuildStep$validateConfigProperties61.deploy_0(ConfigBuildStep$validateConfigProperties61.zig:120)
-	at io.quarkus.deployment.steps.ConfigBuildStep$validateConfigProperties61.deploy(ConfigBuildStep$validateConfigProperties61.zig:36)
-	at io.quarkus.runner.ApplicationImpl.doStart(ApplicationImpl.zig:166)
-	at io.quarkus.runtime.Application.start(Application.java:89)
-	at io.quarkus.runtime.ApplicationLifecycleManager.run(ApplicationLifecycleManager.java:90)
-	at io.quarkus.runtime.Quarkus.run(Quarkus.java:61)
-	at io.quarkus.runtime.Quarkus.run(Quarkus.java:38)
-	at io.quarkus.runtime.Quarkus.run(Quarkus.java:106)
-	at io.quarkus.runner.GeneratedMain.main(GeneratedMain.zig:29)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
-	at io.quarkus.runner.bootstrap.StartupActionImpl$1.run(StartupActionImpl.java:99)
-	at java.base/java.lang.Thread.run(Thread.java:834)</code></pre>
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">io.quarkus.runtime.configuration.ConfigurationException: Failed to load config value of type class java.lang.String for: greeting
+	at io.quarkus.arc.runtime.ConfigRecorder.validateConfigProperties(ConfigRecorder.java:70)
+	at io.quarkus.deployment.steps.ConfigBuildStep$validateConfigValues1665125174.deploy_0(Unknown Source)
+	at io.quarkus.deployment.steps.ConfigBuildStep$validateConfigValues1665125174.deploy(Unknown Source)
+	at io.quarkus.runner.ApplicationImpl.doStart(Unknown Source)
+	at io.quarkus.runtime.Application.start(Application.java:101)
+	at io.quarkus.runtime.ApplicationLifecycleManager.run(ApplicationLifecycleManager.java:111)
+	at io.quarkus.runtime.Quarkus.run(Quarkus.java:71)
+	at io.quarkus.runtime.Quarkus.run(Quarkus.java:44)
+	at io.quarkus.runtime.Quarkus.run(Quarkus.java:124)
+	at io.quarkus.runner.GeneratedMain.main(Unknown Source)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -254,7 +248,7 @@ greeting=Hello y'all!</code></pre>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/hello</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/hello</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -265,10 +259,10 @@ greeting=Hello y'all!</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_update_your_integration_test"><a class="anchor" href="#_update_your_integration_test"></a>Update your integration test</h2>
+<h2 id="_update_your_test"><a class="anchor" href="#_update_your_test"></a>Update your test</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Since we changed the output of our <code>/hello</code> endpoint, our integration test doesn&#8217;t pass anymore.</p>
+<p>Since we changed the output of our <code>/hello</code> endpoint, our test doesn&#8217;t pass anymore.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s update <code>GreetingResourceTest</code> to reflect our recent changes:</p>

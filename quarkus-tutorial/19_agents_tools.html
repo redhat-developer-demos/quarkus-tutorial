@@ -263,9 +263,9 @@ public class EmailService {
 <div class="paragraph">
 <p>Let&#8217;s create an interface for our AI service, but with <code>SystemMessage</code> and <code>UserMessage</code> this time.
 <code>SystemMessage</code> gives context to the AI Model.
-In this case we tell it that it should craft a message as if it is written by a professional poet.
+In this case, we tell it that it should craft a message as if it is written by a professional poet.
 The <code>UserMessage</code> is the actual instruction/question we&#8217;re sending to the AI model. As you can see in the example below,
-you can format and parametrize the UserMessage, translating structured content to text and vice-versa.</p>
+you can format and parameterize the <code>UserMessage</code>, translating structured content to text and vice-versa.</p>
 </div>
 <div class="paragraph">
 <p>Create a new <code>AssistantWithContext</code> Java interface in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
@@ -304,7 +304,7 @@ public interface AssistantWithContext {
 <h2 id="_create_a_email_sending_resource"><a class="anchor" href="#_create_a_email_sending_resource"></a>Create a email sending resource</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Now we create a resource that builds the interaction and calls the service with the required parameters (topic &amp; lines).</p>
+<p>Now we create a resource that builds the interaction and calls the service with the required parameters (topic and number of lines).</p>
 </div>
 <div class="paragraph">
 <p>Create a new <code>EmailMeAPoemResource</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
@@ -379,7 +379,7 @@ quarkus.langchain4j.openai.timeout=60s
 </div>
 </div>
 <div class="paragraph">
-<p>Because we haven&#8217;t configured the local email service, Quarkus will use DevServices to instantiate and configure a local email service for you (in Dev Mode only!).</p>
+<p>Because we haven&#8217;t configured the local email service, Quarkus will use Dev Services to instantiate and configure a local email service for you (in dev mode only!).</p>
 </div>
 <div class="paragraph">
 <p>You can check it running:</p>
@@ -400,7 +400,7 @@ e4a1d5aae322  docker.io/testcontainers/ryuk:0.6.0  /bin/ryuk   34 seconds ago  U
 </div>
 </div>
 <div class="paragraph">
-<p>Which means that you have a email service up and running.</p>
+<p>Which means that you have an email service up and running.</p>
 </div>
 </div>
 </div>

@@ -169,11 +169,11 @@
 <div class="sectionbody">
 <div class="imageblock text-right mt-4 right">
 <div class="content">
-<a class="image" href="https://developers.redhat.com/developer-sandbox"><img src="_images/openshift_sandbox.png" alt="Openshift Sandbox" width="250" height="250"></a>
+<a class="image" href="https://developers.redhat.com/developer-sandbox"><img src="_images/openshift_sandbox.png" alt="OpenShift Sandbox" width="250" height="250"></a>
 </div>
 </div>
 <div class="paragraph">
-<p>In this chapter we will push our newly built application to Kubernetes. If you don&#8217;t have a Kubernetes instance at your disposal, you can create a free Openshift Sandbox instance on <a href="https://developers.redhat.com/developer-sandbox">developers.redhat.com/sandbox</a>.</p>
+<p>In this chapter we will push our newly built application to Kubernetes. If you don&#8217;t have a Kubernetes instance at your disposal, you can create a free OpenShift Sandbox instance on <a href="https://developers.redhat.com/developer-sandbox">developers.redhat.com/sandbox</a>.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -196,7 +196,7 @@ You will need a public container registry to store your image. If you don&#8217;
 <h2 id="_adding_the_kubernetes_and_jib_extensions"><a class="anchor" href="#_adding_the_kubernetes_and_jib_extensions"></a>Adding the Kubernetes and Jib extensions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In this chapter we&#8217;ll be using the Quarkus Kubernetes Extension to create the Kubernetes deployment file, and the Quarkus Jib Extension to create and push the container image to your container registry without the need of a local podman/docker instance.</p>
+<p>In this chapter we&#8217;ll be using the Quarkus Kubernetes extension to create the Kubernetes deployment file, and the Quarkus Jib Extension to create and push the container image to your container registry without the need of a local Podman/Docker instance.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s add the required extensions:</p>
@@ -305,7 +305,7 @@ If you don&#8217;t, your push <strong>will</strong> fail.
 </div>
 </div>
 <div class="paragraph">
-<p>Now we&#8217;re going to create the artifact, build a container and push it to our registry in one go using jib.</p>
+<p>Now we&#8217;re going to create the artifact, build a container and push it to our registry in one go using Jib.</p>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -342,7 +342,7 @@ If you don&#8217;t, your push <strong>will</strong> fail.
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-If you&#8217;re having trouble with jib, you can also just use Docker/Podman to build &amp; push.  To do so, omit 'jib' from the command.
+If you&#8217;re having trouble with Jib, you can also just use Docker/Podman to build and push.  To do so, omit 'jib' from the command.
 </td>
 </tr>
 </table>
@@ -368,7 +368,7 @@ If you&#8217;re having trouble with jib, you can also just use Docker/Podman to 
 <h2 id="_deploy_the_application_to_your_kubernetes_cluster"><a class="anchor" href="#_deploy_the_application_to_your_kubernetes_cluster"></a>Deploy the application to your Kubernetes cluster</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>When a Kubernetes extension is present in the classpath, Quarkus will scaffold a Kubernetes deployment file in your target folder during the package phase.  We can apply it to deploy the application to our Kubernetes cluster:</p>
+<p>When a Kubernetes extension is present in the classpath, Quarkus will scaffold a Kubernetes deployment file in your <code>target/</code> folder during the package phase.  We can apply it to deploy the application to our Kubernetes cluster:</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -377,7 +377,7 @@ If you&#8217;re having trouble with jib, you can also just use Docker/Podman to 
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-You will need the <a href="https://kubernetes.io/docs/tasks/tools/">kubectl</a> or oc cli tool installed locally for the apply command below. <a href="https://developers.redhat.com/blog/2021/04/21/access-your-developer-sandbox-for-red-hat-openshift-from-the-command-line#">Here are instructions</a> to install the oc tool and log in to your Openshift Sandbox.  Hint: your favorite package manager (dnf/brew/choco) can likely be used for the installation. Eg. <code>dnf install kubectl</code> or <code>choco install kubernetes-client</code> or <code>choco install openshift-client</code>
+You will need the <a href="https://kubernetes.io/docs/tasks/tools/">kubectl</a> or <code>oc</code> cli tool installed locally for the apply command below. <a href="https://developers.redhat.com/blog/2021/04/21/access-your-developer-sandbox-for-red-hat-openshift-from-the-command-line#">Here are instructions</a> to install the <code>oc</code> tool and log in to your OpenShift Sandbox.  Hint: your favorite package manager (dnf/brew/choco) can likely be used for the installation. Eg. <code>dnf install kubectl</code> or <code>choco install kubernetes-client</code> or <code>choco install openshift-client</code>
 </td>
 </tr>
 </table>
@@ -417,7 +417,7 @@ deployment.apps/tutorial-app created</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>With the Quarkus CLI tool deploying is even easier.  Instead of the above <code>kubectl apply</code> command, you can simply run <code>quarkus deploy</code> to deploy the application to your cluster. If you don&#8217;t have the kubectl or oc cli installed or are not sure how to log in to your cluster, just add <code>-Dquarkus.kubernetes-client.api-server-url={yourServerUrl} -Dquarkus.kubernetes-client.token={myToken}</code> to the below command.</p>
+<p>With the Quarkus CLI tool, deploying is even easier.  Instead of the above <code>kubectl apply</code> command, you can simply run <code>quarkus deploy</code> to deploy the application to your cluster. If you don&#8217;t have the <code>kubectl</code> or <code>oc</code> CLI installed or are not sure how to log in to your cluster, just add <code>-Dquarkus.kubernetes-client.api-server-url={yourServerUrl} -Dquarkus.kubernetes-client.token={myToken}</code> to the below command.</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -431,7 +431,7 @@ deployment.apps/tutorial-app created</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset4_openshift-sandbox-kubernetes-on-aws"></a>Openshift Sandbox / Kubernetes on AWS</p>
+<p><a id="tabset4_openshift-sandbox-kubernetes-on-aws"></a>OpenShift Sandbox / Kubernetes on AWS</p>
 </li>
 <li>
 <p><a id="tabset4_minikube"></a>Minikube</p>
@@ -444,7 +444,7 @@ deployment.apps/tutorial-app created</code></pre>
 <div class="content">
 <div class="tab-pane" aria-labelledby="tabset4_openshift-sandbox-kubernetes-on-aws">
 <div class="paragraph">
-<p>If using a hosted Kubernetes cluster like OpenShift (Sandbox) on AWS then use curl and the EXTERNAL-IP address with port <code>8080</code> or get it using <code>kubectl</code>:</p>
+<p>If using a hosted Kubernetes cluster like OpenShift (Sandbox) on AWS then use <code>curl</code> and the <code>EXTERNAL-IP</code> address with port <code>8080</code> or get it using <code>kubectl</code>:</p>
 </div>
 <div id="{section-k8s}-ip-port-service" class="listingblock console-input">
 <div class="content">
@@ -465,7 +465,7 @@ echo $IP:$PORT</code></pre>
 </div>
 <div class="tab-pane" aria-labelledby="tabset4_hosted">
 <div class="paragraph">
-<p>If using a hosted Kubernetes cluster like OpenShift then use curl and the EXTERNAL-IP address with port <code>8080</code> or get it using <code>kubectl</code>:</p>
+<p>If using a hosted Kubernetes cluster like OpenShift then use <code>curl</code> and the <code>EXTERNAL-IP</code> address with port <code>8080</code> or get it using <code>kubectl</code>:</p>
 </div>
 <div id="{section-k8s}-ip-port-openshift" class="listingblock console-input">
 <div class="content">
@@ -491,7 +491,7 @@ echo $IP:$PORT</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If you&#8217;re using the Openshift Sandbox UI, you can also find the application running in the "Topology" view as seen in the screenshot below:</p>
+<p>If you&#8217;re using the OpenShift Sandbox UI, you can also find the application running in the "Topology" view as seen in the screenshot below:</p>
 </div>
 <div class="imageblock text-center mt-4 center">
 <div class="content">
@@ -507,7 +507,7 @@ echo $IP:$PORT</code></pre>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-If you&#8217;re using Openshift (Sandbox) and would like to create a url you can share to the outside world, you can create it like so:
+If you&#8217;re using OpenShift (Sandbox) and would like to create a url you can share to the outside world, you can create it like so:
 </td>
 </tr>
 </table>

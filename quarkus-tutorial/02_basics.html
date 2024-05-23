@@ -399,7 +399,7 @@ Start the container that runs the native binary:</p>
  --/ __ \/ / / / _ | / _ \/ //_/ / / / __/
  -/ /_/ / /_/ / __ |/ , _/ ,&lt; / /_/ /\ \
 --\___\_\____/_/ |_/_/|_/_/|_|\____/___/
-2023-07-07 11:47:14,046 INFO  [io.quarkus] (main) code-with-quarkus 1.0.0-SNAPSHOT native (powered by Quarkus 3.2.0.Final) started in 0.019s. Listening on: http://0.0.0.0:8080
+2023-07-07 11:47:14,046 INFO  [io.quarkus] (main) code-with-quarkus 1.0.0-SNAPSHOT native (powered by Quarkus 3.10.2) started in 0.019s. Listening on: http://0.0.0.0:8080
 2023-07-07 11:47:14,047 INFO  [io.quarkus] (main) Profile prod activated.
 2023-07-07 11:47:14,047 INFO  [io.quarkus] (main) Installed features: [cdi, -reactive, smallrye-context-propagation, vertx]</code></pre>
 </div>
@@ -415,7 +415,7 @@ Start the container that runs the native binary:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/hello</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/hello</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">

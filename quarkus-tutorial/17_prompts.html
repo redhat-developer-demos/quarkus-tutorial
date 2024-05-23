@@ -168,10 +168,10 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Quarkus LangChain4j extension seamlessly integrates Large Language Models (LLMs) into Quarkus applications. LLMs are AI-based systems designed to understand, generate, and manipulate human language, showcasing advanced natural language processing capabilities. Thanks to this extensions we can enable the harnessing of LLM capabilities for the development of more intelligent applications.</p>
+<p>The Quarkus LangChain4j extension seamlessly integrates Large Language Models (LLMs) into Quarkus applications. LLMs are AI-based systems designed to understand, generate, and manipulate human language, showcasing advanced natural language processing capabilities. Thanks to this extension, we can enable the harnessing of LLM capabilities for the development of more intelligent applications.</p>
 </div>
 <div class="paragraph">
-<p>In this first chapter we&#8217;ll explore the simplest of interactions with an LLM: Prompting. It essentially means just asking questions to an LLM and receiving an answer in natural language from a given Model, such as OpenAI, Mistral, Hugging Face, Ollama, etc.</p>
+<p>In this first chapter, we&#8217;ll explore the simplest of interactions with an LLM: Prompting. It essentially means just asking questions to an LLM and receiving an answer in natural language from a given Model, such as OpenAI, Mistral, Hugging Face, Ollama, etc.</p>
 </div>
 </div>
 </div>
@@ -298,7 +298,7 @@ public class ExistentialQuestionResource {
 <h2 id="_invoke_the_endpoint"><a class="anchor" href="#_invoke_the_endpoint"></a>Invoke the endpoint</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Start the app in Quarkus Dev Mode:</p>
+<p>Start the app in Quarkus dev mode:</p>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -322,8 +322,7 @@ public class ExistentialQuestionResource {
 <div class="tab-pane" aria-labelledby="tabset2_quarkus-cli">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus create app -x rest -x langchain4j-openai com.redhat.developers:quarkus-langchain4j-app:1.0-SNAPSHOT
-quarkus dev</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus dev</code></pre>
 </div>
 </div>
 </div>
@@ -337,7 +336,7 @@ quarkus dev</code></pre>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/earth/flat</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/earth/flat</code></pre>
 </div>
 </div>
 <div class="paragraph">

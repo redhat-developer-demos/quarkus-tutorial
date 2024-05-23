@@ -171,7 +171,7 @@
 with models on our local machine (without incurring costs)?</p>
 </div>
 <div class="paragraph">
-<p>Podman Desktop is a GUI tool that helps with running and managing containers on our local machine, but it can also help with running AI models locally as well thanks to its AI Lab extension. Thanks to Quarkus and LangChain4j it then becomes trivial to start developing with these models. Let&#8217;s find out how!</p>
+<p>Podman Desktop is a GUI tool that helps with running and managing containers on our local machine, but it can also help with running AI models locally as well thanks to its AI Lab extension. Thanks to Quarkus and LangChain4j, it then becomes trivial to start developing with these models. Let&#8217;s find out how!</p>
 </div>
 </div>
 </div>
@@ -188,7 +188,7 @@ with models on our local machine (without incurring costs)?</p>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-For Windows/Mac users, if you can, give the podman machine at least 8GB of memory and 4 CPU (Generative AI Models are resource hungry!). The model will run with less resources, but it will be significantly slower.
+For Windows/macOS users, if you can, give the Podman machine at least 8GB of memory and 4 CPUs (Generative AI Models are resource hungry!). The model can run with less resources, but it will be significantly slower.
 </td>
 </tr>
 </table>
@@ -202,7 +202,7 @@ For Windows/Mac users, if you can, give the podman machine at least 8GB of memor
 </div>
 </div>
 <div class="paragraph">
-<p>Go ahead and click on it, and in the AI Lab, select the "Catalog"</p>
+<p>Go ahead and click on it, and in the AI Lab, select the "Catalog".</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -210,7 +210,7 @@ For Windows/Mac users, if you can, give the podman machine at least 8GB of memor
 </div>
 </div>
 <div class="paragraph">
-<p>You should now see a list of available AI Models to choose from. You can also import different ones (eg. from Huggingface), but we will use one of the InstructLab models that are already available.</p>
+<p>You should now see a list of available AI Models to choose from. You can also import different ones (e.g. from Huggingface), but we will use one of the InstructLab models that are already available.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -219,7 +219,7 @@ For Windows/Mac users, if you can, give the podman machine at least 8GB of memor
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-If you haven&#8217;t heard of <a href="https://developers.redhat.com/articles/2024/05/07/instructlab-open-source-generative-ai">Instructlab</a>, it&#8217;s an open source project for enhancing large language models (LLMs) used in generative artificial intelligence (gen AI) applications. You can even contribute to it yourself!
+If you haven&#8217;t heard of <a href="https://developers.redhat.com/articles/2024/05/07/instructlab-open-source-generative-ai">InstructLab</a>, it&#8217;s an open source project for enhancing large language models (LLMs) used in generative artificial intelligence (Gen AI) applications. You can even contribute to it yourself!
 </td>
 </tr>
 </table>
@@ -231,7 +231,7 @@ If you haven&#8217;t heard of <a href="https://developers.redhat.com/articles/20
 <p>Once downloaded, you can create a new model service by clicking on the rocket button <span class="image"><img src="_images/podman-desktop-create-model-service.png" alt="rocket button" width="30"></span> that will appear where you previously clicked the download button.</p>
 </div>
 <div class="paragraph">
-<p>You will be taken to the "Creating Model Service" page where you can set the port that should be exposed for the service. Podman Desktop assigns a random available port by default, but let&#8217;s set it to <code><strong>35000</strong></code> so we can remember more easily what the port is when we configure our Quarkus application.</p>
+<p>You will be taken to the "Creating Model Service" page where you can set the port that should be exposed for the service. Podman Desktop assigns a random available port by default, but let&#8217;s set it to <code>35000</code> so we can remember more easily what the port is when we configure our Quarkus application.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -251,7 +251,7 @@ If you haven&#8217;t heard of <a href="https://developers.redhat.com/articles/20
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-The InstructLab service uses the OpenAI protocol, so we can continue to use the quarkus-langchain4j-openai extension for this exercise
+The InstructLab service uses the OpenAI protocol, so we can continue to use the quarkus-langchain4j-openai extension for this exercise.
 </td>
 </tr>
 </table>
@@ -318,7 +318,7 @@ quarkus.langchain4j.openai.log-responses=true</code></pre>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Port number 35000 was what we had defined in podman desktop when we created the model service</td>
+<td>Port number 35000 was what we had defined in Podman Desktop when we created the model service</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -371,7 +371,7 @@ public interface Assistant {
 <h2 id="_create_the_prompt_base_resource"><a class="anchor" href="#_create_the_prompt_base_resource"></a>Create the prompt-base resource</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Now we&#8217;re going to implement another REST resource that accepts prompts</p>
+<p>Now we&#8217;re going to implement another REST resource that accepts prompts.</p>
 </div>
 <div class="paragraph">
 <p>Create a new <code>AIResource.java</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
@@ -419,7 +419,7 @@ public class AIResource {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl http://localhost:8080/ai</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' http://localhost:8080/ai</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -462,14 +462,14 @@ This will allow you to calculate the square root of any given number, positive o
 </td>
 <td class="content">
 depending on your local resources, this might take a up to a few minutes. If you run into timeouts,
-you can try changing the <code>quarkus.langchain4j.openai.timeout</code> value in the application.properties file.
-If you&#8217;re running on Mac/Windows, you could also try to give the podman machine more CPU/Memory resources.
+you can try changing the <code>quarkus.langchain4j.openai.timeout</code> value in the <code>application.properties</code> file.
+If you&#8217;re running on Windows/macOS, you could also try to give the Podman machine more CPU/Memory resources.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Notice that (at least in our case) the LLM responded with a Java class, since we provided in the SystemMessage that the
+<p>Notice that (at least in our case) the LLM responded with a Java class, since we provided in the <code>SystemMessage</code> that the
 LLM should respond as if they were a Java engineer.</p>
 </div>
 </div>

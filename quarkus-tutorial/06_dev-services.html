@@ -169,7 +169,7 @@
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus supports the automatic provisioning of unconfigured services in <strong>dev and test</strong> mode.
-We refer to this capability as Dev Services. From a developer&#8217;s perspective this means that if you include an extension and don&#8217;t configure it then Quarkus will automatically start the relevant service (usually using <a href="https://www.testcontainers.org/">Testcontainers</a> behind the scenes) and wire up your application to use this service, even pre-configuring access credentials.</p>
+We refer to this capability as Dev Services. From a developer&#8217;s perspective, this means that if you include an extension and don&#8217;t configure it then Quarkus will automatically start the relevant service (usually using <a href="https://www.testcontainers.org/">Testcontainers</a> behind the scenes) and wire up your application to use this service, even pre-configuring access credentials.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -178,7 +178,7 @@ We refer to this capability as Dev Services. From a developer&#8217;s perspectiv
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Dev Services will only be enabled in dev/test mode, so it will not affect the application running in production.  If you want to disable all Dev Services you can use the quarkus.devservices.enabled=false config property, or you can simply configure the service in which case it will result in the Dev Service being disabled automatically.
+Dev Services will only be enabled in dev/test mode, so it will not affect the application running in production.  If you want to disable all Dev Services you can use the <code>quarkus.devservices.enabled=false</code> config property, or you can simply configure the service in which case it will result in the Dev Service being disabled automatically.
 </td>
 </tr>
 </table>
@@ -190,7 +190,7 @@ Dev Services will only be enabled in dev/test mode, so it will not affect the ap
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-If you are using a proprietary database such as <code>DB2</code> or <code>MSSQL</code> you will need to accept the license agreement. To do this, create a <code>src/main/resources/container-license-acceptance.txt</code> file in your project and add a line with the image name and tag of the database.
+If you are using a proprietary database such as IBM Db2 or Microsoft SQL Server, you will need to accept the license agreement. To do this, create a <code>src/main/resources/container-license-acceptance.txt</code> file in your project and add a line with the image name and tag of the database.
 </td>
 </tr>
 </table>
@@ -204,8 +204,8 @@ If you are using a proprietary database such as <code>DB2</code> or <code>MSSQL<
 <h2 id="_replace_database_extensions"><a class="anchor" href="#_replace_database_extensions"></a>Replace Database Extensions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Instead of the built-in h2 database, we&#8217;re now going to use an external database.  Swapping out from one database provider to another is fairly trivial with Quarkus.
-Let&#8217;s start with updating the configuration in the application.properties.</p>
+<p>Instead of the built-in h2 database, we&#8217;re now going to use an external database. Swapping out from one database provider to another is fairly trivial with Quarkus.
+Let&#8217;s start with updating the configuration in the <code>application.properties</code>.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -214,7 +214,7 @@ Let&#8217;s start with updating the configuration in the application.properties.
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-You technically don&#8217;t need to add the db-kind property since there is only one jdbc driver in our application.  We added it for clarity&#8217;s sake.
+You technically don&#8217;t need to add the <code>db-kind</code> property since there is only one JDBC driver in our application. We added it for clarity&#8217;s sake.
 </td>
 </tr>
 </table>
@@ -225,7 +225,8 @@ You technically don&#8217;t need to add the db-kind property since there is only
 # key = value
 greeting=Hello y'all!
 quarkus.datasource.db-kind=postgresql
-quarkus.hibernate-orm.database.generation=drop-and-create</code></pre>
+quarkus.hibernate-orm.database.generation=drop-and-create
+quarkus.hibernate-orm.sql-load-script=import.sql</code></pre>
 </div>
 </div>
 <div class="admonitionblock warning">
@@ -235,7 +236,7 @@ quarkus.hibernate-orm.database.generation=drop-and-create</code></pre>
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-Make sure the h2 db-kind and jdbc.url properties have been removed.
+Make sure the h2 <code>db-kind</code> and <code>jdbc.url</code> properties have been removed.
 </td>
 </tr>
 </table>
@@ -258,36 +259,36 @@ Make sure the h2 db-kind and jdbc.url properties have been removed.
 <div class="tab-pane" aria-labelledby="tabset1_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:remove-extension -Dextension=quarkus-jdbc-h2
-./mvnw quarkus:add-extension -Dextension=quarkus-jdbc-postgresql</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension=quarkus-jdbc-postgresql
+./mvnw quarkus:remove-extension -Dextension=quarkus-jdbc-h2</code></pre>
 </div>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_quarkus-cli">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus extension remove quarkus-jdbc-h2
-quarkus extension add quarkus-jdbc-postgresql</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus extension add quarkus-jdbc-postgresql
+quarkus extension remove quarkus-jdbc-h2</code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="paragraph">
-<p>Notice in the logs how Quarkus has reloaded and started up a Postgresql database dev service:</p>
+<p>Notice in the logs how Quarkus has reloaded and started up a PostgreSQL database Dev Service:</p>
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">2023-03-16 08:06:56,882 INFO  [io.qua.dat.dep.dev.DevServicesDatasourceProcessor] (build-13) Dev Services for the default datasource (postgresql) started - container ID is c7c9a6ccf029</code></pre>
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">2024-05-23 17:46:51,225 INFO  [io.qua.dat.dep.dev.DevServicesDatasourceProcessor] (build-32) Dev Services for default datasource (postgresql) started - container ID is b2957fbe64ee</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_verify_postgresql_testcontainer_is_running"><a class="anchor" href="#_verify_postgresql_testcontainer_is_running"></a>Verify Postgresql testcontainer is running</h2>
+<h2 id="_verify_postgresql_container_is_running"><a class="anchor" href="#_verify_postgresql_container_is_running"></a>Verify PostgreSQL container is running</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Let&#8217;s verify in Docker/Podman that the dev services container is running.  You should see 2 containers, one testcontainers/ryuk container which orchestrates the dev services, and another postgres container which is running the database and which is automatically wired into our Quarkus dev mode:</p>
+<p>Let&#8217;s verify in Docker/Podman that the Dev Services container is running.  You should see 2 containers, one <code>testcontainers/ryuk</code> container which orchestrates the Dev Services, and another <code>postgres</code> container which is running the database and which is automatically wired into our Quarkus dev mode:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -300,11 +301,11 @@ quarkus extension add quarkus-jdbc-postgresql</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Call the fruit endpoint again. The data is now coming from the postgresql database container.</p>
+<p>Call the fruit endpoint again. The data is now coming from the PostgreSQL database container.</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit?season=Spring</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/fruit?season=Spring</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -329,7 +330,7 @@ quarkus extension add quarkus-jdbc-postgresql</code></pre>
 <h2 id="_run_unit_tests_with_testcontainers"><a class="anchor" href="#_run_unit_tests_with_testcontainers"></a>Run Unit Tests with TestContainers</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Let&#8217;s stop dev mode for now to verify that the Postgres container also stops when we&#8217;re done with dev mode by sending a <code>CTRL+C</code> in the terminal and checking again with docker ps. Notice that the postgres container has disappeared as expected.</p>
+<p>Let&#8217;s stop dev mode for now to verify that the PostgreSQL container also stops when we&#8217;re done with dev mode by sending a <code>CTRL+C</code> in the terminal and checking again with <code>docker ps</code>. Notice that the PostgreSQL container has disappeared as expected.</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -376,7 +377,7 @@ quarkus extension add quarkus-jdbc-postgresql</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Notice in the logs that Quarkus and TestContainers work in unison to spin up the Postgres container again, run the tests, and then tear down the container again once done.</p>
+<p>Notice in the logs that Quarkus and TestContainers work in unison to spin up the PostgreSQL container again, run the tests, and then tear down the container again once done.</p>
 </div>
 <div class="listingblock console-output">
 <div class="content">
@@ -403,7 +404,7 @@ quarkus extension add quarkus-jdbc-postgresql</code></pre>
 <h2 id="_optional_re_deploy_to_kubernetes"><a class="anchor" href="#_optional_re_deploy_to_kubernetes"></a>[Optional] Re-deploy to Kubernetes</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>If you would like to redeploy to Kubernetes, this time you will need to provision a Postgresql database because as mentioned before, Dev Services are only enabled in dev/test mode.</p>
+<p>If you would like to redeploy to Kubernetes, this time you will need to provision a PostgreSQL database because as mentioned before, Dev Services are only enabled in dev/test mode.</p>
 </div>
 <div class="paragraph">
 <p>We will also need to add credentials to connect to the external database. Make sure you have the following properties set:</p>
@@ -425,15 +426,15 @@ quarkus.hibernate-orm.sql-load-script=import.sql</code></pre>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-We added a %prod. prefix to some of the properties.  This prefix makes it so these properties will only be evaluated with the (default) prod profile.  In dev mode these values will be ignored, thus triggering the Dev Services creation.
+We added a <code>%prod.</code> prefix to some of the properties.  This prefix makes it so these properties will only be evaluated with the (default) <code>prod</code> profile.  In dev mode these values will be ignored, thus triggering the Dev Services creation.
 </td>
 </tr>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_create_a_postgresql_database"><a class="anchor" href="#_create_a_postgresql_database"></a>Create a postgresql database</h3>
+<h3 id="_create_a_postgresql_database"><a class="anchor" href="#_create_a_postgresql_database"></a>Create a PostgreSQL database</h3>
 <div class="paragraph">
-<p>There are several ways to deploy a Postgresql Database to Kubernetes.  If you&#8217;re using Openshift, you could create one easily through the UI (Developer Perspective &gt; +Add &gt; Database &gt; PostgreSQL).  Make sure your database name, username and password match up with what you have configured in your application.properties or secrets.</p>
+<p>There are several ways to deploy a PostgreSQL Database to Kubernetes.  If you&#8217;re using OpenShift, you could create one easily through the UI (Developer Perspective &gt; +Add &gt; Database &gt; PostgreSQL).  Make sure your database name, username and password match up with what you have configured in your <code>application.properties</code> or secrets.</p>
 </div>
 <div class="paragraph">
 <p>Alternatively you can also create the following Kubernetes manifest for a simple ephemeral instance:</p>

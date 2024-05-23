@@ -203,14 +203,14 @@
 <div class="tab-pane" aria-labelledby="tabset1_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="rest-jsonb, jdbc-h2, hibernate-orm-panache, smallrye-openapi"</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension="rest-jackson, jdbc-h2, hibernate-orm-panache, smallrye-openapi"</code></pre>
 </div>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_quarkus-cli">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus extension add rest-jsonb jdbc-h2 hibernate-orm-panache smallrye-openapi</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus extension add rest-jackson jdbc-h2 hibernate-orm-panache smallrye-openapi</code></pre>
 </div>
 </div>
 </div>
@@ -218,7 +218,7 @@
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">✅ Adding extension io.quarkus:quarkus-rest-jsonb
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">✅ Adding extension io.quarkus:quarkus-rest-jackson
 ✅ Adding extension io.quarkus:quarkus-smallrye-openapi
 ✅ Adding extension io.quarkus:quarkus-hibernate-orm-panache
 ✅ Adding extension io.quarkus:quarkus-jdbc-h2
@@ -340,7 +340,7 @@ public class FruitResource {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/fruit</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -386,7 +386,6 @@ public class FruitResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response newFruit(Fruit fruit) {
-        fruit.id = null;
         fruit.persist();
         return Response.status(Status.CREATED).entity(fruit).build();
     }
@@ -399,7 +398,7 @@ public class FruitResource {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -d "{\"name\": \"Banana\", \"season\": \"Summer\"}" -H "Content-Type: application/json" http://localhost:8080/fruit</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' -d "{\"name\": \"Banana\", \"season\": \"Summer\"}" -H "Content-Type: application/json" http://localhost:8080/fruit</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -438,16 +437,16 @@ public class FruitResource {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">create sequence fruit_sequence start with 1 increment by 1;
-INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Mango','Spring');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Strawberry','Spring');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Orange','Winter');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Lemon','Winter');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Blueberry','Summer');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Banana','Summer');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Watermelon','Summer');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Apple','Fall');
-INSERT INTO Fruit(id,name,season) VALUES (nextval('fruit_sequence'),'Pear','Fall');</code></pre>
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">INSERT INTO Fruit(id,name,season) VALUES (1,'Mango','Spring');
+INSERT INTO Fruit(id,name,season) VALUES (2,'Strawberry','Spring');
+INSERT INTO Fruit(id,name,season) VALUES (3,'Orange','Winter');
+INSERT INTO Fruit(id,name,season) VALUES (4,'Lemon','Winter');
+INSERT INTO Fruit(id,name,season) VALUES (5,'Blueberry','Summer');
+INSERT INTO Fruit(id,name,season) VALUES (6,'Banana','Summer');
+INSERT INTO Fruit(id,name,season) VALUES (7,'Watermelon','Summer');
+INSERT INTO Fruit(id,name,season) VALUES (8,'Apple','Fall');
+INSERT INTO Fruit(id,name,season) VALUES (9,'Pear','Fall');
+ALTER SEQUENCE fruit_seq RESTART WITH 10;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -617,7 +616,7 @@ public class FruitResource {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit?season=Summer</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/fruit?season=Summer</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -740,7 +739,7 @@ public class FruitResource {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit?season=Spring</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/fruit?season=Spring</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">

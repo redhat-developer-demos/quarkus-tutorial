@@ -221,14 +221,14 @@
 <div class="tab-pane" aria-labelledby="tabset1_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -D"extensions=rest-client, rest-client-jsonb"</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -D"extensions=rest-client-jackson"</code></pre>
 </div>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_quarkus-cli">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus extension add rest-client rest-client-jsonb</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus extension add rest-client-jackson</code></pre>
 </div>
 </div>
 </div>
@@ -242,15 +242,18 @@
 [INFO] Building tutorial-app 1.0-SNAPSHOT
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO]
-[INFO] --- quarkus-maven-plugin:1.4.2.Final:add-extension (default-cli) @ tutorial-app ---
-✅ Adding extension io.quarkus:quarkus-rest-client
+[INFO] --- quarkus-maven-plugin:3.10.2:add-extension (default-cli) @ tutorial-app ---
+✅ Adding extension io.quarkus:quarkus-rest-client-jackson
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
 [INFO] Total time:  1.773 s
-[INFO] Finished at: 2020-05-11T21:43:38-04:00
+[INFO] Finished at: 2024-05-23T21:43:38-04:00
 [INFO] ------------------------------------------------------------------------</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Notice in the logs how Quarkus is reloading and the <code>rest-client-jackson</code> extension is now part of the <code>Installed features</code>.</p>
 </div>
 </div>
 </div>
@@ -267,22 +270,15 @@
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
-import jakarta.json.bind.annotation.JsonbCreator;
-
 public class FruityVice {
 
     private String name;
 
     private Nutritions nutritions;
 
-    FruityVice(String name, Nutritions nutritions) {
+    public FruityVice(String name, Nutritions nutritions) {
         this.name = name;
         this.nutritions = nutritions;
-    }
-
-    @JsonbCreator
-    public static FruityVice of(String name, Nutritions nutritions) {
-        return new FruityVice(name, nutritions);
     }
 
     public String getName() {
@@ -299,14 +295,9 @@ public class FruityVice {
 
         private double calories;
 
-        Nutritions(double carbohydrates, double calories) {
+        public Nutritions(double carbohydrates, double calories) {
             this.carbohydrates = carbohydrates;
             this.calories = calories;
-        }
-
-        @JsonbCreator
-        public static Nutritions of(double carbohydrates, double calories) {
-                return new Nutritions(carbohydrates, calories);
         }
 
         public double getCarbohydrates() {
@@ -462,8 +453,6 @@ import jakarta.ws.rs.core.Response.Status;
 @Path("/fruit")
 public class FruitResource {
 
-
-
     @RestClient
     @Inject
     FruityViceService fruityViceService;
@@ -477,7 +466,6 @@ public class FruitResource {
         fruit.persist();
         return Response.status(Status.CREATED).entity(fruit).build();
     }
-
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -508,7 +496,7 @@ public class FruitResource {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/fruit?season=Summer</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/fruit?season=Summer</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
