@@ -176,7 +176,7 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="_creating_a_quarkus_langchain_application"><a class="anchor" href="#_creating_a_quarkus_langchain_application"></a>Creating a Quarkus &amp; LangChain Application</h2>
+<h2 id="_creating_a_quarkus_langchain4j_application"><a class="anchor" href="#_creating_a_quarkus_langchain4j_application"></a>Creating a Quarkus &amp; LangChain4j Application</h2>
 <div class="sectionbody">
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -193,16 +193,16 @@
 <div class="tab-pane" aria-labelledby="tabset1_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw "io.quarkus.platform:quarkus-maven-plugin:create" -DprojectGroupId="com.redhat.developers" -DprojectArtifactId="quarkus-langchain-app" -DprojectVersion="1.0-SNAPSHOT" -Dextensions=rest,langchain4j-core,langchain4j-openai
-cd quarkus-langchain-app</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw "io.quarkus.platform:quarkus-maven-plugin:create" -DprojectGroupId="com.redhat.developers" -DprojectArtifactId="quarkus-langchain4j-app" -DprojectVersion="1.0-SNAPSHOT" -Dextensions=rest,langchain4j-core,langchain4j-openai
+cd quarkus-langchain4j-app</code></pre>
 </div>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_quarkus-cli">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus create app -x rest -x langchain4j-openai -x langchain4j-core com.redhat.developers:quarkus-langchain-app:1.0-SNAPSHOT
-cd quarkus-langchain-app</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus create app -x rest -x langchain4j-openai -x langchain4j-core com.redhat.developers:quarkus-langchain4j-app:1.0-SNAPSHOT
+cd quarkus-langchain4j-app</code></pre>
 </div>
 </div>
 </div>
@@ -215,7 +215,7 @@ cd quarkus-langchain-app</code></pre>
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-All the remaining parts of this section assume that you&#8217;ll be working inside the project folder that was just created. In this case, <code>quarkus-langchain-app</code>.
+All the remaining parts of this section assume that you&#8217;ll be working inside the project folder that was just created. In this case, <code>quarkus-langchain4j-app</code>.
 </td>
 </tr>
 </table>
@@ -322,7 +322,7 @@ public class ExistentialQuestionResource {
 <div class="tab-pane" aria-labelledby="tabset2_quarkus-cli">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus create app -x rest -x langchain4j-openai com.redhat.developers:quarkus-langchain-app:1.0-SNAPSHOT
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus create app -x rest -x langchain4j-openai com.redhat.developers:quarkus-langchain4j-app:1.0-SNAPSHOT
 quarkus dev</code></pre>
 </div>
 </div>
