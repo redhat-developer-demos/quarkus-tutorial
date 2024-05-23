@@ -72,6 +72,8 @@ quarkus extension add rest-client-jackson
 [INFO] ------------------------------------------------------------------------
 ----
 
+Notice in the logs how Quarkus is reloading and the `rest-client-jackson` extension is now part of the `Installed features`.
+
 == Create FruityVice POJO
 
 We need to create a POJO object that is used to unmarshal a JSON message from http://fruityvice.com[window=_blank].

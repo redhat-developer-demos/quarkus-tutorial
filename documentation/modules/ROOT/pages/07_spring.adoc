@@ -49,6 +49,8 @@ quarkus ext add spring-web spring-data-jpa
 [INFO] ------------------------------------------------------------------------
 ----
 
+Notice in the logs how Quarkus is reloading and the Spring compatibility extensions are now part of the `Installed features`.
+
 == Create a Spring Data Repository for Fruit
 
 Spring Data is one of the most popular Spring APIs, so let's create a Spring Data JPA Repository for our `Fruit` entity. Create the `SpringFruitRepository` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
