@@ -18,7 +18,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw "io.quarkus.platform:quarkus-maven-plugin:create" -DprojectGroupId="com.redhat.developers" -DprojectArtifactId="{project-ai-name}" -DprojectVersion="1.0-SNAPSHOT" -Dextensions=rest,langchain4j-core,langchain4j-openai
+mvn "io.quarkus.platform:quarkus-maven-plugin:create" -DprojectGroupId="com.redhat.developers" -DprojectArtifactId="{project-ai-name}" -DprojectVersion="1.0-SNAPSHOT" -Dextensions=rest,langchain4j-core,langchain4j-openai
 cd {project-ai-name}
 ----
 --
