@@ -339,7 +339,7 @@ public interface FruityViceService {
 
     public static class FruityViceFallback implements FallbackHandler&lt;FruityVice&gt; {
 
-        private static final FruityVice EMPTY_FRUITY_VICE = FruityVice.of("empty", Nutritions.of(0.0, 0.0));
+        private static final FruityVice EMPTY_FRUITY_VICE = new FruityVice("empty", new Nutritions(0.0, 0.0));
         @Override
         public FruityVice handle(ExecutionContext context) {
             return EMPTY_FRUITY_VICE;
