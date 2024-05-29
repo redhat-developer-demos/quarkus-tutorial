@@ -166,7 +166,7 @@ Add the following properties to your `application.properties` in `src/main/resou
 [.console-input]
 [source,properties]
 ----
-com.redhat.developers.FruityViceService/mp-rest/url=https://fruityvice.com
+quarkus.rest-client."com.redhat.developers.FruityViceService".url=https://fruityvice.com
 ----
 
 == Create FruitDTO
