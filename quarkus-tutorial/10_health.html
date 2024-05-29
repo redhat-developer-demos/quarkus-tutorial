@@ -328,7 +328,7 @@ import jakarta.ws.rs.HttpMethod;
 @ApplicationScoped
 public class CustomHealthCheck {
 
-    @ConfigProperty(name = "com.redhat.developers.FruityViceService/mp-rest/url")
+    @ConfigProperty(name = "quarkus.rest-client.\"com.redhat.developers.FruityViceService\".url")
     String externalURL;
 
     @Readiness <i class="conum" data-value="1"></i><b>(1)</b>
