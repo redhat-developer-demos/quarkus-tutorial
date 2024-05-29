@@ -100,7 +100,7 @@ curl -w '\n' localhost:8080/fruit?season=Summer
 ]
 ----
 
-No change from calls done previously, but now switch off your network so you do not have access to http://fruityvice.com.
+No change from calls done previously, but now switch off your network so you do not have access to https://fruityvice.com.
 
 Run the following command again:
 
