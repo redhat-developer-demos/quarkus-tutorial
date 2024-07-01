@@ -172,7 +172,7 @@
 </div>
 <div class="paragraph">
 <p>In this chapter we&#8217;re going to see some examples of how Mutiny changes the design of our Quarkus applications.
-to online beer database (<a href="https://punkapi.com/documentation/v2" class="bare">https://punkapi.com/documentation/v2</a>) to retrieve beer information.
+We&#8217;re going to call an online beer database to retrieve beer information.
 This API does not return all beers at once, so we&#8217;ll need to navigate through the pages to fetch all the information.
 Then we&#8217;re going to filter all the beers with an ABV greater than 15.0 and return all these beers in a Reactive REST endpoint.</p>
 </div>
@@ -182,10 +182,7 @@ Then we&#8217;re going to filter all the beers with an ABV greater than 15.0 and
 <h2 id="_add_the_mutiny_extension"><a class="anchor" href="#_add_the_mutiny_extension"></a>Add the Mutiny extension</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Create a new Quarkus project, for example using <a href="https://code.quarkus.io/" class="bare">https://code.quarkus.io/</a> website.</p>
-</div>
-<div class="paragraph">
-<p>Then open a new terminal window, and make sure you’re at the root of your <code>tutorial-app</code> project, then run:</p>
+<p>Let&#8217;s create a new Quarkus project and add the Rest, Rest Client and Mutiny extensions:</p>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -202,14 +199,16 @@ Then we&#8217;re going to filter all the beers with an ABV greater than 15.0 and
 <div class="tab-pane" aria-labelledby="tabset1_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -Dextension=mutiny,rest-client-jsonb,rest-jsonb</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn "io.quarkus.platform:quarkus-maven-plugin:create" -DprojectGroupId="com.redhat.developers" -DprojectArtifactId="tutorial-app" -DprojectVersion="1.0-SNAPSHOT" -Dextensions=rest,mutiny,rest-client-jsonb,rest-jsonb
+cd tutorial-app</code></pre>
 </div>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_quarkus-cli">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus extension add mutiny,rest-client-jsonb,rest-jsonb</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus create app -x rest -x mutiny -x rest-client-jsonb -x rest-jsonb com.redhat.developers:tutorial-app:1.0-SNAPSHOT
+cd tutorial-app</code></pre>
 </div>
 </div>
 </div>
