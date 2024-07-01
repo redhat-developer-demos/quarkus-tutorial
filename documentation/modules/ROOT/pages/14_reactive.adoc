@@ -3,27 +3,26 @@
 Quarkus provides a novel reactive API called Mutiny, with the goal of easing the development of highly scalable, resilient, and asynchronous systems.
 
 In this chapter we're going to see some examples of how Mutiny changes the design of our Quarkus applications.
-to online beer database (https://punkapi.com/documentation/v2) to retrieve beer information.
+We're going to call an online beer database to retrieve beer information.
 This API does not return all beers at once, so we'll need to navigate through the pages to fetch all the information.
 Then we're going to filter all the beers with an ABV greater than 15.0 and return all these beers in a Reactive REST endpoint.
 
 == Add the Mutiny extension
 
-Create a new Quarkus project, for example using https://code.quarkus.io/ website.
+Let's create a new Quarkus project and add the Rest, Rest Client and Mutiny extensions:
 
-Then open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
-
-[tabs]
+[tabs%sync]
 ====
+
 Maven::
 +
 --
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:add-extension -Dextension=mutiny,rest-client-jsonb,rest-jsonb
+mvn "io.quarkus.platform:quarkus-maven-plugin:create" -DprojectGroupId="com.redhat.developers" -DprojectArtifactId="tutorial-app" -DprojectVersion="1.0-SNAPSHOT" -Dextensions=rest,mutiny,rest-client-jsonb,rest-jsonb
+cd {project-name}
 ----
-
 --
 Quarkus CLI::
 +
@@ -31,7 +30,8 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus extension add mutiny,rest-client-jsonb,rest-jsonb
+quarkus create app -x rest -x mutiny -x rest-client-jsonb -x rest-jsonb com.redhat.developers:tutorial-app:1.0-SNAPSHOT
+cd {project-name}
 ----
 --
 ====
