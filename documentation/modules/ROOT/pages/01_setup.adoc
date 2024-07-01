@@ -93,7 +93,7 @@ cd quarkus-tutorial
 mkdir work
 docker run -ti -p 8080:8080 -v `pwd`/work:/work \
   -v `mvn help:evaluate -Dexpression=settings.localRepository -q -DforceStdout`:/opt/developer/.m2/repository \
-  --rm quay.io/rhdevelopers/tutorial-tools:0.0.7 bash
+  --rm quay.io/rhdevelopers/tutorial-tools:latest bash
 
 # -p will map Quarkus running in the container to your host port
 # -v `pwd`... will map the host work subdirectory to the container /work directory, this is where you will create your application
