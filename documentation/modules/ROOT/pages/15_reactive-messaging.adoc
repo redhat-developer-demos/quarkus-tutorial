@@ -4,7 +4,7 @@ As a Java developer you are aware that the JMS is the standard when comes to wor
 JMS is a blocking API which blocks us from implementing the reactive principles.
 
 Quarkus has SmallRye Reactive Messaging which is an implementation of the Eclipse MicroProfile Reactive Messaging specification.
-Quarkus implements version 2.x of this specification but also provides many other extensions.
+Quarkus implements version 3.x of this specification but also provides many other extensions.
 
 In this chapter we're going to use SmallRye Reactive Messaging to generate beers having a price but using messages instead of synchronous calls.
 
