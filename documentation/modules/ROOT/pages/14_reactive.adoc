@@ -36,6 +36,32 @@ cd {project-name}
 --
 ====
 
+== Start the app in Dev Mode:
+
+[tabs%sync]
+====
+Maven::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+./mvnw quarkus:dev
+----
+
+--
+Quarkus CLI::
++
+--
+[.console-input]
+[source,bash,subs="+macros,+attributes"]
+----
+quarkus dev
+----
+--
+====
+
+
 == Create Beer POJO
 
 Create a new `Beer` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
@@ -116,6 +142,8 @@ public interface BeerService {
 ----
 
 == Configure REST Client properties
+
+NOTE: The original punkapi.com service is not operational anymore. To reproduce the application, you can deploy the API on an Openshift Sandbox (developers.redhat.com/sandbox). Once you have logged in to the Sandbox, go to the "Developers" perspective in the top left corner, click on +Add in the left menu, and then in the "Git Repository" section click on the "Import from Git". Paste in the Git Repo URL field: "https://github.com/kdubois/punkapi-server.git", scroll down and set "Target port" to `3333`. Wait for the build to complete (this may take a few minutes) and the app to be deployed. Now click on the deployed app circle in the Topology view and copy the URL from the "Routes" section which should be visible on the right side of your screen. Then paste this URL in the application.properties below:
 
 Add the following properties to your `application.properties` in `src/main/resources`:
 

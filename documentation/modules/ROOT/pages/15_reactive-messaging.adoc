@@ -1,20 +1,19 @@
 = Reactive Messaging
 
-As a Java developer you are aware that the JMS is the standard when comes to working with messages.
-JMS is a blocking API which blocks us from implementing the reactive principles.
+As a Java developer you're likely familiar with JMS, which is considered to be the standard when it comes to working with messages.
+JMS however is a blocking API, which prevents us from implementing the reactive principles.
 
-Quarkus has SmallRye Reactive Messaging which is an implementation of the Eclipse MicroProfile Reactive Messaging specification.
-Quarkus implements version 2.x of this specification but also provides many other extensions.
+Quarkus has a "SmallRye Reactive Messaging" extension which is an implementation of the Eclipse MicroProfile Reactive Messaging specification. Reactive Messaging allows us to implement messaging in a non-blocking, reactive way.
 
-In this chapter we're going to use SmallRye Reactive Messaging to generate beers having a price but using messages instead of synchronous calls.
+In this chapter we're going to use SmallRye Reactive Messaging to generate beers once again. This time we're going to add a (random) price to the beers. We're going to be using messages instead of synchronous calls to do this.
 
-At this point, we're going to use an inmemory channel which means that messages are sent through the same application using the memory as transport channel of the messages.
+To do so, we're going to use an in-memory channel. This means that messages are sent through the application using memory as transport channel of the messages.
 
 In the following section, we'll see what we need to change to start using an external broker for sending messages.
 
 == Add the Reactive Messaging extension
 
-Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
+Open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
 
 [tabs]
 ====
@@ -41,9 +40,9 @@ quarkus extension add messaging
 
 == Modify BeerResource
 
-Let's create a new endpoint that finds a beer and sends/emits a message to `beers` channel with the beer.
+Let's create a new endpoint that finds a beer and sends/emits a message to a `beers` channel.
 
-Open `BeerResource` class and add the following code.
+Open the `BeerResource` class and add the following code.
 
 In the imports section:
 
@@ -79,9 +78,9 @@ public Response emitBeer(@PathParam("beer") int beerId) {
 <4> Sends an ack to caller
 
 The previous code sends the beer as a `JsonObject` to `beers` channel. 
-Since we are using a memory channel, let's create a new Java class in the same project capturing the messages sent to the channel.
+Since we are using an in-memory channel, let's create a new Java class in the same project capturing the messages sent to the channel.
 
-Moreover this new class, will send another event to a different channel which will be captured by another method.
+This new class will send another event to a different channel which will be captured by yet another method.
 
 == Create BeerProcessor
 
@@ -90,7 +89,7 @@ Create a new `BeerProcessor` Java class in `src/main/java` in the `org.acme` pac
 [.console-input]
 [source,java]
 ----
-package org.acme;
+package com.redhat.developers;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -109,7 +108,7 @@ public class BeerProcessor {
     
     @Incoming("beers") // <1>
     @Outgoing("messages") // <2>
-    public JsonObject processPrize(JsonObject beer) { // <3>
+    public JsonObject processPrice(JsonObject beer) { // <3>
         JsonObjectBuilder beerWithPrice = Json.createObjectBuilder(beer).add("price", getPrice());
         return beerWithPrice.build(); // <4>
     }
@@ -124,7 +123,7 @@ public class BeerProcessor {
     }
 }
 ----
-<1> Listen events from `beers` channel
+<1> Listen to events from `beers` channel
 <2> Sends/Emits the result of the method call to the `messages` channel
 <3> Argument is the message of the `beers` channel
 <4> Return object is sent to the `messages` channel
