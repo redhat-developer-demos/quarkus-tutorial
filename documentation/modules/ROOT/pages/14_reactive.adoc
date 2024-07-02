@@ -143,14 +143,14 @@ public interface BeerService {
 
 == Configure REST Client properties
 
-NOTE: The original punkapi.com service is not operational anymore. To reproduce the application, you can deploy the API on an Openshift Sandbox (developers.redhat.com/sandbox). Once you have logged in to the Sandbox, go to the "Developers" perspective in the top left corner, click on +Add in the left menu, and then in the "Git Repository" section click on the "Import from Git". Paste in the Git Repo URL field: "https://github.com/kdubois/punkapi-server.git", scroll down and set "Target port" to `3333`. Wait for the build to complete (this may take a few minutes) and the app to be deployed. Now click on the deployed app circle in the Topology view and copy the URL from the "Routes" section which should be visible on the right side of your screen. Then paste this URL in the application.properties below:
+NOTE: The original punkapi.com service is not operational anymore. To reproduce the application, you can deploy the API on an Openshift Sandbox (https://developers.redhat.com/sandbox). Once you have logged in to the Sandbox, go to the `Developer` perspective in the top left corner, click on `+Add` in the left menu, and then in the `Git Repository` section click on the `Import from Git` link. Paste in the Git Repo URL field the following URL: "https://github.com/kdubois/punkapi-server.git". Openshift will detect the project as a NodeJS app. Scroll further down the form and set `Target port` to `3333`. Wait for the build to complete (this may take a few minutes) and the app to be deployed. Now click on the deployed app circle in the Topology view and copy the URL from the `Routes` section which should be visible on the right side of your screen. Then paste this URL in the application.properties below:
 
 Add the following properties to your `application.properties` in `src/main/resources`:
 
 [.console-input]
 [source,properties]
 ----
-com.redhat.developers.BeerService/mp-rest/url=https://api.punkapi.com
+com.redhat.developers.BeerService/mp-rest/url=REPLACE_WITH_PUNKAPI_URL_FROM_SANDBOX_HERE
 ----
 
 == Pagination + Filtering
