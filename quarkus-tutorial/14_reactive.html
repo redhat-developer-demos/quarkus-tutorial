@@ -345,7 +345,7 @@ public interface BeerService {
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-The original punkapi.com service is not operational anymore. To reproduce the application, you can deploy the API on an Openshift Sandbox (developers.redhat.com/sandbox). Once you have logged in to the Sandbox, go to the "Developers" perspective in the top left corner, click on +Add in the left menu, and then in the "Git Repository" section click on the "Import from Git". Paste in the Git Repo URL field: "https://github.com/kdubois/punkapi-server.git", scroll down and set "Target port" to <code>3333</code>. Wait for the build to complete (this may take a few minutes) and the app to be deployed. Now click on the deployed app circle in the Topology view and copy the URL from the "Routes" section which should be visible on the right side of your screen. Then paste this URL in the application.properties below:
+The original punkapi.com service is not operational anymore. To reproduce the application, you can deploy the API on an Openshift Sandbox (<a href="https://developers.redhat.com/sandbox" class="bare">https://developers.redhat.com/sandbox</a>). Once you have logged in to the Sandbox, go to the <code>Developer</code> perspective in the top left corner, click on <code>+Add</code> in the left menu, and then in the <code>Git Repository</code> section click on the <code>Import from Git</code> link. Paste in the Git Repo URL field the following URL: "https://github.com/kdubois/punkapi-server.git". Openshift will detect the project as a NodeJS app. Scroll further down the form and set <code>Target port</code> to <code>3333</code>. Wait for the build to complete (this may take a few minutes) and the app to be deployed. Now click on the deployed app circle in the Topology view and copy the URL from the <code>Routes</code> section which should be visible on the right side of your screen. Then paste this URL in the application.properties below:
 </td>
 </tr>
 </table>
@@ -355,7 +355,7 @@ The original punkapi.com service is not operational anymore. To reproduce the ap
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">com.redhat.developers.BeerService/mp-rest/url=https://api.punkapi.com</code></pre>
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">com.redhat.developers.BeerService/mp-rest/url=REPLACE_WITH_PUNKAPI_URL_FROM_SANDBOX_HERE</code></pre>
 </div>
 </div>
 </div>
