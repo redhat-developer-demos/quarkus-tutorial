@@ -217,6 +217,39 @@ cd tutorial-app</code></pre>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_start_the_app_in_dev_mode"><a class="anchor" href="#_start_the_app_in_dev_mode"></a>Start the app in Dev Mode:</h2>
+<div class="sectionbody">
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset2_maven"></a>Maven</p>
+</li>
+<li>
+<p><a id="tabset2_quarkus-cli"></a>Quarkus CLI</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset2_maven">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:dev</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset2_quarkus-cli">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus dev</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_create_beer_pojo"><a class="anchor" href="#_create_beer_pojo"></a>Create Beer POJO</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -305,6 +338,18 @@ public interface BeerService {
 <div class="sect1">
 <h2 id="_configure_rest_client_properties"><a class="anchor" href="#_configure_rest_client_properties"></a>Configure REST Client properties</h2>
 <div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The original punkapi.com service is not operational anymore. To reproduce the application, you can deploy the API on an Openshift Sandbox (developers.redhat.com/sandbox). Once you have logged in to the Sandbox, go to the "Developers" perspective in the top left corner, click on +Add in the left menu, and then in the "Git Repository" section click on the "Import from Git". Paste in the Git Repo URL field: "https://github.com/kdubois/punkapi-server.git", scroll down and set "Target port" to <code>3333</code>. Wait for the build to complete (this may take a few minutes) and the app to be deployed. Now click on the deployed app circle in the Topology view and copy the URL from the "Routes" section which should be visible on the right side of your screen. Then paste this URL in the application.properties below:
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>Add the following properties to your <code>application.properties</code> in <code>src/main/resources</code>:</p>
 </div>

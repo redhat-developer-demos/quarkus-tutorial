@@ -168,10 +168,10 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Mutiny is just part of the Reactive story. To complement it, we need Reactive Streams too. And an important service that can serve as the underlying implementation for our stream is <a href="http://kafka.apache.org" target="_blank" rel="noopener">Apache Kafka</a>.</p>
+<p>Mutiny is just one part of the Reactive story. To complement it, we could use Reactive Streams too. An important service that can serve as the underlying implementation for our stream is <a href="http://kafka.apache.org" target="_blank" rel="noopener">Apache Kafka</a>.</p>
 </div>
 <div class="paragraph">
-<p>In this chapter, we&#8217;ll do a small change, we send beers with a price to a Kafka broker instead of using a memory channel.</p>
+<p>In this chapter, we&#8217;ll make a small change: We will send beers with a price to a Kafka broker instead of using an in-memory channel.</p>
 </div>
 </div>
 </div>
@@ -179,7 +179,7 @@
 <h2 id="_add_the_reactive_messaging_kafka_extension"><a class="anchor" href="#_add_the_reactive_messaging_kafka_extension"></a>Add the Reactive Messaging Kafka extension</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Just open a new terminal window, and make sure you’re at the root of your <code>tutorial-app</code> project, then run:</p>
+<p>Open a new terminal window, and make sure you’re at the root of your <code>tutorial-app</code> project, then run:</p>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -284,7 +284,7 @@ If the channel name is the same as the topic, it&#8217;s not necessary to set th
 <p>Because starting a Kafka broker can be long and you need to develop fast in your local environment, Dev Services for Kafka is here to help you!</p>
 </div>
 <div class="paragraph">
-<p>Since <code>quarkus-smallrye-reactive-messaging-kafka</code> extension is present, Dev Services for Kafka automatically starts a Kafka broker in dev mode and when running tests.</p>
+<p>Since we have added the <code>quarkus-messaging-kafka</code>, Quarkus Dev Services automatically starts a containerized Kafka broker in dev mode and when running tests.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -304,7 +304,7 @@ You can disable Dev Services for Kafka by adding <code>quarkus.kafka.devservices
 <h2 id="_invoke_the_endpoint"><a class="anchor" href="#_invoke_the_endpoint"></a>Invoke the endpoint</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>With all these changes done, having Docker/Podman running in your computer, and starting the service in dev mode, you can send the same request as in the previous chapter:</p>
+<p>There&#8217;s not really any code to add at this point. Just by having Docker/Podman running on our computer, and starting the service in dev mode, we can now send the same request as in the previous chapter, but it will be sent to a Kafka topic instead of an in-memory channel. Let&#8217;s try it:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -312,10 +312,7 @@ You can disable Dev Services for Kafka by adding <code>quarkus.kafka.devservices
 </div>
 </div>
 <div class="paragraph">
-<p>Now, nothing is shown as return or in the Quarkus terminal, because the event is sent to a Kafka topic.</p>
-</div>
-<div class="paragraph">
-<p>To check the content of the topic, we can use the Dev UI interfac by pointing your browser to <a href="http://localhost:8080/q/dev-ui/io.quarkus.quarkus-kafka-client/topics" class="bare" target="_blank" rel="noopener">http://localhost:8080/q/dev-ui/io.quarkus.quarkus-kafka-client/topics</a></p>
+<p>As you can see, nothing is shown in the return message, nor is there anything in the Quarkus terminal, because the event is simply sent to a Kafka topic. We could create some additional code to retrieve the message from Kafka, but in this case we&#8217;re going to use the Dev UI interface where we can actually find the contents of the Kafka topic in the Kafka  by pointing our browser to <a href="http://localhost:8080/q/dev-ui/io.quarkus.quarkus-kafka-client/topics" class="bare" target="_blank" rel="noopener">http://localhost:8080/q/dev-ui/io.quarkus.quarkus-kafka-client/topics</a></p>
 </div>
 </div>
 </div>
