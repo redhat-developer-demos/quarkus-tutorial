@@ -1,12 +1,12 @@
 = Apache Kafka with Reactive Streams
 
-Mutiny is just part of the Reactive story. To complement it, we need Reactive Streams too. And an important service that can serve as the underlying implementation for our stream is http://kafka.apache.org[Apache Kafka,window=_blank].
+Mutiny is just one part of the Reactive story. To complement it, we could use Reactive Streams too. An important service that can serve as the underlying implementation for our stream is http://kafka.apache.org[Apache Kafka,window=_blank].
 
-In this chapter, we'll do a small change, we send beers with a price to a Kafka broker instead of using a memory channel.
+In this chapter, we'll make a small change: We will send beers with a price to a Kafka broker instead of using an in-memory channel.
 
 == Add the Reactive Messaging Kafka extension
 
-Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
+Open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
 
 [tabs]
 ====
@@ -65,13 +65,13 @@ TIP: If the channel name is the same as the topic, it's not necessary to set the
 
 Because starting a Kafka broker can be long and you need to develop fast in your local environment, Dev Services for Kafka is here to help you!
 
-Since `quarkus-smallrye-reactive-messaging-kafka` extension is present, Dev Services for Kafka automatically starts a Kafka broker in dev mode and when running tests.
+Since we have added the `quarkus-messaging-kafka`, Quarkus Dev Services automatically starts a containerized Kafka broker in dev mode and when running tests.
 
 TIP: You can disable Dev Services for Kafka by adding `quarkus.kafka.devservices.enabled=false` or configuring `kafka.bootstrap.servers` in `application.properties`.
 
 == Invoke the endpoint
 
-With all these changes done, having Docker/Podman running in your computer, and starting the service in dev mode, you can send the same request as in the previous chapter:
+There's not really any code to add at this point. Just by having Docker/Podman running on our computer, and starting the service in dev mode, we can now send the same request as in the previous chapter, but it will be sent to a Kafka topic instead of an in-memory channel. Let's try it:
 
 [.console-input]
 [source,bash]
@@ -80,6 +80,4 @@ curl -w '\n' localhost:8080/beer/emit/1
 ----
 
 
-Now, nothing is shown as return or in the Quarkus terminal, because the event is sent to a Kafka topic.
-
-To check the content of the topic, we can use the Dev UI interfac by pointing your browser to http://localhost:8080/q/dev-ui/io.quarkus.quarkus-kafka-client/topics[window=_blank]
+As you can see, nothing is shown in the return message, nor is there anything in the Quarkus terminal, because the event is simply sent to a Kafka topic. We could create some additional code to retrieve the message from Kafka, but in this case we're going to use the Dev UI interface where we can actually find the contents of the Kafka topic in the Kafka  by pointing our browser to http://localhost:8080/q/dev-ui/io.quarkus.quarkus-kafka-client/topics[window=_blank]
