@@ -20,7 +20,7 @@
 * Reactive
 ** xref:14_reactive.adoc[Reactive with Mutiny]
 ** xref:15_reactive-messaging.adoc[Streaming reactive messages]
-** xref:15_kafka-and-streams.adoc[Apache Kafka with Reactive Streams]
+** xref:16_kafka-and-streams.adoc[Apache Kafka with Reactive Streams]
 
 * AI
 ** xref:17_prompts.adoc[Working with prompts]
