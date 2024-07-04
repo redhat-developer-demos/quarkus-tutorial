@@ -246,17 +246,17 @@ import org.eclipse.microprofile.reactive.messaging.Emitter;</code></pre>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Channel("beers")
-Emitter&lt;JsonObject&gt; emitter;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    @Channel("beers")
+    Emitter&lt;JsonObject&gt; emitter;
 
-@GET
-@Path("/emit/{beer}")
-public Response emitBeer(@PathParam("beer") int beerId) {
-    beerService.getBeer(beerId) <i class="conum" data-value="1"></i><b>(1)</b>
-        .map(beers -&gt; beers.get(0).asJsonObject()) <i class="conum" data-value="2"></i><b>(2)</b>
-        .subscribe().with(emitter::send); <i class="conum" data-value="3"></i><b>(3)</b>
-    return Response.ok().build(); <i class="conum" data-value="4"></i><b>(4)</b>
-}</code></pre>
+    @GET
+    @Path("/emit/{beer}")
+    public Response emitBeer(@PathParam("beer") int beerId) {
+        beerService.getBeer(beerId) <i class="conum" data-value="1"></i><b>(1)</b>
+            .map(beers -&gt; beers.get(0).asJsonObject()) <i class="conum" data-value="2"></i><b>(2)</b>
+            .subscribe().with(emitter::send); <i class="conum" data-value="3"></i><b>(3)</b>
+        return Response.ok().build(); <i class="conum" data-value="4"></i><b>(4)</b>
+    }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
