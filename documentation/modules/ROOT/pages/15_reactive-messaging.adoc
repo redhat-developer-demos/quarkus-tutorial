@@ -60,17 +60,17 @@ And the business code:
 [.console-input]
 [source,java]
 ----
-@Channel("beers")
-Emitter<JsonObject> emitter;
+    @Channel("beers")
+    Emitter<JsonObject> emitter;
 
-@GET
-@Path("/emit/{beer}")
-public Response emitBeer(@PathParam("beer") int beerId) {
-    beerService.getBeer(beerId) // <1>
-        .map(beers -> beers.get(0).asJsonObject()) // <2>
-        .subscribe().with(emitter::send); // <3>
-    return Response.ok().build(); // <4>
-}
+    @GET
+    @Path("/emit/{beer}")
+    public Response emitBeer(@PathParam("beer") int beerId) {
+        beerService.getBeer(beerId) // <1>
+            .map(beers -> beers.get(0).asJsonObject()) // <2>
+            .subscribe().with(emitter::send); // <3>
+        return Response.ok().build(); // <4>
+    }
 ----
 <1> Finds the beer
 <2> Gets the first beer

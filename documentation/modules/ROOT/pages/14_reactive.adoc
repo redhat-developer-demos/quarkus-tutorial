@@ -301,10 +301,10 @@ Open `BeerService` interface and add the following method to get a beer:
 [.console-input]
 [source,java]
 ----
-@GET
-@Path("/beers/{id}")
-@Produces(MediaType.APPLICATION_JSON)
-Uni<JsonArray> getBeer(@PathParam("id") int id);
+    @GET
+    @Path("/beers/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    Uni<JsonArray> getBeer(@PathParam("id") int id);    
 ----
 
 === Modify BeerResource
@@ -314,35 +314,35 @@ Open `BeerResource` class and add the following methods to do in parallel the bo
 [.console-input]
 [source,java]
 ----
-@GET
-@Path("/{beerA}/{beerB}")
-public Uni<JsonValue> compare(@PathParam("beerA") int beerA, @PathParam("beerB") int beerB) {
-    Uni<JsonArray> beer1 = beerService.getBeer(beerA); // <1>
-    Uni<JsonArray> beer2 = beerService.getBeer(beerB); // <2>
+    @GET
+    @Path("/{beerA}/{beerB}")
+    public Uni<JsonValue> compare(@PathParam("beerA") int beerA, @PathParam("beerB") int beerB) {
+        Uni<JsonArray> beer1 = beerService.getBeer(beerA); 
+        Uni<JsonArray> beer2 = beerService.getBeer(beerB); 
 
-    return Uni.combine()
-        .all()
-        .unis(beer1, beer2) // <3>
-        .with((b1, b2) -> this.compare(b1, b2)); // <4>
-}
+        return Uni.combine()
+            .all()
+            .unis(beer1, beer2) 
+            .with((b1, b2) -> this.compare(b1, b2)); 
+    }
 
-private JsonValue compare(JsonArray beerA, JsonArray beerB) {
-    JsonObject source = beerA.get(0).asJsonObject();
-    JsonObject target = beerB.get(0).asJsonObject();
+    private JsonValue compare(JsonArray beerA, JsonArray beerB) {
+        JsonObject source = beerA.get(0).asJsonObject();
+        JsonObject target = beerB.get(0).asJsonObject();
 
-    String beerAName = source.getString("name");
-    String beerBName = target.getString("name");
+        String beerAName = source.getString("name");
+        String beerBName = target.getString("name");
 
-    double beerAAbv = source.getJsonNumber("abv").doubleValue();
-    double beerBAbv = target.getJsonNumber("abv").doubleValue();
+        double beerAAbv = source.getJsonNumber("abv").doubleValue();
+        double beerBAbv = target.getJsonNumber("abv").doubleValue();
 
-    return Json.createObjectBuilder()
-        .add("source-name", beerAName)
-        .add("target-name", beerBName)
-        .add("source-abv", beerAAbv)
-        .add("target-abv", beerBAbv)
-        .build();
-}
+        return Json.createObjectBuilder()
+            .add("source-name", beerAName)
+            .add("target-name", beerBName)
+            .add("source-abv", beerAAbv)
+            .add("target-abv", beerBAbv)
+            .build();
+    }
 ----
 <1> Executes request for first beer
 <2> Executes request for second beer
