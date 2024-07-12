@@ -230,13 +230,16 @@ quarkus.langchain4j.openai.timeout=60s
 
 %dev.quarkus.mailer.mock=false
 
-quarkus.langchain4j.openai.chat-model.temperature=0.0 <i class="conum" data-value="1"></i><b>(1)</b>
-quarkus.langchain4j.easy-rag.path=src/main/resources/catalog <i class="conum" data-value="2"></i><b>(2)</b>
+quarkus.langchain4j.openai.chat-model.temperature=0.0
+quarkus.langchain4j.easy-rag.path=src/main/resources/catalog
 
-booking.daystostart=1
+booking.daystostart=1 <i class="conum" data-value="3"></i><b>(3)</b>
 booking.daystoend=3
+booking.firstname=john
+booking.lastname=doe
+booking.number=123-456
 
-quarkus.langchain4j.openai.chat-model.model-name=gpt-4o <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+quarkus.langchain4j.openai.chat-model.model-name=gpt-4o <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -251,6 +254,10 @@ quarkus.langchain4j.openai.chat-model.model-name=gpt-4o <i class="conum" data-va
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Sample booking data</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
 <td>The specific model to use. IMPORTANT: gpt3.5-turbo is much cheaper but the results will be slower and less reliable.</td>
 </tr>
 </table>
@@ -384,27 +391,24 @@ public record Booking(String bookingNumber, LocalDate bookingFrom, LocalDate boo
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
 import java.time.LocalDate;
+import java.util.Map;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class BookingService {
 
-    @ConfigProperty(name="booking.daystostart")
-    int daystostart;
-
-    @ConfigProperty(name="booking.daystoend")
-    int daystoend;
-
-    private static String FIRSTNAME="john";
-    private static String LASTNAME="doe";
-    private static String BOOKINGNUMBER ="123-456"; <i class="conum" data-value="1"></i><b>(1)</b>
+    @Inject
+    @ConfigProperty(name = "booking") <i class="conum" data-value="1"></i><b>(1)</b>
+    Map&lt;String, String&gt; booking;
 
     public Booking getBookingDetails(String bookingNumber, String customerName, String customerSurname) {
         ensureExists(bookingNumber, customerName, customerSurname);
-        LocalDate bookingFrom = LocalDate.now().plusDays(daystostart);
-        LocalDate bookingTo = LocalDate.now().plusDays(daystoend);
+        LocalDate bookingFrom = LocalDate.now().plusDays(Long.parseLong(booking.get("daystostart")));
+        LocalDate bookingTo = LocalDate.now().plusDays(Long.parseLong(booking.get("daystoend")));
         // Retrieval from DB mocking
         Customer customer = new Customer(customerName, customerSurname);
         return new Booking(bookingNumber, bookingFrom, bookingTo, customer);
@@ -413,15 +417,16 @@ public class BookingService {
     public void cancelBooking(String bookingNumber, String customerName, String customerSurname) {
         ensureExists(bookingNumber, customerName, customerSurname);
 
-        // TODO add logic to double check booking conditions in case the LLM got it wrong.
+        // TODO add logic to double check booking conditions in case the LLM got it
+        // wrong.
         // throw new BookingCannotBeCancelledException(bookingNumber);
     }
 
     private void ensureExists(String bookingNumber, String customerName, String customerSurname) {
         // Check mocking
-        if (!(bookingNumber.equals(BOOKINGNUMBER)
-                &amp;&amp; customerName.toLowerCase().equals(FIRSTNAME)
-                &amp;&amp; customerSurname.toLowerCase().equals(LASTNAME))) {
+        if (!(bookingNumber.equals(booking.get("number"))
+                &amp;&amp; customerName.toLowerCase().equals(booking.get("firstname"))
+                &amp;&amp; customerSurname.toLowerCase().equals(booking.get("lastname")))) {
             throw new BookingNotFoundException(bookingNumber);
         }
     }
@@ -446,7 +451,7 @@ class BookingCannotBeCancelledException extends RuntimeException {
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>We hardcoded a booking entry for simplicity&#8217;s sake. Of course, in a real world scenario this would likely come from a database.</td>
+<td>Retrieve a single booking from the application.properties file. (in the real world this data would likely come from a DB instead :) )</td>
 </tr>
 </table>
 </div>
@@ -531,7 +536,7 @@ public interface AssistantForCustomerSupport {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
-import jakarta.websocket.OnOpen;
+import io.quarkus.websockets.next.OnOpen;
 import io.quarkus.websockets.next.OnTextMessage;
 import io.quarkus.websockets.next.WebSocket;
 
@@ -550,7 +555,7 @@ public class ChatSocket {
     }
 
     @OnTextMessage
-    public String onMessage(String userMessage){
+    public String onMessage(String userMessage) {
         return assistant.chat(userMessage);
     }
 }</code></pre>
