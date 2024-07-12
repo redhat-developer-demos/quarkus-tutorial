@@ -52,17 +52,21 @@ quarkus.langchain4j.openai.timeout=60s
 
 %dev.quarkus.mailer.mock=false
 
-quarkus.langchain4j.openai.chat-model.temperature=0.0 #<1>
-quarkus.langchain4j.easy-rag.path=src/main/resources/catalog #<2>
+quarkus.langchain4j.openai.chat-model.temperature=0.0 
+quarkus.langchain4j.easy-rag.path=src/main/resources/catalog
 
-booking.daystostart=1
+booking.daystostart=1 #<3>
 booking.daystoend=3
+booking.firstname=john
+booking.lastname=doe
+booking.number=123-456
 
-quarkus.langchain4j.openai.chat-model.model-name=gpt-4o #<3>
+quarkus.langchain4j.openai.chat-model.model-name=gpt-4o #<4>
 ----
 <1> The "temperature" parameter in AI language models controls the randomness of text generation. Lower values result in more predictable outputs, while higher values encourage creativity and diversity in responses.
 <2> Path to where documents are stored for the Retrieval Augmentation Generation (ie. the documents the AI model will use to build local knowledge)
-<3> The specific model to use. IMPORTANT: gpt3.5-turbo is much cheaper but the results will be slower and less reliable.
+<3> Sample booking data
+<4> The specific model to use. IMPORTANT: gpt3.5-turbo is much cheaper but the results will be slower and less reliable.
 
 
 == Embedding the business document
@@ -162,27 +166,24 @@ Create a new `BookingService` Java class in `src/main/java` in the `com.redhat.d
 package com.redhat.developers;
 
 import java.time.LocalDate;
+import java.util.Map;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class BookingService {
 
-    @ConfigProperty(name="booking.daystostart")
-    int daystostart;
-
-    @ConfigProperty(name="booking.daystoend")
-    int daystoend;
-
-    private static String FIRSTNAME="john";
-    private static String LASTNAME="doe";
-    private static String BOOKINGNUMBER ="123-456"; // <1>
+    @Inject
+    @ConfigProperty(name = "booking") #<1>
+    Map<String, String> booking;
 
     public Booking getBookingDetails(String bookingNumber, String customerName, String customerSurname) {
         ensureExists(bookingNumber, customerName, customerSurname);
-        LocalDate bookingFrom = LocalDate.now().plusDays(daystostart);
-        LocalDate bookingTo = LocalDate.now().plusDays(daystoend);
+        LocalDate bookingFrom = LocalDate.now().plusDays(Long.parseLong(booking.get("daystostart")));
+        LocalDate bookingTo = LocalDate.now().plusDays(Long.parseLong(booking.get("daystoend")));
         // Retrieval from DB mocking
         Customer customer = new Customer(customerName, customerSurname);
         return new Booking(bookingNumber, bookingFrom, bookingTo, customer);
@@ -191,15 +192,16 @@ public class BookingService {
     public void cancelBooking(String bookingNumber, String customerName, String customerSurname) {
         ensureExists(bookingNumber, customerName, customerSurname);
 
-        // TODO add logic to double check booking conditions in case the LLM got it wrong.
+        // TODO add logic to double check booking conditions in case the LLM got it
+        // wrong.
         // throw new BookingCannotBeCancelledException(bookingNumber);
     }
 
     private void ensureExists(String bookingNumber, String customerName, String customerSurname) {
         // Check mocking
-        if (!(bookingNumber.equals(BOOKINGNUMBER)
-                && customerName.toLowerCase().equals(FIRSTNAME)
-                && customerSurname.toLowerCase().equals(LASTNAME))) {
+        if (!(bookingNumber.equals(booking.get("number"))
+                && customerName.toLowerCase().equals(booking.get("firstname"))
+                && customerSurname.toLowerCase().equals(booking.get("lastname")))) {
             throw new BookingNotFoundException(bookingNumber);
         }
     }
@@ -219,7 +221,7 @@ class BookingCannotBeCancelledException extends RuntimeException {
     }
 }
 ----
-<1> We hardcoded a booking entry for simplicity's sake. Of course, in a real world scenario this would likely come from a database.
+<1> Retrieve a single booking from the application.properties file. (in the real world this data would likely come from a DB instead :) )
 
 Now we define a `BookingTools` singleton that will serve our AI with proper tools.
 
@@ -297,7 +299,7 @@ Create a new `ChatSocket` Java record in `src/main/java` in the `com.redhat.deve
 ----
 package com.redhat.developers;
 
-import jakarta.websocket.OnOpen;
+import io.quarkus.websockets.next.OnOpen;
 import io.quarkus.websockets.next.OnTextMessage;
 import io.quarkus.websockets.next.WebSocket;
 
@@ -316,7 +318,7 @@ public class ChatSocket {
     }
 
     @OnTextMessage
-    public String onMessage(String userMessage){
+    public String onMessage(String userMessage) {
         return assistant.chat(userMessage);
     }
 }
