@@ -2,8 +2,7 @@
 
 :project-ai-name: quarkus-langchain4j-app
 
-So far we explored how to use prompts with LLMs, however to really leverage the power of LLMs it is essential that you
-can build a conversation by referring to previous questions and answers and manage concurrent interactions.
+So far we explored how to use prompts with LLMs, however to really leverage the power of LLMs it is essential that you can build a conversation by referring to previous questions and answers and manage concurrent interactions.
 
 In this section, we'll cover how we can achieve this with the LangChain4j extension in Quarkus.
 
@@ -22,7 +21,7 @@ import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.UserMessage;
 import io.quarkiverse.langchain4j.RegisterAiService;
 
-@RegisterAiService(/*chatMemoryProviderSupplier = RegisterAiService.BeanChatMemoryProviderSupplier.class*/)
+@RegisterAiService()
 public interface AssistantWithMemory {
 
     String chat(@MemoryId Integer id, @UserMessage String msg);
@@ -30,53 +29,9 @@ public interface AssistantWithMemory {
 }
 ----
 
-== Implement the ChatMemoryProvider
-
-LangChain4j provides the interface `ChatMemoryProvider` to help us manage the memory of our conversations with the LLM.
-
-Create a new `ChatMemoryBean` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
-
-[.console-input]
-[source,java]
-----
-package com.redhat.developers;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import jakarta.annotation.PreDestroy;
-import jakarta.enterprise.context.ApplicationScoped;
-
-import dev.langchain4j.memory.ChatMemory;
-import dev.langchain4j.memory.chat.ChatMemoryProvider;
-import dev.langchain4j.memory.chat.MessageWindowChatMemory;
-
-@ApplicationScoped
-public class ChatMemoryBean implements ChatMemoryProvider {
-
-    private final Map<Object, ChatMemory> memories = new ConcurrentHashMap<>();
-
-    @Override
-    public ChatMemory get(Object memoryId) {
-        return memories.computeIfAbsent(memoryId, id -> MessageWindowChatMemory.builder() //<1>
-                .maxMessages(20) //<2>
-                .id(memoryId)
-                .build());
-    }
-
-    @PreDestroy
-    public void close() {
-        memories.clear();
-    }
-}
-----
-<1> If no chat memory exists yet, create a new instance
-<2> Retain a maximum of 20 messages
-
-
 == Create a Developer resource
 
-Now let's create a resource to help us write some code.
+Now let's create a resource to help us write some code, and then ask the model to create a test for the code as well in a second request. Thanks to the memory feature, the model will remember what code we're referring to from the first request. 
 
 Create a new `DeveloperResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
@@ -85,78 +40,54 @@ Create a new `DeveloperResource` Java class in `src/main/java` in the `com.redha
 ----
 package com.redhat.developers;
 
-import static dev.langchain4j.data.message.UserMessage.userMessage;
-import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
-
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
-import dev.langchain4j.chain.ConversationalChain;
-import dev.langchain4j.data.message.AiMessage;
-import dev.langchain4j.data.message.UserMessage;
-import dev.langchain4j.memory.ChatMemory;
-import dev.langchain4j.memory.chat.TokenWindowChatMemory;
-import dev.langchain4j.model.Tokenizer;
-import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.openai.OpenAiTokenizer;
-import dev.langchain4j.model.output.Response;
-
-@Path("/code")
+@Path("/")
 public class DeveloperResource {
 
     @Inject
-    private ChatLanguageModel model;
+    private AssistantWithMemory ai;
 
     @GET
-    @Path("/rest")
+    @Path("/memory")
     @Produces(MediaType.TEXT_PLAIN)
-    public void createRestEndpoint() {
+    public String memory() {
+        String msg1 = "How do I write a REST endpoint in Java using Quarkus?";
 
-        Tokenizer tokenizer = new OpenAiTokenizer();
-        ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(1000, tokenizer);
+        String response = "[User]: " + msg1 + "\n\n" + 
+            "[LLM]: "+ ai.chat(1, msg1) + "\n\n\n" +
+            "------------------------------------------\n\n\n";
 
-        UserMessage userMessage1 = userMessage(
-                "How do I write a REST endpoint in Java using Quarkus? ");
-        chatMemory.add(userMessage1);
+        String msg2 = "Create a test of the first step. " +
+                        "Be short, 15 lines of code maximum.";
+            
+        response += "[User]: " + msg2 + "\n\n"+ 
+            "[LLM]: "+ ai.chat(1, msg2);
 
-        System.out.println("[User]: " + userMessage1.contents() + System.lineSeparator());
-
-        final Response<AiMessage> response1 = model.generate(chatMemory.messages());
-        chatMemory.add(response1.content());
-
-        System.out.println("[LLM]: " + response1.content().text() + System.lineSeparator());
-
-        UserMessage userMessage2 = userMessage(
-                "Create a test of the first point. " +
-                        "Be short, 15 lines of code maximum.");
-        chatMemory.add(userMessage2);
-
-        System.out.println("[User]: " + userMessage2.contents() + System.lineSeparator());
-
-        final Response<AiMessage> response2 = model.generate(chatMemory.messages());
-
-        System.out.println("[LLM]: " + response2.content().text() + System.lineSeparator());
+        return response;       
 
     }
+
 }
 ----
 
 == Invoke the endpoint
 
-You can check your prompt implementation by pointing your browser to http://localhost:8080/code/rest[window=_blank]
+You can check your prompt implementation by pointing your browser to http://localhost:8080/memory[window=_blank]
 
 You can also run the following command in your terminal:
 
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/code/rest
+curl localhost:8080/memory
 ----
 
-The result will be in the logs of your Quarkus application (ie. the terminal where you're running the `quarkus dev` command). An example of output (it can vary on each prompt execution):
+An example of output (can vary on each prompt execution):
 
 [.console-output]
 [source,text]
@@ -200,7 +131,7 @@ public class HelloResource {
 This class defines two REST endpoints: `/hello` for saying hello to the world, and `/hello/{name}` for saying hello to a specific name. You can access these endpoints at `http://localhost:8080/hello` and `http://localhost:8080/hello/{name}` respectively.
 
 
-[User]: Create a test of the first point. Be short, 15 lines of code maximum.
+[User]: Create a test of the first step. Be short, 15 lines of code maximum.
 
 [LLM]: Here's an example of a simple test for the `sayHello` endpoint in Quarkus using JUnit:
 
@@ -231,127 +162,60 @@ In this test, we are using the QuarkusTest annotation to run the test in the Qua
 
 ----
 
-Let's now get some help to learn a little bit about Kubernetes.
 
-Add a new `generateKubernetes()` method to the `DeveloperResource` class:
-
-[.console-input]
-[source,java]
-----
-    @GET
-    @Path("/k8s")
-    @Produces(MediaType.TEXT_PLAIN)
-    public void generateKubernetes() {
-
-        ConversationalChain chain = ConversationalChain.builder()
-                .chatLanguageModel(model)
-                .build();
-
-        String userMessage1 = "Can you give a brief explanation of Kubernetes, 3 lines max?";
-        System.out.println("[User]: " + userMessage1 + System.lineSeparator());
-
-        String answer1 = chain.execute(userMessage1);
-        System.out.println("[LLM]: " + answer1 + System.lineSeparator());
-
-        String userMessage2 = "Can you give me a YAML example to deploy an application for that?";
-        System.out.println("[User]: " + userMessage2 + System.lineSeparator());
-
-        String answer2 = chain.execute(userMessage2);
-        System.out.println("[LLM]: " + answer2);
-
-    }
-----
-
-== Invoke the endpoint
-
-You can check your prompt implementation by pointing your browser to http://localhost:8080/code/k8s[window=_blank]
-
-You can also run the following command:
-
-[.console-input]
-[source,bash]
-----
-curl localhost:8080/code/k8s
-----
-
-The result will be once again in your Quarkus application logs. An example of output (it can vary on each prompt execution):
-
-[.console-output]
-[source,text]
-----
-[User]: Can you give a brief explanation of Kubernetes, 3 lines max?
-
-[LLM]: Kubernetes is an open-source container orchestration platform that automates the deployment, scaling, and management of containerized applications. It simplifies the process of managing and coordinating large numbers of containers across multiple clusters. Kubernetes provides a scalable and efficient way to deploy and manage containerized applications in a production-ready environment.
-
-
-[User]: Can you give me a YAML example to deploy an application for that?
-
-[LLM]: Sure! Here is an example of a simple YAML file that deploys a sample application using Kubernetes:
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: sample-app
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: sample-app
-  template:
-    metadata:
-      labels:
-        app: sample-app
-    spec:
-      containers:
-      - name: sample-app
-        image: nginx:latest
-        ports:
-        - containerPort: 80
-```
-
-Save this YAML file as `sample-app-deployment.yaml` and apply it using the `kubectl apply -f sample-app-deployment.yaml` command to deploy the sample application with 3 replicas running NGINX.
-----
 
 == How to index a conversation
 
-We can use the LangChain4j extension to index a conversation so we can reuse it.
+We can use the LangChain4j extension to index a conversation so we can reuse it, and keep multiple, parallel conversations separated.
 
-Let's inject an instance of the `AssistantWithMemory` class and add a new `guessWho()` method to our `DeveloperResource`:
+Let's add a new `guessWho()` method to our `DeveloperResource`:
 
 [.console-input]
 [source,java]
 ----
-    @Inject
-    AssistantWithMemory assistant;
-
     @GET
     @Path("/guess")
     @Produces(MediaType.TEXT_PLAIN)
-    public void guessWho() {
+    public String guess() {
+        String msg1FromUser1 = "Hello, my name is Klaus and I'm a doctor";
 
-        System.out.println(assistant.chat(1, "Hello, my name is Klaus, and I'm a Doctor"));
+        String response = "[User1]: " + msg1FromUser1 + "\n\n" +
+                "[LLM]: " + ai.chat(1, msg1FromUser1) + "\n\n\n" +
+                "------------------------------------------\n\n\n";
 
-        System.out.println(assistant.chat(2, "Hello, my name is Francine, and I'm a Lawyer"));
+        String msg1FromUser2 = "Hi, I'm Francine and I'm a lawyer";
 
-        System.out.println(assistant.chat(1, "What is my name?"));
+        response += "[User2]: " + msg1FromUser2 + "\n\n" +
+                "[LLM]: " + ai.chat(2, msg1FromUser2) + "\n\n\n" +
+                "------------------------------------------\n\n\n";
 
-        System.out.println(assistant.chat(2, "What is my profession?"));
+        String msg2FromUser2 = "What is my name?";
 
+        response += "[User2]: " + msg2FromUser2 + "\n\n" +
+                "[LLM]: " + ai.chat(2, msg2FromUser2) + "\n\n\n" +
+                "------------------------------------------\n\n\n";
+
+        String msg2FromUser1 = "What is my profession?";
+
+        response += "[User1]: " + msg2FromUser1 + "\n\n" +
+                "[LLM]: " + ai.chat(1, msg2FromUser1) + "\n\n\n" +
+                "------------------------------------------\n\n\n";
+
+        return response;
     }
 
 ----
 
 == Invoke the endpoint
 
-You can check your implementation by pointing your browser to http://localhost:8080/code/guess[window=_blank]
+You can check your implementation by pointing your browser to http://localhost:8080/guess[window=_blank]
 
 You can also run the following command:
 
 [.console-input]
 [source,bash]
 ----
-curl localhost:8080/code/guess
+curl localhost:8080/guess
 ----
 
 The result will be at your Quarkus terminal. An example of output (it can vary on each prompt execution):
@@ -359,10 +223,36 @@ The result will be at your Quarkus terminal. An example of output (it can vary o
 [.console-output]
 [source,text]
 ----
-Hello Klaus, it's nice to meet you. What type of doctor are you?
-Hello Francine, nice to meet you! How can I assist you today?
-Your name is Klaus.
-Your profession is a Lawyer. You are legally trained and licensed to represent clients in legal matters.
+[User1]: Hello, my name is Klaus and I'm a doctor
+
+[LLM]:  Nice to meet you, Klaus! What field of medicine do you specialize in?
+
+
+------------------------------------------
+
+
+[User2]: Hi, I'm Francine and I'm a lawyer
+
+[LLM]: Hello Francine, nice to meet you. How can I assist you today?
+
+
+------------------------------------------
+
+
+[User2]: What is my name?
+
+[LLM]: Your name is Francine, and you mentioned earlier that you are a lawyer. How can I assist you today, Francine?
+
+
+------------------------------------------
+
+
+[User1]: What is my profession?
+
+[LLM]: Your profession is being a doctor, Klaus. How can I assist you today?
+
+
+------------------------------------------
 ----
 
-NOTE: You might be confused by the responses (ie. Klaus is not a lawyer but a doctor). Take a close look at the IDs of our calls to the assistant. Do you notice that the last question was in fact directed to Francine with ID=2? We were indeed able to maintain 2 separate and concurrent conversations with the LLM!
+NOTE: Take a close look at the IDs of our calls to the assistant. Do you notice that the last question was in fact directed to Klaus with ID=1? We were indeed able to maintain 2 separate and concurrent conversations with the LLM!
