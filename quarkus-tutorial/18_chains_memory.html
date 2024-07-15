@@ -168,8 +168,7 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>So far we explored how to use prompts with LLMs, however to really leverage the power of LLMs it is essential that you
-can build a conversation by referring to previous questions and answers and manage concurrent interactions.</p>
+<p>So far we explored how to use prompts with LLMs, however to really leverage the power of LLMs it is essential that you can build a conversation by referring to previous questions and answers and manage concurrent interactions.</p>
 </div>
 <div class="paragraph">
 <p>In this section, we&#8217;ll cover how we can achieve this with the LangChain4j extension in Quarkus.</p>
@@ -193,7 +192,7 @@ import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.UserMessage;
 import io.quarkiverse.langchain4j.RegisterAiService;
 
-@RegisterAiService(/*chatMemoryProviderSupplier = RegisterAiService.BeanChatMemoryProviderSupplier.class*/)
+@RegisterAiService()
 public interface AssistantWithMemory {
 
     String chat(@MemoryId Integer id, @UserMessage String msg);
@@ -204,67 +203,10 @@ public interface AssistantWithMemory {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_implement_the_chatmemoryprovider"><a class="anchor" href="#_implement_the_chatmemoryprovider"></a>Implement the ChatMemoryProvider</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>LangChain4j provides the interface <code>ChatMemoryProvider</code> to help us manage the memory of our conversations with the LLM.</p>
-</div>
-<div class="paragraph">
-<p>Create a new <code>ChatMemoryBean</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import jakarta.annotation.PreDestroy;
-import jakarta.enterprise.context.ApplicationScoped;
-
-import dev.langchain4j.memory.ChatMemory;
-import dev.langchain4j.memory.chat.ChatMemoryProvider;
-import dev.langchain4j.memory.chat.MessageWindowChatMemory;
-
-@ApplicationScoped
-public class ChatMemoryBean implements ChatMemoryProvider {
-
-    private final Map&lt;Object, ChatMemory&gt; memories = new ConcurrentHashMap&lt;&gt;();
-
-    @Override
-    public ChatMemory get(Object memoryId) {
-        return memories.computeIfAbsent(memoryId, id -&gt; MessageWindowChatMemory.builder() <i class="conum" data-value="1"></i><b>(1)</b>
-                .maxMessages(20) <i class="conum" data-value="2"></i><b>(2)</b>
-                .id(memoryId)
-                .build());
-    }
-
-    @PreDestroy
-    public void close() {
-        memories.clear();
-    }
-}</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>If no chat memory exists yet, create a new instance</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Retain a maximum of 20 messages</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="sect1">
 <h2 id="_create_a_developer_resource"><a class="anchor" href="#_create_a_developer_resource"></a>Create a Developer resource</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Now let&#8217;s create a resource to help us write some code.</p>
+<p>Now let&#8217;s create a resource to help us write some code, and then ask the model to create a test for the code as well in a second request. Thanks to the memory feature, the model will remember what code we&#8217;re referring to from the first request.</p>
 </div>
 <div class="paragraph">
 <p>Create a new <code>DeveloperResource</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
@@ -273,62 +215,38 @@ public class ChatMemoryBean implements ChatMemoryProvider {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
-import static dev.langchain4j.data.message.UserMessage.userMessage;
-import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
-
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
-import dev.langchain4j.chain.ConversationalChain;
-import dev.langchain4j.data.message.AiMessage;
-import dev.langchain4j.data.message.UserMessage;
-import dev.langchain4j.memory.ChatMemory;
-import dev.langchain4j.memory.chat.TokenWindowChatMemory;
-import dev.langchain4j.model.Tokenizer;
-import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.openai.OpenAiTokenizer;
-import dev.langchain4j.model.output.Response;
-
-@Path("/code")
+@Path("/")
 public class DeveloperResource {
 
     @Inject
-    private ChatLanguageModel model;
+    private AssistantWithMemory ai;
 
     @GET
-    @Path("/rest")
+    @Path("/memory")
     @Produces(MediaType.TEXT_PLAIN)
-    public void createRestEndpoint() {
+    public String memory() {
+        String msg1 = "How do I write a REST endpoint in Java using Quarkus?";
 
-        Tokenizer tokenizer = new OpenAiTokenizer();
-        ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(1000, tokenizer);
+        String response = "[User]: " + msg1 + "\n\n" +
+            "[LLM]: "+ ai.chat(1, msg1) + "\n\n\n" +
+            "------------------------------------------\n\n\n";
 
-        UserMessage userMessage1 = userMessage(
-                "How do I write a REST endpoint in Java using Quarkus? ");
-        chatMemory.add(userMessage1);
+        String msg2 = "Create a test of the first step. " +
+                        "Be short, 15 lines of code maximum.";
 
-        System.out.println("[User]: " + userMessage1.contents() + System.lineSeparator());
+        response += "[User]: " + msg2 + "\n\n"+
+            "[LLM]: "+ ai.chat(1, msg2);
 
-        final Response&lt;AiMessage&gt; response1 = model.generate(chatMemory.messages());
-        chatMemory.add(response1.content());
-
-        System.out.println("[LLM]: " + response1.content().text() + System.lineSeparator());
-
-        UserMessage userMessage2 = userMessage(
-                "Create a test of the first point. " +
-                        "Be short, 15 lines of code maximum.");
-        chatMemory.add(userMessage2);
-
-        System.out.println("[User]: " + userMessage2.contents() + System.lineSeparator());
-
-        final Response&lt;AiMessage&gt; response2 = model.generate(chatMemory.messages());
-
-        System.out.println("[LLM]: " + response2.content().text() + System.lineSeparator());
+        return response;
 
     }
+
 }</code></pre>
 </div>
 </div>
@@ -338,18 +256,18 @@ public class DeveloperResource {
 <h2 id="_invoke_the_endpoint"><a class="anchor" href="#_invoke_the_endpoint"></a>Invoke the endpoint</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can check your prompt implementation by pointing your browser to <a href="http://localhost:8080/code/rest" class="bare" target="_blank" rel="noopener">http://localhost:8080/code/rest</a></p>
+<p>You can check your prompt implementation by pointing your browser to <a href="http://localhost:8080/memory" class="bare" target="_blank" rel="noopener">http://localhost:8080/memory</a></p>
 </div>
 <div class="paragraph">
 <p>You can also run the following command in your terminal:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/code/rest</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/memory</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The result will be in the logs of your Quarkus application (ie. the terminal where you&#8217;re running the <code>quarkus dev</code> command). An example of output (it can vary on each prompt execution):</p>
+<p>An example of output (can vary on each prompt execution):</p>
 </div>
 <div class="listingblock console-output">
 <div class="content">
@@ -392,7 +310,7 @@ public class HelloResource {
 This class defines two REST endpoints: `/hello` for saying hello to the world, and `/hello/{name}` for saying hello to a specific name. You can access these endpoints at `http://localhost:8080/hello` and `http://localhost:8080/hello/{name}` respectively.
 
 
-[User]: Create a test of the first point. Be short, 15 lines of code maximum.
+[User]: Create a test of the first step. Be short, 15 lines of code maximum.
 
 [LLM]: Here's an example of a simple test for the `sayHello` endpoint in Quarkus using JUnit:
 
@@ -422,35 +340,48 @@ In this test, we are using the QuarkusTest annotation to run the test in the Qua
 ```</code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_how_to_index_a_conversation"><a class="anchor" href="#_how_to_index_a_conversation"></a>How to index a conversation</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Let&#8217;s now get some help to learn a little bit about Kubernetes.</p>
+<p>We can use the LangChain4j extension to index a conversation so we can reuse it, and keep multiple, parallel conversations separated.</p>
 </div>
 <div class="paragraph">
-<p>Add a new <code>generateKubernetes()</code> method to the <code>DeveloperResource</code> class:</p>
+<p>Let&#8217;s add a new <code>guessWho()</code> method to our <code>DeveloperResource</code>:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    @GET
-    @Path("/k8s")
+    @Path("/guess")
     @Produces(MediaType.TEXT_PLAIN)
-    public void generateKubernetes() {
+    public String guess() {
+        String msg1FromUser1 = "Hello, my name is Klaus and I'm a doctor";
 
-        ConversationalChain chain = ConversationalChain.builder()
-                .chatLanguageModel(model)
-                .build();
+        String response = "[User1]: " + msg1FromUser1 + "\n\n" +
+                "[LLM]: " + ai.chat(1, msg1FromUser1) + "\n\n\n" +
+                "------------------------------------------\n\n\n";
 
-        String userMessage1 = "Can you give a brief explanation of Kubernetes, 3 lines max?";
-        System.out.println("[User]: " + userMessage1 + System.lineSeparator());
+        String msg1FromUser2 = "Hi, I'm Francine and I'm a lawyer";
 
-        String answer1 = chain.execute(userMessage1);
-        System.out.println("[LLM]: " + answer1 + System.lineSeparator());
+        response += "[User2]: " + msg1FromUser2 + "\n\n" +
+                "[LLM]: " + ai.chat(2, msg1FromUser2) + "\n\n\n" +
+                "------------------------------------------\n\n\n";
 
-        String userMessage2 = "Can you give me a YAML example to deploy an application for that?";
-        System.out.println("[User]: " + userMessage2 + System.lineSeparator());
+        String msg2FromUser2 = "What is my name?";
 
-        String answer2 = chain.execute(userMessage2);
-        System.out.println("[LLM]: " + answer2);
+        response += "[User2]: " + msg2FromUser2 + "\n\n" +
+                "[LLM]: " + ai.chat(2, msg2FromUser2) + "\n\n\n" +
+                "------------------------------------------\n\n\n";
 
+        String msg2FromUser1 = "What is my profession?";
+
+        response += "[User1]: " + msg2FromUser1 + "\n\n" +
+                "[LLM]: " + ai.chat(1, msg2FromUser1) + "\n\n\n" +
+                "------------------------------------------\n\n\n";
+
+        return response;
     }</code></pre>
 </div>
 </div>
@@ -460,101 +391,14 @@ In this test, we are using the QuarkusTest annotation to run the test in the Qua
 <h2 id="_invoke_the_endpoint_2"><a class="anchor" href="#_invoke_the_endpoint_2"></a>Invoke the endpoint</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can check your prompt implementation by pointing your browser to <a href="http://localhost:8080/code/k8s" class="bare" target="_blank" rel="noopener">http://localhost:8080/code/k8s</a></p>
+<p>You can check your implementation by pointing your browser to <a href="http://localhost:8080/guess" class="bare" target="_blank" rel="noopener">http://localhost:8080/guess</a></p>
 </div>
 <div class="paragraph">
 <p>You can also run the following command:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/code/k8s</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The result will be once again in your Quarkus application logs. An example of output (it can vary on each prompt execution):</p>
-</div>
-<div class="listingblock console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">[User]: Can you give a brief explanation of Kubernetes, 3 lines max?
-
-[LLM]: Kubernetes is an open-source container orchestration platform that automates the deployment, scaling, and management of containerized applications. It simplifies the process of managing and coordinating large numbers of containers across multiple clusters. Kubernetes provides a scalable and efficient way to deploy and manage containerized applications in a production-ready environment.
-
-
-[User]: Can you give me a YAML example to deploy an application for that?
-
-[LLM]: Sure! Here is an example of a simple YAML file that deploys a sample application using Kubernetes:
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: sample-app
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: sample-app
-  template:
-    metadata:
-      labels:
-        app: sample-app
-    spec:
-      containers:
-      - name: sample-app
-        image: nginx:latest
-        ports:
-        - containerPort: 80
-```
-
-Save this YAML file as `sample-app-deployment.yaml` and apply it using the `kubectl apply -f sample-app-deployment.yaml` command to deploy the sample application with 3 replicas running NGINX.</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_how_to_index_a_conversation"><a class="anchor" href="#_how_to_index_a_conversation"></a>How to index a conversation</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>We can use the LangChain4j extension to index a conversation so we can reuse it.</p>
-</div>
-<div class="paragraph">
-<p>Let&#8217;s inject an instance of the <code>AssistantWithMemory</code> class and add a new <code>guessWho()</code> method to our <code>DeveloperResource</code>:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    @Inject
-    AssistantWithMemory assistant;
-
-    @GET
-    @Path("/guess")
-    @Produces(MediaType.TEXT_PLAIN)
-    public void guessWho() {
-
-        System.out.println(assistant.chat(1, "Hello, my name is Klaus, and I'm a Doctor"));
-
-        System.out.println(assistant.chat(2, "Hello, my name is Francine, and I'm a Lawyer"));
-
-        System.out.println(assistant.chat(1, "What is my name?"));
-
-        System.out.println(assistant.chat(2, "What is my profession?"));
-
-    }</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_invoke_the_endpoint_3"><a class="anchor" href="#_invoke_the_endpoint_3"></a>Invoke the endpoint</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>You can check your implementation by pointing your browser to <a href="http://localhost:8080/code/guess" class="bare" target="_blank" rel="noopener">http://localhost:8080/code/guess</a></p>
-</div>
-<div class="paragraph">
-<p>You can also run the following command:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/code/guess</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl localhost:8080/guess</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -562,10 +406,36 @@ Save this YAML file as `sample-app-deployment.yaml` and apply it using the `kube
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">Hello Klaus, it's nice to meet you. What type of doctor are you?
-Hello Francine, nice to meet you! How can I assist you today?
-Your name is Klaus.
-Your profession is a Lawyer. You are legally trained and licensed to represent clients in legal matters.</code></pre>
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">[User1]: Hello, my name is Klaus and I'm a doctor
+
+[LLM]:  Nice to meet you, Klaus! What field of medicine do you specialize in?
+
+
+------------------------------------------
+
+
+[User2]: Hi, I'm Francine and I'm a lawyer
+
+[LLM]: Hello Francine, nice to meet you. How can I assist you today?
+
+
+------------------------------------------
+
+
+[User2]: What is my name?
+
+[LLM]: Your name is Francine, and you mentioned earlier that you are a lawyer. How can I assist you today, Francine?
+
+
+------------------------------------------
+
+
+[User1]: What is my profession?
+
+[LLM]: Your profession is being a doctor, Klaus. How can I assist you today?
+
+
+------------------------------------------</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -575,7 +445,7 @@ Your profession is a Lawyer. You are legally trained and licensed to represent c
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-You might be confused by the responses (ie. Klaus is not a lawyer but a doctor). Take a close look at the IDs of our calls to the assistant. Do you notice that the last question was in fact directed to Francine with ID=2? We were indeed able to maintain 2 separate and concurrent conversations with the LLM!
+Take a close look at the IDs of our calls to the assistant. Do you notice that the last question was in fact directed to Klaus with ID=1? We were indeed able to maintain 2 separate and concurrent conversations with the LLM!
 </td>
 </tr>
 </table>
