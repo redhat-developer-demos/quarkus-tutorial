@@ -55,7 +55,7 @@ quarkus.langchain4j.openai.timeout=60s
 quarkus.langchain4j.openai.chat-model.temperature=0.0 
 quarkus.langchain4j.easy-rag.path=src/main/resources/catalog
 
-booking.daystostart=1 #<3>
+booking.daystostart=1#<3>
 booking.daystoend=3
 booking.firstname=john
 booking.lastname=doe
@@ -412,7 +412,6 @@ Create a new `chat-assistant.html` file in `src/main/resources/META-INF/resource
                   $("#send").attr("disabled", false);
                   $("#connect").attr("disabled", true);
                   $("#name").attr("disabled", true);
-                  $("#chat").append("[Assistant] Hi from Miles of Smiles, how may I help you? \n");
                   $("#msg").focus();
               };
               socket.onmessage =function(m) {
