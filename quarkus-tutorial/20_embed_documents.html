@@ -233,7 +233,7 @@ quarkus.langchain4j.openai.timeout=60s
 quarkus.langchain4j.openai.chat-model.temperature=0.0
 quarkus.langchain4j.easy-rag.path=src/main/resources/catalog
 
-booking.daystostart=1 <i class="conum" data-value="3"></i><b>(3)</b>
+booking.daystostart=1<i class="conum" data-value="3"></i><b>(3)</b>
 booking.daystoend=3
 booking.firstname=john
 booking.lastname=doe
@@ -653,7 +653,6 @@ public class ChatSocket {
                   $("#send").attr("disabled", false);
                   $("#connect").attr("disabled", true);
                   $("#name").attr("disabled", true);
-                  $("#chat").append("[Assistant] Hi from Miles of Smiles, how may I help you? \n");
                   $("#msg").focus();
               };
               socket.onmessage =function(m) {
