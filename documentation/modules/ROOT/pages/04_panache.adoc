@@ -5,7 +5,7 @@
 [#quarkusp-demo-overview]
 == Demo Overview
 
-You'll learn how easy and productive Quarkus is with Hibernate with Panache. For this, we'll develop a simple CRUD REST API that handles information about fruits.
+You'll learn how easy and productive Quarkus is with Hibernate with Panache. For this, we'll develop a simple CRUD REST API that handles information about movies.
 
 We'll use http://www.h2database.com[H2,window="_blank"] as our backing database in this section, but it's very easy to use other database engines with Quarkus as you will see in the Dev Services chapter. As an exercise for later, we suggest to try your favorite database engine with the documentation found https://quarkus.io/guides/datasource[here,window="_blank"].
 

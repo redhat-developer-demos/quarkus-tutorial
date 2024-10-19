@@ -57,7 +57,7 @@ curl -w '\n' localhost:8080/movie?year=1980
 
 === Trace down the requests in Jaeger
 
-Go to http://localhost:16686 in your browser. You should see the Jaeger UI, if not make sure the `docker run` command was executed successfully. To see the traces we just produced, select 'tutorial-app' from the Service dropdown and click 'Find Traces'. Depending on how many times you sent requests to the fruit endpoint, you'll see a number of traces that were collected.
+Go to http://localhost:16686 in your browser. You should see the Jaeger UI, if not make sure the `docker run` command was executed successfully. To see the traces we just produced, select 'tutorial-app' from the Service dropdown and click 'Find Traces'. Depending on how many times you sent requests to the Movie endpoint, you'll see a number of traces that were collected.
 
 [.mt-4.center]
 image::Jaeger.png[Jaeger Tracing,800,500,align="center"]
