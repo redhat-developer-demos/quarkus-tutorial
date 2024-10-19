@@ -78,12 +78,12 @@ docker ps
 [.mt-4.center]
 image::Dev_Services_Podman_ps.png[Dev Services Container,800,100,align="left"]
 
-Call the fruit endpoint again. The data is now coming from the PostgreSQL database container.
+Call the movie endpoint again. The data is now coming from the PostgreSQL database container.
 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-curl -w '\n' localhost:8080/fruit?season=Spring
+curl -w '\n' localhost:8080/movie?year=1980
 ----
 
 [.console-output]
@@ -91,14 +91,9 @@ curl -w '\n' localhost:8080/fruit?season=Spring
 ----
 [
   {
-    "id": 1,
-    "name": "Mango",
-    "season": "Spring"
-  },
-  {
     "id": 2,
-    "name": "Strawberry",
-    "season": "Spring"
+    "title": "The Empire Strikes Back",
+    "releaseDate": "1980-05-17"
   }
 ]
 ----

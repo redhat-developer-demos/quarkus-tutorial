@@ -10,7 +10,7 @@ There are two different types of health checks:
 
 == Add the Health extension
 
-Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
+Open a new terminal window, and make sure you're at the root of your `{project-name}` project, then run:
 
 [tabs]
 ====
@@ -99,10 +99,10 @@ public class LivenessProbe implements HealthCheck {
 In dev mode, all your health checks are visible in the Health UI: http://localhost:8080/q/health-ui/.
 
 Some extensions may provide default health checks, including that the extension will automatically register its health checks.
-For example, quarkus-agroal (that is used to manage Quarkus datasources) automatically registers a readiness health check that will validate each datasource.
+For example, quarkus-agroal (which is used to manage Quarkus datasources) automatically registers a readiness health check that will validate each datasource.
 
 Since the readiness of the database is already assessed just by adding those extensions, we should look into defining health checks for other dependencies that we have.
-As we depend on the availability of https://fruityvice.com, let's create a new `ReadinessProbe` to assess its availability prior to using it.
+As we depend on the availability of https://swapi.dev, let's create a new `ReadinessProbe` to assess its availability prior to using it.
 
 We will define a new Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
@@ -122,12 +122,12 @@ import jakarta.ws.rs.HttpMethod;
 @ApplicationScoped
 public class CustomHealthCheck {
 
-    @ConfigProperty(name = "quarkus.rest-client.\"com.redhat.developers.FruityViceService\".url")
+    @ConfigProperty(name = "quarkus.rest-client.\"com.redhat.developers.SwapiService\".url")
     String externalURL;
 
     @Readiness //<1>
     HealthCheck checkURL() {
-        return new UrlHealthCheck(externalURL+"/api/fruit/banana") //<2>
+        return new UrlHealthCheck(externalURL+"/api/films/") //<2>
                 .name("ExternalURL health check").requestMethod(HttpMethod.GET).statusCode(200);
     }
 
@@ -160,7 +160,7 @@ curl -w '\n' localhost:8080/health
             "name": "ExternalURL health check",
             "status": "UP",
             "data": {
-                "host": "GET https://fruityvice.com/api/fruit/banana"
+                "host": "GET https://swapi.dev/api/films"
             }
         },
         {
@@ -219,7 +219,7 @@ curl -w '\n' localhost:8080/health/ready
             "name": "ExternalURL health check",
             "status": "UP",
             "data": {
-                "host": "GET https://fruityvice.com/api/fruit/banana"
+                "host": "GET https://swapi.dev/api/films"
             }
         },
         {

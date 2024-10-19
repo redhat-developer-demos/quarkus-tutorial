@@ -77,25 +77,28 @@ quarkus.hibernate-orm.database.generation=drop-and-create
 
 NOTE: With <<Dev Services>> enabled, no JDBC URL needs to be provided in dev mode. In this case, we input the URL to ensure consistency across all application run modes.
 
-== Create Fruit Entity
+== Create Movie Entity
 
-Create a new `Fruit` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Create a new `Movie` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
 ----
 package com.redhat.developers;
 
+import java.util.List;
+
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
 @Entity
-public class Fruit extends PanacheEntity {
+public class Movie extends PanacheEntity {
 
-    public String name;
+    public String title;
 
-    public String season;
-
+    @Column(name = "release_date")
+    public java.sql.Date releaseDate;
 }
 ----
 
@@ -111,9 +114,9 @@ Fore more information please refer to the https://quarkus.io/guides/hibernate-or
 
 ****
 
-== Create Fruit Resource
+== Create Movie Resource
 
-Create a new `FruitResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Create a new `MovieResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
@@ -127,13 +130,13 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
-@Path("/fruit")
-public class FruitResource {
+@Path("/movie")
+public class MovieResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Fruit> fruits() {
-        return Fruit.listAll();
+    public List<Movie> movies() {
+        return Movie.listAll();
     }
 
 }
@@ -144,7 +147,7 @@ Now we should have everything in place to query our *GET* REST endpoint:
 [.console-input]
 [source,bash]
 ----
-curl -w '\n' localhost:8080/fruit
+curl -w '\n' localhost:8080/movie
 ----
 
 [.console-output]
@@ -157,7 +160,7 @@ We have an empty JSON array as the response, which is expected, since our databa
 
 === Adding a POST endpoint
 
-Let's change our `FruitResource` class to also contain a *POST* REST endpoint:
+Let's change our `MovieResource` class to also contain a *POST* REST endpoint:
 
 [.console-input]
 [source,java]
@@ -176,42 +179,43 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
-@Path("/fruit")
-public class FruitResource {
+@Path("/movie")
+public class MovieResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Fruit> fruits() {
-        return Fruit.listAll();
+    public List<Movie> movies() {
+        return Movie.listAll();
     }
 
     @Transactional
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response newFruit(Fruit fruit) {
-        fruit.persist();
-        return Response.status(Status.CREATED).entity(fruit).build();
+    public Response newMovie(Movie movie) {
+        movie.id = null;
+        movie.persist();
+        return Response.status(Status.CREATED).entity(movie).build();
     }
 
 }
 ----
 
-Now you can insert a new fruit by using `curl`:
+Now you can insert a new movie by using `curl`:
 
 [.console-input]
 [source,bash]
 ----
-curl -w '\n' -d "{\"name\": \"Banana\", \"season\": \"Summer\"}" -H "Content-Type: application/json" http://localhost:8080/fruit
+curl -w '\n' -d "{\"title\": \"The Empire Strikes Back\", \"releaseDate\": \"1980-05-17\"}" -H "Content-Type: application/json" http://localhost:8080/movie
 ----
 
 [.console-output]
 [source,text]
 ----
-{"id":1,"name":"Banana","season":"Summer"}
+{"id":1,"title":"The Empire Strikes Back","releaseDate":"1980-05-17"}
 ----
 
-Now if you refresh your browser pointing to http://localhost:8080/fruit[window=_blank], you should see a response like:
+Now if you refresh your browser pointing to http://localhost:8080/movie[window=_blank], you should see a response like:
 
 [.console-output]
 [source,json]
@@ -219,8 +223,8 @@ Now if you refresh your browser pointing to http://localhost:8080/fruit[window=_
 [
   {
     "id": 1,
-    "name": "Banana",
-    "season": "Summer"
+    "title": "The Empire Strikes Back",
+    "releaseDate": "1980-05-17"
   }
 ]
 ----
@@ -236,16 +240,13 @@ Create the file `import.sql` in the folder `src/main/resources` with the followi
 [.console-input]
 [source,sql]
 ----
-INSERT INTO Fruit(id,name,season) VALUES (1,'Mango','Spring');
-INSERT INTO Fruit(id,name,season) VALUES (2,'Strawberry','Spring');
-INSERT INTO Fruit(id,name,season) VALUES (3,'Orange','Winter');
-INSERT INTO Fruit(id,name,season) VALUES (4,'Lemon','Winter');
-INSERT INTO Fruit(id,name,season) VALUES (5,'Blueberry','Summer');
-INSERT INTO Fruit(id,name,season) VALUES (6,'Banana','Summer');
-INSERT INTO Fruit(id,name,season) VALUES (7,'Watermelon','Summer');
-INSERT INTO Fruit(id,name,season) VALUES (8,'Apple','Fall');
-INSERT INTO Fruit(id,name,season) VALUES (9,'Pear','Fall');
-ALTER SEQUENCE fruit_seq RESTART WITH 10;
+INSERT INTO Movie(id,title,release_date) VALUES (1,'A New Hope','1977-05-25');
+INSERT INTO Movie(id,title,release_date) VALUES (2,'The Empire Strikes Back','1980-05-17');
+INSERT INTO Movie(id,title,release_date) VALUES (3,'Return of the Jedi','1983-05-25');
+INSERT INTO Movie(id,title,release_date) VALUES (4,'The Phantom Menace','1999-05-19');
+INSERT INTO Movie(id,title,release_date) VALUES (5,'Attack of the Clones','2002-05-16');
+INSERT INTO Movie(id,title,release_date) VALUES (6,'Revenge of the Sith','2005-05-19');
+ALTER SEQUENCE movie_seq RESTART WITH 7;
 ----
 
 And append the following configuration in `application.properties`:
@@ -257,7 +258,7 @@ And append the following configuration in `application.properties`:
 quarkus.hibernate-orm.sql-load-script=import.sql
 ----
 
-Now if you refresh your browser pointing to http://localhost:8080/fruit[window=_blank], you should see a response like:
+Now if you refresh your browser pointing to http://localhost:8080/movie[window=_blank], you should see a response like:
 
 [.console-output]
 [source,json]
@@ -265,48 +266,33 @@ Now if you refresh your browser pointing to http://localhost:8080/fruit[window=_
 [
   {
     "id": 1,
-    "name": "Mango",
-    "season": "Spring"
+    "title": "A New Hope",
+    "releaseDate": "1977-05-25"
   },
   {
     "id": 2,
-    "name": "Strawberry",
-    "season": "Spring"
+    "title": "The Empire Strikes Back",
+    "releaseDate": "1980-05-17"
   },
   {
     "id": 3,
-    "name": "Orange",
-    "season": "Winter"
+    "title": "Return of the Jedi",
+    "releaseDate": "1983-05-25"
   },
   {
     "id": 4,
-    "name": "GrapeFruit",
-    "season": "Winter"
+    "title": "The Phantom Menace",
+    "releaseDate": "1999-05-19"
   },
   {
     "id": 5,
-    "name": "Blueberry",
-    "season": "Summer"
+    "title": "Attack of the Clones",
+    "releaseDate": "2002-05-16"
   },
   {
     "id": 6,
-    "name": "Banana",
-    "season": "Summer"
-  },
-  {
-    "id": 7,
-    "name": "Plum",
-    "season": "Summer"
-  },
-  {
-    "id": 8,
-    "name": "Apple",
-    "season": "Fall"
-  },
-  {
-    "id": 9,
-    "name": "Grapes",
-    "season": "Fall"
+    "title": "Revenge of the Sith",
+    "releaseDate": "2005-05-19"
   }
 ]
 ----
@@ -321,11 +307,11 @@ can use the configuration `quarkus.hibernate-orm.sql-load-script=import-dev.sql`
 while in production mode you can use `quarkus.hibernate-orm.sql-load-script=import-prod.sql`.
 ====
 
-== Adding a custom finder to the `Fruit` Entity
+== Adding a custom finder to the `Movie` Entity
 
-Update the `Fruit` class to contain a finder method `findBySeason` like:
+Update the `Movie` class to contain a finder method `findByYear` like:
 
-[#quarkusp-find-fruits]
+[#quarkusp-find-movies]
 [.console-input]
 [source,java]
 ----
@@ -337,14 +323,15 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.Entity;
 
 @Entity
-public class Fruit extends PanacheEntity {
+public class Movie extends PanacheEntity {
 
-    public String name;
+    public String title;
 
-    public String season;
+    @Column(name = "release_date")
+    public java.sql.Date releaseDate;
 
-    public static List<Fruit> findBySeason(String season) {
-        return find("season", season).list();
+    public static List<Movie> findByYear(int year) {
+        return find("YEAR(releaseDate)", year).list();
     }
 
 }
@@ -352,7 +339,7 @@ public class Fruit extends PanacheEntity {
 
 == Update the GET REST endpoint to use a QueryParam
 
-Update the `FruitResource` class by changing the `fruits` method to use a `@QueryParam`:
+Update the `MovieResource` class by changing the `movies` method to use a `@QueryParam`:
 
 [.console-input]
 [source,java]
@@ -372,37 +359,36 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
-@Path("/fruit")
-public class FruitResource {
+@Path("/movie")
+public class MovieResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Fruit> fruits(@QueryParam("season") String season) {
-        if (season != null) {
-            return Fruit.findBySeason(season);
+    public List<Movie> movies(@QueryParam("year") String year) {
+        if (year != null) {
+            return Movie.findByYear(Integer.parseInt(year));            
         }
-        return Fruit.listAll();
+        return Movie.listAll();
     }
 
     @Transactional
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response newFruit(Fruit fruit) {
-        fruit.id = null;
-        fruit.persist();
-        return Response.status(Status.CREATED).entity(fruit).build();
+    public Response newMovie(Movie movie) {
+        movie.id = null;
+        movie.persist();
+        return Response.status(Status.CREATED).entity(movie).build();
     }
-
 }
 ----
 
-Let's try to filter only the fruits with the *Summer* season:
+Let's try to filter only the movies from the year *1980*:
 
 [.console-input]
 [source,bash]
 ----
-curl -w '\n' localhost:8080/fruit?season=Summer
+curl -w '\n' localhost:8080/movie?year=1980
 ----
 
 [.console-output]
@@ -410,19 +396,9 @@ curl -w '\n' localhost:8080/fruit?season=Summer
 ----
 [
   {
-    "id": 5,
-    "name": "Blueberry",
-    "season": "Summer"
-  },
-  {
-    "id": 6,
-    "name": "Banana",
-    "season": "Summer"
-  },
-  {
-    "id": 7,
-    "name": "Watermelon",
-    "season": "Summer"
+    "id": 2,
+    "title": "The Empire Strikes Back",
+    "releaseDate": "1980-05-17"
   }
 ]
 ----
@@ -433,7 +409,7 @@ Is `PanacheEntity` too opinionated for you? Maybe you prefer the traditional *Re
 
 Panache also helps you to create Repositories.
 
-Create the `FruitRepository` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Create the `MovieRepository` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
@@ -446,20 +422,20 @@ import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class FruitRepository implements PanacheRepository<Fruit> {
+public class MovieRepository implements PanacheRepository<Movie> {
 
-    public List<Fruit> findBySeason(String season) {
-        return find("upper(season)", season.toUpperCase()).list();
+    public List<Movie> findByYear(int year) {
+        return find("YEAR(releaseDate)", year).list();
     }
 
 }
 ----
 
-Now you can make an case-insensitive search for fruits belonging to a specific season.
+Now you can make another search for movies from a specific year.
 
-== Update FruitResource to use FruitRepository
+== Update MovieResource to use MovieRepository
 
-Now let's update our `FruitResource` class to use the `FruitRepository` we just created:
+Now let's update our `MovieResource` class to use the `MovieRepository` we just created:
 
 [.console-input]
 [source,java]
@@ -480,44 +456,44 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
-@Path("/fruit")
-public class FruitResource {
+@Path("/movie")
+public class MovieResource {
 
-    FruitRepository fruitRepository;
+    MovieRepository movieRepository;
 
-    public FruitResource(FruitRepository fruitRepository) {
-        this.fruitRepository = fruitRepository;
+    public MovieResource(MovieRepository movieRepository) {
+        this.movieRepository = movieRepository;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Fruit> fruits(@QueryParam("season") String season) {
-        if (season != null) {
-            Log.infof("Searching for %s fruits", season);
-            return fruitRepository.findBySeason(season);
+    public List<Movie> movies(@QueryParam("year") String year) {
+        if (year != null) {
+            Log.infof("Searching for %s movies", year);
+            return movieRepository.findByYear(Integer.parseInt(year));
         }
-        return Fruit.listAll();
+        return Movie.listAll();
     }
 
     @Transactional
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response create(Fruit fruit) {
-        fruit.id = null;
-        fruit.persist();
-        return Response.status(Status.CREATED).entity(fruit).build();
+    public Response newMovie(Movie movie) {
+        movie.id = null;
+        movie.persist();
+        return Response.status(Status.CREATED).entity(movie).build();
     }
 
 }
 ----
 
-Let's try again to filter only the fruits with the *Spring* season:
+Let's try again to filter only the movies with the year *1980*:
 
 [.console-input]
 [source,bash]
 ----
-curl -w '\n' localhost:8080/fruit?season=Spring
+curl -w '\n' localhost:8080/movie?year=1980
 ----
 
 [.console-output]
@@ -525,14 +501,9 @@ curl -w '\n' localhost:8080/fruit?season=Spring
 ----
 [
   {
-    "id": 1,
-    "name": "Mango",
-    "season": "Spring"
-  },
-  {
     "id": 2,
-    "name": "Strawberry",
-    "season": "Spring"
+    "title": "The Empire Strikes Back",
+    "releaseDate": "1980-05-17"
   }
 ]
 ----

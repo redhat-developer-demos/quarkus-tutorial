@@ -4,7 +4,7 @@ When trying to achieve the goal of resilience in our distributed systems, someti
 
 == Add the Fault Tolerance extension
 
-Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
+Open a new terminal window, and make sure you're at the root of your `{project-name}` project, then run:
 
 [tabs]
 ====
@@ -30,36 +30,38 @@ quarkus extension add quarkus-smallrye-fault-tolerance
 ====
 
 
-== Add Retry to FruityViceService
+== Add Retry to SwapiService
 
-Let's add the retry policy in `FruityViceService`.
+Let's add a retry policy in `SwapiService`.
 
-Change the `FruityViceService` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Change the `SwapiService` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
 ----
 package com.redhat.developers;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
+import java.util.List;
 
 import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-@Path("/api/fruit")
-@RegisterRestClient
-public interface FruityViceService {
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
 
+import com.redhat.developers.Swapi.Results;
+
+@Path("/api")
+@RegisterRestClient
+public interface SwapiService {
     @GET
-    @Path("/{name}")
+    @Path("/films/")
     @Produces(MediaType.APPLICATION_JSON)
     @Retry(maxRetries = 3, delay = 2000)
-    FruityVice getFruitByName(@PathParam("name") String name);
-
+    Swapi getMovieByTitle(@QueryParam("search") String title);
 }
 ----
 
@@ -72,7 +74,7 @@ Run the following command:
 [.console-input]
 [source,bash]
 ----
-curl -w '\n' localhost:8080/fruit?season=Summer
+curl -w '\n' localhost:8080/movie?year=1980
 ----
 
 [.console-output]
@@ -80,56 +82,40 @@ curl -w '\n' localhost:8080/fruit?season=Summer
 ----
 [
   {
-    "calories": 0,
-    "carbohydrates": 29,
-    "name": "Blueberry",
-    "season": "Summer"
-  },
-  {
-    "calories": 0,
-    "carbohydrates": 96,
-    "name": "Banana",
-    "season": "Summer"
-  },
-  {
-    "calories": 0,
-    "carbohydrates": 30,
-    "name": "Watermelon",
-    "season": "Summer"
+    "title": "The Empire Strikes Back",
+    "releaseDate": "1980-05-17",
+    "episodeId": 0,
+    "producer": "Gary Kurtz, Rick McCallum",
+    "director": "Irvin Kershner",
+    "opening_crawl": "It is a dark time for the\r\nRebellion. Although the Death\r\nStar has been destroyed,\r\nImperial troops have driven the\r\nRebel forces from their hidden\r\nbase and pursued them across\r\nthe galaxy.\r\n\r\nEvading the dreaded Imperial\r\nStarfleet, a group of freedom\r\nfighters led by Luke Skywalker\r\nhas established a new secret\r\nbase on the remote ice world\r\nof Hoth.\r\n\r\nThe evil lord Darth Vader,\r\nobsessed with finding young\r\nSkywalker, has dispatched\r\nthousands of remote probes into\r\nthe far reaches of space...."
   }
 ]
 ----
 
-No change from calls done previously, but now switch off your network so you do not have access to https://fruityvice.com.
+No change from calls done previously, but now change the https://swapi.dev url in your application properties to https://swapii.dev (or some other random url that won't resolve).
 
 Run the following command again:
 
 [.console-input]
 [source,bash]
 ----
-curl -w '\n' localhost:8080/fruit?season=Summer
+curl -w '\n' localhost:8080/movie?year=1980
 ----
 
-Now after waiting 6 seconds (3 retries x 2 seconds), the next exception is thrown `java.net.UnknownHostException: fruityvice.com`.
+Now after waiting 6 seconds (3 retries x 2 seconds), the next exception is thrown `java.net.UnknownHostException: swapii.dev`.
 
-== Add Fallback to Fruity Vice Service
+== Add Fallback to Swapi Service
 
-Let's add a fallback policy in case of an error in `FruityViceService`.
+We can handle unexpected issues with remote services more gracefully by adding a Fallback policy. Let's add a Fallback handler to `SwapiService`.
 
-Change the `FruityViceService` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Change the `SwapiService` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
 ----
 package com.redhat.developers;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-
-import com.redhat.developers.FruityVice.Nutritions;
+import java.util.List;
 
 import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 import org.eclipse.microprofile.faulttolerance.Fallback;
@@ -137,28 +123,35 @@ import org.eclipse.microprofile.faulttolerance.FallbackHandler;
 import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-@Path("/api/fruit")
-@RegisterRestClient
-public interface FruityViceService {
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
 
+import com.redhat.developers.Swapi.Results;
+
+@Path("/api")
+@RegisterRestClient
+public interface SwapiService {
     @GET
-    @Path("/{name}")
+    @Path("/films/")
     @Produces(MediaType.APPLICATION_JSON)
     @Retry(maxRetries = 3, delay = 2000)
-    @Fallback(FruityViceFallback.class)
-    FruityVice getFruitByName(@PathParam("name") String name);
+    @Fallback(SwapiFallback.class)
+    Swapi getMovieByTitle(@QueryParam("search") String title);
 
-    public static class FruityViceFallback implements FallbackHandler<FruityVice> {
+    public static class SwapiFallback implements FallbackHandler<Swapi> {
 
-        private static final FruityVice EMPTY_FRUITY_VICE = new FruityVice("empty", new Nutritions(0.0, 0.0));
+        private static final Swapi EMPTY_SWAPI = new Swapi(List.of(new Results(0,"","","")));
         @Override
-        public FruityVice handle(ExecutionContext context) {
-            return EMPTY_FRUITY_VICE;
+        public Swapi handle(ExecutionContext context) {
+            return EMPTY_SWAPI;
         }
 
     }
-
 }
+
 ----
 
 Now in case of any error, 3 retries are done automatically, waiting for 2 seconds between retries.
@@ -174,7 +167,7 @@ Run the following command:
 [.console-input]
 [source,bash]
 ----
-curl -w '\n' localhost:8080/fruit?season=Summer
+curl -w '\n' localhost:8080/movie?year=1980
 ----
 
 [.console-output]
@@ -182,59 +175,55 @@ curl -w '\n' localhost:8080/fruit?season=Summer
 ----
 [
   {
-    "calories": 0,
-    "carbohydrates": 0,
-    "name": "Blueberry",
-    "season": "Summer"
-  },
-  {
-    "calories": 0,
-    "carbohydrates": 0,
-    "name": "Banana",
-    "season": "Summer"
-  },
-  {
-    "calories": 0,
-    "carbohydrates": 0,
-    "name": "Watermelon",
-    "season": "Summer"
+    "title": "The Empire Strikes Back",
+    "releaseDate": "1980-05-17",
+    "episodeId": 0,
+    "producer": "",
+    "director": "",
+    "opening_crawl": ""
   }
 ]
 ----
 
-== Add Circuit Breaker to Fruity Vice Service
+Notice how we're still returning the results from our database, but the remote service values are now empty as they are set by our fallback method.
 
-Let's add the circuit breaker policy in `FruityViceService`.
+== Add Circuit Breaker to Swapi Service
 
-Change the `FruityViceService` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Let's add the circuit breaker policy in `SwapiService`.
+
+Change the `SwapiService` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
 ----
 package com.redhat.developers;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-@Path("/api/fruit")
-@RegisterRestClient
-public interface FruityViceService {
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
 
+@Path("/api")
+@RegisterRestClient
+public interface SwapiService {
     @GET
-    @Path("/{name}")
+    @Path("/films/")
     @Produces(MediaType.APPLICATION_JSON)
     @Retry(maxRetries = 3, delay = 2000)
-    @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.75, delay = 5000)
-    FruityVice getFruitByName(@PathParam("name") String name);
+    @CircuitBreaker(
+        requestVolumeThreshold=4,
+        failureRatio=0.75,
+        delay=5000
+    )
+    Swapi getMovieByTitle(@QueryParam("search") String title);
 
 }
+
 ----
 
 Now, if 3 (4 x 0.75) failures occur among the rolling window of 4 consecutive invocations, then the circuit is opened for 5000 ms and then will be back to half open.
@@ -245,13 +234,13 @@ Run the following command at least 5 times (without network connectivity):
 [.console-input]
 [source,bash]
 ----
-curl -w '\n' localhost:8080/fruit?season=Summer
+curl -w '\n' localhost:8080/movie?year=1980
 ----
 
-The output changes from `java.net.UnknownHostException: fruityvice.com` (or any other network exception) in the first calls to `org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getFruitByName` when the circuit is opened.
+The output changes from `java.net.UnknownHostException: swapii.dev` (or any other network exception) in the first calls to `org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getMovieByTitle` when the circuit is opened.
 
 The big difference between the first exception and the second one is that the first one occurs because the circuit is closed while the system is trying to reach the host, while in the second one, the circuit is closed and the exception is thrown automatically without trying to reach the host.
 
 TIP: You can use `@Retry` and `@Fallback` annotations together with `@CircuitBreaker` annotation.
 
-IMPORTANT: If you turned your network off for this chapter, remember to turn it back on again after you finished the exercises for this chapter.
+IMPORTANT: If you turned your network off for this chapter, remember to turn it back on again after you finish the exercises for this chapter.
