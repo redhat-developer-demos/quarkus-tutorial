@@ -171,30 +171,34 @@
 <p>A typical scenario in a Microservices architecture is the remote invocation of remote REST HTTP endpoints. Quarkus provides a typed REST client that follows the  <a href="https://github.com/eclipse/microprofile-rest-client" target="_blank" rel="noopener">MicroProfile REST Client</a> specification.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s create a REST client that accesses <a href="https://fruityvice.com" class="bare" target="_blank" rel="noopener">https://fruityvice.com</a> to get nutrition information about our fruits. The endpoint we&#8217;re interested in is this one:</p>
+<p>Let&#8217;s create a REST client that accesses <a href="https://swapi.dev" class="bare" target="_blank" rel="noopener">https://swapi.dev</a> to get additional information about Movies. The endpoint we&#8217;re interested in is this one:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><code>api/fruit/{name}</code>, which returns specific info about the given fruit name.</p>
+<p><code>api/films/?search={title}</code>, which returns specific info about the given movie.</p>
 </li>
 </ul>
 </div>
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
-    "genus": "Musa",
-    "name": "Banana",
-    "id": 1,
-    "family": "Musaceae",
-    "order": "Zingiberales",
-    "nutritions": {
-        "carbohydrates": 22,
-        "protein": 1,
-        "fat": 0.2,
-        "calories": 96,
-        "sugar": 17.2
-    }
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "title": "The Empire Strikes Back",
+            "episode_id": 5,
+            "opening_crawl": "It is a dark time for the\r\nRebellion. Although the Death\r\nStar has been destroyed,\r\nImperial troops have driven the\r\nRebel forces from their hidden\r\nbase and pursued them across\r\nthe galaxy.\r\n\r\nEvading the dreaded Imperial\r\nStarfleet, a group of freedom\r\nfighters led by Luke Skywalker\r\nhas established a new secret\r\nbase on the remote ice world\r\nof Hoth.\r\n\r\nThe evil lord Darth Vader,\r\nobsessed with finding young\r\nSkywalker, has dispatched\r\nthousands of remote probes into\r\nthe far reaches of space....",
+            "director": "Irvin Kershner",
+            "producer": "Gary Kurtz, Rick McCallum",
+            "release_date": "1980-05-17",
+            "created": "2014-12-12T11:26:24.656000Z",
+            "edited": "2014-12-15T13:07:53.386000Z",
+            "url": "https://swapi.dev/api/films/2/"
+        }
+    ]
 }</code></pre>
 </div>
 </div>
@@ -204,7 +208,7 @@
 <h2 id="_add_the_rest_client_extension"><a class="anchor" href="#_add_the_rest_client_extension"></a>Add the REST Client extension</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Just open a new terminal window, and make sure you’re at the root of your <code>tutorial-app</code> project, then run:</p>
+<p>Open a new terminal window, and make sure you’re at the root of your <code>tutorial-app</code> project, then run:</p>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -221,14 +225,14 @@
 <div class="tab-pane" aria-labelledby="tabset1_maven">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -D"extensions=rest-client-jackson"</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw quarkus:add-extension -D"extensions=rest-client, rest-client-jackson"</code></pre>
 </div>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_quarkus-cli">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus extension add rest-client-jackson</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">quarkus extension add rest-client rest-client-jackson</code></pre>
 </div>
 </div>
 </div>
@@ -258,89 +262,95 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="_create_fruityvice_pojo"><a class="anchor" href="#_create_fruityvice_pojo"></a>Create FruityVice POJO</h2>
+<h2 id="_create_swapi_pojo"><a class="anchor" href="#_create_swapi_pojo"></a>Create Swapi POJO</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We need to create a POJO object that is used to unmarshal a JSON message from <a href="http://fruityvice.com" class="bare" target="_blank" rel="noopener">http://fruityvice.com</a>.</p>
+<p>We need to create a POJO object that is used to unmarshal a JSON message from <a href="http://swapi.dev" class="bare" target="_blank" rel="noopener">http://swapi.dev</a>.</p>
 </div>
 <div class="paragraph">
-<p>Create a new <code>FruityVice</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+<p>Create a new <code>Swapi</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
-public class FruityVice {
+import java.util.List;
 
-    private String name;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    private Nutritions nutritions;
+public class Swapi {
 
-    public FruityVice(String name, Nutritions nutritions) {
-        this.name = name;
-        this.nutritions = nutritions;
+    private List&lt;Results&gt; results;
+
+    public Swapi(@JsonProperty("results") List&lt;Results&gt; results) {
+        this.results = results;
     }
 
-    public String getName() {
-        return name;
+    public List&lt;Results&gt; getResults() {
+        return results;
     }
 
-    public Nutritions getNutritions() {
-        return nutritions;
-    }
+    public static class Results {
+        private int episodeId;
+        private String producer;
+        private String director;
+        private String opening_crawl;
 
-    public static class Nutritions {
-
-        private double carbohydrates;
-
-        private double calories;
-
-        public Nutritions(double carbohydrates, double calories) {
-            this.carbohydrates = carbohydrates;
-            this.calories = calories;
+        public Results(int episodeId, String producer, String director, String opening_crawl) {
+            this.episodeId = episodeId;
+            this.producer = producer;
+            this.director = director;
+            this.opening_crawl = opening_crawl;
         }
 
-        public double getCarbohydrates() {
-            return carbohydrates;
+        public int getEpisodeId() {
+            return episodeId;
         }
 
-        public double getCalories() {
-            return calories;
+        public String getProducer() {
+            return producer;
         }
 
+        public String getDirector() {
+            return director;
+        }
+
+        public String getOpening_crawl() {
+            return opening_crawl;
+        }
     }
-
 }</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_create_fruityviceservice"><a class="anchor" href="#_create_fruityviceservice"></a>Create FruityViceService</h3>
+<h3 id="_create_swapiservice"><a class="anchor" href="#_create_swapiservice"></a>Create SwapiService</h3>
 <div class="paragraph">
 <p>Now we&#8217;re going to implement a Java interface that mimics the remote REST endpoint.</p>
 </div>
 <div class="paragraph">
-<p>Create a new <code>FruityViceService</code> Java interface in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+<p>Create a new <code>SwapiService</code> Java interface in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-@Path("/api/fruit")
-@RegisterRestClient
-public interface FruityViceService {
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
 
+import com.redhat.developers.Swapi.Results;
+
+@Path("/api")
+@RegisterRestClient
+public interface SwapiService {
     @GET
-    @Path("/{name}")
+    @Path("/films")
     @Produces(MediaType.APPLICATION_JSON)
-    FruityVice getFruitByName(@PathParam("name") String name);
+    Swapi getMovieByTitle(@QueryParam("search") String title);
 
 }</code></pre>
 </div>
@@ -356,87 +366,105 @@ public interface FruityViceService {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">quarkus.rest-client."com.redhat.developers.FruityViceService".url=https://fruityvice.com</code></pre>
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">quarkus.rest-client."com.redhat.developers.SwapiService".url=https://swapi.dev</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_create_fruitdto"><a class="anchor" href="#_create_fruitdto"></a>Create FruitDTO</h2>
+<h2 id="_create_moviedto"><a class="anchor" href="#_create_moviedto"></a>Create MovieDTO</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We&#8217;re going to enhance our <code>FruitResource</code> endpoint by creating a new <code>FruitDTO</code> POJO and add the additional information provided by the <code>FruitViceService</code>.</p>
+<p>We&#8217;re going to enhance our <code>MovieResource</code> endpoint by creating a new <code>MovieDTO</code> POJO and add the additional information provided by the <code>SwapiService</code>.</p>
 </div>
 <div class="paragraph">
-<p>Create a new <code>FruitDTO</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+<p>Create a new <code>MovieDTO</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
-public class FruitDTO {
+import java.sql.Date;
+import java.util.List;
 
-    private String name;
+import com.redhat.developers.Swapi.Results;
 
-    private String season;
+public class MovieDTO {
+    private String title;
+    private Date releaseDate;
+    private int episodeId;
+    private String producer;
+    private String director;
+    private String opening_crawl;
 
-    private double carbohydrates;
-
-    private double calories;
-
-    private FruitDTO(String name, String season, double carbohydrates, double calories) {
-        this.name = name;
-        this.season = season;
-        this.carbohydrates = carbohydrates;
-        this.calories = calories;
+    private MovieDTO(String title, Date releaseDate, int episodeId, String producer, String director, String opening_crawl) {
+        this.title = title;
+        this.releaseDate = releaseDate;
+        this.episodeId = episodeId;
+        this.producer = producer;
+        this.director = director;
+        this.opening_crawl = opening_crawl;
     }
 
-    public static FruitDTO of(Fruit fruit, FruityVice fruityVice) {
-        return new FruitDTO(
-            fruit.name,
-            fruit.season,
-            fruityVice.getNutritions().getCarbohydrates(),
-            fruityVice.getNutritions().getCalories());
+    public static MovieDTO of(Movie movie, Swapi swapi){
+        List&lt;Results&gt; results = swapi.getResults();
+        Results result = results.get(0);
+
+        return new MovieDTO(
+            movie.title,
+            movie.releaseDate,
+            result.getEpisodeId(),
+            result.getProducer(),
+            result.getDirector(),
+            result.getOpening_crawl()
+        );
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public String getSeason() {
-        return season;
+    public Date getReleaseDate() {
+        return releaseDate;
     }
 
-    public double getCarbohydrates() {
-        return carbohydrates;
+    public int getEpisodeId() {
+        return episodeId;
     }
 
-    public double getCalories() {
-        return calories;
+    public String getProducer() {
+        return producer;
     }
 
+    public String getDirector() {
+        return director;
+    }
+
+    public String getOpening_crawl() {
+        return opening_crawl;
+    }
 }</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_change_fruitresource_to_use_fruityviceservice"><a class="anchor" href="#_change_fruitresource_to_use_fruityviceservice"></a>Change FruitResource to use FruityViceService</h2>
+<h2 id="_change_movieresource_to_use_swapiservice"><a class="anchor" href="#_change_movieresource_to_use_swapiservice"></a>Change MovieResource to use SwapiService</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Now that we have all the required classes, we can change <code>FruitResource</code> to get fruits by season and use our <code>FruityViceService</code> REST client via <code>@RestClient</code> annotation.</p>
+<p>Now that we have all the required classes, we can change <code>MovieResource</code> to get movies by title and use our <code>SwapiService</code> REST client via the <code>@RestClient</code> annotation.</p>
 </div>
 <div class="paragraph">
-<p>Change the <code>FruitResource</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+<p>Change the <code>MovieResource</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
-import org.eclipse.microprofile.rest.client.inject.RestClient;
-
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -450,36 +478,35 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
-@Path("/fruit")
-public class FruitResource {
+@Path("/movie")
+public class MovieResource {
 
     @RestClient
     @Inject
-    FruityViceService fruityViceService;
+    SwapiService swapiService;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List&lt;MovieDTO&gt; movies(@QueryParam("year") String year) {
+        if (year != null) {
+            return Movie.findByYear(Integer.parseInt(year)).stream()
+            .map(movie -&gt; MovieDTO.of(movie, swapiService.getMovieByTitle(movie.title)))
+            .collect(Collectors.toList());
+        }
+        return Movie.&lt;Movie&gt;listAll().stream()
+            .map(movie -&gt; MovieDTO.of(movie, swapiService.getMovieByTitle(movie.title)))
+            .collect(Collectors.toList());
+    }
 
     @Transactional
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response newFruit(Fruit fruit) {
-        fruit.id = null;
-        fruit.persist();
-        return Response.status(Status.CREATED).entity(fruit).build();
+    public Response newMovie(Movie movie) {
+        movie.id = null;
+        movie.persist();
+        return Response.status(Status.CREATED).entity(movie).build();
     }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List&lt;FruitDTO&gt; fruits(@QueryParam("season") String season) {
-        if (season != null) {
-            return Fruit.findBySeason(season).stream()
-                    .map(fruit -&gt; FruitDTO.of(fruit, fruityViceService.getFruitByName(fruit.name)))
-                    .collect(Collectors.toList());
-        }
-        return Fruit.&lt;Fruit&gt;listAll().stream()
-                .map(fruit -&gt; FruitDTO.of(fruit, fruityViceService.getFruitByName(fruit.name)))
-                .collect(Collectors.toList());
-    }
-
 }</code></pre>
 </div>
 </div>
@@ -489,36 +516,26 @@ public class FruitResource {
 <h2 id="_invoke_the_endpoint"><a class="anchor" href="#_invoke_the_endpoint"></a>Invoke the endpoint</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can check your new implementation using a REST client by pointing your browser to <a href="http://localhost:8080/fruit?season=Summer" class="bare" target="_blank" rel="noopener">http://localhost:8080/fruit?season=Summer</a></p>
+<p>You can check your new implementation using a REST client by pointing your browser to <a href="http://localhost:8080/movie?year=1980" class="bare" target="_blank" rel="noopener">http://localhost:8080/movie?year=1980</a></p>
 </div>
 <div class="paragraph">
 <p>You can also run the following command:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/fruit?season=Summer</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/movie?year=1980</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">[
   {
-    "calories": 0,
-    "carbohydrates": 29,
-    "name": "Blueberry",
-    "season": "Summer"
-  },
-  {
-    "calories": 0,
-    "carbohydrates": 96,
-    "name": "Banana",
-    "season": "Summer"
-  },
-  {
-    "calories": 0,
-    "carbohydrates": 30,
-    "name": "Watermelon",
-    "season": "Summer"
+    "title": "The Empire Strikes Back",
+    "releaseDate": "1980-05-17",
+    "episodeId": 0,
+    "producer": "Gary Kurtz, Rick McCallum",
+    "director": "Irvin Kershner",
+    "opening_crawl": "It is a dark time for the\r\nRebellion. Although the Death\r\nStar has been destroyed,\r\nImperial troops have driven the\r\nRebel forces from their hidden\r\nbase and pursued them across\r\nthe galaxy.\r\n\r\nEvading the dreaded Imperial\r\nStarfleet, a group of freedom\r\nfighters led by Luke Skywalker\r\nhas established a new secret\r\nbase on the remote ice world\r\nof Hoth.\r\n\r\nThe evil lord Darth Vader,\r\nobsessed with finding young\r\nSkywalker, has dispatched\r\nthousands of remote probes into\r\nthe far reaches of space...."
   }
 ]</code></pre>
 </div>

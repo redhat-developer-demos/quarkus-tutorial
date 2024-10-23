@@ -169,7 +169,7 @@
 <h2 id="quarkusp-demo-overview"><a class="anchor" href="#quarkusp-demo-overview"></a>Demo Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You&#8217;ll learn how easy and productive Quarkus is with Hibernate with Panache. For this, we&#8217;ll develop a simple CRUD REST API that handles information about fruits.</p>
+<p>You&#8217;ll learn how easy and productive Quarkus is with Hibernate with Panache. For this, we&#8217;ll develop a simple CRUD REST API that handles information about movies.</p>
 </div>
 <div class="paragraph">
 <p>We&#8217;ll use <a href="http://www.h2database.com" target="_blank" rel="noopener">H2</a> as our backing database in this section, but it&#8217;s very easy to use other database engines with Quarkus as you will see in the Dev Services chapter. As an exercise for later, we suggest to try your favorite database engine with the documentation found <a href="https://quarkus.io/guides/datasource" target="_blank" rel="noopener">here</a>.</p>
@@ -266,25 +266,28 @@ With <a href="#Dev Services">[Dev Services]</a> enabled, no JDBC URL needs to be
 </div>
 </div>
 <div class="sect1">
-<h2 id="_create_fruit_entity"><a class="anchor" href="#_create_fruit_entity"></a>Create Fruit Entity</h2>
+<h2 id="_create_movie_entity"><a class="anchor" href="#_create_movie_entity"></a>Create Movie Entity</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Create a new <code>Fruit</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+<p>Create a new <code>Movie</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
+import java.util.List;
+
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
 @Entity
-public class Fruit extends PanacheEntity {
+public class Movie extends PanacheEntity {
 
-    public String name;
+    public String title;
 
-    public String season;
-
+    @Column(name = "release_date")
+    public java.sql.Date releaseDate;
 }</code></pre>
 </div>
 </div>
@@ -307,10 +310,10 @@ public class Fruit extends PanacheEntity {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_create_fruit_resource"><a class="anchor" href="#_create_fruit_resource"></a>Create Fruit Resource</h2>
+<h2 id="_create_movie_resource"><a class="anchor" href="#_create_movie_resource"></a>Create Movie Resource</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Create a new <code>FruitResource</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+<p>Create a new <code>MovieResource</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -323,13 +326,13 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
-@Path("/fruit")
-public class FruitResource {
+@Path("/movie")
+public class MovieResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List&lt;Fruit&gt; fruits() {
-        return Fruit.listAll();
+    public List&lt;Movie&gt; movies() {
+        return Movie.listAll();
     }
 
 }</code></pre>
@@ -340,7 +343,7 @@ public class FruitResource {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/fruit</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/movie</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -354,7 +357,7 @@ public class FruitResource {
 <div class="sect2">
 <h3 id="_adding_a_post_endpoint"><a class="anchor" href="#_adding_a_post_endpoint"></a>Adding a POST endpoint</h3>
 <div class="paragraph">
-<p>Let&#8217;s change our <code>FruitResource</code> class to also contain a <strong>POST</strong> REST endpoint:</p>
+<p>Let&#8217;s change our <code>MovieResource</code> class to also contain a <strong>POST</strong> REST endpoint:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -372,50 +375,51 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
-@Path("/fruit")
-public class FruitResource {
+@Path("/movie")
+public class MovieResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List&lt;Fruit&gt; fruits() {
-        return Fruit.listAll();
+    public List&lt;Movie&gt; movies() {
+        return Movie.listAll();
     }
 
     @Transactional
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response newFruit(Fruit fruit) {
-        fruit.persist();
-        return Response.status(Status.CREATED).entity(fruit).build();
+    public Response newMovie(Movie movie) {
+        movie.id = null;
+        movie.persist();
+        return Response.status(Status.CREATED).entity(movie).build();
     }
 
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Now you can insert a new fruit by using <code>curl</code>:</p>
+<p>Now you can insert a new movie by using <code>curl</code>:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' -d "{\"name\": \"Banana\", \"season\": \"Summer\"}" -H "Content-Type: application/json" http://localhost:8080/fruit</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' -d "{\"title\": \"The Empire Strikes Back\", \"releaseDate\": \"1980-05-17\"}" -H "Content-Type: application/json" http://localhost:8080/movie</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">{"id":1,"name":"Banana","season":"Summer"}</code></pre>
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">{"id":1,"title":"The Empire Strikes Back","releaseDate":"1980-05-17"}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Now if you refresh your browser pointing to <a href="http://localhost:8080/fruit" class="bare" target="_blank" rel="noopener">http://localhost:8080/fruit</a>, you should see a response like:</p>
+<p>Now if you refresh your browser pointing to <a href="http://localhost:8080/movie" class="bare" target="_blank" rel="noopener">http://localhost:8080/movie</a>, you should see a response like:</p>
 </div>
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">[
   {
     "id": 1,
-    "name": "Banana",
-    "season": "Summer"
+    "title": "The Empire Strikes Back",
+    "releaseDate": "1980-05-17"
   }
 ]</code></pre>
 </div>
@@ -437,16 +441,13 @@ public class FruitResource {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">INSERT INTO Fruit(id,name,season) VALUES (1,'Mango','Spring');
-INSERT INTO Fruit(id,name,season) VALUES (2,'Strawberry','Spring');
-INSERT INTO Fruit(id,name,season) VALUES (3,'Orange','Winter');
-INSERT INTO Fruit(id,name,season) VALUES (4,'Lemon','Winter');
-INSERT INTO Fruit(id,name,season) VALUES (5,'Blueberry','Summer');
-INSERT INTO Fruit(id,name,season) VALUES (6,'Banana','Summer');
-INSERT INTO Fruit(id,name,season) VALUES (7,'Watermelon','Summer');
-INSERT INTO Fruit(id,name,season) VALUES (8,'Apple','Fall');
-INSERT INTO Fruit(id,name,season) VALUES (9,'Pear','Fall');
-ALTER SEQUENCE fruit_seq RESTART WITH 10;</code></pre>
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">INSERT INTO Movie(id,title,release_date) VALUES (1,'A New Hope','1977-05-25');
+INSERT INTO Movie(id,title,release_date) VALUES (2,'The Empire Strikes Back','1980-05-17');
+INSERT INTO Movie(id,title,release_date) VALUES (3,'Return of the Jedi','1983-05-25');
+INSERT INTO Movie(id,title,release_date) VALUES (4,'The Phantom Menace','1999-05-19');
+INSERT INTO Movie(id,title,release_date) VALUES (5,'Attack of the Clones','2002-05-16');
+INSERT INTO Movie(id,title,release_date) VALUES (6,'Revenge of the Sith','2005-05-19');
+ALTER SEQUENCE movie_seq RESTART WITH 7;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -458,55 +459,40 @@ ALTER SEQUENCE fruit_seq RESTART WITH 10;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Now if you refresh your browser pointing to <a href="http://localhost:8080/fruit" class="bare" target="_blank" rel="noopener">http://localhost:8080/fruit</a>, you should see a response like:</p>
+<p>Now if you refresh your browser pointing to <a href="http://localhost:8080/movie" class="bare" target="_blank" rel="noopener">http://localhost:8080/movie</a>, you should see a response like:</p>
 </div>
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">[
   {
     "id": 1,
-    "name": "Mango",
-    "season": "Spring"
+    "title": "A New Hope",
+    "releaseDate": "1977-05-25"
   },
   {
     "id": 2,
-    "name": "Strawberry",
-    "season": "Spring"
+    "title": "The Empire Strikes Back",
+    "releaseDate": "1980-05-17"
   },
   {
     "id": 3,
-    "name": "Orange",
-    "season": "Winter"
+    "title": "Return of the Jedi",
+    "releaseDate": "1983-05-25"
   },
   {
     "id": 4,
-    "name": "GrapeFruit",
-    "season": "Winter"
+    "title": "The Phantom Menace",
+    "releaseDate": "1999-05-19"
   },
   {
     "id": 5,
-    "name": "Blueberry",
-    "season": "Summer"
+    "title": "Attack of the Clones",
+    "releaseDate": "2002-05-16"
   },
   {
     "id": 6,
-    "name": "Banana",
-    "season": "Summer"
-  },
-  {
-    "id": 7,
-    "name": "Plum",
-    "season": "Summer"
-  },
-  {
-    "id": 8,
-    "name": "Apple",
-    "season": "Fall"
-  },
-  {
-    "id": 9,
-    "name": "Grapes",
-    "season": "Fall"
+    "title": "Revenge of the Sith",
+    "releaseDate": "2005-05-19"
   }
 ]</code></pre>
 </div>
@@ -533,12 +519,12 @@ while in production mode you can use <code>quarkus.hibernate-orm.sql-load-script
 </div>
 </div>
 <div class="sect1">
-<h2 id="_adding_a_custom_finder_to_the_fruit_entity"><a class="anchor" href="#_adding_a_custom_finder_to_the_fruit_entity"></a>Adding a custom finder to the <code>Fruit</code> Entity</h2>
+<h2 id="_adding_a_custom_finder_to_the_movie_entity"><a class="anchor" href="#_adding_a_custom_finder_to_the_movie_entity"></a>Adding a custom finder to the <code>Movie</code> Entity</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Update the <code>Fruit</code> class to contain a finder method <code>findBySeason</code> like:</p>
+<p>Update the <code>Movie</code> class to contain a finder method <code>findByYear</code> like:</p>
 </div>
-<div id="quarkusp-find-fruits" class="listingblock console-input">
+<div id="quarkusp-find-movies" class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
@@ -548,14 +534,15 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.Entity;
 
 @Entity
-public class Fruit extends PanacheEntity {
+public class Movie extends PanacheEntity {
 
-    public String name;
+    public String title;
 
-    public String season;
+    @Column(name = "release_date")
+    public java.sql.Date releaseDate;
 
-    public static List&lt;Fruit&gt; findBySeason(String season) {
-        return find("season", season).list();
+    public static List&lt;Movie&gt; findByYear(int year) {
+        return find("YEAR(releaseDate)", year).list();
     }
 
 }</code></pre>
@@ -567,7 +554,7 @@ public class Fruit extends PanacheEntity {
 <h2 id="_update_the_get_rest_endpoint_to_use_a_queryparam"><a class="anchor" href="#_update_the_get_rest_endpoint_to_use_a_queryparam"></a>Update the GET REST endpoint to use a QueryParam</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Update the <code>FruitResource</code> class by changing the <code>fruits</code> method to use a <code>@QueryParam</code>:</p>
+<p>Update the <code>MovieResource</code> class by changing the <code>movies</code> method to use a <code>@QueryParam</code>:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -586,56 +573,45 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
-@Path("/fruit")
-public class FruitResource {
+@Path("/movie")
+public class MovieResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List&lt;Fruit&gt; fruits(@QueryParam("season") String season) {
-        if (season != null) {
-            return Fruit.findBySeason(season);
+    public List&lt;Movie&gt; movies(@QueryParam("year") String year) {
+        if (year != null) {
+            return Movie.findByYear(Integer.parseInt(year));
         }
-        return Fruit.listAll();
+        return Movie.listAll();
     }
 
     @Transactional
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response newFruit(Fruit fruit) {
-        fruit.id = null;
-        fruit.persist();
-        return Response.status(Status.CREATED).entity(fruit).build();
+    public Response newMovie(Movie movie) {
+        movie.id = null;
+        movie.persist();
+        return Response.status(Status.CREATED).entity(movie).build();
     }
-
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s try to filter only the fruits with the <strong>Summer</strong> season:</p>
+<p>Let&#8217;s try to filter only the movies from the year <strong>1980</strong>:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/fruit?season=Summer</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/movie?year=1980</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">[
   {
-    "id": 5,
-    "name": "Blueberry",
-    "season": "Summer"
-  },
-  {
-    "id": 6,
-    "name": "Banana",
-    "season": "Summer"
-  },
-  {
-    "id": 7,
-    "name": "Watermelon",
-    "season": "Summer"
+    "id": 2,
+    "title": "The Empire Strikes Back",
+    "releaseDate": "1980-05-17"
   }
 ]</code></pre>
 </div>
@@ -652,7 +628,7 @@ public class FruitResource {
 <p>Panache also helps you to create Repositories.</p>
 </div>
 <div class="paragraph">
-<p>Create the <code>FruitRepository</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+<p>Create the <code>MovieRepository</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -664,25 +640,25 @@ import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class FruitRepository implements PanacheRepository&lt;Fruit&gt; {
+public class MovieRepository implements PanacheRepository&lt;Movie&gt; {
 
-    public List&lt;Fruit&gt; findBySeason(String season) {
-        return find("upper(season)", season.toUpperCase()).list();
+    public List&lt;Movie&gt; findByYear(int year) {
+        return find("YEAR(releaseDate)", year).list();
     }
 
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Now you can make an case-insensitive search for fruits belonging to a specific season.</p>
+<p>Now you can make another search for movies from a specific year.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_update_fruitresource_to_use_fruitrepository"><a class="anchor" href="#_update_fruitresource_to_use_fruitrepository"></a>Update FruitResource to use FruitRepository</h2>
+<h2 id="_update_movieresource_to_use_movierepository"><a class="anchor" href="#_update_movieresource_to_use_movierepository"></a>Update MovieResource to use MovieRepository</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Now let&#8217;s update our <code>FruitResource</code> class to use the <code>FruitRepository</code> we just created:</p>
+<p>Now let&#8217;s update our <code>MovieResource</code> class to use the <code>MovieRepository</code> we just created:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -702,58 +678,53 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
-@Path("/fruit")
-public class FruitResource {
+@Path("/movie")
+public class MovieResource {
 
-    FruitRepository fruitRepository;
+    MovieRepository movieRepository;
 
-    public FruitResource(FruitRepository fruitRepository) {
-        this.fruitRepository = fruitRepository;
+    public MovieResource(MovieRepository movieRepository) {
+        this.movieRepository = movieRepository;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List&lt;Fruit&gt; fruits(@QueryParam("season") String season) {
-        if (season != null) {
-            Log.infof("Searching for %s fruits", season);
-            return fruitRepository.findBySeason(season);
+    public List&lt;Movie&gt; movies(@QueryParam("year") String year) {
+        if (year != null) {
+            Log.infof("Searching for %s movies", year);
+            return movieRepository.findByYear(Integer.parseInt(year));
         }
-        return Fruit.listAll();
+        return Movie.listAll();
     }
 
     @Transactional
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response create(Fruit fruit) {
-        fruit.id = null;
-        fruit.persist();
-        return Response.status(Status.CREATED).entity(fruit).build();
+    public Response newMovie(Movie movie) {
+        movie.id = null;
+        movie.persist();
+        return Response.status(Status.CREATED).entity(movie).build();
     }
 
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s try again to filter only the fruits with the <strong>Spring</strong> season:</p>
+<p>Let&#8217;s try again to filter only the movies with the year <strong>1980</strong>:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/fruit?season=Spring</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/movie?year=1980</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">[
   {
-    "id": 1,
-    "name": "Mango",
-    "season": "Spring"
-  },
-  {
     "id": 2,
-    "name": "Strawberry",
-    "season": "Spring"
+    "title": "The Empire Strikes Back",
+    "releaseDate": "1980-05-17"
   }
 ]</code></pre>
 </div>

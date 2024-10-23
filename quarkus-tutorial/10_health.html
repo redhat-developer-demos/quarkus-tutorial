@@ -189,7 +189,7 @@
 <h2 id="_add_the_health_extension"><a class="anchor" href="#_add_the_health_extension"></a>Add the Health extension</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Just open a new terminal window, and make sure you’re at the root of your <code>tutorial-app</code> project, then run:</p>
+<p>Open a new terminal window, and make sure you&#8217;re at the root of your <code>tutorial-app</code> project, then run:</p>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -304,11 +304,11 @@ public class LivenessProbe implements HealthCheck {
 </div>
 <div class="paragraph">
 <p>Some extensions may provide default health checks, including that the extension will automatically register its health checks.
-For example, quarkus-agroal (that is used to manage Quarkus datasources) automatically registers a readiness health check that will validate each datasource.</p>
+For example, quarkus-agroal (which is used to manage Quarkus datasources) automatically registers a readiness health check that will validate each datasource.</p>
 </div>
 <div class="paragraph">
 <p>Since the readiness of the database is already assessed just by adding those extensions, we should look into defining health checks for other dependencies that we have.
-As we depend on the availability of <a href="https://fruityvice.com" class="bare">https://fruityvice.com</a>, let&#8217;s create a new <code>ReadinessProbe</code> to assess its availability prior to using it.</p>
+As we depend on the availability of <a href="https://swapi.dev" class="bare">https://swapi.dev</a>, let&#8217;s create a new <code>ReadinessProbe</code> to assess its availability prior to using it.</p>
 </div>
 <div class="paragraph">
 <p>We will define a new Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
@@ -328,12 +328,12 @@ import jakarta.ws.rs.HttpMethod;
 @ApplicationScoped
 public class CustomHealthCheck {
 
-    @ConfigProperty(name = "quarkus.rest-client.\"com.redhat.developers.FruityViceService\".url")
+    @ConfigProperty(name = "quarkus.rest-client.\"com.redhat.developers.SwapiService\".url")
     String externalURL;
 
     @Readiness <i class="conum" data-value="1"></i><b>(1)</b>
     HealthCheck checkURL() {
-        return new UrlHealthCheck(externalURL+"/api/fruit/banana") <i class="conum" data-value="2"></i><b>(2)</b>
+        return new UrlHealthCheck(externalURL+"/api/films/") <i class="conum" data-value="2"></i><b>(2)</b>
                 .name("ExternalURL health check").requestMethod(HttpMethod.GET).statusCode(200);
     }
 
@@ -378,7 +378,7 @@ public class CustomHealthCheck {
             "name": "ExternalURL health check",
             "status": "UP",
             "data": {
-                "host": "GET https://fruityvice.com/api/fruit/banana"
+                "host": "GET https://swapi.dev/api/films"
             }
         },
         {
@@ -443,7 +443,7 @@ public class CustomHealthCheck {
             "name": "ExternalURL health check",
             "status": "UP",
             "data": {
-                "host": "GET https://fruityvice.com/api/fruit/banana"
+                "host": "GET https://swapi.dev/api/films"
             }
         },
         {

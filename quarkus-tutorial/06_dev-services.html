@@ -301,25 +301,20 @@ quarkus extension remove quarkus-jdbc-h2</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Call the fruit endpoint again. The data is now coming from the PostgreSQL database container.</p>
+<p>Call the movie endpoint again. The data is now coming from the PostgreSQL database container.</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/fruit?season=Spring</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/movie?year=1980</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">[
   {
-    "id": 1,
-    "name": "Mango",
-    "season": "Spring"
-  },
-  {
     "id": 2,
-    "name": "Strawberry",
-    "season": "Spring"
+    "title": "The Empire Strikes Back",
+    "releaseDate": "1980-05-17"
   }
 ]</code></pre>
 </div>

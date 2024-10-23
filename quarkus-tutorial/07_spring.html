@@ -231,10 +231,10 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="_create_a_spring_data_repository_for_fruit"><a class="anchor" href="#_create_a_spring_data_repository_for_fruit"></a>Create a Spring Data Repository for Fruit</h2>
+<h2 id="_create_a_spring_data_repository_for_movie"><a class="anchor" href="#_create_a_spring_data_repository_for_movie"></a>Create a Spring Data Repository for Movie</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Spring Data is one of the most popular Spring APIs, so let&#8217;s create a Spring Data JPA Repository for our <code>Fruit</code> entity. Create the <code>SpringFruitRepository</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+<p>Spring Data is one of the most popular Spring APIs, so let&#8217;s create a Spring Data JPA Repository for our <code>Movie</code> entity. Create the <code>SpringMovieRepository</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -246,9 +246,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SpringFruitRepository extends JpaRepository&lt;Fruit, Long&gt; {
+public interface SpringMovieRepository extends JpaRepository&lt;Movie, Long&gt; {
 
-    public List&lt;Fruit&gt; findBySeason(String season);
+    public List&lt;Movie&gt; findByYear(String year);
 
 }</code></pre>
 </div>
@@ -259,7 +259,7 @@ public interface SpringFruitRepository extends JpaRepository&lt;Fruit, Long&gt; 
 <h2 id="_create_a_spring_rest_controller"><a class="anchor" href="#_create_a_spring_rest_controller"></a>Create a Spring REST Controller</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Now let&#8217;s create another REST endpoint for <code>Fruit</code>, but now using the Spring Web APIs. Create the <code>FruitController</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+<p>Now let&#8217;s create another REST endpoint for <code>Movie</code>, but now using the Spring Web APIs. Create the <code>MovieController</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -273,51 +273,41 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/spring-fruit")
-public class FruitController {
+@RequestMapping(path = "/spring-movie")
+public class MovieController {
 
-    private SpringFruitRepository fruitRepository;
+    private SpringMovieRepository movieRepository;
 
-    public FruitController(SpringFruitRepository fruitRepository) {
-        this.fruitRepository = fruitRepository;
+    public MovieController(SpringMovieRepository movieRepository) {
+        this.movieRepository = movieRepository;
     }
 
     @GetMapping
-    public List&lt;Fruit&gt; fruits(@RequestParam("season") String season) {
-        if (season != null) {
-            return fruitRepository.findBySeason(season);
+    public List&lt;Movie&gt; movies(@RequestParam("year") String year) {
+        if (year != null) {
+            return movieRepository.findByYear(year);
         }
-        return fruitRepository.findAll();
+        return movieRepository.findAll();
     }
 
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s try to filter only the fruits with the <strong>Summer</strong> season.  Don&#8217;t forget to start Quarkus dev mode again if you stopped it.</p>
+<p>Let&#8217;s try to filter only the movies with year <strong>1980</strong>.  Don&#8217;t forget to start Quarkus dev mode again if you stopped it.</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/spring-fruit?season=Summer</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/spring-movie?year=1980</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">[
   {
-    "id": 5,
-    "name": "Blueberry",
-    "season": "Summer"
-  },
-  {
-    "id": 6,
-    "name": "Banana",
-    "season": "Summer"
-  },
-  {
-    "id": 7,
-    "name": "Plum",
-    "season": "Summer"
+    "id": 2,
+    "title": "The Empire Strikes Back",
+    "releaseDate": "1980-05-17"
   }
 ]</code></pre>
 </div>

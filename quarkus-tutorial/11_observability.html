@@ -229,18 +229,18 @@
 </div>
 </div>
 <div class="paragraph">
-<p>Create a few requests so we have some telemetry data to work with by hitting our <code>/fruit</code> endpoint a few times again:</p>
+<p>Create a few requests so we have some telemetry data to work with by hitting our <code>/movie</code> endpoint a few times again:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/fruit?season=Summer</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/movie?year=1980</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_trace_down_the_requests_in_jaeger"><a class="anchor" href="#_trace_down_the_requests_in_jaeger"></a>Trace down the requests in Jaeger</h3>
 <div class="paragraph">
-<p>Go to <a href="http://localhost:16686" class="bare">http://localhost:16686</a> in your browser. You should see the Jaeger UI, if not make sure the <code>docker run</code> command was executed successfully. To see the traces we just produced, select 'tutorial-app' from the Service dropdown and click 'Find Traces'. Depending on how many times you sent requests to the fruit endpoint, you&#8217;ll see a number of traces that were collected.</p>
+<p>Go to <a href="http://localhost:16686" class="bare">http://localhost:16686</a> in your browser. You should see the Jaeger UI, if not make sure the <code>docker run</code> command was executed successfully. To see the traces we just produced, select 'tutorial-app' from the Service dropdown and click 'Find Traces'. Depending on how many times you sent requests to the Movie endpoint, you&#8217;ll see a number of traces that were collected.</p>
 </div>
 <div class="imageblock text-center mt-4 center">
 <div class="content">
@@ -248,7 +248,7 @@
 </div>
 </div>
 <div class="paragraph">
-<p>Click on the first "tutorial-app: GET /fruit" trace to drill into the details of the latest request. Notice that without doing any further work, even data from the calls out to the FruityVice REST service was collected, so we can see how long each request took:</p>
+<p>Click on the first "tutorial-app: GET /movie" trace to drill into the details of the latest request. Notice that without doing any further work, even data from the calls out to the Swapi REST service was collected, so we can see how long each request took:</p>
 </div>
 <div class="imageblock text-center mt-4 center">
 <div class="content">
@@ -279,15 +279,15 @@ quarkus.datasource.jdbc.telemetry=true</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Create a few more requests to the fruit resource:</p>
+<p>Create a few more requests to the movie resource:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/fruit?season=Summer</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/movie?year=1980</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>&#8230;&#8203;And go back to the Jaeger UI at <a href="http://localhost:16686" class="bare">http://localhost:16686</a>. Click the 'Find Traces' again (make sure the tutorial-app Service is selected) and click on the first trace from the top. You will now see 2 more spans, one with 'DataSource.getConnection' that shows how long it took for the database connection to get established, and one with 'SELECT quarkus.Fruit' that shows the details of the database query and how long it took.</p>
+<p>&#8230;&#8203;And go back to the Jaeger UI at <a href="http://localhost:16686" class="bare">http://localhost:16686</a>. Click the 'Find Traces' again (make sure the tutorial-app Service is selected) and click on the first trace from the top. You will now see 2 more spans, one with 'DataSource.getConnection' that shows how long it took for the database connection to get established, and one with 'SELECT quarkus.Movie' that shows the details of the database query and how long it took.</p>
 </div>
 <div class="imageblock text-center mt-4 center">
 <div class="content">

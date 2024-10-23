@@ -176,7 +176,7 @@
 <h2 id="_add_the_fault_tolerance_extension"><a class="anchor" href="#_add_the_fault_tolerance_extension"></a>Add the Fault Tolerance extension</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Just open a new terminal window, and make sure you’re at the root of your <code>tutorial-app</code> project, then run:</p>
+<p>Open a new terminal window, and make sure you&#8217;re at the root of your <code>tutorial-app</code> project, then run:</p>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -209,37 +209,39 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="_add_retry_to_fruityviceservice"><a class="anchor" href="#_add_retry_to_fruityviceservice"></a>Add Retry to FruityViceService</h2>
+<h2 id="_add_retry_to_swapiservice"><a class="anchor" href="#_add_retry_to_swapiservice"></a>Add Retry to SwapiService</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Let&#8217;s add the retry policy in <code>FruityViceService</code>.</p>
+<p>Let&#8217;s add a retry policy in <code>SwapiService</code>.</p>
 </div>
 <div class="paragraph">
-<p>Change the <code>FruityViceService</code> Java interface in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+<p>Change the <code>SwapiService</code> Java interface in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
+import java.util.List;
 
 import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-@Path("/api/fruit")
-@RegisterRestClient
-public interface FruityViceService {
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
 
+import com.redhat.developers.Swapi.Results;
+
+@Path("/api")
+@RegisterRestClient
+public interface SwapiService {
     @GET
-    @Path("/{name}")
+    @Path("/films/")
     @Produces(MediaType.APPLICATION_JSON)
     @Retry(maxRetries = 3, delay = 2000)
-    FruityVice getFruitByName(@PathParam("name") String name);
-
+    Swapi getMovieByTitle(@QueryParam("search") String title);
 }</code></pre>
 </div>
 </div>
@@ -256,69 +258,53 @@ public interface FruityViceService {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/fruit?season=Summer</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/movie?year=1980</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">[
   {
-    "calories": 0,
-    "carbohydrates": 29,
-    "name": "Blueberry",
-    "season": "Summer"
-  },
-  {
-    "calories": 0,
-    "carbohydrates": 96,
-    "name": "Banana",
-    "season": "Summer"
-  },
-  {
-    "calories": 0,
-    "carbohydrates": 30,
-    "name": "Watermelon",
-    "season": "Summer"
+    "title": "The Empire Strikes Back",
+    "releaseDate": "1980-05-17",
+    "episodeId": 0,
+    "producer": "Gary Kurtz, Rick McCallum",
+    "director": "Irvin Kershner",
+    "opening_crawl": "It is a dark time for the\r\nRebellion. Although the Death\r\nStar has been destroyed,\r\nImperial troops have driven the\r\nRebel forces from their hidden\r\nbase and pursued them across\r\nthe galaxy.\r\n\r\nEvading the dreaded Imperial\r\nStarfleet, a group of freedom\r\nfighters led by Luke Skywalker\r\nhas established a new secret\r\nbase on the remote ice world\r\nof Hoth.\r\n\r\nThe evil lord Darth Vader,\r\nobsessed with finding young\r\nSkywalker, has dispatched\r\nthousands of remote probes into\r\nthe far reaches of space...."
   }
 ]</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>No change from calls done previously, but now switch off your network so you do not have access to <a href="https://fruityvice.com" class="bare">https://fruityvice.com</a>.</p>
+<p>No change from calls done previously, but now change the <a href="https://swapi.dev" class="bare">https://swapi.dev</a> url in your application properties to <a href="https://swapii.dev" class="bare">https://swapii.dev</a> (or some other random url that won&#8217;t resolve).</p>
 </div>
 <div class="paragraph">
 <p>Run the following command again:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/fruit?season=Summer</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/movie?year=1980</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Now after waiting 6 seconds (3 retries x 2 seconds), the next exception is thrown <code>java.net.UnknownHostException: fruityvice.com</code>.</p>
+<p>Now after waiting 6 seconds (3 retries x 2 seconds), the next exception is thrown <code>java.net.UnknownHostException: swapii.dev</code>.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_add_fallback_to_fruity_vice_service"><a class="anchor" href="#_add_fallback_to_fruity_vice_service"></a>Add Fallback to Fruity Vice Service</h2>
+<h2 id="_add_fallback_to_swapi_service"><a class="anchor" href="#_add_fallback_to_swapi_service"></a>Add Fallback to Swapi Service</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Let&#8217;s add a fallback policy in case of an error in <code>FruityViceService</code>.</p>
+<p>We can handle unexpected issues with remote services more gracefully by adding a Fallback policy. Let&#8217;s add a Fallback handler to <code>SwapiService</code>.</p>
 </div>
 <div class="paragraph">
-<p>Change the <code>FruityViceService</code> Java interface in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+<p>Change the <code>SwapiService</code> Java interface in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-
-import com.redhat.developers.FruityVice.Nutritions;
+import java.util.List;
 
 import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 import org.eclipse.microprofile.faulttolerance.Fallback;
@@ -326,27 +312,33 @@ import org.eclipse.microprofile.faulttolerance.FallbackHandler;
 import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-@Path("/api/fruit")
-@RegisterRestClient
-public interface FruityViceService {
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
 
+import com.redhat.developers.Swapi.Results;
+
+@Path("/api")
+@RegisterRestClient
+public interface SwapiService {
     @GET
-    @Path("/{name}")
+    @Path("/films/")
     @Produces(MediaType.APPLICATION_JSON)
     @Retry(maxRetries = 3, delay = 2000)
-    @Fallback(FruityViceFallback.class)
-    FruityVice getFruitByName(@PathParam("name") String name);
+    @Fallback(SwapiFallback.class)
+    Swapi getMovieByTitle(@QueryParam("search") String title);
 
-    public static class FruityViceFallback implements FallbackHandler&lt;FruityVice&gt; {
+    public static class SwapiFallback implements FallbackHandler&lt;Swapi&gt; {
 
-        private static final FruityVice EMPTY_FRUITY_VICE = new FruityVice("empty", new Nutritions(0.0, 0.0));
+        private static final Swapi EMPTY_SWAPI = new Swapi(List.of(new Results(0,"","","")));
         @Override
-        public FruityVice handle(ExecutionContext context) {
-            return EMPTY_FRUITY_VICE;
+        public Swapi handle(ExecutionContext context) {
+            return EMPTY_SWAPI;
         }
 
     }
-
 }</code></pre>
 </div>
 </div>
@@ -369,68 +361,64 @@ public interface FruityViceService {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/fruit?season=Summer</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/movie?year=1980</code></pre>
 </div>
 </div>
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">[
   {
-    "calories": 0,
-    "carbohydrates": 0,
-    "name": "Blueberry",
-    "season": "Summer"
-  },
-  {
-    "calories": 0,
-    "carbohydrates": 0,
-    "name": "Banana",
-    "season": "Summer"
-  },
-  {
-    "calories": 0,
-    "carbohydrates": 0,
-    "name": "Watermelon",
-    "season": "Summer"
+    "title": "The Empire Strikes Back",
+    "releaseDate": "1980-05-17",
+    "episodeId": 0,
+    "producer": "",
+    "director": "",
+    "opening_crawl": ""
   }
 ]</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>Notice how we&#8217;re still returning the results from our database, but the remote service values are now empty as they are set by our fallback method.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_add_circuit_breaker_to_fruity_vice_service"><a class="anchor" href="#_add_circuit_breaker_to_fruity_vice_service"></a>Add Circuit Breaker to Fruity Vice Service</h2>
+<h2 id="_add_circuit_breaker_to_swapi_service"><a class="anchor" href="#_add_circuit_breaker_to_swapi_service"></a>Add Circuit Breaker to Swapi Service</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Let&#8217;s add the circuit breaker policy in <code>FruityViceService</code>.</p>
+<p>Let&#8217;s add the circuit breaker policy in <code>SwapiService</code>.</p>
 </div>
 <div class="paragraph">
-<p>Change the <code>FruityViceService</code> Java interface in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
+<p>Change the <code>SwapiService</code> Java interface in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-@Path("/api/fruit")
-@RegisterRestClient
-public interface FruityViceService {
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
 
+@Path("/api")
+@RegisterRestClient
+public interface SwapiService {
     @GET
-    @Path("/{name}")
+    @Path("/films/")
     @Produces(MediaType.APPLICATION_JSON)
     @Retry(maxRetries = 3, delay = 2000)
-    @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.75, delay = 5000)
-    FruityVice getFruitByName(@PathParam("name") String name);
+    @CircuitBreaker(
+        requestVolumeThreshold=4,
+        failureRatio=0.75,
+        delay=5000
+    )
+    Swapi getMovieByTitle(@QueryParam("search") String title);
 
 }</code></pre>
 </div>
@@ -444,11 +432,11 @@ If the invocation succeeds, then the circuit is back to closed again.</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/fruit?season=Summer</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -w '\n' localhost:8080/movie?year=1980</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The output changes from <code>java.net.UnknownHostException: fruityvice.com</code> (or any other network exception) in the first calls to <code>org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getFruitByName</code> when the circuit is opened.</p>
+<p>The output changes from <code>java.net.UnknownHostException: swapii.dev</code> (or any other network exception) in the first calls to <code>org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getMovieByTitle</code> when the circuit is opened.</p>
 </div>
 <div class="paragraph">
 <p>The big difference between the first exception and the second one is that the first one occurs because the circuit is closed while the system is trying to reach the host, while in the second one, the circuit is closed and the exception is thrown automatically without trying to reach the host.</p>
@@ -472,7 +460,7 @@ You can use <code>@Retry</code> and <code>@Fallback</code> annotations together 
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-If you turned your network off for this chapter, remember to turn it back on again after you finished the exercises for this chapter.
+If you turned your network off for this chapter, remember to turn it back on again after you finish the exercises for this chapter.
 </td>
 </tr>
 </table>
