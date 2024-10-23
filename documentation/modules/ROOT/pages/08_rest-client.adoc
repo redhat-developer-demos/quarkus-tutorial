@@ -2,32 +2,36 @@
 
 A typical scenario in a Microservices architecture is the remote invocation of remote REST HTTP endpoints. Quarkus provides a typed REST client that follows the  https://github.com/eclipse/microprofile-rest-client[MicroProfile REST Client, window=_blank] specification.
 
-Let's create a REST client that accesses https://fruityvice.com[window=_blank] to get nutrition information about our fruits. The endpoint we're interested in is this one:
+Let's create a REST client that accesses https://swapi.dev[window=_blank] to get additional information about Movies. The endpoint we're interested in is this one:
 
-* `api/fruit/\{name\}`, which returns specific info about the given fruit name.
+* `api/films/?search=\{title\}`, which returns specific info about the given movie.
 
 [.console-output]
 [source, json]
 ----
 {
-    "genus": "Musa",
-    "name": "Banana",
-    "id": 1,
-    "family": "Musaceae",
-    "order": "Zingiberales",
-    "nutritions": {
-        "carbohydrates": 22,
-        "protein": 1,
-        "fat": 0.2,
-        "calories": 96,
-        "sugar": 17.2
-    }
+    "count": 1, 
+    "next": null, 
+    "previous": null, 
+    "results": [
+        {
+            "title": "The Empire Strikes Back", 
+            "episode_id": 5, 
+            "opening_crawl": "It is a dark time for the\r\nRebellion. Although the Death\r\nStar has been destroyed,\r\nImperial troops have driven the\r\nRebel forces from their hidden\r\nbase and pursued them across\r\nthe galaxy.\r\n\r\nEvading the dreaded Imperial\r\nStarfleet, a group of freedom\r\nfighters led by Luke Skywalker\r\nhas established a new secret\r\nbase on the remote ice world\r\nof Hoth.\r\n\r\nThe evil lord Darth Vader,\r\nobsessed with finding young\r\nSkywalker, has dispatched\r\nthousands of remote probes into\r\nthe far reaches of space....", 
+            "director": "Irvin Kershner", 
+            "producer": "Gary Kurtz, Rick McCallum", 
+            "release_date": "1980-05-17",            
+            "created": "2014-12-12T11:26:24.656000Z", 
+            "edited": "2014-12-15T13:07:53.386000Z", 
+            "url": "https://swapi.dev/api/films/2/"
+        }
+    ]
 }
 ----
 
 == Add the REST Client extension
 
-Just open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
+Open a new terminal window, and make sure you’re at the root of your `{project-name}` project, then run:
 
 [tabs]
 ====
@@ -37,7 +41,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-./mvnw quarkus:add-extension -D"extensions=rest-client-jackson"
+./mvnw quarkus:add-extension -D"extensions=rest-client, rest-client-jackson"
 ----
 
 --
@@ -47,7 +51,7 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus extension add rest-client-jackson
+quarkus extension add rest-client rest-client-jackson
 ----
 --
 ====
@@ -74,87 +78,93 @@ quarkus extension add rest-client-jackson
 
 Notice in the logs how Quarkus is reloading and the `rest-client-jackson` extension is now part of the `Installed features`.
 
-== Create FruityVice POJO
+== Create Swapi POJO
 
-We need to create a POJO object that is used to unmarshal a JSON message from http://fruityvice.com[window=_blank].
+We need to create a POJO object that is used to unmarshal a JSON message from http://swapi.dev[window=_blank].
 
-Create a new `FruityVice` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Create a new `Swapi` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
 ----
 package com.redhat.developers;
 
-public class FruityVice {
+import java.util.List;
 
-    private String name;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    private Nutritions nutritions;
+public class Swapi {
+        
+    private List<Results> results;
 
-    public FruityVice(String name, Nutritions nutritions) {
-        this.name = name;
-        this.nutritions = nutritions;
+    public Swapi(@JsonProperty("results") List<Results> results) {
+        this.results = results;
     }
 
-    public String getName() {
-        return name;
+    public List<Results> getResults() {
+        return results;
     }
+    
+    public static class Results {
+        private int episodeId;
+        private String producer;
+        private String director;
+        private String opening_crawl;
 
-    public Nutritions getNutritions() {
-        return nutritions;
-    }
-
-    public static class Nutritions {
-
-        private double carbohydrates;
-
-        private double calories;
-
-        public Nutritions(double carbohydrates, double calories) {
-            this.carbohydrates = carbohydrates;
-            this.calories = calories;
+        public Results(int episodeId, String producer, String director, String opening_crawl) {
+            this.episodeId = episodeId;
+            this.producer = producer;
+            this.director = director;
+            this.opening_crawl = opening_crawl;
         }
 
-        public double getCarbohydrates() {
-            return carbohydrates;
+        public int getEpisodeId() {
+            return episodeId;
         }
 
-        public double getCalories() {
-            return calories;
+        public String getProducer() {
+            return producer;
         }
 
+        public String getDirector() {
+            return director;
+        }
+
+        public String getOpening_crawl() {
+            return opening_crawl;
+        }       
     }
-
 }
 ----
 
-=== Create FruityViceService
+=== Create SwapiService
 
 Now we're going to implement a Java interface that mimics the remote REST endpoint.
 
-Create a new `FruityViceService` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Create a new `SwapiService` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
 ----
 package com.redhat.developers;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-@Path("/api/fruit")
-@RegisterRestClient
-public interface FruityViceService {
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
 
+import com.redhat.developers.Swapi.Results;
+
+@Path("/api")
+@RegisterRestClient
+public interface SwapiService {
     @GET
-    @Path("/{name}")
+    @Path("/films")
     @Produces(MediaType.APPLICATION_JSON)
-    FruityVice getFruitByName(@PathParam("name") String name);
+    Swapi getMovieByTitle(@QueryParam("search") String title);
 
 }
 ----
@@ -166,79 +176,97 @@ Add the following properties to your `application.properties` in `src/main/resou
 [.console-input]
 [source,properties]
 ----
-quarkus.rest-client."com.redhat.developers.FruityViceService".url=https://fruityvice.com
+quarkus.rest-client."com.redhat.developers.SwapiService".url=https://swapi.dev
 ----
 
-== Create FruitDTO
+== Create MovieDTO
 
-We're going to enhance our `FruitResource` endpoint by creating a new `FruitDTO` POJO and add the additional information provided by the `FruitViceService`.
+We're going to enhance our `MovieResource` endpoint by creating a new `MovieDTO` POJO and add the additional information provided by the `SwapiService`.
 
-Create a new `FruitDTO` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Create a new `MovieDTO` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
 ----
 package com.redhat.developers;
 
-public class FruitDTO {
+import java.sql.Date;
+import java.util.List;
 
-    private String name;
+import com.redhat.developers.Swapi.Results;
 
-    private String season;
+public class MovieDTO {
+    private String title;
+    private Date releaseDate;
+    private int episodeId;
+    private String producer;
+    private String director;
+    private String opening_crawl;
 
-    private double carbohydrates;
-
-    private double calories;
-
-    private FruitDTO(String name, String season, double carbohydrates, double calories) {
-        this.name = name;
-        this.season = season;
-        this.carbohydrates = carbohydrates;
-        this.calories = calories;
+    private MovieDTO(String title, Date releaseDate, int episodeId, String producer, String director, String opening_crawl) {
+        this.title = title;
+        this.releaseDate = releaseDate;
+        this.episodeId = episodeId;
+        this.producer = producer;
+        this.director = director;
+        this.opening_crawl = opening_crawl;
     }
 
-    public static FruitDTO of(Fruit fruit, FruityVice fruityVice) {
-        return new FruitDTO(
-            fruit.name,
-            fruit.season,
-            fruityVice.getNutritions().getCarbohydrates(),
-            fruityVice.getNutritions().getCalories());
+    public static MovieDTO of(Movie movie, Swapi swapi){
+        List<Results> results = swapi.getResults();
+        Results result = results.get(0);
+        
+        return new MovieDTO(
+            movie.title,
+            movie.releaseDate,
+            result.getEpisodeId(),
+            result.getProducer(),
+            result.getDirector(),
+            result.getOpening_crawl()
+        );
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public String getSeason() {
-        return season;
+    public Date getReleaseDate() {
+        return releaseDate;
     }
 
-    public double getCarbohydrates() {
-        return carbohydrates;
+    public int getEpisodeId() {
+        return episodeId;
     }
 
-    public double getCalories() {
-        return calories;
+    public String getProducer() {
+        return producer;
     }
 
+    public String getDirector() {
+        return director;
+    }
+
+    public String getOpening_crawl() {
+        return opening_crawl;
+    }
 }
 ----
 
-== Change FruitResource to use FruityViceService
+== Change MovieResource to use SwapiService
 
-Now that we have all the required classes, we can change `FruitResource` to get fruits by season and use our `FruityViceService` REST client via `@RestClient` annotation.
+Now that we have all the required classes, we can change `MovieResource` to get movies by title and use our `SwapiService` REST client via the `@RestClient` annotation.
 
-Change the `FruitResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
+Change the `MovieResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
 [.console-input]
 [source,java]
 ----
 package com.redhat.developers;
 
-import org.eclipse.microprofile.rest.client.inject.RestClient;
-
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -252,49 +280,48 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
-@Path("/fruit")
-public class FruitResource {
+@Path("/movie")
+public class MovieResource {
 
     @RestClient
     @Inject
-    FruityViceService fruityViceService;
+    SwapiService swapiService;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<MovieDTO> movies(@QueryParam("year") String year) {
+        if (year != null) {
+            return Movie.findByYear(Integer.parseInt(year)).stream()
+            .map(movie -> MovieDTO.of(movie, swapiService.getMovieByTitle(movie.title)))
+            .collect(Collectors.toList());
+        }
+        return Movie.<Movie>listAll().stream()
+            .map(movie -> MovieDTO.of(movie, swapiService.getMovieByTitle(movie.title)))
+            .collect(Collectors.toList());
+    }
 
     @Transactional
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response newFruit(Fruit fruit) {
-        fruit.id = null;
-        fruit.persist();
-        return Response.status(Status.CREATED).entity(fruit).build();
+    public Response newMovie(Movie movie) {
+        movie.id = null;
+        movie.persist();
+        return Response.status(Status.CREATED).entity(movie).build();
     }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<FruitDTO> fruits(@QueryParam("season") String season) {
-        if (season != null) {
-            return Fruit.findBySeason(season).stream()
-                    .map(fruit -> FruitDTO.of(fruit, fruityViceService.getFruitByName(fruit.name)))
-                    .collect(Collectors.toList());
-        }
-        return Fruit.<Fruit>listAll().stream()
-                .map(fruit -> FruitDTO.of(fruit, fruityViceService.getFruitByName(fruit.name)))
-                .collect(Collectors.toList());
-    }
-
 }
 ----
 
 == Invoke the endpoint
 
-You can check your new implementation using a REST client by pointing your browser to http://localhost:8080/fruit?season=Summer[window=_blank]
+You can check your new implementation using a REST client by pointing your browser to http://localhost:8080/movie?year=1980[window=_blank]
 
 You can also run the following command:
 
 [.console-input]
 [source,bash]
 ----
-curl -w '\n' localhost:8080/fruit?season=Summer
+curl -w '\n' localhost:8080/movie?year=1980
 ----
 
 [.console-output]
@@ -302,22 +329,12 @@ curl -w '\n' localhost:8080/fruit?season=Summer
 ----
 [
   {
-    "calories": 0,
-    "carbohydrates": 29,
-    "name": "Blueberry",
-    "season": "Summer"
-  },
-  {
-    "calories": 0,
-    "carbohydrates": 96,
-    "name": "Banana",
-    "season": "Summer"
-  },
-  {
-    "calories": 0,
-    "carbohydrates": 30,
-    "name": "Watermelon",
-    "season": "Summer"
+    "title": "The Empire Strikes Back",
+    "releaseDate": "1980-05-17",
+    "episodeId": 0,
+    "producer": "Gary Kurtz, Rick McCallum",
+    "director": "Irvin Kershner",
+    "opening_crawl": "It is a dark time for the\r\nRebellion. Although the Death\r\nStar has been destroyed,\r\nImperial troops have driven the\r\nRebel forces from their hidden\r\nbase and pursued them across\r\nthe galaxy.\r\n\r\nEvading the dreaded Imperial\r\nStarfleet, a group of freedom\r\nfighters led by Luke Skywalker\r\nhas established a new secret\r\nbase on the remote ice world\r\nof Hoth.\r\n\r\nThe evil lord Darth Vader,\r\nobsessed with finding young\r\nSkywalker, has dispatched\r\nthousands of remote probes into\r\nthe far reaches of space...."
   }
 ]
 ----

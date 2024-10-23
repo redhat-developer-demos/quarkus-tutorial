@@ -47,22 +47,22 @@ To start collecting and inspecting telemetry, let's run a container that instant
 docker run --name=jaeger -d -p 16686:16686 -p 4317:4317 -e COLLECTOR_OTLP_ENABLED=true jaegertracing/all-in-one:latest
 ----
 
-Create a few requests so we have some telemetry data to work with by hitting our `/fruit` endpoint a few times again:
+Create a few requests so we have some telemetry data to work with by hitting our `/movie` endpoint a few times again:
 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-curl -w '\n' localhost:8080/fruit?season=Summer
+curl -w '\n' localhost:8080/movie?year=1980
 ----
 
 === Trace down the requests in Jaeger
 
-Go to http://localhost:16686 in your browser. You should see the Jaeger UI, if not make sure the `docker run` command was executed successfully. To see the traces we just produced, select 'tutorial-app' from the Service dropdown and click 'Find Traces'. Depending on how many times you sent requests to the fruit endpoint, you'll see a number of traces that were collected.
+Go to http://localhost:16686 in your browser. You should see the Jaeger UI, if not make sure the `docker run` command was executed successfully. To see the traces we just produced, select 'tutorial-app' from the Service dropdown and click 'Find Traces'. Depending on how many times you sent requests to the Movie endpoint, you'll see a number of traces that were collected.
 
 [.mt-4.center]
 image::Jaeger.png[Jaeger Tracing,800,500,align="center"]
 
-Click on the first "tutorial-app: GET /fruit" trace to drill into the details of the latest request. Notice that without doing any further work, even data from the calls out to the FruityVice REST service was collected, so we can see how long each request took:
+Click on the first "tutorial-app: GET /movie" trace to drill into the details of the latest request. Notice that without doing any further work, even data from the calls out to the Swapi REST service was collected, so we can see how long each request took:
 
 [.mt-4.center]
 image::Jaeger_Span.png[Jaeger Span,800,500,align="center"]
@@ -89,15 +89,15 @@ We'll also need to add a new property to our `application.properties` file to en
 quarkus.datasource.jdbc.telemetry=true
 ----
 
-Create a few more requests to the fruit resource:
+Create a few more requests to the movie resource:
 
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-curl -w '\n' localhost:8080/fruit?season=Summer
+curl -w '\n' localhost:8080/movie?year=1980
 ----
 
-...And go back to the Jaeger UI at http://localhost:16686. Click the 'Find Traces' again (make sure the tutorial-app Service is selected) and click on the first trace from the top. You will now see 2 more spans, one with 'DataSource.getConnection' that shows how long it took for the database connection to get established, and one with 'SELECT quarkus.Fruit' that shows the details of the database query and how long it took.
+...And go back to the Jaeger UI at http://localhost:16686. Click the 'Find Traces' again (make sure the tutorial-app Service is selected) and click on the first trace from the top. You will now see 2 more spans, one with 'DataSource.getConnection' that shows how long it took for the database connection to get established, and one with 'SELECT quarkus.Movie' that shows the details of the database query and how long it took.
 
 [.mt-4.center]
 image::Jaeger_DataSource.png[Jaeger DataSource,800,500,align="center"]
