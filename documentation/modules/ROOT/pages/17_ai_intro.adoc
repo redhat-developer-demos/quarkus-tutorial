@@ -1,0 +1,14 @@
+= Quarkus and AI
+
+AI is becoming an intrinsic part of software development. It can help us write, test and debug code. We can also infuse AI models directly into our applications. Inversely, we can also create functions/tools that can be called by AI agents to augment their capabilities and knowledge. 
+
+Quarkus supports a few different ways to work with AI, mainly leveraging the LangChain4j extension. There are also other extensions such as the Quarkus MCP server which allows you to serve tools to be consumed by AI agents.
+
+In this chapter, we'll explore how to work with AI models. We'll cover:
+* Prompting AI models in your applications
+* Preserving state between calls
+* Creating Tools for use by AI Agents
+* Embedding Documents that can be queried by LLMs
+* Building a chatbot
+* Working with local models (using Podman Desktop AI Lab)
+

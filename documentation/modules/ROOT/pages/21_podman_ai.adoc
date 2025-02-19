@@ -2,15 +2,15 @@
 
 :project-podman-ai-name: quarkus-podman-ai-app
 
-Throughout this tutorial, we've been working with OpenAI's remote models, however wouldn't it be nice if we could work
-with models on our local machine (without incurring costs)?
+Throughout this tutorial, we've been working with OpenAI's remote models, or Ollama's models on our local machine, however wouldn't it be nice if we could work
+with models on our local machine (without incurring costs) AND have a nice visualization of what's going on?
 
 Podman Desktop is a GUI tool that helps with running and managing containers on our local machine, but it can also help with running AI models locally as well thanks to its AI Lab extension. Thanks to Quarkus and LangChain4j, it then becomes trivial to start developing with these models. Let's find out how!
 
 
 == Installing Podman Desktop AI
 
-First, if you haven't yet, you must download and install Podman Desktop on your operating system. https://podman-desktop.io/downloads[The instructions can be found here, window="_blank"].
+First, if you haven't yet, download and install Podman Desktop on your operating system. https://podman-desktop.io/downloads[The instructions can be found here, window="_blank"].
 
 NOTE: For Windows/macOS users, if you can, give the Podman machine at least 8GB of memory and 4 CPUs (Generative AI Models are resource hungry!). The model can run with less resources, but it will be significantly slower.
 

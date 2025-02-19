@@ -1,4 +1,5 @@
-= Embedding Documents
+= Embedding Documents and Creating a Chatbot
+:description: Learn how to embed documents and create a chatbot using LangChain4J in Quarkus.
 
 :project-ai-name: quarkus-langchain4j-app
 
@@ -44,7 +45,14 @@ Add the following properties to your `application.properties` so that it looks l
 [.console-input]
 [source,config,subs="+macros,+attributes"]
 ----
-quarkus.langchain4j.openai.api-key=<YOUR OPENAI KEY>
+# Set OpenAI key if you want to use the API key
+# quarkus.langchain4j.openai.api-key=demo
+
+# With Ollama
+quarkus.langchain4j.openai.base-url=http://localhost:11434/v1
+# Configure server to use a specific model
+quarkus.langchain4j.openai.chat-model.model-name=granite3.1-dense:2b
+quarkus.langchain4j.openai.embedding-model.model-name=granite3.1-dense:2b
 
 quarkus.langchain4j.openai.log-requests=true
 quarkus.langchain4j.openai.log-responses=true
@@ -71,7 +79,7 @@ quarkus.langchain4j.openai.chat-model.model-name=gpt-4o #<4>
 
 == Embedding the business document
 
-NOTE: If you don't provide an actual OpenAI key you will still be able to go through this exercise but the "Tools" functions won't be called, resulting in unexpected answers.
+NOTE: If you don't provide a model that supports embeddings and tools you will still be able to go through this exercise but the "Tools" functions won't be called, resulting in unexpected answers. See the previous "Agents and Tools" chapter for more information.
 
 Let's provide a document containing the service's terms of use:
 

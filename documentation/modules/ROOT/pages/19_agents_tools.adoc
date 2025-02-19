@@ -12,7 +12,7 @@ You can read more about this in the https://docs.quarkiverse.io/quarkus-langchai
 
 == Add the Mailer and Mailpit extensions
 
-Open a new terminal window, and make sure you’re at the root of your `{project-ai-name}` project, then run:
+Open a new terminal window, and make sure you’re at the root of your `{project-ai-name}` project, then run the following command to add emailing capabilities to our application:
 
 [tabs]
 ====
@@ -79,7 +79,8 @@ public class EmailService {
 Let's create an interface for our AI service, but with `SystemMessage` and `UserMessage` this time.
 `SystemMessage` gives context to the AI Model.
 In this case, we tell it that it should craft a message as if it is written by a professional poet.
-The `UserMessage` is the actual instruction/question we're sending to the AI model. As you can see in the example below,
+The `UserMessage` is the actual instruction/question we're sending to the AI model.
+As you can see in the example below,
 you can format and parameterize the `UserMessage`, translating structured content to text and vice-versa.
 
 Create a new `AssistantWithContext` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
@@ -143,21 +144,41 @@ public class EmailMeAPoemResource {
 }
 ----
 
-== Adding email service properties to your configuration
+== Modify application.properties to use the email Tools
+
+Tool calling is not supported with the OpenAI `demo` key so we will need to
+either use a real API key, or use a local model that supports tools..
+If you want to use OpenAI's ChatGPT, you can create and fund an account at https://platform.openai.com/[OpenAI] and then set the openai-api-key to your key.
+
+We will use a local (free) open source model served with Ollama instead. 
+To do this, you will need to https://ollama.com/download[download and install Ollama].
+Once that's done, you will need to https://ollama.com/search?c=tools[download a model that supports tool calling], such as `granite3.1-dense:2b`. To do so, execute the command:
+
+[#quarkuspdb-dl-ollama]
+[.console-input]
+[source,config,subs="+macros,+attributes"]
+----
+ollama pull granite3.1-dense:2b
+----
 
 Update the following properties in your `application.properties`
 
-IMPORTANT: The LangChain4j `demo` key currently does not support tools, so you will need to use a real OpenAI key for the email service to be called by the OpenAI model.
-You can create an account over at https://platform.openai.com/[OpenAI] if you'd like to see this in action.
-Note that OpenAI requires you to fund your account with credits to be able to use the API. The minimum is $5 but this amount will go a long way to test the scenarios in this tutorial.
+NOTE: If you do not want to go through the trouble of creating an OpenAI account or install Ollama, you can still test the below scenario, it just won't send an email since the "Tool" functionality unfortunately won't work.
 
-NOTE: If you do not want to create an OpenAI key, you can still test the below scenario, it just won't send an email since the "Tool" functionality unfortunately won't work.
+Modify the application.properties as below: 
 
 [#quarkuspdb-update-props]
 [.console-input]
 [source,config,subs="+macros,+attributes"]
 ----
-quarkus.langchain4j.openai.api-key=<YOUR OPENAI KEY>
+# Set OpenAI key if you want to use the API key
+# quarkus.langchain4j.openai.api-key=demo
+
+# With Ollama
+quarkus.langchain4j.openai.base-url=http://localhost:11434/v1
+# Configure server to use a specific model
+quarkus.langchain4j.openai.chat-model.model-name=granite3.1-dense:2b
+quarkus.langchain4j.openai.embedding-model.model-name=granite3.1-dense:2b
 
 quarkus.langchain4j.openai.log-requests=true
 quarkus.langchain4j.openai.log-responses=true
@@ -166,7 +187,9 @@ quarkus.langchain4j.openai.timeout=60s
 %dev.quarkus.mailer.mock=false
 ----
 
-Because we haven't configured the local email service, Quarkus will use Dev Services to instantiate and configure a local email service for you (in dev mode only!).
+Make sure your Quarkus Dev mode is still running. It should have reloaded with the new configuration.
+
+Because we haven't configured the local email service, Quarkus will also have started a Dev Service to instantiate and configure a local email service for you (in dev mode only!).
 
 You can check it running:
 
@@ -200,7 +223,7 @@ You can also run the following command:
 curl localhost:8080/email-me-a-poem
 ----
 
-An example of output (it can vary on each prompt execution):
+An example of output (will vary on each prompt execution):
 
 [.console-output]
 [source,text]
@@ -208,7 +231,7 @@ An example of output (it can vary on each prompt execution):
 I have composed a poem about Quarkus. I have sent it to you via email. Let me know if you need anything else
 ----
 
-If you have a valid OpenAI key configured, you can check the "real" email:
+If you have a tool calling model configured, you can check your inbox for the actual email:
 
 First, open the http://localhost:8080/q/dev-ui[DevUI, window=_blank] and click on the Mailpit arrow.
 
