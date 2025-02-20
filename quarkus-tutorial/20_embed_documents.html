@@ -3,10 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Embedding Documents :: Quarkus Tutorial</title>
+    <title>Embedding Documents and Creating a Chatbot :: Quarkus Tutorial</title>
     <link rel="canonical" href="https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/20_embed_documents.html">
     <link rel="prev" href="19_agents_tools.html">
     <link rel="next" href="21_podman_ai.html">
+    <meta name="description" content="Learn how to embed documents and create a chatbot using LangChain4J in Quarkus.">
     <meta name="generator" content="Antora 2.3.1">
     <link rel="stylesheet" href="../_/css/site.css">
   </head>
@@ -125,6 +126,9 @@
     <span class="nav-text">AI</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="17_ai_intro.html">AI with Quarkus</a>
+  </li>
+  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="17_prompts.html">Working with prompts</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -164,7 +168,7 @@
   </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Embedding Documents</h1>
+<h1 class="page">Embedding Documents and Creating a Chatbot</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -222,7 +226,14 @@ We&#8217;re going to embed this business document for the LLM, which will use it
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.langchain4j.openai.api-key=&lt;YOUR OPENAI KEY&gt;
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config"># Set OpenAI key if you want to use the API key
+# quarkus.langchain4j.openai.api-key=demo
+
+# With Ollama
+quarkus.langchain4j.openai.base-url=http://localhost:11434/v1
+# Configure server to use a specific model
+quarkus.langchain4j.openai.chat-model.model-name=granite3.1-dense:2b
+quarkus.langchain4j.openai.embedding-model.model-name=granite3.1-dense:2b
 
 quarkus.langchain4j.openai.log-requests=true
 quarkus.langchain4j.openai.log-responses=true
@@ -274,7 +285,7 @@ quarkus.langchain4j.openai.chat-model.model-name=gpt-4o <i class="conum" data-va
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-If you don&#8217;t provide an actual OpenAI key you will still be able to go through this exercise but the "Tools" functions won&#8217;t be called, resulting in unexpected answers.
+If you don&#8217;t provide a model that supports embeddings and tools you will still be able to go through this exercise but the "Tools" functions won&#8217;t be called, resulting in unexpected answers. See the previous "Agents and Tools" chapter for more information.
 </td>
 </tr>
 </table>

@@ -125,6 +125,9 @@
     <span class="nav-text">AI</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="17_ai_intro.html">AI with Quarkus</a>
+  </li>
+  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="17_prompts.html">Working with prompts</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -185,7 +188,7 @@
 <h2 id="_add_the_mailer_and_mailpit_extensions"><a class="anchor" href="#_add_the_mailer_and_mailpit_extensions"></a>Add the Mailer and Mailpit extensions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Open a new terminal window, and make sure you’re at the root of your <code>quarkus-langchain4j-app</code> project, then run:</p>
+<p>Open a new terminal window, and make sure you’re at the root of your <code>quarkus-langchain4j-app</code> project, then run the following command to add emailing capabilities to our application:</p>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -264,7 +267,8 @@ public class EmailService {
 <p>Let&#8217;s create an interface for our AI service, but with <code>SystemMessage</code> and <code>UserMessage</code> this time.
 <code>SystemMessage</code> gives context to the AI Model.
 In this case, we tell it that it should craft a message as if it is written by a professional poet.
-The <code>UserMessage</code> is the actual instruction/question we&#8217;re sending to the AI model. As you can see in the example below,
+The <code>UserMessage</code> is the actual instruction/question we&#8217;re sending to the AI model.
+As you can see in the example below,
 you can format and parameterize the <code>UserMessage</code>, translating structured content to text and vice-versa.</p>
 </div>
 <div class="paragraph">
@@ -336,24 +340,25 @@ public class EmailMeAPoemResource {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_adding_email_service_properties_to_your_configuration"><a class="anchor" href="#_adding_email_service_properties_to_your_configuration"></a>Adding email service properties to your configuration</h2>
+<h2 id="_modify_application_properties_to_use_the_email_tools"><a class="anchor" href="#_modify_application_properties_to_use_the_email_tools"></a>Modify application.properties to use the email Tools</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Update the following properties in your <code>application.properties</code></p>
+<p>Tool calling is not supported with the OpenAI <code>demo</code> key so we will need to
+either use a real API key, or use a local model that supports tools..
+If you want to use OpenAI&#8217;s ChatGPT, you can create and fund an account at <a href="https://platform.openai.com/">OpenAI</a> and then set the openai-api-key to your key.</p>
 </div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-The LangChain4j <code>demo</code> key currently does not support tools, so you will need to use a real OpenAI key for the email service to be called by the OpenAI model.
-You can create an account over at <a href="https://platform.openai.com/">OpenAI</a> if you&#8217;d like to see this in action.
-Note that OpenAI requires you to fund your account with credits to be able to use the API. The minimum is $5 but this amount will go a long way to test the scenarios in this tutorial.
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>We will use a local (free) open source model served with Ollama instead.
+To do this, you will need to <a href="https://ollama.com/download">download and install Ollama</a>.
+Once that&#8217;s done, you will need to <a href="https://ollama.com/search?c=tools">download a model that supports tool calling</a>, such as <code>granite3.1-dense:2b</code>. To do so, execute the command:</p>
+</div>
+<div id="quarkuspdb-dl-ollama" class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">ollama pull granite3.1-dense:2b</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Update the following properties in your <code>application.properties</code></p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -362,14 +367,24 @@ Note that OpenAI requires you to fund your account with credits to be able to us
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-If you do not want to create an OpenAI key, you can still test the below scenario, it just won&#8217;t send an email since the "Tool" functionality unfortunately won&#8217;t work.
+If you do not want to go through the trouble of creating an OpenAI account or install Ollama, you can still test the below scenario, it just won&#8217;t send an email since the "Tool" functionality unfortunately won&#8217;t work.
 </td>
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>Modify the application.properties as below:</p>
+</div>
 <div id="quarkuspdb-update-props" class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config">quarkus.langchain4j.openai.api-key=&lt;YOUR OPENAI KEY&gt;
+<pre class="highlightjs highlight"><code class="language-config hljs" data-lang="config"># Set OpenAI key if you want to use the API key
+# quarkus.langchain4j.openai.api-key=demo
+
+# With Ollama
+quarkus.langchain4j.openai.base-url=http://localhost:11434/v1
+# Configure server to use a specific model
+quarkus.langchain4j.openai.chat-model.model-name=granite3.1-dense:2b
+quarkus.langchain4j.openai.embedding-model.model-name=granite3.1-dense:2b
 
 quarkus.langchain4j.openai.log-requests=true
 quarkus.langchain4j.openai.log-responses=true
@@ -379,7 +394,10 @@ quarkus.langchain4j.openai.timeout=60s
 </div>
 </div>
 <div class="paragraph">
-<p>Because we haven&#8217;t configured the local email service, Quarkus will use Dev Services to instantiate and configure a local email service for you (in dev mode only!).</p>
+<p>Make sure your Quarkus Dev mode is still running. It should have reloaded with the new configuration.</p>
+</div>
+<div class="paragraph">
+<p>Because we haven&#8217;t configured the local email service, Quarkus will also have started a Dev Service to instantiate and configure a local email service for you (in dev mode only!).</p>
 </div>
 <div class="paragraph">
 <p>You can check it running:</p>
@@ -419,7 +437,7 @@ e4a1d5aae322  docker.io/testcontainers/ryuk:0.6.0  /bin/ryuk   34 seconds ago  U
 </div>
 </div>
 <div class="paragraph">
-<p>An example of output (it can vary on each prompt execution):</p>
+<p>An example of output (will vary on each prompt execution):</p>
 </div>
 <div class="listingblock console-output">
 <div class="content">
@@ -427,7 +445,7 @@ e4a1d5aae322  docker.io/testcontainers/ryuk:0.6.0  /bin/ryuk   34 seconds ago  U
 </div>
 </div>
 <div class="paragraph">
-<p>If you have a valid OpenAI key configured, you can check the "real" email:</p>
+<p>If you have a tool calling model configured, you can check your inbox for the actual email:</p>
 </div>
 <div class="paragraph">
 <p>First, open the <a href="http://localhost:8080/q/dev-ui" target="_blank" rel="noopener">DevUI</a> and click on the Mailpit arrow.</p>
