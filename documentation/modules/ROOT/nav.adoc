@@ -23,6 +23,7 @@
 ** xref:16_kafka-and-streams.adoc[Apache Kafka with Reactive Streams]
 
 * AI
+** xref:17_ai_intro.adoc[AI with Quarkus]
 ** xref:17_prompts.adoc[Working with prompts]
 ** xref:18_chains_memory.adoc[Chains and Memory]
 ** xref:19_agents_tools.adoc[Agents/Tools]

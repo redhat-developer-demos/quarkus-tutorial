@@ -4,10 +4,16 @@
 
 The Quarkus LangChain4j extension seamlessly integrates Large Language Models (LLMs) into Quarkus applications. LLMs are AI-based systems designed to understand, generate, and manipulate human language, showcasing advanced natural language processing capabilities. Thanks to this extension, we can enable the harnessing of LLM capabilities for the development of more intelligent applications.
 
-In this first chapter, we'll explore the simplest of interactions with an LLM: Prompting. It essentially means just asking questions to an LLM and receiving an answer in natural language from a given Model, such as OpenAI, Mistral, Hugging Face, Ollama, etc.
+In this first chapter, we'll explore the simplest of interactions with an LLM: Prompting. It essentially means just asking questions to an LLM and receiving an answer in natural language from a given model, such as ChatGPT, Granite, Mistral, etc.
 
 
 == Creating a Quarkus & LangChain4j Application
+
+We're going to use the langchain4j-openai extension for our first interaction with models.
+The openai extension supports models that expose the open sourced OpenAI API specification.
+Several models and model providers expose this API specification. If you want to use 
+a different API spec, then you can likely find a supported extension in the https://docs.quarkiverse.io/quarkus-langchain4j/dev/llms.html[Quarkus documentation].
+
 
 [tabs%sync]
 ====
@@ -18,7 +24,7 @@ Maven::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-mvn "io.quarkus.platform:quarkus-maven-plugin:create" -DprojectGroupId="com.redhat.developers" -DprojectArtifactId="{project-ai-name}" -DprojectVersion="1.0-SNAPSHOT" -Dextensions=rest,langchain4j-core,langchain4j-openai
+mvn "io.quarkus.platform:quarkus-maven-plugin:create" -DprojectGroupId="com.redhat.developers" -DprojectArtifactId="{project-ai-name}" -DprojectVersion="1.0-SNAPSHOT" -Dextensions=rest,langchain4j-openai
 cd {project-ai-name}
 ----
 --
@@ -29,7 +35,7 @@ Quarkus CLI::
 [.console-input]
 [source,bash,subs="+macros,+attributes"]
 ----
-quarkus create app -x rest -x langchain4j-openai -x langchain4j-core com.redhat.developers:{project-ai-name}:1.0-SNAPSHOT
+quarkus create app -x rest -x langchain4j-openai com.redhat.developers:{project-ai-name}:1.0-SNAPSHOT
 cd {project-ai-name}
 ----
 --
@@ -44,8 +50,12 @@ LangChain4j provides you a proxy to connect your application to OpenAI by just a
 [.console-input]
 [source,properties]
 ----
+# Free demo key for basic usage of OpenAI ChatGPT
 quarkus.langchain4j.openai.api-key=demo
+# Change this URL to the model provider of your choice
+quarkus.langchain4j.openai.base-url=https://api.openai.com/v1
 ----
+
 
 == Create the AI service
 
@@ -68,7 +78,7 @@ public interface Assistant {
 
 == Create the prompt-base resource
 
-Now we're going to implement a resource that send prompts using the AI service.
+Now we're going to implement a resource that sends prompts using the AI service.
 
 Create a new `ExistentialQuestionResource` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
@@ -136,7 +146,8 @@ You can also run the following command:
 curl -w '\n' localhost:8080/earth/flat
 ----
 
-An example of output (it can vary on each prompt execution):
+An example of the output you might see (Yours will likely be slightly different
+depending on the response from the non-deterministic LLM):
 
 [.console-output]
 [source,text]

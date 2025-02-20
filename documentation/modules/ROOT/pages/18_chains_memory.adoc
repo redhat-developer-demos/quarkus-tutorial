@@ -8,7 +8,7 @@ In this section, we'll cover how we can achieve this with the LangChain4j extens
 
 == Create an AI service with memory
 
-Let's create an interface for our AI service, but with memory feature this time.
+Let's create an interface for our AI service, but with memory this time.
 
 Create a new `AssistantWithMemory` Java interface in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
@@ -255,4 +255,4 @@ The result will be at your Quarkus terminal. An example of output (it can vary o
 ------------------------------------------
 ----
 
-NOTE: Take a close look at the IDs of our calls to the assistant. Do you notice that the last question was in fact directed to Klaus with ID=1? We were indeed able to maintain 2 separate and concurrent conversations with the LLM!
+NOTE: Take a close look at the IDs of our calls to the assistant. Do you notice that the last question was in fact directed to Klaus with ID=1? We were indeed able to maintain 2 separate and concurrent conversations with the LLM.
