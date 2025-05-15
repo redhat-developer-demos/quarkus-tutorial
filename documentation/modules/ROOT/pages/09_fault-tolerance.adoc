@@ -61,7 +61,7 @@ public interface SwapiService {
     @Path("/films/")
     @Produces(MediaType.APPLICATION_JSON)
     @Retry(maxRetries = 3, delay = 2000)
-    Swapi getMovieByTitle(@QueryParam("search") String title);
+    public Swapi getFilmById(@PathParam("id") String id);
 }
 ----
 
@@ -139,7 +139,7 @@ public interface SwapiService {
     @Produces(MediaType.APPLICATION_JSON)
     @Retry(maxRetries = 3, delay = 2000)
     @Fallback(SwapiFallback.class)
-    Swapi getMovieByTitle(@QueryParam("search") String title);
+    public Swapi getFilmById(@PathParam("id") String id);
 
     public static class SwapiFallback implements FallbackHandler<Swapi> {
 
@@ -220,7 +220,7 @@ public interface SwapiService {
         failureRatio=0.75,
         delay=5000
     )
-    Swapi getMovieByTitle(@QueryParam("search") String title);
+    public Swapi getFilmById(@PathParam("id") String id);
 
 }
 
