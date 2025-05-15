@@ -54,6 +54,8 @@ LangChain4j provides you a proxy to connect your application to OpenAI by just a
 quarkus.langchain4j.openai.api-key=demo
 # Change this URL to the model provider of your choice
 quarkus.langchain4j.openai.base-url=https://api.openai.com/v1
+# Set timeout explicitly (default is 10s)
+quarkus.langchain4j.openai.timeout=30s
 ----
 
 
