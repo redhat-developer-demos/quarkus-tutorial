@@ -242,7 +242,9 @@ All the remaining parts of this section assume that you&#8217;ll be working insi
 <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties"># Free demo key for basic usage of OpenAI ChatGPT
 quarkus.langchain4j.openai.api-key=demo
 # Change this URL to the model provider of your choice
-quarkus.langchain4j.openai.base-url=https://api.openai.com/v1</code></pre>
+quarkus.langchain4j.openai.base-url=https://api.openai.com/v1
+# Set timeout explicitly (default is 10s)
+quarkus.langchain4j.openai.timeout=30s</code></pre>
 </div>
 </div>
 </div>
