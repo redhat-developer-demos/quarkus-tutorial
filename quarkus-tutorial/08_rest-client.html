@@ -277,50 +277,65 @@
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class Swapi {
 
-    private List&lt;Results&gt; results;
+    private String title;
+    private int episode_id;
+    private String opening_crawl;
+    private String director;
+    private String producer;
 
-    public Swapi(@JsonProperty("results") List&lt;Results&gt; results) {
-        this.results = results;
+
+    public Swapi() {
     }
 
-    public List&lt;Results&gt; getResults() {
-        return results;
+    public Swapi(String title, int episode_id, String opening_crawl, String director, String producer) {
+        this.title = title;
+        this.episode_id = episode_id;
+        this.opening_crawl = opening_crawl;
+        this.director = director;
+        this.producer = producer;
     }
 
-    public static class Results {
-        private int episodeId;
-        private String producer;
-        private String director;
-        private String opening_crawl;
 
-        public Results(int episodeId, String producer, String director, String opening_crawl) {
-            this.episodeId = episodeId;
-            this.producer = producer;
-            this.director = director;
-            this.opening_crawl = opening_crawl;
-        }
+    public String getTitle() {
+        return title;
+    }
 
-        public int getEpisodeId() {
-            return episodeId;
-        }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-        public String getProducer() {
-            return producer;
-        }
+    public int getEpisode_id() {
+        return episode_id;
+    }
 
-        public String getDirector() {
-            return director;
-        }
+    public void setEpisode_id(int episode_id) {
+        this.episode_id = episode_id;
+    }
 
-        public String getOpening_crawl() {
-            return opening_crawl;
-        }
+    public String getOpening_crawl() {
+        return opening_crawl;
+    }
+
+    public void setOpening_crawl(String opening_crawl) {
+        this.opening_crawl = opening_crawl;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public String getProducer() {
+        return producer;
+    }
+
+    public void setProducer(String producer) {
+        this.producer = producer;
     }
 }</code></pre>
 </div>
@@ -337,24 +352,21 @@ public class Swapi {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
-import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-import com.redhat.developers.Swapi.Results;
-
-@Path("/api")
 @RegisterRestClient
 public interface SwapiService {
-    @GET
-    @Path("/films")
-    @Produces(MediaType.APPLICATION_JSON)
-    Swapi getMovieByTitle(@QueryParam("search") String title);
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/films/{id}")
+    public Swapi getFilmById(@PathParam("id") String id);
 }</code></pre>
 </div>
 </div>
@@ -369,7 +381,7 @@ public interface SwapiService {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">quarkus.rest-client."com.redhat.developers.SwapiService".url=https://swapi.dev</code></pre>
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">quarkus.rest-client."com.redhat.developers.SwapiService".url=https://swapi.info/api</code></pre>
 </div>
 </div>
 </div>
@@ -388,38 +400,36 @@ public interface SwapiService {
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
 import java.sql.Date;
-import java.util.List;
-
-import com.redhat.developers.Swapi.Results;
 
 public class MovieDTO {
+
     private String title;
     private Date releaseDate;
-    private int episodeId;
-    private String producer;
-    private String director;
+    private int episode_id;
     private String opening_crawl;
+    private String director;
+    private String producer;
 
-    private MovieDTO(String title, Date releaseDate, int episodeId, String producer, String director, String opening_crawl) {
-        this.title = title;
-        this.releaseDate = releaseDate;
-        this.episodeId = episodeId;
-        this.producer = producer;
-        this.director = director;
-        this.opening_crawl = opening_crawl;
+    public MovieDTO() {
     }
 
-    public static MovieDTO of(Movie movie, Swapi swapi){
-        List&lt;Results&gt; results = swapi.getResults();
-        Results result = results.get(0);
+    private MovieDTO(String title, Date releaseDate, int episode_id, String opening_crawl, String director, String producer) {
+        this.title = title;
+        this.releaseDate = releaseDate;
+        this.episode_id = episode_id;
+        this.opening_crawl = opening_crawl;
+        this.director = director;
+        this.producer = producer;
+    }
 
+    public static MovieDTO of(Movie movie, Swapi swapi) {
         return new MovieDTO(
-            movie.title,
-            movie.releaseDate,
-            result.getEpisodeId(),
-            result.getProducer(),
-            result.getDirector(),
-            result.getOpening_crawl()
+                movie.title,
+                movie.releaseDate,
+                swapi.getEpisode_id(),
+                swapi.getOpening_crawl(),
+                swapi.getDirector(),
+                swapi.getProducer()
         );
     }
 
@@ -427,24 +437,48 @@ public class MovieDTO {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public Date getReleaseDate() {
         return releaseDate;
     }
 
-    public int getEpisodeId() {
-        return episodeId;
+    public void setReleaseDate(Date releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
-    public String getProducer() {
-        return producer;
+    public int getEpisode_id() {
+        return episode_id;
+    }
+
+    public void setEpisode_id(int episode_id) {
+        this.episode_id = episode_id;
+    }
+
+    public String getOpening_crawl() {
+        return opening_crawl;
+    }
+
+    public void setOpening_crawl(String opening_crawl) {
+        this.opening_crawl = opening_crawl;
     }
 
     public String getDirector() {
         return director;
     }
 
-    public String getOpening_crawl() {
-        return opening_crawl;
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public String getProducer() {
+        return producer;
+    }
+
+    public void setProducer(String producer) {
+        this.producer = producer;
     }
 }</code></pre>
 </div>
@@ -464,41 +498,35 @@ public class MovieDTO {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.eclipse.microprofile.rest.client.inject.RestClient;
-
-import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
-
-@Path("/movie")
+@Path("movie")
+@Produces(MediaType.APPLICATION_JSON)
 public class MovieResource {
 
     @RestClient
-    @Inject
     SwapiService swapiService;
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List&lt;MovieDTO&gt; movies(@QueryParam("year") String year) {
+    public List&lt;MovieDTO&gt; getMovie(@QueryParam("year") String year) {
+
         if (year != null) {
-            return Movie.findByYear(Integer.parseInt(year)).stream()
-            .map(movie -&gt; MovieDTO.of(movie, swapiService.getMovieByTitle(movie.title)))
-            .collect(Collectors.toList());
+            return Movie.&lt;Movie&gt;findByYear(Integer.parseInt(year)).stream()
+                    .map(movie -&gt; MovieDTO.of(movie, swapiService.getFilmById(String.valueOf(movie.id))))
+                    .collect(Collectors.toList());
+        } else{
+            return Movie.&lt;Movie&gt;listAll().stream()
+                    .map(movie -&gt; MovieDTO.of(movie, swapiService.getFilmById(String.valueOf(movie.id))))
+                    .collect(Collectors.toList());
         }
-        return Movie.&lt;Movie&gt;listAll().stream()
-            .map(movie -&gt; MovieDTO.of(movie, swapiService.getMovieByTitle(movie.title)))
-            .collect(Collectors.toList());
+
     }
 
     @Transactional
@@ -508,7 +536,7 @@ public class MovieResource {
     public Response newMovie(Movie movie) {
         movie.id = null;
         movie.persist();
-        return Response.status(Status.CREATED).entity(movie).build();
+        return Response.status(Response.Status.CREATED).entity(movie).build();
     }
 }</code></pre>
 </div>
