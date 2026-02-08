@@ -61,14 +61,16 @@ Spring Data is one of the most popular Spring APIs, so let's create a Spring Dat
 package com.redhat.developers;
 
 import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SpringMovieRepository extends JpaRepository<Movie, Long> {
 
-    public List<Movie> findByYear(String year);
+    @Query("select m from Movie m where year(m.releaseDate) = :year")
+    List<Movie> findByYear(@Param("year") int year);
 
 }
 ----
@@ -83,7 +85,6 @@ Now let's create another REST endpoint for `Movie`, but now using the Spring Web
 package com.redhat.developers;
 
 import java.util.List;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -102,7 +103,7 @@ public class MovieController {
     @GetMapping
     public List<Movie> movies(@RequestParam("year") String year) {
         if (year != null) {
-            return movieRepository.findByYear(year);
+            return movieRepository.findByYear(Integer.parseInt(year));
         }
         return movieRepository.findAll();
     }
