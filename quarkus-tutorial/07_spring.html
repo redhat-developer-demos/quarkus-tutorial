@@ -244,14 +244,16 @@
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
 import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SpringMovieRepository extends JpaRepository&lt;Movie, Long&gt; {
 
-    public List&lt;Movie&gt; findByYear(String year);
+    @Query("select m from Movie m where year(m.releaseDate) = :year")
+    List&lt;Movie&gt; findByYear(@Param("year") int year);
 
 }</code></pre>
 </div>
@@ -269,7 +271,6 @@ public interface SpringMovieRepository extends JpaRepository&lt;Movie, Long&gt; 
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.redhat.developers;
 
 import java.util.List;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -288,7 +289,7 @@ public class MovieController {
     @GetMapping
     public List&lt;Movie&gt; movies(@RequestParam("year") String year) {
         if (year != null) {
-            return movieRepository.findByYear(year);
+            return movieRepository.findByYear(Integer.parseInt(year));
         }
         return movieRepository.findAll();
     }
