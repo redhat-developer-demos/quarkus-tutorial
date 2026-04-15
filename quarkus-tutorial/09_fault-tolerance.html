@@ -240,7 +240,7 @@ import com.redhat.developers.Swapi.Results;
 @RegisterRestClient
 public interface SwapiService {
     @GET
-    @Path("/films/")
+    @Path("/films/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Retry(maxRetries = 3, delay = 2000)
     public Swapi getFilmById(@PathParam("id") String id);
@@ -334,13 +334,10 @@ public interface SwapiService {
 </div>
 </div>
 <div class="paragraph">
-<p>Now in case of any error, 3 retries are done automatically, waiting for 2 seconds between retries.</p>
+<p>Now the request will be attempted for 2 seconds. If there is an error, then the fallback method is executed.</p>
 </div>
 <div class="paragraph">
-<p>If the error persists, then the fallback method is executed.</p>
-</div>
-<div class="paragraph">
-<p>Now after waiting for 6 seconds (3 retries x 2 seconds), an empty object is sent instead of an exception.</p>
+<p>Now after waiting for 2 seconds, an empty object is sent instead of an exception.</p>
 </div>
 </div>
 </div>
