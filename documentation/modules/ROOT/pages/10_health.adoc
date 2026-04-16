@@ -127,7 +127,7 @@ public class CustomHealthCheck {
 
     @Readiness //<1>
     HealthCheck checkURL() {
-        return new UrlHealthCheck(externalURL+"/api/films/") //<2>
+        return new UrlHealthCheck(externalURL+"/films/") //<2>
                 .name("ExternalURL health check").requestMethod(HttpMethod.GET).statusCode(200);
     }
 
@@ -160,7 +160,7 @@ curl -w '\n' localhost:8080/health
             "name": "ExternalURL health check",
             "status": "UP",
             "data": {
-                "host": "GET https://swapi.dev/api/films"
+                "host": "GET https://swapi.info/api/films"
             }
         },
         {
@@ -219,7 +219,7 @@ curl -w '\n' localhost:8080/health/ready
             "name": "ExternalURL health check",
             "status": "UP",
             "data": {
-                "host": "GET https://swapi.dev/api/films"
+                "host": "GET https://swapi.info/api/films"
             }
         },
         {
