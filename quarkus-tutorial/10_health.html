@@ -336,7 +336,7 @@ public class CustomHealthCheck {
 
     @Readiness <i class="conum" data-value="1"></i><b>(1)</b>
     HealthCheck checkURL() {
-        return new UrlHealthCheck(externalURL+"/api/films/") <i class="conum" data-value="2"></i><b>(2)</b>
+        return new UrlHealthCheck(externalURL+"/films/") <i class="conum" data-value="2"></i><b>(2)</b>
                 .name("ExternalURL health check").requestMethod(HttpMethod.GET).statusCode(200);
     }
 
@@ -381,7 +381,7 @@ public class CustomHealthCheck {
             "name": "ExternalURL health check",
             "status": "UP",
             "data": {
-                "host": "GET https://swapi.dev/api/films"
+                "host": "GET https://swapi.info/api/films"
             }
         },
         {
@@ -446,7 +446,7 @@ public class CustomHealthCheck {
             "name": "ExternalURL health check",
             "status": "UP",
             "data": {
-                "host": "GET https://swapi.dev/api/films"
+                "host": "GET https://swapi.info/api/films"
             }
         },
         {
