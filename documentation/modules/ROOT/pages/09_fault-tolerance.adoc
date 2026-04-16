@@ -91,7 +91,7 @@ curl -w '\n' localhost:8080/movie?year=1980
 ]
 ----
 
-No change from calls done previously, but now change the https://swapi.dev url in your application properties to https://swapii.dev (or some other random url that won't resolve).
+No change from calls done previously, but now change the https://swapi.build url in your application properties to https://swapii.build (or some other random url that won't resolve).
 
 Run the following command again:
 
@@ -101,7 +101,7 @@ Run the following command again:
 curl -w '\n' localhost:8080/movie?year=1980
 ----
 
-Now after waiting 6 seconds (3 retries x 2 seconds), the next exception is thrown `java.net.UnknownHostException: swapii.dev`.
+Now after waiting 6 seconds (3 retries x 2 seconds), the next exception is thrown `java.net.UnknownHostException: swapii.build`.
 
 == Add Fallback to Swapi Service
 
@@ -228,7 +228,7 @@ Run the following command at least 5 times (without network connectivity):
 curl -w '\n' localhost:8080/movie?year=1980
 ----
 
-The output changes from `java.net.UnknownHostException: swapii.dev` (or any other network exception) in the first calls to `org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getMovieByTitle` when the circuit is opened.
+The output changes from `java.net.UnknownHostException: swapii.build` (or any other network exception) in the first calls to `org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getMovieByTitle` when the circuit is opened.
 
 The big difference between the first exception and the second one is that the first one occurs because the circuit is closed while the system is trying to reach the host, while in the second one, the circuit is closed and the exception is thrown automatically without trying to reach the host.
 
