@@ -105,10 +105,10 @@ package com.redhat.developers;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
 import io.quarkiverse.langchain4j.RegisterAiService;
-import jakarta.enterprise.context.SessionScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 @RegisterAiService()
-@SessionScoped
+@ApplicationScoped
 public interface Assistant {
 
     @SystemMessage({
