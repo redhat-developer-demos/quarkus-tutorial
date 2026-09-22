@@ -174,7 +174,7 @@
 <p>A typical scenario in a Microservices architecture is the remote invocation of remote REST HTTP endpoints. Quarkus provides a typed REST client that follows the  <a href="https://github.com/eclipse/microprofile-rest-client" target="_blank" rel="noopener">MicroProfile REST Client</a> specification.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s create a REST client that accesses <a href="https://swapi.info" class="bare" target="_blank" rel="noopener">https://swapi.info</a> to get additional information about Movies. The endpoint we&#8217;re interested in is this one:</p>
+<p>Let&#8217;s create a REST client that accesses <a href="https://swapi.build" class="bare" target="_blank" rel="noopener">https://swapi.build</a> to get additional information about Movies. The endpoint we&#8217;re interested in is this one:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -193,56 +193,56 @@
 	"producer": "Gary Kurtz, Rick McCallum",
 	"release_date": "1977-05-25",
 	"characters": [
-		"https://swapi.info/api/people/1",
-		"https://swapi.info/api/people/2",
-		"https://swapi.info/api/people/3",
-		"https://swapi.info/api/people/4",
-		"https://swapi.info/api/people/5",
-		"https://swapi.info/api/people/6",
-		"https://swapi.info/api/people/7",
-		"https://swapi.info/api/people/8",
-		"https://swapi.info/api/people/9",
-		"https://swapi.info/api/people/10",
-		"https://swapi.info/api/people/12",
-		"https://swapi.info/api/people/13",
-		"https://swapi.info/api/people/14",
-		"https://swapi.info/api/people/15",
-		"https://swapi.info/api/people/16",
-		"https://swapi.info/api/people/18",
-		"https://swapi.info/api/people/19",
-		"https://swapi.info/api/people/81"
+		"https://swapi.build/api/people/1",
+		"https://swapi.build/api/people/2",
+		"https://swapi.build/api/people/3",
+		"https://swapi.build/api/people/4",
+		"https://swapi.build/api/people/5",
+		"https://swapi.build/api/people/6",
+		"https://swapi.build/api/people/7",
+		"https://swapi.build/api/people/8",
+		"https://swapi.build/api/people/9",
+		"https://swapi.build/api/people/10",
+		"https://swapi.build/api/people/12",
+		"https://swapi.build/api/people/13",
+		"https://swapi.build/api/people/14",
+		"https://swapi.build/api/people/15",
+		"https://swapi.build/api/people/16",
+		"https://swapi.build/api/people/18",
+		"https://swapi.build/api/people/19",
+		"https://swapi.build/api/people/81"
 	],
 	"planets": [
-		"https://swapi.info/api/planets/1",
-		"https://swapi.info/api/planets/2",
-		"https://swapi.info/api/planets/3"
+		"https://swapi.build/api/planets/1",
+		"https://swapi.build/api/planets/2",
+		"https://swapi.build/api/planets/3"
 	],
 	"starships": [
-		"https://swapi.info/api/starships/2",
-		"https://swapi.info/api/starships/3",
-		"https://swapi.info/api/starships/5",
-		"https://swapi.info/api/starships/9",
-		"https://swapi.info/api/starships/10",
-		"https://swapi.info/api/starships/11",
-		"https://swapi.info/api/starships/12",
-		"https://swapi.info/api/starships/13"
+		"https://swapi.build/api/starships/2",
+		"https://swapi.build/api/starships/3",
+		"https://swapi.build/api/starships/5",
+		"https://swapi.build/api/starships/9",
+		"https://swapi.build/api/starships/10",
+		"https://swapi.build/api/starships/11",
+		"https://swapi.build/api/starships/12",
+		"https://swapi.build/api/starships/13"
 	],
 	"vehicles": [
-		"https://swapi.info/api/vehicles/4",
-		"https://swapi.info/api/vehicles/6",
-		"https://swapi.info/api/vehicles/7",
-		"https://swapi.info/api/vehicles/8"
+		"https://swapi.build/api/vehicles/4",
+		"https://swapi.build/api/vehicles/6",
+		"https://swapi.build/api/vehicles/7",
+		"https://swapi.build/api/vehicles/8"
 	],
 	"species": [
-		"https://swapi.info/api/species/1",
-		"https://swapi.info/api/species/2",
-		"https://swapi.info/api/species/3",
-		"https://swapi.info/api/species/4",
-		"https://swapi.info/api/species/5"
+		"https://swapi.build/api/species/1",
+		"https://swapi.build/api/species/2",
+		"https://swapi.build/api/species/3",
+		"https://swapi.build/api/species/4",
+		"https://swapi.build/api/species/5"
 	],
 	"created": "2014-12-10T14:23:31.880000Z",
 	"edited": "2014-12-20T19:49:45.256000Z",
-	"url": "https://swapi.info/api/films/1"
+	"url": "https://swapi.build/api/films/1"
 }</code></pre>
 </div>
 </div>
@@ -309,7 +309,7 @@
 <h2 id="_create_swapi_pojo"><a class="anchor" href="#_create_swapi_pojo"></a>Create Swapi POJO</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We need to create a POJO object that is used to unmarshal a JSON message from <a href="http://swapi.dev" class="bare" target="_blank" rel="noopener">http://swapi.dev</a>.</p>
+<p>We need to create a POJO object that is used to unmarshal a JSON message from <a href="https://swapi.build" class="bare" target="_blank" rel="noopener">https://swapi.build</a>.</p>
 </div>
 <div class="paragraph">
 <p>Create a new <code>Swapi</code> Java class in <code>src/main/java</code> in the <code>com.redhat.developers</code> package with the following contents:</p>
@@ -422,7 +422,7 @@ public interface SwapiService {
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">quarkus.rest-client."com.redhat.developers.SwapiService".url=https://swapi.info/api</code></pre>
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">quarkus.rest-client."com.redhat.developers.SwapiService".url=https://swapi.build/api</code></pre>
 </div>
 </div>
 </div>

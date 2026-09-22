@@ -278,7 +278,7 @@ public interface SwapiService {
 </div>
 </div>
 <div class="paragraph">
-<p>No change from calls done previously, but now change the <a href="https://swapi.dev" class="bare">https://swapi.dev</a> url in your application properties to <a href="https://swapii.dev" class="bare">https://swapii.dev</a> (or some other random url that won&#8217;t resolve).</p>
+<p>No change from calls done previously, but now change the <a href="https://swapi.build" class="bare">https://swapi.build</a> url in your application properties to <a href="https://swapii.build" class="bare">https://swapii.build</a> (or some other random url that won&#8217;t resolve).</p>
 </div>
 <div class="paragraph">
 <p>Run the following command again:</p>
@@ -289,7 +289,7 @@ public interface SwapiService {
 </div>
 </div>
 <div class="paragraph">
-<p>Now after waiting 6 seconds (3 retries x 2 seconds), the next exception is thrown <code>java.net.UnknownHostException: swapii.dev</code>.</p>
+<p>Now after waiting 6 seconds (3 retries x 2 seconds), the next exception is thrown <code>java.net.UnknownHostException: swapii.build</code>.</p>
 </div>
 </div>
 </div>
@@ -429,7 +429,7 @@ If the invocation succeeds, then the circuit is back to closed again.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The output changes from <code>java.net.UnknownHostException: swapii.dev</code> (or any other network exception) in the first calls to <code>org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getMovieByTitle</code> when the circuit is opened.</p>
+<p>The output changes from <code>java.net.UnknownHostException: swapii.build</code> (or any other network exception) in the first calls to <code>org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException: getMovieByTitle</code> when the circuit is opened.</p>
 </div>
 <div class="paragraph">
 <p>The big difference between the first exception and the second one is that the first one occurs because the circuit is closed while the system is trying to reach the host, while in the second one, the circuit is closed and the exception is thrown automatically without trying to reach the host.</p>
