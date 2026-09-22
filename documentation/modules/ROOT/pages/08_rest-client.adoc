@@ -2,7 +2,7 @@
 
 A typical scenario in a Microservices architecture is the remote invocation of remote REST HTTP endpoints. Quarkus provides a typed REST client that follows the  https://github.com/eclipse/microprofile-rest-client[MicroProfile REST Client, window=_blank] specification.
 
-Let's create a REST client that accesses https://swapi.info[window=_blank] to get additional information about Movies. The endpoint we're interested in is this one:
+Let's create a REST client that accesses https://swapi.build[window=_blank] to get additional information about Movies. The endpoint we're interested in is this one:
 
 * `api/films/\{id\}`, which returns specific info about the given movie.
 
@@ -17,56 +17,56 @@ Let's create a REST client that accesses https://swapi.info[window=_blank] to ge
 	"producer": "Gary Kurtz, Rick McCallum",
 	"release_date": "1977-05-25",
 	"characters": [
-		"https://swapi.info/api/people/1",
-		"https://swapi.info/api/people/2",
-		"https://swapi.info/api/people/3",
-		"https://swapi.info/api/people/4",
-		"https://swapi.info/api/people/5",
-		"https://swapi.info/api/people/6",
-		"https://swapi.info/api/people/7",
-		"https://swapi.info/api/people/8",
-		"https://swapi.info/api/people/9",
-		"https://swapi.info/api/people/10",
-		"https://swapi.info/api/people/12",
-		"https://swapi.info/api/people/13",
-		"https://swapi.info/api/people/14",
-		"https://swapi.info/api/people/15",
-		"https://swapi.info/api/people/16",
-		"https://swapi.info/api/people/18",
-		"https://swapi.info/api/people/19",
-		"https://swapi.info/api/people/81"
+		"https://swapi.build/api/people/1",
+		"https://swapi.build/api/people/2",
+		"https://swapi.build/api/people/3",
+		"https://swapi.build/api/people/4",
+		"https://swapi.build/api/people/5",
+		"https://swapi.build/api/people/6",
+		"https://swapi.build/api/people/7",
+		"https://swapi.build/api/people/8",
+		"https://swapi.build/api/people/9",
+		"https://swapi.build/api/people/10",
+		"https://swapi.build/api/people/12",
+		"https://swapi.build/api/people/13",
+		"https://swapi.build/api/people/14",
+		"https://swapi.build/api/people/15",
+		"https://swapi.build/api/people/16",
+		"https://swapi.build/api/people/18",
+		"https://swapi.build/api/people/19",
+		"https://swapi.build/api/people/81"
 	],
 	"planets": [
-		"https://swapi.info/api/planets/1",
-		"https://swapi.info/api/planets/2",
-		"https://swapi.info/api/planets/3"
+		"https://swapi.build/api/planets/1",
+		"https://swapi.build/api/planets/2",
+		"https://swapi.build/api/planets/3"
 	],
 	"starships": [
-		"https://swapi.info/api/starships/2",
-		"https://swapi.info/api/starships/3",
-		"https://swapi.info/api/starships/5",
-		"https://swapi.info/api/starships/9",
-		"https://swapi.info/api/starships/10",
-		"https://swapi.info/api/starships/11",
-		"https://swapi.info/api/starships/12",
-		"https://swapi.info/api/starships/13"
+		"https://swapi.build/api/starships/2",
+		"https://swapi.build/api/starships/3",
+		"https://swapi.build/api/starships/5",
+		"https://swapi.build/api/starships/9",
+		"https://swapi.build/api/starships/10",
+		"https://swapi.build/api/starships/11",
+		"https://swapi.build/api/starships/12",
+		"https://swapi.build/api/starships/13"
 	],
 	"vehicles": [
-		"https://swapi.info/api/vehicles/4",
-		"https://swapi.info/api/vehicles/6",
-		"https://swapi.info/api/vehicles/7",
-		"https://swapi.info/api/vehicles/8"
+		"https://swapi.build/api/vehicles/4",
+		"https://swapi.build/api/vehicles/6",
+		"https://swapi.build/api/vehicles/7",
+		"https://swapi.build/api/vehicles/8"
 	],
 	"species": [
-		"https://swapi.info/api/species/1",
-		"https://swapi.info/api/species/2",
-		"https://swapi.info/api/species/3",
-		"https://swapi.info/api/species/4",
-		"https://swapi.info/api/species/5"
+		"https://swapi.build/api/species/1",
+		"https://swapi.build/api/species/2",
+		"https://swapi.build/api/species/3",
+		"https://swapi.build/api/species/4",
+		"https://swapi.build/api/species/5"
 	],
 	"created": "2014-12-10T14:23:31.880000Z",
 	"edited": "2014-12-20T19:49:45.256000Z",
-	"url": "https://swapi.info/api/films/1"
+	"url": "https://swapi.build/api/films/1"
 }
 ----
 
@@ -121,7 +121,7 @@ Notice in the logs how Quarkus is reloading and the `rest-client-jackson` extens
 
 == Create Swapi POJO
 
-We need to create a POJO object that is used to unmarshal a JSON message from http://swapi.dev[window=_blank].
+We need to create a POJO object that is used to unmarshal a JSON message from https://swapi.build[window=_blank].
 
 Create a new `Swapi` Java class in `src/main/java` in the `com.redhat.developers` package with the following contents:
 
@@ -231,7 +231,7 @@ Add the following properties to your `application.properties` in `src/main/resou
 [.console-input]
 [source,properties]
 ----
-quarkus.rest-client."com.redhat.developers.SwapiService".url=https://swapi.info/api
+quarkus.rest-client."com.redhat.developers.SwapiService".url=https://swapi.build/api
 ----
 
 == Create MovieDTO
