@@ -30,12 +30,12 @@ public class MovieResource {
         if (year != null) {
             return Movie.findByYear(Integer.parseInt(year))
             .stream()
-            .map(movie -> MovieDTO.of(movie, swapiService.getMovieByTitle(movie.title)))
+            .map(movie -> MovieDTO.of(movie, swapiService.getFilmById(String.valueOf(movie.id))))
             .collect(Collectors.toList());
         }
         return Movie.<Movie>listAll()
             .stream()
-            .map(movie -> MovieDTO.of(movie, swapiService.getMovieByTitle(movie.title)))
+            .map(movie -> MovieDTO.of(movie, swapiService.getFilmById(String.valueOf(movie.id))))
             .collect(Collectors.toList());
     }
 

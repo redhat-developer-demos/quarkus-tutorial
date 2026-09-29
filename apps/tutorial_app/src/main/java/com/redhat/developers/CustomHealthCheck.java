@@ -16,7 +16,7 @@ public class CustomHealthCheck {
 
     @Readiness 
     HealthCheck checkURL() {
-        return new UrlHealthCheck(externalURL+"/api/films/") 
+        return new UrlHealthCheck(externalURL+"/films/") 
                 .name("ExternalURL health check").requestMethod(HttpMethod.GET).statusCode(200);
     }
 
