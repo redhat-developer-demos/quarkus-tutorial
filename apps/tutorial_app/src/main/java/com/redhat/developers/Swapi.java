@@ -1,49 +1,63 @@
 package com.redhat.developers;
 
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class Swapi {
-    
-    
-    private List<Results> results;
 
-    public Swapi(@JsonProperty("results") List<Results> results) {
-        this.results = results;
+    private String title;
+    private int episode_id;
+    private String opening_crawl;
+    private String director;
+    private String producer;
+
+
+    public Swapi() {
     }
 
-    public List<Results> getResults() {
-        return results;
+    public Swapi(String title, int episode_id, String opening_crawl, String director, String producer) {
+        this.title = title;
+        this.episode_id = episode_id;
+        this.opening_crawl = opening_crawl;
+        this.director = director;
+        this.producer = producer;
     }
-    
-    public static class Results {
-        private int episodeId;
-        private String producer;
-        private String director;
-        private String opening_crawl;
 
-        public Results(int episodeId, String producer, String director, String opening_crawl) {
-            this.episodeId = episodeId;
-            this.producer = producer;
-            this.director = director;
-            this.opening_crawl = opening_crawl;
-        }
 
-        public int getEpisodeId() {
-            return episodeId;
-        }
+    public String getTitle() {
+        return title;
+    }
 
-        public String getProducer() {
-            return producer;
-        }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-        public String getDirector() {
-            return director;
-        }
+    public int getEpisode_id() {
+        return episode_id;
+    }
 
-        public String getOpening_crawl() {
-            return opening_crawl;
-        }       
+    public void setEpisode_id(int episode_id) {
+        this.episode_id = episode_id;
+    }
+
+    public String getOpening_crawl() {
+        return opening_crawl;
+    }
+
+    public void setOpening_crawl(String opening_crawl) {
+        this.opening_crawl = opening_crawl;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public String getProducer() {
+        return producer;
+    }
+
+    public void setProducer(String producer) {
+        this.producer = producer;
     }
 }
