@@ -322,12 +322,36 @@ public class SecureResource {
 <h2 id="_invoke_the_secureclaim_endpoint"><a class="anchor" href="#_invoke_the_secureclaim_endpoint"></a>Invoke the /secure/claim endpoint</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Run the following command in a bash shell:</p>
+<p>Run the following command in a Bash shell or PowerShell:</p>
 </div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset2_bash"></a>Bash</p>
+</li>
+<li>
+<p><a id="tabset2_powershell"></a>PowerShell</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset2_bash">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token -s)
-curl -w '\n' -H "Authorization: Bearer $token" localhost:8080/secure/claim</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl -s https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token)
+curl -w '\n' -H "Authorization: Bearer $token" http://localhost:8080/secure/claim</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset2_powershell">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-powershell hljs" data-lang="powershell">$token = (curl.exe -s https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token).Trim()
+curl.exe -w '\n' -H "Authorization: Bearer $token" http://localhost:8080/secure/claim</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="paragraph">
@@ -344,10 +368,34 @@ curl -w '\n' -H "Authorization: Bearer $token" localhost:8080/secure/claim</code
 <div class="paragraph">
 <p>To validate this, just invoke the service again, but change the token:</p>
 </div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset3_bash"></a>Bash</p>
+</li>
+<li>
+<p><a id="tabset3_powershell"></a>PowerShell</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset3_bash">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=XXXX
-curl -v -w '\n' -H "Authorization: Bearer $token" localhost:8080/secure/claim</code></pre>
+curl -v -w '\n' -H "Authorization: Bearer $token" http://localhost:8080/secure/claim</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset3_powershell">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-powershell hljs" data-lang="powershell">$token = 'XXXX'
+curl.exe -v -w '\n' -H "Authorization: Bearer $token" http://localhost:8080/secure/claim</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="listingblock console-output">
@@ -420,12 +468,36 @@ public class SecureResource {
 <h2 id="_invoke_the_secureclaim_endpoint_with_rbac"><a class="anchor" href="#_invoke_the_secureclaim_endpoint_with_rbac"></a>Invoke the /secure/claim endpoint with RBAC</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Run the following command:</p>
+<p>Run the following command in a Bash shell or PowerShell:</p>
 </div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset4_bash"></a>Bash</p>
+</li>
+<li>
+<p><a id="tabset4_powershell"></a>PowerShell</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset4_bash">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token -s)
-curl -w '\n' -H "Authorization: Bearer $token" localhost:8080/secure/claim</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl -s https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token)
+curl -w '\n' -H "Authorization: Bearer $token" http://localhost:8080/secure/claim</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset4_powershell">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-powershell hljs" data-lang="powershell">$token = (curl.exe -s https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token).Trim()
+curl.exe -w '\n' -H "Authorization: Bearer $token" http://localhost:8080/secure/claim</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="paragraph">
@@ -477,12 +549,36 @@ public class SecureResource {
 <h2 id="_invoke_the_secureclaim_endpoint_with_incorrect_rbac"><a class="anchor" href="#_invoke_the_secureclaim_endpoint_with_incorrect_rbac"></a>Invoke the /secure/claim endpoint with incorrect RBAC</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Run the following command:</p>
+<p>Run the following command in a Bash shell or PowerShell:</p>
 </div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset5_bash"></a>Bash</p>
+</li>
+<li>
+<p><a id="tabset5_powershell"></a>PowerShell</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset5_bash">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token -s)
-curl -v -w '\n' -H "Authorization: Bearer $token" localhost:8080/secure/claim</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">token=$(curl -s https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token)
+curl -v -w '\n' -H "Authorization: Bearer $token" http://localhost:8080/secure/claim</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset5_powershell">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-powershell hljs" data-lang="powershell">$token = (curl.exe -s https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token).Trim()
+curl.exe -v -w '\n' -H "Authorization: Bearer $token" http://localhost:8080/secure/claim</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="paragraph">
